@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Utente {
 
-    private int id;
+    private String id;
     private String immagine;
     private String nome;
     private String cognome;
@@ -17,7 +17,7 @@ public class Utente {
 
     }
 
-    public Utente(int id, String nome, String cognome, Date dataNascita, String genere, String statusSanitario) {
+    public Utente(String id, String nome, String cognome, Date dataNascita, String genere, String statusSanitario) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -26,7 +26,7 @@ public class Utente {
         this.statusSanitario = statusSanitario;
     }
 
-    public Utente(int id, String immagine, String nome, String cognome, Date dataNascita, String genere, String statusSanitario) {
+    public Utente(String id, String immagine, String nome, String cognome, Date dataNascita, String genere, String statusSanitario) {
         this.id = id;
         this.immagine = immagine;
         this.nome = nome;
@@ -37,11 +37,11 @@ public class Utente {
     }
 
     // GETTER E SETTTER
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

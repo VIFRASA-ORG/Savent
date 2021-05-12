@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class Tampone {
 
-    private int idUtente;
-    private int idEnte;
+    private String idUtente;
+    private String idEnte;
     private Date data;
     private boolean esito;
 
@@ -15,7 +15,7 @@ public class Tampone {
 
     }
 
-    public Tampone(int idUtente, int idEnte, Date data, boolean esito) {
+    public Tampone(String idUtente, String idEnte, Date data, boolean esito) {
         this.idUtente = idUtente;
         this.idEnte = idEnte;
         this.data = data;
@@ -23,19 +23,19 @@ public class Tampone {
     }
 
     // GETTER E SETTER
-    public int getIdUtente() {
+    public String getIdUtente() {
         return idUtente;
     }
 
-    public void setIdUtente(int idUtente) {
+    public void setIdUtente(String idUtente) {
         this.idUtente = idUtente;
     }
 
-    public int getIdEnte() {
+    public String getIdEnte() {
         return idEnte;
     }
 
-    public void setIdEnte(int idEnte) {
+    public void setIdEnte(String idEnte) {
         this.idEnte = idEnte;
     }
 

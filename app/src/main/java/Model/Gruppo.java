@@ -2,7 +2,7 @@ package Model;
 
 public class Gruppo {
 
-    private int id;
+    private String id;
     private String immagine;
     private String nome;
     private String descrizione;
@@ -14,14 +14,14 @@ public class Gruppo {
 
     }
 
-    public Gruppo(int id, String nome, String descrizione, Utente amministratore) {
+    public Gruppo(String id, String nome, String descrizione, Utente amministratore) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
         this.amministratore = amministratore;
     }
 
-    public Gruppo(int id, String immagine, String nome, String descrizione, Utente amministratore) {
+    public Gruppo(String id, String immagine, String nome, String descrizione, Utente amministratore) {
         this.id = id;
         this.immagine = immagine;
         this.nome = nome;
@@ -30,11 +30,11 @@ public class Gruppo {
     }
 
     // GETTER E SETTER
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

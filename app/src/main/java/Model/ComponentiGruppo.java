@@ -2,8 +2,8 @@ package Model;
 
 public class ComponentiGruppo {
 
-    private int idGruppo;
-    private int idUtente;
+    private String idGruppo;
+    private String idUtente;
 
 
     // COSTRUTTORE DELLA CLASSE COMPONENTIGRUPPO
@@ -11,25 +11,25 @@ public class ComponentiGruppo {
 
     }
 
-    public ComponentiGruppo(int idGruppo, int idUtente) {
+    public ComponentiGruppo(String idGruppo, String idUtente) {
         this.idGruppo = idGruppo;
         this.idUtente = idUtente;
     }
 
     // GETTER E SETTER
-    public int getIdGruppo() {
+    public String getIdGruppo() {
         return idGruppo;
     }
 
-    public void setIdGruppo(int idGruppo) {
+    public void setIdGruppo(String idGruppo) {
         this.idGruppo = idGruppo;
     }
 
-    public int getIdUtente() {
+    public String getIdUtente() {
         return idUtente;
     }
 
-    public void setIdUtente(int idUtente) {
+    public void setIdUtente(String idUtente) {
         this.idUtente = idUtente;
     }
 }

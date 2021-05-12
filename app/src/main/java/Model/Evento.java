@@ -4,15 +4,15 @@ import java.util.*;
 
 public class Evento {
 
-    private int id;
+    private String id;
     private String locandina;
     private String nome;
     private String descrizione;
     private double longitudine;
     private double latitudine;
     private Date dataOra;
-    private Utente utenteCreatore;
-    private Gruppo gruppoCreatore;
+    private String idUtenteCreatore;
+    private String idGruppoCreatore;
     private int sogliaAccettazioneStatus;
     private int numeroMassimoPartecipanti;
     private int numeroPartecipanti;
@@ -23,7 +23,7 @@ public class Evento {
 
     }
 
-    public Evento(int id,String locandina, String nome, String descrizione, double longitudine, double latitudine, Date dataOra, Utente utenteCreatore,
+    public Evento(String id,String locandina, String nome, String descrizione, double longitudine, double latitudine, Date dataOra, String idUtenteCreatore,
                   int sogliaAccettazioneStatus, int numeroMassimoPartecipanti, int numeroPartecipanti) {
         this.id = id;
         this.locandina = locandina;
@@ -32,33 +32,32 @@ public class Evento {
         this.longitudine = longitudine;
         this.latitudine = latitudine;
         this.dataOra = dataOra;
-        this.utenteCreatore = utenteCreatore;
+        this.idUtenteCreatore = idUtenteCreatore;
         this.sogliaAccettazioneStatus = sogliaAccettazioneStatus;
         this.numeroMassimoPartecipanti = numeroMassimoPartecipanti;
         this.numeroPartecipanti = numeroPartecipanti;
     }
 
-    public Evento(int id, String locandina, String nome, String descrizione, double longitudine, double latitudine, Date dataOra, Gruppo gruppoCreatore,
+    public Evento(String id,  String nome, String descrizione, double longitudine, double latitudine, Date dataOra, String idGruppoCreatore,
                   int sogliaAccettazioneStatus, int numeroMassimoPartecipanti, int numeroPartecipanti) {
         this.id = id;
-        this.locandina = locandina;
         this.nome = nome;
         this.descrizione = descrizione;
         this.longitudine = longitudine;
         this.latitudine = latitudine;
         this.dataOra = dataOra;
-        this.gruppoCreatore = gruppoCreatore;
+        this.idGruppoCreatore = idGruppoCreatore;
         this.sogliaAccettazioneStatus = sogliaAccettazioneStatus;
         this.numeroMassimoPartecipanti = numeroMassimoPartecipanti;
         this.numeroPartecipanti = numeroPartecipanti;
     }
 
     // GETTER E SETTER
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -110,20 +109,20 @@ public class Evento {
         this.dataOra = dataOra;
     }
 
-    public Utente getUtenteCreatore() {
-        return utenteCreatore;
+    public String getIdUtenteCreatore() {
+        return idUtenteCreatore;
     }
 
-    public void setUtenteCreatore(Utente utenteCreatore) {
-        this.utenteCreatore = utenteCreatore;
+    public void setUtenteCreatore(String idUtenteCreatore) {
+        this.idUtenteCreatore = idUtenteCreatore;
     }
 
-    public Gruppo getGruppoCreatore() {
-        return gruppoCreatore;
+    public String getIdGruppoCreatore() {
+        return idGruppoCreatore;
     }
 
-    public void setGruppoCreatore(Gruppo gruppoCreatore) {
-        this.gruppoCreatore = gruppoCreatore;
+    public void setGruppoCreatore(String idGruppoCreatore) {
+        this.idGruppoCreatore = idGruppoCreatore;
     }
 
     public int getSogliaAccettazioneStatus() {

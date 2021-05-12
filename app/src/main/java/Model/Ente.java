@@ -2,8 +2,7 @@ package Model;
 
 public class Ente {
 
-    private String email;
-    private int password;
+    private String id;
     private String partitaIva;
     private String certificatoPIVA;
     private String visuraCamerale;
@@ -23,10 +22,9 @@ public class Ente {
 
     }
 
-    public Ente(String email, int password, String partitaIva, String certificatoPIVA, String visuraCamerale, String nomeDitta, String domicilioFiscaleDitta,
+    public Ente(String id, String partitaIva, String certificatoPIVA, String visuraCamerale, String nomeDitta, String domicilioFiscaleDitta,
                 String numeroTelefono, boolean abilitazione) {
-        this.email = email;
-        this.password = password;
+        this.id = id;
         this.partitaIva = partitaIva;
         this.certificatoPIVA = certificatoPIVA;
         this.visuraCamerale = visuraCamerale;
@@ -37,20 +35,12 @@ public class Ente {
     }
 
     // GETTER E SETTER
-    public String getEmail() {
-        return email;
+    public String getId() {
+        return id;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getPassword() {
-        return password;
-    }
-
-    public void setPassword(int password) {
-        this.password = password;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getPartitaIva() {

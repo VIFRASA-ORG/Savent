@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class Partecipazione {
 
-    private int idEvento;
-    private int idUtente;
+    private String idEvento;
+    private String idUtente;
     private boolean accettazione;
     private Date dataOra;
     private boolean listaAttesa;
@@ -16,7 +16,7 @@ public class Partecipazione {
 
     }
 
-    public Partecipazione(int idEvento, int idUtente, boolean accettazione, Date dataOra, boolean listaAttesa) {
+    public Partecipazione(String idEvento, String idUtente, boolean accettazione, Date dataOra, boolean listaAttesa) {
         this.idEvento = idEvento;
         this.idUtente = idUtente;
         this.accettazione = accettazione;
@@ -25,19 +25,19 @@ public class Partecipazione {
     }
 
     // GETTER E SETTER
-    public int getIdEvento() {
+    public String getIdEvento() {
         return idEvento;
     }
 
-    public void setIdEvento(int idEvento) {
+    public void setIdEvento(String idEvento) {
         this.idEvento = idEvento;
     }
 
-    public int getIdUtente() {
+    public String getIdUtente() {
         return idUtente;
     }
 
-    public void setIdUtente(int idUtente) {
+    public void setIdUtente(String idUtente) {
         this.idUtente = idUtente;
     }
 
