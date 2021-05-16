@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Savent</string>
+    <string name="stringRegistrazione">Sign up</string>
+    <string name="stringAccesso">Login</string>
 </resources>
