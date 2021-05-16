@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Savent</string>
+    <string name="stringRegistrazione">Registrazione</string>
+    <string name="stringAccesso">Accesso</string>
+</resources>
