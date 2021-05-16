@@ -3,4 +3,5 @@
     <string name="app_name">Savent</string>
     <string name="stringRegistrazione">Registrazione</string>
     <string name="stringAccesso">Accesso</string>
+    <string name="PasswordDimenticata">Password dimenticata?</string>
 </resources>

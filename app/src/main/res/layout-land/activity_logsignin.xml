@@ -24,6 +24,7 @@
         android:background="@drawable/ic_button_shape"
         android:backgroundTint="@color/blueButton"
         android:gravity="center"
+        android:onClick="onLoginClick"
         android:text="@string/stringAccesso" />
 
     <Button

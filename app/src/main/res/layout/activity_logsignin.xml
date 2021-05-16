@@ -17,6 +17,7 @@
 
     <Button
         android:id="@+id/buttonAccesso"
+        android:onClick="onLoginClick"
         android:layout_width="@dimen/button_width"
         android:layout_height="@dimen/button_height"
         android:layout_gravity="center_horizontal"
