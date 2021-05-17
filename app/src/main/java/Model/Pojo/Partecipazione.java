@@ -1,10 +1,9 @@
-package Model;
+package Model.Pojo;
 
 import java.util.Date;
 
 public class Partecipazione {
 
-    private String idEvento;
     private String idUtente;
     private boolean accettazione;
     private Date dataOra;
@@ -12,12 +11,9 @@ public class Partecipazione {
 
 
     // COSTRUTTORE DELLA CLASSE PARTECIPAZIONE
-    public Partecipazione() {
+    public Partecipazione() { }
 
-    }
-
-    public Partecipazione(String idEvento, String idUtente, boolean accettazione, Date dataOra, boolean listaAttesa) {
-        this.idEvento = idEvento;
+    public Partecipazione(String idUtente, boolean accettazione, Date dataOra, boolean listaAttesa) {
         this.idUtente = idUtente;
         this.accettazione = accettazione;
         this.dataOra = dataOra;
@@ -25,14 +21,6 @@ public class Partecipazione {
     }
 
     // GETTER E SETTER
-    public String getIdEvento() {
-        return idEvento;
-    }
-
-    public void setIdEvento(String idEvento) {
-        this.idEvento = idEvento;
-    }
-
     public String getIdUtente() {
         return idUtente;
     }

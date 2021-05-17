@@ -1,4 +1,4 @@
-package Model;
+package Helper;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthCredential;
@@ -13,16 +13,12 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class AuthHelper {
 
-    private FirebaseAuth mAuth;
-
-    public AuthHelper() {
-        mAuth = FirebaseAuth.getInstance();
-    }
+    private static final FirebaseAuth mAuth = FirebaseAuth.getInstance();;
 
     /** Check if the the user is already logged in
      * @return true if the user is already logged in, false otherwise
      */
-    public final boolean isLoggedIn(){
+    public static final boolean isLoggedIn(){
         FirebaseUser cU = mAuth.getCurrentUser();
         return cU != null;
     }
@@ -31,8 +27,8 @@ public class AuthHelper {
      *
      * @return The id of the logged-in user if there is, an empty string otherwise
      */
-    public final String getUserId(){
-        return isLoggedIn() ? mAuth.getCurrentUser().getUid() : "";
+    public static final String getUserId(){
+        return isLoggedIn() ? mAuth.getCurrentUser().getUid() : null;
     }
 
     /**
@@ -52,7 +48,7 @@ public class AuthHelper {
      * @param psw
      * @param completeListener Listener to manage the success of failure of the login.
      */
-    public final void singIn(String email,String psw,OnCompleteListener<AuthResult> completeListener){
+    public static final void singIn(String email,String psw,OnCompleteListener<AuthResult> completeListener){
         mAuth.signInWithEmailAndPassword(email,psw).addOnCompleteListener(completeListener);
     }
 
@@ -61,7 +57,7 @@ public class AuthHelper {
      * @param newPsw
      * @param onComplete Completition handler to handle the success or the insuccess
      */
-    public final void updatePsw(String newPsw, OnCompleteListener<Void> onComplete){
+    public static final void updatePsw(String newPsw, OnCompleteListener<Void> onComplete){
         if(isLoggedIn()){
             mAuth.getCurrentUser().updatePassword(newPsw).addOnCompleteListener(onComplete);
         }
@@ -72,7 +68,7 @@ public class AuthHelper {
      * @param newEmail
      * @param onComplete Completition handler to handle the success or the insuccess
      */
-    public final void updateEmail(String newEmail, OnCompleteListener<Void> onComplete){
+    public static final void updateEmail(String newEmail, OnCompleteListener<Void> onComplete){
         if(isLoggedIn()){
             mAuth.getCurrentUser().updateEmail(newEmail).addOnCompleteListener(onComplete);
         }
@@ -83,7 +79,7 @@ public class AuthHelper {
      * @param email
      * @param onComplete Completition handler to handle the success or the insuccess
      */
-    public final void sendPswResetEmail(String email,OnCompleteListener<Void> onComplete){
+    public static final void sendPswResetEmail(String email,OnCompleteListener<Void> onComplete){
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(onComplete);
     }
 
@@ -93,7 +89,7 @@ public class AuthHelper {
      * @param psw
      * @param onComplete Completition handler to handle the success or the insuccess
      */
-    public final void reAuthenticate(String email,String psw,OnCompleteListener<Void> onComplete){
+    public static final void reAuthenticate(String email,String psw,OnCompleteListener<Void> onComplete){
         if(isLoggedIn()){
             FirebaseUser currentUser = mAuth.getCurrentUser();
             AuthCredential cred = EmailAuthProvider.getCredential(email,psw);
@@ -105,7 +101,7 @@ public class AuthHelper {
     /**
      * Function used to Log-out
      */
-    public final void logOut(){
+    public static final void logOut(){
         mAuth.signOut();
     }
 }

@@ -1,10 +1,14 @@
-package Model;
+package Model.Pojo;
+
+import com.google.firebase.firestore.DocumentId;
 
 import java.util.*;
 
 public class Utente {
 
+    @DocumentId
     private String id;
+
     private String immagine;
     private String nome;
     private String cognome;
@@ -13,9 +17,7 @@ public class Utente {
     private String statusSanitario;
 
     // COSTRUTTORE DELLA CLASSE UTENTE
-    public Utente() {
-
-    }
+    public Utente() { }
 
     public Utente(String id, String nome, String cognome, Date dataNascita, String genere, String statusSanitario) {
         this.id = id;

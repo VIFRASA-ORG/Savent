@@ -1,4 +1,4 @@
-package Model;
+package Model.Pojo;
 
 public class Ente {
 
