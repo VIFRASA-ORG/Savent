@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "231668618432",
+    "project_id": "savent-63107",
+    "storage_bucket": "savent-63107.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231668618432:android:5f5e2602c3969b3c5e4925",
+        "android_client_info": {
+          "package_name": "com.vifrasa.savent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "231668618432-2n69ri8fre8g6uel0tcoaj8c2f5rea0j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vifrasa.savent",
+            "certificate_hash": "b3b10befad0d3dfd0f21f570a96e3b99078a5f3f"
+          }
+        },
+        {
+          "client_id": "231668618432-pqflirblh36themdaife9tb0rmk675hc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKhBLnGi-iHz-SPpsKI3yIQ3v4PDb6vjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "231668618432-pqflirblh36themdaife9tb0rmk675hc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
