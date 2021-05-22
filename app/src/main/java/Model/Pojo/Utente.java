@@ -9,33 +9,24 @@ public class Utente {
     @DocumentId
     private String id;
 
-    private String immagine;
     private String nome;
     private String cognome;
     private Date dataNascita;
     private String genere;
+    private String numeroDiTelefono;
     private String statusSanitario;
 
     // COSTRUTTORE DELLA CLASSE UTENTE
     public Utente() { }
 
-    public Utente(String id, String nome, String cognome, Date dataNascita, String genere, String statusSanitario) {
+    public Utente(String id, String nome, String cognome, Date dataNascita, String genere, String statusSanitario,String numeroDiTelefono) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.dataNascita = dataNascita;
         this.genere = genere;
         this.statusSanitario = statusSanitario;
-    }
-
-    public Utente(String id, String immagine, String nome, String cognome, Date dataNascita, String genere, String statusSanitario) {
-        this.id = id;
-        this.immagine = immagine;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.dataNascita = dataNascita;
-        this.genere = genere;
-        this.statusSanitario = statusSanitario;
+        this.numeroDiTelefono = numeroDiTelefono;
     }
 
     // GETTER E SETTTER
@@ -45,14 +36,6 @@ public class Utente {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getImmagine() {
-        return immagine;
-    }
-
-    public void setImmagine(String immagine) {
-        this.immagine = immagine;
     }
 
     public String getNome() {
@@ -93,5 +76,13 @@ public class Utente {
 
     public void setStatusSanitario(String statusSanitario) {
         this.statusSanitario = statusSanitario;
+    }
+
+    public String getNumeroDiTelefono() {
+        return numeroDiTelefono;
+    }
+
+    public void setNumeroDiTelefono(String numeroDiTelefono) {
+        this.numeroDiTelefono = numeroDiTelefono;
     }
 }

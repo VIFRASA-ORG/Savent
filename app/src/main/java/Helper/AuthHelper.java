@@ -1,11 +1,19 @@
 package Helper;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import Model.Closures.ClosureBoolean;
+import Model.Closures.ClosureResult;
+import Model.DB.Enti;
+import Model.DB.Utenti;
 
 
 /**
@@ -13,7 +21,40 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class AuthHelper {
 
-    private static final FirebaseAuth mAuth = FirebaseAuth.getInstance();;
+    public enum UserType{
+        Utente,
+        Ente,
+        None
+    }
+
+    private static final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+
+
+
+
+    public static final void getLoggedUserType(ClosureResult<UserType> closureRes){
+        if(!isLoggedIn()){
+            if(closureRes != null) closureRes.closure(UserType.None);
+            return;
+        }
+
+       Utenti.isValidUser(getUserId(), isSuccess -> {
+           if(isSuccess){
+               if(closureRes != null) closureRes.closure(UserType.Utente);
+           }else{
+
+               //Check if is an Ente
+               Enti.isValidEnte(getUserId(), isSuccess1 -> {
+                   if(isSuccess1){
+                       if(closureRes != null) closureRes.closure(UserType.Ente);
+                   }else{
+                       if(closureRes != null) closureRes.closure(UserType.None);
+                   }
+               });
+           }
+       });
+    }
 
     /** Check if the the user is already logged in
      * @return true if the user is already logged in, false otherwise
@@ -36,65 +77,80 @@ public class AuthHelper {
      *
      * @param email
      * @param psw
-     * @param completeListener the listener to manage the success of failure of the new user creation.
+     * @param closureResult return the Uid of the created user, null otherwise.
      */
-    public final void createNewUser(String email, String psw, OnCompleteListener<AuthResult> completeListener){
-        mAuth.createUserWithEmailAndPassword(email,psw).addOnCompleteListener(completeListener);
+    public static final void createNewAccount(String email, String psw, ClosureResult<String> closureResult){
+        mAuth.createUserWithEmailAndPassword(email,psw).addOnCompleteListener(task -> {
+            if (closureResult == null) return;
+
+            if (task.isSuccessful()) closureResult.closure(task.getResult().getUser().getUid());
+            else closureResult.closure(null);
+        });
     }
 
     /** Function used to login.
      *
      * @param email
      * @param psw
-     * @param completeListener Listener to manage the success of failure of the login.
+     * @param closureBool Listener to manage the success of failure of the login.
      */
-    public static final void singIn(String email,String psw,OnCompleteListener<AuthResult> completeListener){
-        mAuth.signInWithEmailAndPassword(email,psw).addOnCompleteListener(completeListener);
+    public static final void singIn(String email,String psw,ClosureBoolean closureBool){
+        mAuth.signInWithEmailAndPassword(email,psw).addOnCompleteListener(task -> {
+            if (closureBool == null) return;
+
+            if (task.isSuccessful()) closureBool.closure(true);
+            else closureBool.closure(false);
+        });
     }
 
-    /**
-     *
-     * @param newPsw
-     * @param onComplete Completition handler to handle the success or the insuccess
-     */
-    public static final void updatePsw(String newPsw, OnCompleteListener<Void> onComplete){
+    public static final void updatePsw(String newPsw, ClosureBoolean closureBool){
         if(isLoggedIn()){
-            mAuth.getCurrentUser().updatePassword(newPsw).addOnCompleteListener(onComplete);
+            mAuth.getCurrentUser().updatePassword(newPsw).addOnCompleteListener(task -> {
+                if (closureBool == null) return;
+
+                if (task.isSuccessful()) closureBool.closure(true);
+                else closureBool.closure(false);
+            });
         }
     }
 
-    /**
-     *
-     * @param newEmail
-     * @param onComplete Completition handler to handle the success or the insuccess
-     */
-    public static final void updateEmail(String newEmail, OnCompleteListener<Void> onComplete){
+    public static final void updateEmail(String newEmail, ClosureBoolean closureBool){
         if(isLoggedIn()){
-            mAuth.getCurrentUser().updateEmail(newEmail).addOnCompleteListener(onComplete);
+            mAuth.getCurrentUser().updateEmail(newEmail).addOnCompleteListener(task -> {
+                if (closureBool == null) return;
+
+                if (task.isSuccessful()) closureBool.closure(true);
+                else closureBool.closure(false);
+            });
         }
     }
 
-    /**
-     *
-     * @param email
-     * @param onComplete Completition handler to handle the success or the insuccess
-     */
-    public static final void sendPswResetEmail(String email,OnCompleteListener<Void> onComplete){
-        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(onComplete);
+    public static final void sendPswResetEmail(String email,ClosureBoolean closureBool){
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
+            if (closureBool == null) return;
+
+            if (task.isSuccessful()) closureBool.closure(true);
+            else closureBool.closure(false);
+        });
     }
 
     /**
      * Double autentication for some secutiry sensitive action
      * @param email
      * @param psw
-     * @param onComplete Completition handler to handle the success or the insuccess
+     * @param closureBool Completition handler to handle the success or the insuccess
      */
-    public static final void reAuthenticate(String email,String psw,OnCompleteListener<Void> onComplete){
+    public static final void reAuthenticate(String email, String psw, ClosureBoolean closureBool){
         if(isLoggedIn()){
             FirebaseUser currentUser = mAuth.getCurrentUser();
             AuthCredential cred = EmailAuthProvider.getCredential(email,psw);
 
-            currentUser.reauthenticate(cred).addOnCompleteListener(onComplete);
+            currentUser.reauthenticate(cred).addOnCompleteListener(task -> {
+                if (closureBool == null) return;
+
+                if (task.isSuccessful()) closureBool.closure(true);
+                else closureBool.closure(false);
+            });
         }
     }
 
