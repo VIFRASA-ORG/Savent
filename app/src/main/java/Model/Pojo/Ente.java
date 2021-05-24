@@ -1,11 +1,22 @@
 package Model.Pojo;
 
+import android.net.Uri;
+
+import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
+
 public class Ente {
 
+    @DocumentId
     private String id;
+
+    @Exclude
+    private Uri certificatoPIVA;
+
+    @Exclude
+    private Uri visuraCamerale;
+
     private String partitaIva;
-    private String certificatoPIVA;
-    private String visuraCamerale;
     private String nomeDitta;
     private String domicilioFiscaleDitta;
     private String nomeLP;
@@ -18,11 +29,19 @@ public class Ente {
 
 
     // COSTRUTTORI DELLA CLASSE ENTE
-    public Ente() {
+    public Ente() { }
 
+    public Ente(String nomeLP, String cognomeLP, String codiceFiscaleLP, String residenzaLP, String numeroIscrizioneAlboLP, String numeroTelefono, boolean abilitazione) {
+        this.nomeLP = nomeLP;
+        this.cognomeLP = cognomeLP;
+        this.codiceFiscaleLP = codiceFiscaleLP;
+        this.residenzaLP = residenzaLP;
+        this.numeroIscrizioneAlboLP = numeroIscrizioneAlboLP;
+        this.numeroTelefono = numeroTelefono;
+        this.abilitazione = abilitazione;
     }
 
-    public Ente(String id, String partitaIva, String certificatoPIVA, String visuraCamerale, String nomeDitta, String domicilioFiscaleDitta,
+    public Ente(String id, String partitaIva, Uri certificatoPIVA, Uri visuraCamerale, String nomeDitta, String domicilioFiscaleDitta,
                 String numeroTelefono, boolean abilitazione) {
         this.id = id;
         this.partitaIva = partitaIva;
@@ -51,19 +70,19 @@ public class Ente {
         this.partitaIva = partitaIva;
     }
 
-    public String getCertificatoPIVA() {
+    @Exclude public Uri getCertificatoPIVA() {
         return certificatoPIVA;
     }
 
-    public void setCertificatoPIVA(String certificatoPIVA) {
+    @Exclude public void setCertificatoPIVA(Uri certificatoPIVA) {
         this.certificatoPIVA = certificatoPIVA;
     }
 
-    public String getVisuraCamerale() {
+    @Exclude public Uri getVisuraCamerale() {
         return visuraCamerale;
     }
 
-    public void setVisuraCamerale(String visuraCamerale) {
+    @Exclude public void setVisuraCamerale(Uri visuraCamerale) {
         this.visuraCamerale = visuraCamerale;
     }
 

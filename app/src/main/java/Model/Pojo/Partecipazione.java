@@ -1,10 +1,16 @@
 package Model.Pojo;
 
+import com.google.firebase.firestore.DocumentId;
+
 import java.util.Date;
 
 public class Partecipazione {
 
+    @DocumentId
+    private String documentId;
+
     private String idUtente;
+    private String idEvento;
     private boolean accettazione;
     private Date dataOra;
     private boolean listaAttesa;
@@ -13,11 +19,12 @@ public class Partecipazione {
     // COSTRUTTORE DELLA CLASSE PARTECIPAZIONE
     public Partecipazione() { }
 
-    public Partecipazione(String idUtente, boolean accettazione, Date dataOra, boolean listaAttesa) {
+    public Partecipazione(String idUtente,String idEvento, boolean accettazione, Date dataOra, boolean listaAttesa) {
         this.idUtente = idUtente;
         this.accettazione = accettazione;
         this.dataOra = dataOra;
         this.listaAttesa = listaAttesa;
+        this.idEvento = idEvento;
     }
 
     // GETTER E SETTER
@@ -51,5 +58,21 @@ public class Partecipazione {
 
     public void setListaAttesa(boolean listaAttesa) {
         this.listaAttesa = listaAttesa;
+    }
+
+    public String getIdEvento() {
+        return idEvento;
+    }
+
+    public void setIdEvento(String idEvento) {
+        this.idEvento = idEvento;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 }
