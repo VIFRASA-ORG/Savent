@@ -88,7 +88,6 @@ public class SplashActivity extends AppCompatActivity {
     private void goAhead(){
         final Intent intent = new Intent(this, LogSingInActivity.class);
         startActivity(intent);
-        finish();
 
     }
 

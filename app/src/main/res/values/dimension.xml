@@ -4,4 +4,12 @@
     <dimen name="margin_size" >10dp</dimen>
     <dimen name="button_width" >180dp</dimen>
     <dimen name="button_height" >40dp</dimen>
+    <dimen name="dimension_icon">150dp</dimen>
+    <dimen name="dimension_text_register">20dp</dimen>
+    <dimen name="margin_left_textView_register">60dp</dimen>
+    <dimen name="margin_left_textView_register_landscape">190dp</dimen>
+    <dimen name="width_editText_register">252dp</dimen>
+    <dimen name="radius_button_register">20dp</dimen>
+    <dimen name="radius_button_login">20dp</dimen>
+    <dimen name="margin_left_textView_login_landscape">190dp</dimen>
 </resources>

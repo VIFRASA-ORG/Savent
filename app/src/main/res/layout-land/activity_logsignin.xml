@@ -29,6 +29,7 @@
 
     <Button
         android:id="@+id/buttonRegistrazione"
+        android:onClick="onRegisterClick"
         android:layout_width="@dimen/button_width"
         android:layout_height="@dimen/button_height"
         android:layout_gravity="center_horizontal"
