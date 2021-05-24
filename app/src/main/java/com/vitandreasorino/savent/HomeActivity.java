@@ -4,52 +4,67 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.widget.LinearLayout;
+import android.widget.Toolbar;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        if(savedInstanceState == null) loadFragment(new HomeFragment());
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new HomeFragment()).commit();
+        //getting bottom navigation view and attaching the listener
+        BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
+        navigation.setOnNavigationItemSelectedListener(this);
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                   Fragment selectedFragment = null;
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment selectedFragment = null;
 
-                   switch (item.getItemId()){
-                        case R.id.nav_home:
-                            selectedFragment = new HomeFragment();
-                            break;
-                        case R.id.nav_group:
-                            selectedFragment = new GroupFragment();
-                            break;
-                        case R.id.nav_event:
-                            selectedFragment = new EventFragment();
-                            break;
-                        case R.id.nav_account:
-                            selectedFragment = new AccountFragment();
-                            break;
-                    }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            selectedFragment).commit();
-                   return true;
-                }
-            };
+        switch (item.getItemId()){
+            case R.id.nav_home:
+                selectedFragment = new HomeFragment();
+                break;
+            case R.id.nav_group:
+                selectedFragment = new GroupFragment();
+                break;
+            case R.id.nav_event:
+                selectedFragment = new EventFragment();
+                break;
+            case R.id.nav_account:
+                selectedFragment = new AccountFragment();
+                break;
+        }
+        return loadFragment(selectedFragment);
+    }
 
+    private boolean loadFragment(Fragment fragment) {
+        //switching fragment
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
 }
