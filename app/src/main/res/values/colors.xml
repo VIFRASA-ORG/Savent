@@ -11,4 +11,6 @@
     <color name="blueButton">#5751FF</color>
     <color name="lightWhite">#FFFFFF</color>
     <color name="backgroundBlue">#C3BEFF</color>
+    <color name="red">#FF0000</color>
+    <color name="lightGray">#d3d3d3</color>
 </resources>

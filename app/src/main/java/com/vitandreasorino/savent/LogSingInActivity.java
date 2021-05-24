@@ -17,11 +17,18 @@ public class LogSingInActivity extends AppCompatActivity {
 
 
     public void onLoginClick(View view) {
-        
+
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
-        finish();
     }
+
+    public void onRegisterClick(View view) {
+
+        Intent schermataRegistrazione = new Intent(this, RegisterActivity.class);
+        startActivity(schermataRegistrazione);
+    }
+
+
 
 
 

@@ -1,0 +1,262 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center|top"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/ic_background">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewRegistrazione"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_size"
+                android:layout_marginTop="@dimen/margin_size"
+                android:layout_marginBottom="@dimen/margin_size"
+                android:text="@string/stringRegistrazione"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimension_text_register" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/dimension_icon"
+                android:layout_height="@dimen/dimension_icon"
+                android:layout_gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/textView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardCornerRadius="75dp"
+                android:outlineAmbientShadowColor="@color/black">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="@dimen/dimension_icon"
+                    android:layout_height="@dimen/dimension_icon"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/profile_icon"/>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom"
+                    android:background="#CCFFFFFF" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="@string/modificaProfilo"
+                    android:textColor="#0000FF"
+                    android:onClick="onClickPhoto"/>
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:id="@+id/textViewNome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register_landscape"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/nomeUtente"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextNome"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/textViewCognome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register_landscape"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/cognomeUtente"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextCognome"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/textViewDataNascita"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register_landscape"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/dataNascitaUtente"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextDataNascita"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="date"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/textViewGenere"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register_landscape"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/genereUtente"
+                android:textColor="@color/black" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/checkBox1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/genereMaschile" />
+
+                    <CheckBox
+                        android:id="@+id/checkBox2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/genereFemminile" />
+
+                    <CheckBox
+                        android:id="@+id/checkBox3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/genereNonDefinito" />
+                </LinearLayout>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textViewTelefono"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register_landscape"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/telefonoUtente"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextTelefono"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="number"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/textViewEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register_landscape"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/EmailUtente"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/textViewPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register_landscape"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/passwordUtente"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/textViewConfermaPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register_landscape"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/confermaPasswordUtente"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextConfermaPassword"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/buttonRegistrazione"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin_size"
+                android:backgroundTint="@color/blueButton"
+                android:text="@string/stringRegistrazione"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:cornerRadius="@dimen/radius_button_register"
+                android:onClick="onRegistrationClick"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
