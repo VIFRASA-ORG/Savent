@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
 
         editTextEmailLogin = (EditText) findViewById(R.id.editTextEmailLogin);
         editTextPasswordLogin = (EditText) findViewById(R.id.editTextPasswordLogin);
+
     }
 
     public void eventLoginClick(View view) {
@@ -63,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
 
         }else{
             backgroundTintEditText();
+            Intent schermataHome = new Intent(this, HomeActivity.class);
+            startActivity(schermataHome);
         }
 
 

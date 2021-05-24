@@ -34,17 +34,18 @@
                 android:layout_marginTop="20dp">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
                     android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
                     android:outlineAmbientShadowColor="@color/black"
                     app:cardCornerRadius="75dp"
                     tools:ignore="UnknownId">
 
                     <ImageView
                         android:id="@+id/imageViewProfile"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
                         android:background="@drawable/profile_icon"
                         android:scaleType="centerCrop"/>
 
@@ -56,14 +57,14 @@
                         android:background="#CCFFFFFF" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/textEditProfilePhoto"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:layout_marginBottom="10dp"
                         android:gravity="center"
-                        android:onClick="onCLick"
                         android:text="@string/ModificaImmagineProfilo"
+                        android:onClick="onClickPhoto"
                         android:textColor="#0000FF" />
                 </androidx.cardview.widget.CardView>
 
@@ -85,11 +86,11 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="1dp"
                     android:ems="10"
-                    android:enabled="false"
+                    android:enabled="true"
                     android:gravity="center"
                     android:inputType="textPersonName"
                     android:singleLine="true"
-                    android:text="Vitandrea"
+                    android:hint="@string/nomeUtente"
                     android:textColor="#050505" />
 
                 <TextView
@@ -110,11 +111,11 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="1dp"
                     android:ems="10"
-                    android:enabled="false"
+                    android:enabled="true"
                     android:gravity="center"
                     android:inputType="textPersonName"
-                    android:text="Sorino"
-                    android:textColor="#050505" />
+                    android:hint="@string/cognomeUtente"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/DateBirth"
@@ -123,7 +124,7 @@
                     android:layout_marginLeft="@dimen/margin_left_Vertical_profile"
                     android:layout_marginTop="@dimen/margin_size_profile"
                     android:text="@string/dataNascita"
-                    android:textColor="#040404"
+                    android:textColor="@color/black"
                     android:textSize="45px" />
 
                 <EditText
@@ -134,12 +135,11 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="1dp"
                     android:ems="10"
-                    android:enabled="false"
+                    android:enabled="true"
                     android:gravity="center"
-                    android:inputType="textPersonName"
-                    android:text="10/05/1996"
-                    android:textColor="#020202"
-                    android:textColorHint="#020202" />
+                    android:inputType="date"
+                    android:hint="@string/dataNascita"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/textGender"
@@ -148,43 +148,38 @@
                     android:layout_marginLeft="@dimen/margin_left_Vertical_profile"
                     android:layout_marginTop="@dimen/margin_size_profile"
                     android:text="@string/Genere"
-                    android:textColor="#040404"
+                    android:textColor="@color/black"
                     android:textSize="45px" />
 
                 <RadioGroup
-                    android:id="@+id/radioGroup"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center">
 
                     <LinearLayout
-                        android:id="@+id/linearLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal">
 
                         <CheckBox
-                            android:id="@+id/checkBoxMale"
-                            android:layout_width="98dp"
+                            android:id="@+id/checkBoxMaleProfile"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Maschio"
-                            android:textColor="#050505" />
+                            android:text="@string/genereMaschile" />
 
                         <CheckBox
-                            android:id="@+id/checkBoxFemale"
-                            android:layout_width="110dp"
+                            android:id="@+id/checkBoxFemaleProfile"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Femmina"
-                            android:textColor="#020202" />
+                            android:text="@string/genereFemminile" />
 
                         <CheckBox
-                            android:id="@+id/checkBoxUndefined"
-                            android:layout_width="120dp"
+                            android:id="@+id/checkBoxUndefinedProfile"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Non definito"
-                            android:textColor="#050505" />
-
+                            android:text="@string/genereNonDefinito" />
                     </LinearLayout>
+
                 </RadioGroup>
 
                 <TextView
@@ -194,7 +189,7 @@
                     android:layout_marginLeft="@dimen/margin_left_Vertical_profile"
                     android:layout_marginTop="@dimen/margin_size_profile"
                     android:text="Phone:"
-                    android:textColor="#020202"
+                    android:textColor="@color/black"
                     android:textSize="45px" />
 
                 <EditText
@@ -206,9 +201,9 @@
                     android:layout_marginTop="1dp"
                     android:ems="10"
                     android:gravity="center"
-                    android:inputType="textPersonName"
-                    android:text="3289743124"
-                    android:textColor="#050505" />
+                    android:inputType="number"
+                    android:hint="@string/telefonoUtente"
+                    android:textColor="@color/black" />
 
                 <Button
                     android:id="@+id/buttonSaveData"
