@@ -1,6 +1,9 @@
 package Model.Pojo;
 
+import android.net.Uri;
+
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
 
 import java.util.List;
 
@@ -9,7 +12,9 @@ public class Gruppo {
     @DocumentId
     private String id;
 
-    private String immagine;
+    @Exclude
+    private Uri immagine;
+
     private String nome;
     private String descrizione;
     private String idAmministratore;
@@ -28,7 +33,7 @@ public class Gruppo {
         this.idComponenti = idComponenti;
     }
 
-    public Gruppo(String id, String immagine, String nome, String descrizione, String idAmministratore, List<String> idComponenti) {
+    public Gruppo(String id, Uri immagine, String nome, String descrizione, String idAmministratore, List<String> idComponenti) {
         this.id = id;
         this.immagine = immagine;
         this.nome = nome;
@@ -46,11 +51,11 @@ public class Gruppo {
         this.id = id;
     }
 
-    public String getImmagine() {
+    @Exclude public Uri getImmagine() {
         return immagine;
     }
 
-    public void setImmagine(String immagine) {
+    @Exclude public void setImmagine(Uri immagine) {
         this.immagine = immagine;
     }
 

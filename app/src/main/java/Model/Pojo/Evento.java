@@ -9,7 +9,6 @@ public class Evento {
     @DocumentId
     private String id;
 
-    private String locandina;
     private String nome;
     private String descrizione;
     private double longitudine;
@@ -21,12 +20,8 @@ public class Evento {
     private int numeroMassimoPartecipanti;
     private int numeroPartecipanti;
 
-    private List<Partecipazione> partecipazioni;
-
-
     // COSTRUTTORI DELLA CLASSE EVENTO
     public Evento() {
-        locandina = "";
         nome = "";
         descrizione = "";
         longitudine = 0;
@@ -37,14 +32,12 @@ public class Evento {
         sogliaAccettazioneStatus = 0;
         numeroMassimoPartecipanti = 0;
         numeroPartecipanti = 0;
-        partecipazioni = new ArrayList<>();
     }
 
     /**
      * Constructor for an event made by a normal user
      *
      * @param id
-     * @param locandina
      * @param nome
      * @param descrizione
      * @param longitudine
@@ -55,10 +48,9 @@ public class Evento {
      * @param numeroMassimoPartecipanti
      * @param numeroPartecipanti
      */
-    public Evento(String id,String locandina, String nome, String descrizione, double longitudine, double latitudine, Date dataOra, String idUtenteCreatore,
-                  int sogliaAccettazioneStatus, int numeroMassimoPartecipanti, int numeroPartecipanti,List<Partecipazione> partecipazioni) {
+    public Evento(String id, String nome, String descrizione, double longitudine, double latitudine, Date dataOra, String idUtenteCreatore,
+                  int sogliaAccettazioneStatus, int numeroMassimoPartecipanti, int numeroPartecipanti) {
         this.id = id;
-        this.locandina = locandina;
         this.nome = nome;
         this.descrizione = descrizione;
         this.longitudine = longitudine;
@@ -68,37 +60,8 @@ public class Evento {
         this.sogliaAccettazioneStatus = sogliaAccettazioneStatus;
         this.numeroMassimoPartecipanti = numeroMassimoPartecipanti;
         this.numeroPartecipanti = numeroPartecipanti;
-        this.partecipazioni = partecipazioni;
     }
 
-    /**
-     * Constructor for an event made by a group
-     *
-     * @param id
-     * @param nome
-     * @param descrizione
-     * @param longitudine
-     * @param latitudine
-     * @param dataOra
-     * @param idGruppoCreatore
-     * @param sogliaAccettazioneStatus
-     * @param numeroMassimoPartecipanti
-     * @param numeroPartecipanti
-     */
-    public Evento(String id,  String nome, String descrizione, double longitudine, double latitudine, Date dataOra, String idGruppoCreatore,
-                  int sogliaAccettazioneStatus, int numeroMassimoPartecipanti, int numeroPartecipanti,List<Partecipazione> partecipazioni) {
-        this.id = id;
-        this.nome = nome;
-        this.descrizione = descrizione;
-        this.longitudine = longitudine;
-        this.latitudine = latitudine;
-        this.dataOra = dataOra;
-        this.idGruppoCreatore = idGruppoCreatore;
-        this.sogliaAccettazioneStatus = sogliaAccettazioneStatus;
-        this.numeroMassimoPartecipanti = numeroMassimoPartecipanti;
-        this.numeroPartecipanti = numeroPartecipanti;
-        this.partecipazioni = partecipazioni;
-    }
 
     // GETTER E SETTER
     public String getId() {
@@ -107,14 +70,6 @@ public class Evento {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getLocandina() {
-        return locandina;
-    }
-
-    public void setLocandina(String locandina) {
-        this.locandina = locandina;
     }
 
     public String getNome() {
@@ -195,13 +150,5 @@ public class Evento {
 
     public void setNumeroPartecipanti(int numeroPartecipanti) {
         this.numeroPartecipanti = numeroPartecipanti;
-    }
-
-    public List<Partecipazione> getPartecipazioni() {
-        return partecipazioni;
-    }
-
-    public void setPartecipazioni(List<Partecipazione> partecipazioni) {
-        this.partecipazioni = partecipazioni;
     }
 }

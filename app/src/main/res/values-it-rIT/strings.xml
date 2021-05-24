@@ -4,6 +4,23 @@
     <string name="stringRegistrazione">Registrazione</string>
     <string name="stringAccesso">Accesso</string>
     <string name="PasswordDimenticata">Password dimenticata?</string>
+    <string name="modificaProfilo">Modifica</string>
+    <string name="nomeUtente">Nome</string>
+    <string name="cognomeUtente">Cognome</string>
+    <string name="dataNascitaUtente">Data di nascita</string>
+    <string name="genereUtente">Genere</string>
+    <string name="genereMaschile">Maschio</string>
+    <string name="genereFemminile">Femmina</string>
+    <string name="genereNonDefinito">Non definito</string>
+    <string name="telefonoUtente">Telefono</string>
+    <string name="EmailUtente">Email</string>
+    <string name="passwordUtente">Password</string>
+    <string name="confermaPasswordUtente">Conferma password</string>
+    <string name="passwordErrataRegister">Inserire almeno un carattere maiuscolo, minuscolo e numerico</string>
+    <string name="campiErratiRegister">Ci sono campi errati</string>
+    <string name="registrazioneEffettuataRegister">Utente registrato</string>
+
+
     <string name="TabBarHome">Home </string>
     <string name="TabBarGroups">Gruppi </string>
     <string name="TabBarEvents">Eventi </string>

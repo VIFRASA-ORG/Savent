@@ -1,58 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/ic_background">
+    android:background="@drawable/ic_background"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/logoSavent"
         android:layout_width="150dp"
-        android:layout_height="350dp"
+        android:layout_height="316dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         app:srcCompat="@drawable/app_icon" />
 
+    <TextView
+        android:id="@+id/textViewEmailLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="@dimen/margin_left_textView_register"
+        android:layout_marginTop="@dimen/margin_size"
+        android:text="@string/EmailUtente"
+        android:textColor="@color/black" />
+
     <EditText
-        android:id="@+id/editTextEmailAddress"
-        android:layout_width="280dp"
-        android:layout_height="35dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/margin_size"
-        android:background="@drawable/ic_round_corner"
-        android:drawableStart="@drawable/ic_baseline_email_24"
+        android:id="@+id/editTextEmailLogin"
+        android:layout_width="@dimen/width_editText_register"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:ems="10"
-        android:hint="Email"
-        android:maxLength="64"
-        android:maxLines="1"
-        android:paddingLeft="6dp"
+        android:inputType="textEmailAddress"
         android:singleLine="true"
-        android:textColor="@color/black"
-        android:textColorHighlight="@color/blueButton"
-        android:textColorHint="@color/gray"
-        android:textColorLink="#FF03DAC5"
-        android:textCursorDrawable="@color/blueButton" />
+        app:backgroundTint="@color/gray"/>
 
+    <TextView
+        android:id="@+id/textViewPasswordLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="@dimen/margin_left_textView_register"
+        android:layout_marginTop="@dimen/margin_size"
+        android:text="@string/passwordUtente"
+        android:textColor="@color/black" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
-        android:layout_width="280dp"
-        android:layout_height="35dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/margin_size"
-        android:background="@drawable/ic_round_corner"
-        android:drawableStart="@drawable/ic_baseline_lock_24"
+        android:id="@+id/editTextPasswordLogin"
+        android:layout_width="@dimen/width_editText_register"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:ems="10"
-        android:hint="Password"
         android:inputType="textPassword"
-        android:maxLength="64"
-        android:maxLines="1"
-        android:paddingLeft="6dp"
         android:singleLine="true"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray" />
-
+        app:backgroundTint="@color/gray"/>
 
     <TextView
         android:id="@+id/textPasswordDimenticata"
@@ -64,16 +65,17 @@
 
 
     <Button
-        android:id="@+id/buttonAccedi"
-        android:onClick="onLoginEntry"
-        android:layout_width="@dimen/button_width"
-        android:layout_height="@dimen/button_height"
+        android:id="@+id/buttonAccediLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="20dp"
-        android:background="@drawable/ic_button_shape"
         android:backgroundTint="@color/blueButton"
         android:gravity="center"
-        android:text="@string/stringAccesso" />
+        android:textColor="@color/white"
+        android:text="@string/stringAccesso"
+        app:cornerRadius="@dimen/radius_button_login"
+        android:onClick="eventLoginClick"/>
 
 
 </LinearLayout>

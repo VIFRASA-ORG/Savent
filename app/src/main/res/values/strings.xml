@@ -3,6 +3,22 @@
     <string name="stringRegistrazione">Sign up</string>
     <string name="stringAccesso">Login</string>
     <string name="PasswordDimenticata">Forgot password?</string>
+    <string name="modificaProfilo">Edit</string>
+    <string name="nomeUtente">Name</string>
+    <string name="cognomeUtente">Surname</string>
+    <string name="dataNascitaUtente">Date of birth</string>
+    <string name="genereUtente">Gender</string>
+    <string name="genereMaschile">Male</string>
+    <string name="genereFemminile">Female</string>
+    <string name="genereNonDefinito">Undefined</string>
+    <string name="telefonoUtente">Phone</string>
+    <string name="EmailUtente">Email</string>
+    <string name="passwordUtente">Password</string>
+    <string name="confermaPasswordUtente">Confirm password</string>
+    <string name="passwordErrataRegister">Enter at least one uppercase, lowercase and numeric character</string>
+    <string name="campiErratiRegister">There are incorrect fields</string>
+    <string name="registrazioneEffettuataRegister">Registered user</string>
+
     <string name="TabBarHome">Home </string>
     <string name="TabBarGroups">Groups </string>
     <string name="TabBarEvents">Events </string>
