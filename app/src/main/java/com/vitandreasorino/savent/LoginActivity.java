@@ -54,15 +54,14 @@ public class LoginActivity extends AppCompatActivity {
 
             if(validazionePassword(passwordLogin) == false || passwordLogin.contains(" ")) {
                 editTextPasswordLogin.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
-                Toast.makeText(this, "Inserire almeno un carattere maiuscolo, minuscolo e numerico", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.passwordErrataRegister), Toast.LENGTH_LONG).show();
             }else{
                 editTextPasswordLogin.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
-            Toast.makeText(this, "CI SONO CAMPI ERRATI", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.campiErratiRegister), Toast.LENGTH_LONG).show();
 
         }else{
-
             backgroundTintEditText();
         }
 
