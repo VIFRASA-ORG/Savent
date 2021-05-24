@@ -4,4 +4,19 @@
     <string name="stringRegistrazione">Registrazione</string>
     <string name="stringAccesso">Accesso</string>
     <string name="PasswordDimenticata">Password dimenticata?</string>
+    <string name="TabBarHome">Home </string>
+    <string name="TabBarGroups">Gruppi </string>
+    <string name="TabBarEvents">Eventi </string>
+    <string name="TabBarAccount">Profilo </string>
+    <string name="statusText">Negativo </string>
+    <string name="Nome">Nome:</string>
+    <string name="Cognome">Cognome:</string>
+    <string name="Genere">Genere:</string>
+    <string name="dataNascita">Data di nascita:</string>
+    <string name="email">La tua email:</string>
+    <string name="password">La tua password:</string>
+    <string name="ModificaImmagineProfilo">Modifica</string>
+    <string name="salvaModifiche">Salva modifiche</string>
+    <string name="cambiaCredenziali">Modifica le credenziali di accesso</string>
+
 </resources>

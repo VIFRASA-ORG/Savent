@@ -4,4 +4,13 @@
     <dimen name="margin_size" >10dp</dimen>
     <dimen name="button_width" >180dp</dimen>
     <dimen name="button_height" >40dp</dimen>
+    <dimen name="nav_bar" >200dp</dimen>
+    <dimen name="nav_bar_land" >70dp</dimen>
+    <dimen name="margin_box" >35dp</dimen>
+    <dimen name="margin_text_box" >20dp</dimen>
+    <dimen name="icon_status_bar" >35dp</dimen>
+    <dimen name="margin_left_Vertical_profile">60dp</dimen>
+    <dimen name="margin_left_Horizontal_profile">180dp</dimen>
+    <dimen name="margin_size_profile" >2dp</dimen>
+
 </resources>

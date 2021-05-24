@@ -3,4 +3,18 @@
     <string name="stringRegistrazione">Sign up</string>
     <string name="stringAccesso">Login</string>
     <string name="PasswordDimenticata">Forgot password?</string>
+    <string name="TabBarHome">Home </string>
+    <string name="TabBarGroups">Groups </string>
+    <string name="TabBarEvents">Events </string>
+    <string name="TabBarAccount">Account </string>
+    <string name="statusText">Negative </string>
+    <string name="Nome">Name:</string>
+    <string name="Cognome">Surname:</string>
+    <string name="Genere">Gender:</string>
+    <string name="dataNascita">Date of birth:</string>
+    <string name="email">Your email:</string>
+    <string name="password">Your password:</string>
+    <string name="ModificaImmagineProfilo">Edit</string>
+    <string name="salvaModifiche">Save modification</string>
+    <string name="cambiaCredenziali">Change your login credentials</string>
 </resources>
