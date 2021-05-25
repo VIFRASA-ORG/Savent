@@ -1,6 +1,8 @@
 package com.vitandreasorino.savent;
 
 
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +18,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -30,16 +34,17 @@ public class AccountFragment extends Fragment {
     ImageView imageViewProfile;
     TextView textEditProfilePhoto;
 
+    View rootView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_account, container, false);
+        rootView = inflater.inflate(R.layout.fragment_account, container, false);
         checkBoxMaleProfile = (CheckBox) rootView.findViewById(R.id.checkBoxMaleProfile);
         checkBoxFemaleProfile = (CheckBox) rootView.findViewById(R.id.checkBoxFemaleProfile);
         checkBoxUndefinedProfile = (CheckBox) rootView.findViewById(R.id.checkBoxUndefinedProfile);
         imageViewProfile = (ImageView) rootView.findViewById(R.id.imageViewProfile);
         textEditProfilePhoto = (TextView) rootView.findViewById(R.id.textEditProfilePhoto);
-
         /**
          * Metodo utilizzato per gestire la selezione di una singola checkbox per volta.
          */
@@ -109,6 +114,5 @@ public class AccountFragment extends Fragment {
 
 
     }
-
 
 }

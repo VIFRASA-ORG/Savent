@@ -33,4 +33,7 @@
     <string name="ModificaImmagineProfilo">Edit</string>
     <string name="salvaModifiche">Save modification</string>
     <string name="cambiaCredenziali">Change your login credentials</string>
+
+    <string name="errorLogin">Email or password incorrect!</string>
+    <string name="correctLogin">Login successful!</string>
 </resources>

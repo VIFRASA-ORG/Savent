@@ -9,6 +9,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 
+import Helper.AuthHelper;
 
 
 public class SplashActivity extends AppCompatActivity {
@@ -86,9 +87,13 @@ public class SplashActivity extends AppCompatActivity {
      *
      */
     private void goAhead(){
-        final Intent intent = new Intent(this, LogSingInActivity.class);
-        startActivity(intent);
+        Intent intent;
 
+        if(!AuthHelper.isLoggedIn()) intent = new Intent(this, LogSingInActivity.class);
+        else intent = new Intent(this, HomeActivity.class);
+
+        startActivity(intent);
+        finish();
     }
 
 }

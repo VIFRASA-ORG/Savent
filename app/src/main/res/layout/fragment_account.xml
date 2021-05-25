@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center|top"
@@ -20,57 +20,58 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/linearLayoutProfileInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/nav_bar">
+                android:paddingTop="50dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/ic_box"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
                     tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="1dp"
-                    android:layout_marginTop="20dp">
+                    tools:layout_editor_absoluteX="1dp">
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="130dp"
-                        android:layout_height="130dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="15dp"
-                        android:outlineAmbientShadowColor="@color/black"
-                        app:cardCornerRadius="65dp"
-                        tools:ignore="UnknownId">
-
-                        <ImageView
-                            android:id="@+id/imageViewProfile"
+                        <androidx.cardview.widget.CardView
                             android:layout_width="130dp"
                             android:layout_height="130dp"
-                            android:background="@drawable/profile_icon"
-                            android:scaleType="centerCrop"/>
+                            android:layout_gravity="center"
+                            android:layout_marginTop="15dp"
+                            android:outlineAmbientShadowColor="@color/black"
+                            app:cardCornerRadius="65dp"
+                            tools:ignore="UnknownId">
 
-                        <View
-                            android:id="@+id/view2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="bottom"
-                            android:background="#CCFFFFFF" />
+                            <ImageView
+                                android:id="@+id/imageViewProfile"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/profile_icon"
+                                android:scaleType="centerCrop" />
 
-                        <TextView
-                            android:id="@+id/textEditProfilePhoto"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:layout_marginBottom="10dp"
-                            android:gravity="center"
-                            android:text="@string/ModificaImmagineProfilo"
-                            android:onClick="onClickPhoto"
-                            android:textColor="#0000FF" />
-                    </androidx.cardview.widget.CardView>
+                            <View
+                                android:id="@+id/view2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_gravity="bottom"
+                                android:background="#CCFFFFFF" />
+
+                            <TextView
+                                android:id="@+id/textEditProfilePhoto"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:layout_marginBottom="10dp"
+                                android:gravity="center"
+                                android:onClick="onClickPhoto"
+                                android:text="@string/ModificaImmagineProfilo"
+                                android:textColor="#0000FF" />
+                        </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/Name"
@@ -92,9 +93,9 @@
                         android:ems="10"
                         android:enabled="true"
                         android:gravity="center"
+                        android:hint="@string/nomeUtente"
                         android:inputType="textPersonName"
                         android:singleLine="true"
-                        android:hint="@string/nomeUtente"
                         android:textColor="#050505" />
 
                     <TextView
@@ -117,8 +118,8 @@
                         android:ems="10"
                         android:enabled="true"
                         android:gravity="center"
-                        android:inputType="textPersonName"
                         android:hint="@string/cognomeUtente"
+                        android:inputType="textPersonName"
                         android:textColor="@color/black" />
 
                     <TextView
@@ -141,8 +142,8 @@
                         android:ems="10"
                         android:enabled="true"
                         android:gravity="center"
-                        android:inputType="date"
                         android:hint="@string/dataNascita"
+                        android:inputType="date"
                         android:textColor="@color/black" />
 
                     <TextView
@@ -205,8 +206,8 @@
                         android:layout_marginTop="1dp"
                         android:ems="10"
                         android:gravity="center"
-                        android:inputType="number"
                         android:hint="@string/telefonoUtente"
+                        android:inputType="number"
                         android:textColor="@color/black" />
 
                     <Button
@@ -225,11 +226,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="40dp"
                         android:text="@string/cambiaCredenziali"
                         android:textColor="@color/blueButton"
-                        android:textSize="40px"
-                        android:layout_marginBottom="40dp"/>
+                        android:textSize="40px" />
 
                 </LinearLayout>
 

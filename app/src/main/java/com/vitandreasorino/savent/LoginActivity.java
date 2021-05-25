@@ -10,12 +10,16 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import Helper.AuthHelper;
+import Model.Closures.ClosureBoolean;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -64,11 +68,30 @@ public class LoginActivity extends AppCompatActivity {
 
         }else{
             backgroundTintEditText();
-            Intent schermataHome = new Intent(this, HomeActivity.class);
-            startActivity(schermataHome);
+            AuthHelper.singIn(emailLogin, passwordLogin, new ClosureBoolean() {
+                @Override
+                public void closure(boolean isSuccess) {
+                    if(isSuccess){
+                        loginEffettuato();
+                    }else{
+                        errorDuringLogin();
+                    }
+                }
+            });
         }
 
 
+    }
+
+    private final void errorDuringLogin(){
+        Toast.makeText(getApplicationContext(),getString(R.string.errorLogin),Toast.LENGTH_SHORT).show();
+    }
+
+    private final void loginEffettuato(){
+        Toast.makeText(getApplicationContext(),getString(R.string.correctLogin),Toast.LENGTH_SHORT).show();
+        Intent schermataHome = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(schermataHome);
+        finish();
     }
 
     /**

@@ -36,4 +36,7 @@
     <string name="salvaModifiche">Salva modifiche</string>
     <string name="cambiaCredenziali">Modifica le credenziali di accesso</string>
 
+    <string name="errorLogin">Email o password errati!</string>
+    <string name="correctLogin">Login effettuato!</string>
+
 </resources>
