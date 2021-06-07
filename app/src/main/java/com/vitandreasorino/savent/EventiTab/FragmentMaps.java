@@ -24,6 +24,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -129,6 +131,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
             for(Evento e : closureList){
                 markerList.add(map.addMarker(new MarkerOptions()
                         .position(new LatLng(e.getLatitudine(),e.getLongitudine()))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_icon))
                         .title(e.getNome())));
             }
 
@@ -158,6 +161,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
             for(Evento e : closureList){
                 markerList.add(map.addMarker(new MarkerOptions()
                         .position(new LatLng(e.getLatitudine(),e.getLongitudine()))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_icon))
                         .title(e.getNome())));
             }
         });

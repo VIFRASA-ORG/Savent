@@ -14,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vitandreasorino.savent.R;
@@ -136,6 +137,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
 
         map.addMarker(new MarkerOptions()
                 .position(eventPlace)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_icon))
                 .title(eventModel.getNome()));
         moveToLocation(eventPlace);
     }
