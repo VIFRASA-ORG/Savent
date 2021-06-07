@@ -21,4 +21,14 @@
     <dimen name="margin_left_Horizontal_profile">180dp</dimen>
     <dimen name="margin_size_profile" >2dp</dimen>
 
+    <dimen name="margin_size_register_ente">170dp</dimen>
+    <dimen name="dimension_text_register_ente">15dp</dimen>
+    <dimen name="margin_size_register_ente_land">420dp</dimen>
+    <dimen name="radius_button_register_ente">5dp</dimen>
+    <dimen name="margin_left_company_land">200dp</dimen>
+    <dimen name="margin_left_freelance_land">200dp</dimen>
+    <dimen name="margin_left_freelance_button_land">220dp</dimen>
+    <dimen name="margin_left_company_button_land">220dp</dimen>
+    <dimen name="margin_left_loadImage_land">205dp</dimen>
+
 </resources>

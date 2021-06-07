@@ -17,6 +17,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.vitandreasorino.savent.RegistrazioniEnte.RegisterEnteActivity;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.regex.Matcher;
@@ -371,6 +374,12 @@ public class RegisterActivity extends AppCompatActivity {
         return matchTrovato;
     }
 
+    public void onClickRegisterEnte(View view) {
+
+        Intent schermataRegistrazioneEnte = new Intent(this, RegisterEnteActivity.class);
+        startActivity(schermataRegistrazioneEnte);
+    }
+
 
 
     public void onClickPhoto(View view){
@@ -398,6 +407,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (null != selectedImageUri) {
                     // update the preview image in the layout
                     imageView.setImageURI(selectedImageUri);
+
                 }
             }
         }

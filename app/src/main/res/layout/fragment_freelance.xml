@@ -1,206 +1,84 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center|top"
-    android:layout_gravity="center"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".RegistrazioniEnte.FreelanceFragment"
     android:background="@drawable/ic_background">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/boxHome">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textViewRegistrazione"
+                    android:id="@+id/textViewCertificatoPartitaIvaFreelance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_size"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="@dimen/margin_left_textView_register"
                     android:layout_marginTop="@dimen/margin_size"
-                    android:layout_marginBottom="@dimen/margin_size"
-                    android:text="@string/stringRegistrazione"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/dimension_text_register" />
-
-                <TextView
-                    android:id="@+id/textViewRegistrazioneEnte"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_size_register_ente"
-                    android:layout_marginRight="@dimen/margin_size"
-                    android:layout_marginTop="@dimen/margin_size"
-                    android:layout_marginBottom="@dimen/margin_size"
-                    android:text="@string/text_register_ente"
-                    android:textAlignment="center"
-                    android:textColor="@color/blueButton"
-                    android:textSize="@dimen/dimension_text_register_ente"
-                    android:onClick="onClickRegisterEnte"/>
+                    android:text="@string/certificato_partita_iva"
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="@dimen/dimension_icon"
-                android:layout_height="@dimen/dimension_icon"
-                android:layout_gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/textView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:cardCornerRadius="75dp"
-                android:outlineAmbientShadowColor="@color/black">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="@dimen/dimension_icon"
-                    android:layout_height="@dimen/dimension_icon"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/profile_icon"/>
-
-                <View
-                    android:id="@+id/view2"
+                <Button
+                    android:id="@+id/buttonCertificatoPartitaIvaFreelance"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="bottom"
-                    android:background="#CCFFFFFF" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/blueButton"
+                    android:text="@string/button_carica"
+                    android:textColor="@color/white"
+                    app:cornerRadius="@dimen/radius_button_register_ente"
+                    />
 
                 <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
+                    android:id="@+id/textViewLabelCaricamento"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:text="@string/modificaProfilo"
-                    android:textColor="#0000FF"
-                    android:onClick="onClickPhoto"/>
-            </androidx.cardview.widget.CardView>
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="65dp"
+                    android:text="@string/immagine_caricata"
+                    android:visibility="invisible"
+                    android:textColor="@color/black" />
+
+
+            </LinearLayout>
 
 
             <TextView
-                android:id="@+id/textViewNome"
+                android:id="@+id/textViewPartitaIvaFreelance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginLeft="@dimen/margin_left_textView_register"
                 android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/nomeUtente"
+                android:text="@string/numero_partita_iva"
                 android:textColor="@color/black" />
 
             <EditText
-                android:id="@+id/editTextNome"
-                android:layout_width="@dimen/width_editText_register"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:singleLine="true"
-                app:backgroundTint="@color/gray" />
-
-            <TextView
-                android:id="@+id/textViewCognome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/cognomeUtente"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/editTextCognome"
-                android:layout_width="@dimen/width_editText_register"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:singleLine="true"
-                app:backgroundTint="@color/gray"/>
-
-            <TextView
-                android:id="@+id/textViewDataNascita"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/dataNascitaUtente"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/editTextDataNascita"
-                android:layout_width="@dimen/width_editText_register"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:hint="gg/mm/aaaa"
-                android:inputType="date"
-                android:singleLine="true"
-                app:backgroundTint="@color/gray"/>
-
-            <TextView
-                android:id="@+id/textViewGenere"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/genereUtente"
-                android:textColor="@color/black" />
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/checkBox1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/genereMaschile" />
-
-                    <CheckBox
-                        android:id="@+id/checkBox2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/genereFemminile" />
-
-                    <CheckBox
-                        android:id="@+id/checkBox3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/genereNonDefinito" />
-                </LinearLayout>
-
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/textViewTelefono"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/telefonoUtente"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/editTextTelefono"
+                android:id="@+id/editTextPartitaIvaFreelance"
                 android:layout_width="@dimen/width_editText_register"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -210,7 +88,130 @@
                 app:backgroundTint="@color/gray"/>
 
             <TextView
-                android:id="@+id/textViewEmail"
+                android:id="@+id/textViewNomeFreelance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/nomeUtente"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextNomeFreelance"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                app:backgroundTint="@color/gray" />
+
+            <TextView
+                android:id="@+id/textViewCognomeFreelance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/cognomeUtente"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextCognomeFreelance"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                app:backgroundTint="@color/gray" />
+
+            <TextView
+                android:id="@+id/textViewCodiceFiscaleFreelance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/codice_fiscale"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextCodiceFiscaleFreelance"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="text"
+                android:singleLine="true"
+                app:backgroundTint="@color/gray" />
+
+            <TextView
+                android:id="@+id/textViewResidenzaFreelance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/residenza"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextResidenzaFreelance"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="92 Viale Giovanni XXIII"
+                android:ems="10"
+                android:inputType="text"
+                android:singleLine="true"
+                app:backgroundTint="@color/gray" />
+
+
+            <TextView
+                android:id="@+id/textViewNumeroIscrizioneAlboFreelance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/numero_albo"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextNumeroIscrizioneAlboFreelance"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="number"
+                android:singleLine="true"
+                app:backgroundTint="@color/gray"/>
+
+            <TextView
+                android:id="@+id/textViewTelefonoFreelance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/telefonoUtente"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextTelefonoFreelance"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="number"
+                android:singleLine="true"
+                app:backgroundTint="@color/gray"/>
+
+
+            <TextView
+                android:id="@+id/textViewEmailFreelance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -220,7 +221,7 @@
                 android:textColor="@color/black" />
 
             <EditText
-                android:id="@+id/editTextEmail"
+                android:id="@+id/editTextEmailFreelance"
                 android:layout_width="@dimen/width_editText_register"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -230,7 +231,7 @@
                 app:backgroundTint="@color/gray"/>
 
             <TextView
-                android:id="@+id/textViewPassword"
+                android:id="@+id/textViewPasswordFreelance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -240,7 +241,7 @@
                 android:textColor="@color/black" />
 
             <EditText
-                android:id="@+id/editTextPassword"
+                android:id="@+id/editTextPasswordFreelance"
                 android:layout_width="@dimen/width_editText_register"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -250,7 +251,7 @@
                 app:backgroundTint="@color/gray"/>
 
             <TextView
-                android:id="@+id/textViewConfermaPassword"
+                android:id="@+id/textViewConfermaPasswordFreelance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -260,7 +261,7 @@
                 android:textColor="@color/black" />
 
             <EditText
-                android:id="@+id/editTextConfermaPassword"
+                android:id="@+id/editTextConfermaPasswordFreelance"
                 android:layout_width="@dimen/width_editText_register"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -270,20 +271,22 @@
                 app:backgroundTint="@color/gray"/>
 
             <Button
-                android:id="@+id/buttonRegistrazione"
+                android:id="@+id/buttonRegistrazioneFreelance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/margin_size"
+                android:layout_marginTop="@dimen/margin_size"
+                android:layout_marginLeft="@dimen/margin_size"
+                android:layout_marginRight="@dimen/margin_size"
+                android:layout_marginBottom="25dp"
                 android:backgroundTint="@color/blueButton"
                 android:text="@string/stringRegistrazione"
                 android:textColor="@color/white"
-                app:cornerRadius="@dimen/radius_button_register"
-                android:onClick="onRegistrationClick"/>
+                app:cornerRadius="@dimen/radius_button_register" />
 
         </LinearLayout>
 
     </ScrollView>
 
 
-</LinearLayout>
+</FrameLayout>

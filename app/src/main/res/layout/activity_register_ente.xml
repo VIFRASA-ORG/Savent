@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".RegistrazioniEnte.RegisterEnteActivity"
+    android:background="@drawable/ic_background">
+
+    <TextView
+        android:id="@+id/textViewSelezioneEnte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_size"
+        android:layout_marginTop="@dimen/margin_size"
+        android:text="@string/select_ente"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dimension_text_register" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutRegistrazione"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/ic_box_status_register">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabFreelance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/freelance"
+            android:icon="@drawable/ic_baseline_person_24"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabCompany"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company"
+            android:icon="@drawable/ic_baseline_home_work_24"/>
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
+import Helper.AuthHelper;
+
 
 public class HomeFragment extends Fragment {
 
