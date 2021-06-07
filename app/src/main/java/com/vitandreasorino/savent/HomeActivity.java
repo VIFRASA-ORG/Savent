@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vitandreasorino.savent.EventiTab.EventFragment;
 
 import Helper.AnimationHelper;
+import Helper.AuthHelper;
 
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -145,4 +146,5 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         BIG,
         SMALL
     }
+    
 }

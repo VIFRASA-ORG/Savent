@@ -1,13 +1,15 @@
 package Model.Pojo;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Gruppo {
+public class Gruppo implements Serializable {
 
     @DocumentId
     private String id;
@@ -15,10 +17,13 @@ public class Gruppo {
     @Exclude
     private Uri immagine;
 
+    @Exclude
+    private Bitmap immagineBitmap;
+
     private String nome;
     private String descrizione;
     private String idAmministratore;
-
+    private boolean isImmagineUploaded;
     private List<String> idComponenti;
 
 
@@ -30,6 +35,7 @@ public class Gruppo {
         this.nome = nome;
         this.descrizione = descrizione;
         this.idAmministratore = idAmministratore;
+        this.isImmagineUploaded = false;
         this.idComponenti = idComponenti;
     }
 
@@ -39,6 +45,7 @@ public class Gruppo {
         this.nome = nome;
         this.descrizione = descrizione;
         this.idAmministratore = idAmministratore;
+        this.isImmagineUploaded = true;
         this.idComponenti = idComponenti;
     }
 
@@ -89,5 +96,23 @@ public class Gruppo {
 
     public void setIdComponenti(List<String> idComponenti) {
         this.idComponenti = idComponenti;
+    }
+
+    public boolean isImmagineUploaded() {
+        return isImmagineUploaded;
+    }
+
+    public void setImmagineUploaded(boolean immagineUploaded) {
+        isImmagineUploaded = immagineUploaded;
+    }
+
+    @Exclude
+    public Bitmap getImmagineBitmap() {
+        return immagineBitmap;
+    }
+
+    @Exclude
+    public void setImmagineBitmap(Bitmap immagineBitmap) {
+        this.immagineBitmap = immagineBitmap;
     }
 }
