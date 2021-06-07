@@ -290,9 +290,8 @@ public class CompanyFragment extends Fragment {
 
 
     /**
-     * Controllo che la sede della ditta in input rispetti le seguenti caratteristiche:
-     * stringa non vuota, lunghezza compresa tra 3 e 15 caratteri,
-     * solo caratteri letterali, stringa priva di spazi.
+     * Controllo che la sede dell'azienda sia formattata correttamente
+     * Va inserito prima il numero civico e poi successivamente la via
      * @param controlloSedeDitta stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
      */
@@ -302,7 +301,7 @@ public class CompanyFragment extends Fragment {
             return false;
         }
 
-        Pattern p = Pattern.compile("^[a-z]{3,15}$", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("^\\d{1}[a-z-A-Z\\ \\d#-.\\/'()]+$");
         Matcher m = p.matcher(controlloSedeDitta);
         boolean matchTrovato = m.matches();
 

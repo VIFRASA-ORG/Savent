@@ -41,7 +41,7 @@
 
     <string name="text_register_ente"><u>Sei un ente? Clicca qui!</u></string>
     <string name="select_ente">Seleziona ente</string>
-    <string name="freelance">Professionista</string>
+    <string name="freelance">L. Professionista</string>
     <string name="company">Azienda</string>
 
     <string name="certificato_partita_iva">Certificato partita IVA</string>

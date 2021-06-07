@@ -162,6 +162,7 @@
                 android:layout_width="@dimen/width_editText_register"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:hint="92 Viale Giovanni XXIII"
                 android:ems="10"
                 android:inputType="text"
                 android:singleLine="true"

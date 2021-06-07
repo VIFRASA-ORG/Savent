@@ -297,9 +297,8 @@ public class FreelanceFragment extends Fragment {
 
 
     /**
-     * Controllo che la residenza del freelance in input rispetti le seguenti caratteristiche:
-     * stringa non vuota, lunghezza compresa tra 3 e 15 caratteri,
-     * solo caratteri letterali, stringa priva di spazi.
+     * Controllo che la residenza dell'azienda sia formattata correttamente
+     * Va inserito prima il numero civico e poi successivamente la via
      * @param controlloResidenzaFreelance stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
      */
@@ -309,7 +308,7 @@ public class FreelanceFragment extends Fragment {
             return false;
         }
 
-        Pattern p = Pattern.compile("^[a-z]{3,15}$", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("^\\d{1}[a-z-A-Z\\ \\d#-.\\/'()]+$");
         Matcher m = p.matcher(controlloResidenzaFreelance);
         boolean matchTrovato = m.matches();
 
