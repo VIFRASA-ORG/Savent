@@ -23,87 +23,129 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp">
 
-                <TextView
-                    android:id="@+id/textViewCertificatoPartitaIvaDitta"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="@dimen/margin_left_company_land"
-                    android:layout_marginTop="@dimen/margin_size"
-                    android:text="@string/certificato_partita_iva"
-                    android:textColor="@color/black" />
+                    android:layout_weight="1"
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/textViewVisuraCameraleDitta"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/textViewCertificatoPartitaIvaDitta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/certificato_partita_iva"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="@dimen/margin_size"
-                    android:text="@string/visura_camerale"
-                    android:textColor="@color/black" />
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textViewVisuraCameraleDitta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/visura_camerale"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp">
 
-                <Button
-                    android:id="@+id/buttonCertificatoPartitaIvaDitta"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="@dimen/margin_left_company_button_land"
-                    android:layout_marginTop="10dp"
-                    android:backgroundTint="@color/blueButton"
-                    android:text="@string/button_carica"
-                    android:textColor="@color/white"
-                    app:cornerRadius="@dimen/radius_button_register_ente" />
+                    android:layout_weight="1"
+                    android:gravity="center">
 
-                <Button
-                    android:id="@+id/buttonVisuraCameraleDitta"
-                    android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/buttonCertificatoPartitaIvaDitta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:backgroundTint="@color/blueButton"
+                        android:text="@string/button_carica"
+                        android:textColor="@color/white"
+                        app:cornerRadius="@dimen/radius_button_register_ente" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="62dp"
-                    android:backgroundTint="@color/blueButton"
-                    android:text="@string/button_carica"
-                    android:textColor="@color/white"
-                    app:cornerRadius="@dimen/radius_button_register_ente" />
+                    android:layout_weight="1"
+                    android:gravity="center">
 
+                    <Button
+                        android:id="@+id/buttonVisuraCameraleDitta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:backgroundTint="@color/blueButton"
+                        android:text="@string/button_carica"
+                        android:textColor="@color/white"
+                        app:cornerRadius="@dimen/radius_button_register_ente" />
+
+                </LinearLayout>
             </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp">
 
-
-                <TextView
-                    android:id="@+id/textViewLabelCaricamentoCertificatoDitta"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="@dimen/margin_left_loadImage_land"
-                    android:text="@string/immagine_caricata"
-                    android:visibility="invisible"
-                    android:textColor="@color/black" />
+                    android:layout_weight="1"
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/textViewLabelCaricamentoVisuraDitta"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/textViewLabelCaricamentoCertificatoDitta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        android:text="@string/immagine_caricata"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="40dp"
-                    android:text="@string/immagine_caricata"
-                    android:visibility="invisible"
-                    android:textColor="@color/black" />
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textViewLabelCaricamentoVisuraDitta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        android:text="@string/immagine_caricata"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
