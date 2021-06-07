@@ -1,13 +1,21 @@
 package Model.Pojo;
 
-import com.google.firebase.firestore.DocumentId;
+import android.graphics.Bitmap;
 
+import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
+
+import java.io.Serializable;
 import java.util.*;
 
-public class Evento {
+public class Evento implements Serializable {
 
     @DocumentId
     private String id;
+
+    @Exclude
+    private transient Bitmap imageBitmap;
+    private boolean isImageUploaded;
 
     private String nome;
     private String descrizione;
@@ -32,6 +40,7 @@ public class Evento {
         sogliaAccettazioneStatus = 0;
         numeroMassimoPartecipanti = 0;
         numeroPartecipanti = 0;
+        isImageUploaded = false;
     }
 
     /**
@@ -49,7 +58,7 @@ public class Evento {
      * @param numeroPartecipanti
      */
     public Evento(String id, String nome, String descrizione, double longitudine, double latitudine, Date dataOra, String idUtenteCreatore,
-                  int sogliaAccettazioneStatus, int numeroMassimoPartecipanti, int numeroPartecipanti) {
+                  int sogliaAccettazioneStatus, int numeroMassimoPartecipanti, int numeroPartecipanti, boolean isImageUploaded) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -60,6 +69,7 @@ public class Evento {
         this.sogliaAccettazioneStatus = sogliaAccettazioneStatus;
         this.numeroMassimoPartecipanti = numeroMassimoPartecipanti;
         this.numeroPartecipanti = numeroPartecipanti;
+        this.isImageUploaded = isImageUploaded;
     }
 
 
@@ -150,5 +160,36 @@ public class Evento {
 
     public void setNumeroPartecipanti(int numeroPartecipanti) {
         this.numeroPartecipanti = numeroPartecipanti;
+    }
+
+    @Exclude
+    public Bitmap getImageBitmap() {
+        return imageBitmap;
+    }
+
+    @Exclude
+    public void setImageBitmap(Bitmap imageBitmap) {
+        this.imageBitmap = imageBitmap;
+    }
+
+    public boolean getIsImageUploaded() {
+        return isImageUploaded;
+    }
+
+    public void setImageUploaded(boolean imageUploaded) {
+        isImageUploaded = imageUploaded;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Evento evento = (Evento) o;
+        return Objects.equals(id, evento.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

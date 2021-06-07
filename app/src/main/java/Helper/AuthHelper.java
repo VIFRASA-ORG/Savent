@@ -21,18 +21,22 @@ import Model.DB.Utenti;
  */
 public class AuthHelper {
 
+    private static final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    /**
+     * All the possible type of the user logged in
+     */
     public enum UserType{
         Utente,
         Ente,
         None
     }
 
-    private static final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-
-
-
-
+    /**
+     * Return the type of the user logged-in
+     * @param closureRes
+     */
     public static final void getLoggedUserType(ClosureResult<UserType> closureRes){
         if(!isLoggedIn()){
             if(closureRes != null) closureRes.closure(UserType.None);

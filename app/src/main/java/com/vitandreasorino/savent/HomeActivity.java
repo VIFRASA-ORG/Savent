@@ -5,15 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.res.Configuration;
-import android.icu.text.UnicodeSetSpanner;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vitandreasorino.savent.EventiTab.EventFragment;
 
 import Helper.AnimationHelper;
 import Helper.AuthHelper;

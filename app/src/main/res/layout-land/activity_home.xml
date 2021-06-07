@@ -28,7 +28,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="0dp"
                     android:layout_height="70dp"
                     android:orientation="horizontal"
                     android:gravity="top|center">
@@ -77,7 +77,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="2dp"
                         android:orientation="horizontal">
 
                         <Button

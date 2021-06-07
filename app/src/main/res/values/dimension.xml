@@ -13,7 +13,7 @@
     <dimen name="radius_button_login">20dp</dimen>
     <dimen name="margin_left_textView_login_landscape">190dp</dimen>
     <dimen name="nav_bar" >200dp</dimen>
-    <dimen name="nav_bar_land" >70dp</dimen>
+    <dimen name="nav_bar_land" >50dp</dimen>
     <dimen name="margin_box" >35dp</dimen>
     <dimen name="margin_text_box" >20dp</dimen>
     <dimen name="icon_status_bar" >35dp</dimen>
