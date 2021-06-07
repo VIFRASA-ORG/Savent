@@ -39,6 +39,11 @@
     <string name="errorLogin">Email o password errati!</string>
     <string name="correctLogin">Login effettuato!</string>
 
+    <string name="searchGroup">Cerca qui</string>
+    <string name="nameGroup">Nome gruppo</string>
+    <string name="descrGroup">Descrizione</string>
+    <string name="adminGroup">Amm.re</string>
+
     <string name="text_register_ente"><u>Sei un ente? Clicca qui!</u></string>
     <string name="select_ente">Seleziona ente</string>
     <string name="freelance">L. Professionista</string>
