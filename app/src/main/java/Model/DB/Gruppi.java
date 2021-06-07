@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -23,13 +24,35 @@ import Helper.StorageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
+import Model.Closures.ClosureResult;
 import Model.Pojo.Evento;
 import Model.Pojo.Gruppo;
+import Model.Pojo.Utente;
 
 public class Gruppi extends ResultsConverter{
 
     private static final String GRUPPO_COLLECTION = "Gruppi";
 
+    /**
+     * Return the name of the group given as parameter.
+     *
+     * @param groupId id of the group whose name you want to know.
+     * @param closureRes get called with the value if the task is successful, null otherwise.
+     */
+    public static final void getGroupName(String groupId, ClosureResult<String> closureRes){
+        if(AuthHelper.isLoggedIn()){
+            FirestoreHelper.db.collection(GRUPPO_COLLECTION).document(groupId).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    if (closureRes != null){
+                        Gruppo g = task.getResult().toObject(Gruppo.class);
+                        closureRes.closure(g.getNome());
+                    }
+                }else {
+                    if(closureRes != null) closureRes.closure(null);
+                }
+            });
+        }
+    }
 
     /** Remove a user from a group.
      *

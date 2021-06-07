@@ -39,4 +39,22 @@
     <string name="errorLogin">Email o password errati!</string>
     <string name="correctLogin">Login effettuato!</string>
 
+    //Tab eventi
+    <string name="newEvent">Crea Evento</string>
+    <string name="myEvents">I Miei Eventi</string>
+    <string name="searchEvents">Ricerca</string>
+    <string name="nearbyEvents">Eventi Vicini</string>
+
+    //Pagina dettaglio evento
+    <string name="eventPageTitle">Evento</string>
+    <string name="eventDescription">Descrizione</string>
+    <string name="eventLocation">Posizione</string>
+    <string name="availablePlaces">Posti disponibili:</string>
+    <string name="queuePlaces">Persone in lista di attesa:</string>
+    <string name="eventOwner">Creato da:</string>
+    <string name="joinEvent">Partecipa all\'evento</string>
+
+    //Pagina mappa con eventi nelle vicinanze
+    <string name="searchInThisArea">Cerca in questa zona</string>
+
 </resources>

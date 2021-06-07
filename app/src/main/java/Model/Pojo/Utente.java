@@ -1,6 +1,9 @@
 package Model.Pojo;
 
+import android.graphics.Bitmap;
+
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
 
 import java.util.*;
 
@@ -8,6 +11,9 @@ public class Utente {
 
     @DocumentId
     private String id;
+
+    @Exclude
+    private boolean isProfileImageUploaded;
 
     private String nome;
     private String cognome;
@@ -27,6 +33,7 @@ public class Utente {
         this.genere = genere;
         this.statusSanitario = statusSanitario;
         this.numeroDiTelefono = numeroDiTelefono;
+        this.isProfileImageUploaded = false;
     }
 
     // GETTER E SETTTER
@@ -84,5 +91,15 @@ public class Utente {
 
     public void setNumeroDiTelefono(String numeroDiTelefono) {
         this.numeroDiTelefono = numeroDiTelefono;
+    }
+
+    @Exclude
+    public boolean isProfileImageUploaded() {
+        return isProfileImageUploaded;
+    }
+
+    @Exclude
+    public void setProfileImageUploaded(boolean profileImageUploaded) {
+        isProfileImageUploaded = profileImageUploaded;
     }
 }

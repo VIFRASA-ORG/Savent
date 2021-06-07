@@ -28,6 +28,27 @@ public class Utenti extends ResultsConverter {
     private static final String UTENTI_COLLECTION = "Utenti";
 
 
+    /**
+     * Return the name and surname of the user with the specified id.
+     * The return value is formatted as follow: name + " " + surname.
+     *
+     * @param idUtente id of the use whose name you want to know
+     * @param closureRes  get called with the value if the task is successful, null otherwise.
+     */
+    public static final void getNameSurnameOfUser(String idUtente, ClosureResult<String> closureRes){
+        if(AuthHelper.isLoggedIn()){
+            FirestoreHelper.db.collection(UTENTI_COLLECTION).document(idUtente).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    Utente user = task.getResult().toObject(Utente.class);
+                    String finalString = user.getNome() + " " + user.getCognome();
+                    if (closureRes != null) closureRes.closure(finalString);
+                }else{
+                    if (closureRes != null) closureRes.closure(null);
+                }
+            });
+        }
+    }
+
     /** Return the user object with the specified phone number.
      *
      * @param phoneNumber   Phone number of the user to search for.
@@ -106,10 +127,11 @@ public class Utenti extends ResultsConverter {
                 if(task.isSuccessful()) {
                     if (profileImageUri != null) {
                         uploadUserImage(profileImageUri, isSuccess -> {
-                            if (closureBool == null) return;
-
-                            if (isSuccess) closureBool.closure(true);
-                            else closureBool.closure(false);
+                            if (isSuccess){
+                                FirestoreHelper.db.collection(UTENTI_COLLECTION).document(user.getId()).update("isProfileImageUploaded",true).addOnCompleteListener(task1 -> {
+                                    if(closureBool!= null) closureBool.closure(task1.isSuccessful());
+                                });
+                            } else if(closureBool != null) closureBool.closure(false);
                         });
                     }else{
                         if(closureBool != null) closureBool.closure(true);
