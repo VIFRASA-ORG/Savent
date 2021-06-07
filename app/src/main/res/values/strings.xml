@@ -41,5 +41,22 @@
     <string name="nameGroup">Group name</string>
     <string name="descrGroup">Description</string>
     <string name="adminGroup">Admin</string>
+  
+    <string name="text_register_ente"> <u>Are you an institution? Click here!</u></string>
+    <string name="select_ente">Select institution</string>
+    <string name="freelance">Freelance</string>
+    <string name="company">Company</string>
+
+    <string name="certificato_partita_iva">VAT certificate</string>
+    <string name="button_carica">Upload</string>
+    <string name="numero_partita_iva">VAT number</string>
+    <string name="immagine_caricata">Image uploaded!</string>
+    <string name="codice_fiscale">Fiscal code</string>
+    <string name="residenza">Residence</string>
+    <string name="numero_albo">Registration number Albo</string>
+
+    <string name="visura_camerale">Chamber of commerce</string>
+    <string name="domicilio_fiscale">Tax domicile</string>
+    <string name="sede_azienda">Headquarters</string>
 
 </resources>

@@ -16,6 +16,7 @@ import android.widget.Toolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import Helper.AnimationHelper;
+import Helper.AuthHelper;
 
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -146,4 +147,5 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         BIG,
         SMALL
     }
+    
 }
