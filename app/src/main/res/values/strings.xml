@@ -36,4 +36,10 @@
 
     <string name="errorLogin">Email or password incorrect!</string>
     <string name="correctLogin">Login successful!</string>
+
+    <string name="searchGroup">Search here</string>
+    <string name="nameGroup">Group name</string>
+    <string name="descrGroup">Description</string>
+    <string name="adminGroup">Admin</string>
+
 </resources>

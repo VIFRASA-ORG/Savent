@@ -147,7 +147,21 @@ public class Gruppi extends ResultsConverter{
         }
 
         String finalChildName = "Gruppi/" + idGruppo + "/immagineProfilo";
-        StorageHelper.uploadImage(file,finalChildName,closureBool);
+        StorageHelper.uploadImage(file, finalChildName, new ClosureBoolean() {
+            @Override
+            public void closure(boolean isSuccess) {
+                if(!isSuccess){
+                    if(closureBool != null) closureBool.closure(false);
+                } else {
+                    FirestoreHelper.db.collection(GRUPPO_COLLECTION).document(idGruppo).update("isImmagineUploaded", true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(closureBool != null) closureBool.closure(task.isSuccessful());
+                        }
+                    });
+                }
+            }
+        });
     }
 
     /** Download group image from the Firebase Firestore.

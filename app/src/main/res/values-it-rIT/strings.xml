@@ -39,4 +39,10 @@
     <string name="errorLogin">Email o password errati!</string>
     <string name="correctLogin">Login effettuato!</string>
 
+    <string name="searchGroup">Cerca qui</string>
+    <string name="nameGroup">Nome gruppo</string>
+    <string name="descrGroup">Descrizione</string>
+    <string name="adminGroup">Amm.re</string>
+
+
 </resources>
