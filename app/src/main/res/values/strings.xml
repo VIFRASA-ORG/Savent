@@ -18,6 +18,8 @@
     <string name="passwordErrataRegister">Enter at least one uppercase, lowercase and numeric character</string>
     <string name="campiErratiRegister">There are incorrect fields</string>
     <string name="registrazioneEffettuataRegister">Registered user</string>
+    <string name="account">Account</string>
+    <string name="searchPlaceholder">Search here</string>
 
     <string name="TabBarHome">Home </string>
     <string name="TabBarGroups">Groups </string>
@@ -51,13 +53,15 @@
     <string name="queuePlaces">People on the waiting list: :</string>
     <string name="eventOwner">Created by:</string>
     <string name="joinEvent">Join the event</string>
+    <string name="eventOwnerLabel">Owner</string>
+    <string name="events">Events</string>
 
     //Pagina mappa con eventi nelle vicinanze
     <string name="searchInThisArea">Search in this area</string>
-    <string name="searchGroup">Search here</string>
     <string name="nameGroup">Group name</string>
     <string name="descrGroup">Description</string>
     <string name="adminGroup">Admin</string>
+    <string name="groups">Groups</string>
   
     <string name="text_register_ente"> <u>Are you an institution? Click here!</u></string>
     <string name="select_ente">Select institution</string>

@@ -20,7 +20,7 @@
             android:layout_marginTop="30dp"
             android:paddingLeft="20dp"
             android:paddingTop="50dp"
-            android:text="Eventi" />
+            android:text="@string/events" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"

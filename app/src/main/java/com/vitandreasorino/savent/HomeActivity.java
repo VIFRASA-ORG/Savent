@@ -27,6 +27,11 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     Class previousFragmentClass = null;
     TopBarConfiguration previousConfiguration = TopBarConfiguration.BIG;
 
+    private HomeFragment homeFragment = new HomeFragment();
+    private GroupFragment groupFragment = new GroupFragment();
+    private AccountFragment accountFragment = new AccountFragment();
+    private EventFragment eventFragment = new EventFragment();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,19 +81,19 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
         switch (item.getItemId()){
             case R.id.nav_home:
-                selectedFragment = new HomeFragment();
+                selectedFragment = homeFragment;
                 moveTopBar(TopBarConfiguration.BIG,HomeFragment.class);
                 break;
             case R.id.nav_group:
-                selectedFragment = new GroupFragment();
+                selectedFragment = groupFragment;
                 moveTopBar(TopBarConfiguration.SMALL,GroupFragment.class);
                 break;
             case R.id.nav_event:
-                selectedFragment = new EventFragment();
+                selectedFragment = eventFragment;
                 moveTopBar(TopBarConfiguration.SMALL,EventFragment.class);
                 break;
             case R.id.nav_account:
-                selectedFragment = new AccountFragment();
+                selectedFragment = accountFragment;
                 moveTopBar(TopBarConfiguration.SMALL,AccountFragment.class);
                 break;
         }

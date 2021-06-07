@@ -34,6 +34,7 @@ public class EventFragment extends Fragment {
 
         upperTabBar = view.findViewById(R.id.upperTabBar);
         pager = (ViewPager2) view.findViewById(R.id.pagerSearchAndNearbyEvents);
+        pager.setSaveEnabled(false);
 
         //Setting the custom made adapter
         pager.setAdapter(new CollectionAdapter(this));

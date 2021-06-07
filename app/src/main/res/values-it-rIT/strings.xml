@@ -19,6 +19,8 @@
     <string name="passwordErrataRegister">Inserire almeno un carattere maiuscolo, minuscolo e numerico</string>
     <string name="campiErratiRegister">Ci sono campi errati</string>
     <string name="registrazioneEffettuataRegister">Utente registrato</string>
+    <string name="account">Profilo</string>
+    <string name="searchPlaceholder">Cerca qui</string>
 
 
     <string name="TabBarHome">Home </string>
@@ -53,13 +55,15 @@
     <string name="queuePlaces">Persone in lista di attesa:</string>
     <string name="eventOwner">Creato da:</string>
     <string name="joinEvent">Partecipa all\'evento</string>
+    <string name="eventOwnerLabel">Prop.</string>
+    <string name="events">Eventi</string>
 
     //Pagina mappa con eventi nelle vicinanze
     <string name="searchInThisArea">Cerca in questa zona</string>
-    <string name="searchGroup">Cerca qui</string>
     <string name="nameGroup">Nome gruppo</string>
     <string name="descrGroup">Descrizione</string>
     <string name="adminGroup">Amm.re</string>
+    <string name="groups">Gruppi</string>
 
     <string name="text_register_ente"><u>Sei un ente? Clicca qui!</u></string>
     <string name="select_ente">Seleziona ente</string>

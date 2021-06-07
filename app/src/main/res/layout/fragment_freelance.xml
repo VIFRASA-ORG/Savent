@@ -27,8 +27,7 @@
                     android:id="@+id/textViewCertificatoPartitaIvaFreelance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="@dimen/margin_left_textView_register"
+                    android:layout_gravity="center"
                     android:layout_marginTop="@dimen/margin_size"
                     android:text="@string/certificato_partita_iva"
                     android:textColor="@color/black" />
@@ -44,8 +43,7 @@
                     android:id="@+id/buttonCertificatoPartitaIvaFreelance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="80dp"
+                    android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/blueButton"
                     android:text="@string/button_carica"
@@ -57,8 +55,7 @@
                     android:id="@+id/textViewLabelCaricamento"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="65dp"
+                    android:layout_gravity="center"
                     android:text="@string/immagine_caricata"
                     android:visibility="invisible"
                     android:textColor="@color/black" />
@@ -278,11 +275,12 @@
                 android:layout_marginTop="@dimen/margin_size"
                 android:layout_marginLeft="@dimen/margin_size"
                 android:layout_marginRight="@dimen/margin_size"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="50dp"
                 android:backgroundTint="@color/blueButton"
                 android:text="@string/stringRegistrazione"
                 android:textColor="@color/white"
-                app:cornerRadius="@dimen/radius_button_register" />
+                app:cornerRadius="@dimen/radius_button_register"
+                />
 
         </LinearLayout>
 

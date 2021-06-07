@@ -15,7 +15,7 @@
         android:background="@drawable/ic_button_shape"
         android:backgroundTint="@color/white"
         android:iconifiedByDefault="false"
-        android:queryHint="Search Here"
+        android:queryHint="@string/searchPlaceholder"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:queryBackground="@null"/>
