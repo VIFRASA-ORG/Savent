@@ -39,4 +39,22 @@
     <string name="errorLogin">Email o password errati!</string>
     <string name="correctLogin">Login effettuato!</string>
 
+    <string name="text_register_ente"><u>Sei un ente? Clicca qui!</u></string>
+    <string name="select_ente">Seleziona ente</string>
+    <string name="freelance">Professionista</string>
+    <string name="company">Azienda</string>
+
+    <string name="certificato_partita_iva">Certificato partita IVA</string>
+    <string name="button_carica">Carica</string>
+    <string name="numero_partita_iva">Numero partita IVA</string>
+    <string name="immagine_caricata">Immagine caricata!</string>
+    <string name="codice_fiscale">Codice fiscale</string>
+    <string name="residenza">Residenza</string>
+    <string name="numero_albo">Numero iscrizione Albo</string>
+
+    <string name="visura_camerale">Visura camerale</string>
+    <string name="domicilio_fiscale">Domicilio fiscale</string>
+    <string name="sede_azienda">Sede</string>
+
+
 </resources>
