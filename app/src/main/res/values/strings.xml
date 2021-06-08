@@ -80,4 +80,9 @@
     <string name="domicilio_fiscale">Tax domicile</string>
     <string name="sede_azienda">Headquarters</string>
 
+    //Password recovery
+    <string name="pswRecoveryText">Password Recovery</string>
+    <string name="pswRecoveryButton">Send Recovery Email</string>
+    <string name="pswRecoveryToast">If the entered email is on our servers, we will send you a password reset email.</string>
+
 </resources>

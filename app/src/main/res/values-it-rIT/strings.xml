@@ -82,4 +82,9 @@
     <string name="domicilio_fiscale">Domicilio fiscale</string>
     <string name="sede_azienda">Sede</string>
 
+    //Password recovery
+    <string name="pswRecoveryText">Recupero Password</string>
+    <string name="pswRecoveryButton">Invia email di recupero</string>
+    <string name="pswRecoveryToast">Se l\'email inserita è presente nei nostri server, ti verrà inviata una email di reset della password.</string>
+
 </resources>
