@@ -2,6 +2,7 @@ package com.vitandreasorino.savent.EventiTab;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -44,7 +45,7 @@ import Model.DB.Eventi;
 import Model.LogDebug;
 import Model.Pojo.Evento;
 
-public class FragmentMaps extends Fragment implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener {
+public class FragmentMaps extends Fragment implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnInfoWindowClickListener {
 
     LinearLayout searchButtonLinearLayout;
     private boolean firstTimeRenderingTheMap = true;
@@ -61,6 +62,8 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
 
     //List of all the marker actually rendered in the map
     List<Marker> markerList = new ArrayList<>();
+    //List of all the event actually rendered in the map
+    List<Evento> eventList = new ArrayList<>();
 
     private final int MAP_CAMERA_ZOOM = 10;
     private final int MAP_NEARBY_RADIUS = 20000;
@@ -133,6 +136,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
                         .position(new LatLng(e.getLatitudine(),e.getLongitudine()))
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_icon))
                         .title(e.getNome())));
+                eventList.add(e);
             }
 
             //fading out the button after updating the marker
@@ -148,6 +152,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
             m.remove();
         }
         markerList.clear();
+        eventList.clear();
     }
 
     /**
@@ -163,6 +168,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
                         .position(new LatLng(e.getLatitudine(),e.getLongitudine()))
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_icon))
                         .title(e.getNome())));
+                eventList.add(e);
             }
         });
     }
@@ -259,6 +265,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
         map.setOnCameraIdleListener(this);
+        map.setOnInfoWindowClickListener(this);
 
         //Get the location permission when the map is ready
         getLocationPermission();
@@ -308,5 +315,24 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
         if(!firstTimeRenderingTheMap){
             if(searchButtonLinearLayout.getVisibility() == View.INVISIBLE) AnimationHelper.fadeIn(searchButtonLinearLayout,500);
         }else firstTimeRenderingTheMap = false;
+    }
+
+
+
+    /*
+
+        OVERRIDE OF THE METHOD IN THE OnInfoWindowClickListener INTERFACE
+        It is triggered when you click on the InfoWindow of a a marker
+
+     */
+
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker) {
+        int pos = markerList.indexOf(marker);
+        if( pos >= 0){
+            Intent i = new Intent(getContext(), EventDetailActivity.class);
+            i.putExtra("eventObj",eventList.get(pos));
+            startActivity(i);
+        }
     }
 }
