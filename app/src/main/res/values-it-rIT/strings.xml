@@ -82,6 +82,7 @@
     <string name="residenza">Residenza</string>
     <string name="numero_albo">Numero iscrizione Albo</string>
     <string name="errorPIVA">Seleziona un certificato di Partita Iva!</string>
+    <string name="errorVCamerale">Seleziona una Visura Camerale!</string>
     <string name="enteCreated">Ente creato! Appena le informazioni inserite saranno verificate,l\'account verrà attivato.</string>
 
     <string name="visura_camerale">Visura camerale</string>

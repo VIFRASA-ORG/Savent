@@ -165,17 +165,31 @@ public class Enti {
                         //Upload the Partita iva certificate
                         uploadCertificatoPIVA(ente.getCertificatoPIVA(), isSuccess -> {
 
-                            if(isSuccess == false){
-                                if(closureBool != null) closureBool.closure(false);
+                            //Set the flag to true
+                            if(isSuccess){
+                                FirestoreHelper.db.collection(ENTI_COLLECTION).document(AuthHelper.getUserId()).update("isCertificatoPIVAUploaded",true).addOnCompleteListener(task1 -> {
+                                    //if(closureBool!= null) closureBool.closure(task1.isSuccessful());
+                                    if(task1.isSuccessful()){
+
+                                        //upload the visura camerale
+                                        uploadVisuraCamerale(ente.getVisuraCamerale(), isSuccess1 -> {
+
+                                            //Set the flag to true
+                                            if(isSuccess1){
+                                                FirestoreHelper.db.collection(ENTI_COLLECTION).document(AuthHelper.getUserId()).update("isVisuraCameraleUploaded",true).addOnCompleteListener(task2 -> {
+                                                    if(closureBool!= null) closureBool.closure(task2.isSuccessful());
+                                                });
+                                            }else{
+                                                if(closureBool != null) closureBool.closure(false);
+                                            }
+                                        });
+
+                                    }else{
+                                        if(closureBool != null) closureBool.closure(false);
+                                    }
+                                });
                             }else{
-                                if (ente.getVisuraCamerale() != null) {
-                                    //upload the visura camerale
-                                    uploadVisuraCamerale(ente.getVisuraCamerale(), isSuccess1 -> {
-                                        if (closureBool != null) closureBool.closure(isSuccess1);
-                                    });
-                                }else{
-                                    if(closureBool != null) closureBool.closure(true);
-                                }
+                                if(closureBool != null) closureBool.closure(false);
                             }
                         });
                     }else{

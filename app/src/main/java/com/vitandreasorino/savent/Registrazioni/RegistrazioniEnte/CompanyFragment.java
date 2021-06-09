@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,16 +14,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vitandreasorino.savent.LogSingInActivity;
 import com.vitandreasorino.savent.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import Helper.AnimationHelper;
+import Helper.AuthHelper;
+import Model.DB.Enti;
+import Model.DB.GenericUser;
+import Model.Pojo.Ente;
 
-public class CompanyFragment extends Fragment {
+
+public class CompanyFragment extends Fragment implements View.OnFocusChangeListener {
 
     Uri pathCertificatoPartitaIvaDitta;
     Uri pathVisuraCameraleDitta;
@@ -35,6 +44,7 @@ public class CompanyFragment extends Fragment {
 
 
     TextView textViewLabelCaricamentoCertificatoDitta, textViewLabelCaricamentoVisuraDitta;
+    ProgressBar progressBar ;
 
 
     @Override
@@ -58,6 +68,8 @@ public class CompanyFragment extends Fragment {
 
         textViewLabelCaricamentoCertificatoDitta = (TextView) view.findViewById(R.id.textViewLabelCaricamentoCertificatoDitta);
         textViewLabelCaricamentoVisuraDitta = (TextView) view.findViewById(R.id.textViewLabelCaricamentoVisuraDitta);
+
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         buttonCertificatoPartitaIvaDitta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +106,43 @@ public class CompanyFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setAllFocusChanged();
+    }
+
+    private void setAllFocusChanged(){
+        editTextPartitaIvaDitta.setOnFocusChangeListener(this);
+        editTextNomeDitta.setOnFocusChangeListener(this);
+        editTextDomicilioFiscaleDitta.setOnFocusChangeListener(this);
+        editTextSedeDitta.setOnFocusChangeListener(this);
+        editTextTelefonoDitta.setOnFocusChangeListener(this);
+        editTextEmailDitta.setOnFocusChangeListener(this);
+        editTextPasswordDitta.setOnFocusChangeListener(this);
+        editTextConfermaPasswordDitta.setOnFocusChangeListener(this);
+    }
+
+    private void removeAllFocus(){
+        editTextPartitaIvaDitta.clearFocus();
+        editTextNomeDitta.clearFocus();
+        editTextDomicilioFiscaleDitta.clearFocus();
+        editTextSedeDitta.clearFocus();
+        editTextTelefonoDitta.clearFocus();
+        editTextEmailDitta.clearFocus();
+        editTextPasswordDitta.clearFocus();
+        editTextConfermaPasswordDitta.clearFocus();
+    }
+
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus){
+            v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
+        }
     }
 
 
@@ -154,38 +203,121 @@ public class CompanyFragment extends Fragment {
                 editTextEmailDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
-            if(pathCertificatoPartitaIvaDitta == null){
-                textViewLabelCaricamentoCertificatoDitta.setVisibility(View.INVISIBLE);
-            }else{
-                textViewLabelCaricamentoCertificatoDitta.setVisibility(View.VISIBLE);
-            }
-
-            if(validazionePasswordDitta(passwordDitta) == false || passwordDitta.contains(" ") || !passwordDitta.equals(confermaPasswordDitta)) {
+            if(validazionePasswordDitta(passwordDitta) == false || passwordDitta.contains(" ") ) {
                 editTextPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 editTextConfermaPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 Toast.makeText(getActivity(), getString(R.string.passwordErrataRegister), Toast.LENGTH_LONG).show();
+            }else if(!passwordDitta.equals(confermaPasswordDitta)){
+                editTextPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                editTextConfermaPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                Toast.makeText(getActivity(), getString(R.string.passwordsNotMatching), Toast.LENGTH_LONG).show();
+                return;
             }else{
                 editTextPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
                 editTextConfermaPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
+            if(pathCertificatoPartitaIvaDitta == null){
+                textViewLabelCaricamentoCertificatoDitta.setVisibility(View.INVISIBLE);
+                Toast.makeText(getActivity(),R.string.errorPIVA,Toast.LENGTH_LONG).show();
+                return;
+            }else{
+                textViewLabelCaricamentoCertificatoDitta.setVisibility(View.VISIBLE);
+            }
 
             if(pathVisuraCameraleDitta == null ){
                 textViewLabelCaricamentoVisuraDitta.setVisibility(View.INVISIBLE);
+                Toast.makeText(getActivity(),R.string.errorVCamerale,Toast.LENGTH_LONG).show();
+                return;
             }else{
                 textViewLabelCaricamentoVisuraDitta.setVisibility(View.VISIBLE);
             }
-
-            Toast.makeText(getActivity(), getString(R.string.campiErratiRegister), Toast.LENGTH_LONG).show();
-
         }else{
 
+            disableAllComponents();
             backgroundTintEditTextDittaFragment();
-            Toast.makeText(getActivity(), getString(R.string.registrazioneEffettuataRegister), Toast.LENGTH_LONG).show();
 
+            Ente e = new Ente();
+            e.setPartitaIva(numeroPartitaIvaDitta);
+            e.setNomeDitta(nomeDitta);
+            e.setDomicilioFiscaleDitta(domicilioFiscaleDitta);
+            e.setVisuraCamerale(pathVisuraCameraleDitta);
+            e.setCertificatoPIVA(pathCertificatoPartitaIvaDitta);
+            e.setSedeDitta(sedeDitta);
+
+            //Check if the phone number is already taken
+            GenericUser.isPhoneNumberAlreadyTaken(numeroTelefonoDitta, closureBool -> {
+                if(!closureBool){
+                    e.setNumeroTelefono(numeroTelefonoDitta);
+                    computeRegistrationToServer(e,emailDitta,passwordDitta);
+                }else{
+                    editTextTelefonoDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                    Toast.makeText(getActivity(),R.string.phoneNumberAlreadyTaken,Toast.LENGTH_LONG).show();
+                    enableAllComponents();
+                    return;
+                }
+            });
         }
+    }
 
+    private void computeRegistrationToServer(Ente e, String email, String password){
+        Enti.createNewEnteDitta(e,email,password,closureBool -> {
+            if(closureBool){
+                /*  If the Ente creation is successful, execute the logout from the account because
+                 *   it has to be enabled from the service provider after having verified all the information.
+                 * */
 
+                //LogOut
+                AuthHelper.logOut();
+                Toast.makeText(getActivity(),R.string.enteCreated,Toast.LENGTH_LONG).show();
+
+                //Go back to the first page
+                Intent firstPage = new Intent(getActivity(), LogSingInActivity.class);
+                firstPage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the stack all the previous Activity.
+                startActivity(firstPage);
+                getActivity().finish();
+            }else{
+                Toast.makeText(getActivity(), getString(R.string.registrazioneErrore), Toast.LENGTH_LONG).show();
+                AuthHelper.logOut();
+                enableAllComponents();
+            }
+        });
+    }
+
+    private void disableAllComponents(){
+
+        editTextPartitaIvaDitta.setEnabled(false);
+        editTextNomeDitta.setEnabled(false);
+        editTextDomicilioFiscaleDitta.setEnabled(false);
+        editTextSedeDitta.setEnabled(false);
+        editTextTelefonoDitta.setEnabled(false);
+        editTextEmailDitta.setEnabled(false);
+        editTextPasswordDitta.setEnabled(false);
+        editTextConfermaPasswordDitta.setEnabled(false);
+
+        buttonCertificatoPartitaIvaDitta.setEnabled(false);
+        buttonVisuraCameraleDitta.setEnabled(false);
+        buttonRegistrazioneDitta.setEnabled(false);
+
+        AnimationHelper.fadeIn(progressBar,1000);
+    }
+
+    private void enableAllComponents(){
+
+        editTextPartitaIvaDitta.setEnabled(true);
+        editTextNomeDitta.setEnabled(true);
+        editTextDomicilioFiscaleDitta.setEnabled(true);
+        editTextSedeDitta.setEnabled(true);
+        editTextTelefonoDitta.setEnabled(true);
+        editTextEmailDitta.setEnabled(true);
+        editTextPasswordDitta.setEnabled(true);
+        editTextConfermaPasswordDitta.setEnabled(true);
+
+        buttonCertificatoPartitaIvaDitta.setEnabled(true);
+        buttonVisuraCameraleDitta.setEnabled(true);
+        buttonRegistrazioneDitta.setEnabled(true);
+
+        AnimationHelper.fadeOut(progressBar,1000);
     }
 
 
@@ -203,17 +335,12 @@ public class CompanyFragment extends Fragment {
         editTextPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextConfermaPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
 
-
-
-
         if(pathCertificatoPartitaIvaDitta != null) {
             textViewLabelCaricamentoCertificatoDitta.setVisibility(View.VISIBLE);
         }
         if(pathVisuraCameraleDitta != null) {
             textViewLabelCaricamentoVisuraDitta.setVisibility(View.VISIBLE);
         }
-
-
     }
 
 
@@ -398,6 +525,5 @@ public class CompanyFragment extends Fragment {
             }
         }
     }
-
 
 }

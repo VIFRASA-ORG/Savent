@@ -23,8 +23,9 @@ public class RegisterEnteActivity extends AppCompatActivity {
         TabLayout tabLayoutRegistrazione = findViewById(R.id.tabLayoutRegistrazione);
         tabLayoutRegistrazione.setupWithViewPager(vp);
 
-        tabLayoutRegistrazione.getTabAt(0).setIcon(R.drawable.ic_baseline_person_24);
-        tabLayoutRegistrazione.getTabAt(1).setIcon(R.drawable.ic_baseline_home_work_24);
-
+        tabLayoutRegistrazione.getTabAt(0).setIcon(R.drawable.ic_baseline_person_24)
+                .setText(R.string.freelance);
+        tabLayoutRegistrazione.getTabAt(1).setIcon(R.drawable.ic_baseline_home_work_24)
+                .setText(R.string.company);
     }
 }

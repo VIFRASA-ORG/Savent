@@ -25,6 +25,7 @@ public class Ente {
     private String residenzaLP;
     private String numeroIscrizioneAlboLP;
     private String numeroTelefono;
+    private String sedeDitta;
     private boolean abilitazione;
 
     private boolean isCertificatoPIVAUploaded;
@@ -51,8 +52,8 @@ public class Ente {
         this.abilitazione = abilitazione;
         isCertificatoPIVAUploaded = false;
         isVisuraCameraleUploaded = false;
-        certificatoPIVA = null;
-        visuraCamerale = null;
+        this.certificatoPIVA = null;
+        this.visuraCamerale = null;
     }
 
     public Ente(String id, String partitaIva, Uri certificatoPIVA, Uri visuraCamerale, String nomeDitta, String domicilioFiscaleDitta,
@@ -67,8 +68,8 @@ public class Ente {
         this.abilitazione = abilitazione;
         isCertificatoPIVAUploaded = false;
         isVisuraCameraleUploaded = false;
-        certificatoPIVA = null;
-        visuraCamerale = null;
+        this.certificatoPIVA = null;
+        this.visuraCamerale = null;
     }
 
     // GETTER E SETTER
@@ -190,5 +191,13 @@ public class Ente {
 
     public void setIsVisuraCameraleUploaded(boolean isVisuraCameraleUploaded) {
         this.isVisuraCameraleUploaded = isVisuraCameraleUploaded;
+    }
+
+    public String getSedeDitta() {
+        return sedeDitta;
+    }
+
+    public void setSedeDitta(String sedeDitta) {
+        this.sedeDitta = sedeDitta;
     }
 }

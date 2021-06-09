@@ -80,6 +80,7 @@
     <string name="residenza">Residence</string>
     <string name="numero_albo">Registration number Albo</string>
     <string name="errorPIVA">Select a VAT certificate</string>
+    <string name="errorVCamerale">Select a Chamber of commerce!</string>
     <string name="enteCreated">Institution created! As soon as the information entered is verified, the account will be activated.</string>
 
     <string name="visura_camerale">Chamber of commerce</string>
