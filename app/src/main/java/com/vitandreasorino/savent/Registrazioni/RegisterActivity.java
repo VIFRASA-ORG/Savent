@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Helper.ImageHelper;
+import Model.DB.GenericUser;
 import Model.DB.Utenti;
 import Model.Pojo.Utente;
 
@@ -202,7 +203,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
             disableAllComponents();
 
             //Check that the phone number is not already taken
-            Utenti.isPhoneNumberAlreadyTaken(telefono,closureBool -> {
+            GenericUser.isPhoneNumberAlreadyTaken(telefono, closureBool -> {
                 if(!closureBool){
                     u.setNumeroDiTelefono(telefono);
                     computeRegistrationToServer(u,email,password);
@@ -221,7 +222,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
             if(closureBool){
                 Toast.makeText(this, getString(R.string.registrazioneEffettuataRegister), Toast.LENGTH_LONG).show();
                 Intent schermataHome = new Intent(getApplicationContext(), HomeActivity.class);
-                schermataHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
+                schermataHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the stack all the previous Activity.
                 startActivity(schermataHome);
                 finish();
             }else{

@@ -27,18 +27,32 @@ public class Ente {
     private String numeroTelefono;
     private boolean abilitazione;
 
+    private boolean isCertificatoPIVAUploaded;
+    private boolean isVisuraCameraleUploaded;
+
 
     // COSTRUTTORI DELLA CLASSE ENTE
-    public Ente() { }
+    public Ente() {
+        isCertificatoPIVAUploaded = false;
+        isVisuraCameraleUploaded = false;
+        certificatoPIVA = null;
+        visuraCamerale = null;
+    }
 
-    public Ente(String nomeLP, String cognomeLP, String codiceFiscaleLP, String residenzaLP, String numeroIscrizioneAlboLP, String numeroTelefono, boolean abilitazione) {
+    public Ente(String nomeLP, String cognomeLP, String codiceFiscaleLP, String residenzaLP, String numeroIscrizioneAlboLP, String numeroTelefono,String partitaIva, Uri certificatoPIVA, boolean abilitazione) {
         this.nomeLP = nomeLP;
         this.cognomeLP = cognomeLP;
         this.codiceFiscaleLP = codiceFiscaleLP;
         this.residenzaLP = residenzaLP;
         this.numeroIscrizioneAlboLP = numeroIscrizioneAlboLP;
         this.numeroTelefono = numeroTelefono;
+        this.certificatoPIVA = certificatoPIVA;
+        this.partitaIva = partitaIva;
         this.abilitazione = abilitazione;
+        isCertificatoPIVAUploaded = false;
+        isVisuraCameraleUploaded = false;
+        certificatoPIVA = null;
+        visuraCamerale = null;
     }
 
     public Ente(String id, String partitaIva, Uri certificatoPIVA, Uri visuraCamerale, String nomeDitta, String domicilioFiscaleDitta,
@@ -51,6 +65,10 @@ public class Ente {
         this.domicilioFiscaleDitta = domicilioFiscaleDitta;
         this.numeroTelefono = numeroTelefono;
         this.abilitazione = abilitazione;
+        isCertificatoPIVAUploaded = false;
+        isVisuraCameraleUploaded = false;
+        certificatoPIVA = null;
+        visuraCamerale = null;
     }
 
     // GETTER E SETTER
@@ -150,11 +168,27 @@ public class Ente {
         this.numeroTelefono = numeroTelefono;
     }
 
-    public boolean isAbilitazione() {
+    public boolean getAbilitazione() {
         return abilitazione;
     }
 
     public void setAbilitazione(boolean abilitazione) {
         this.abilitazione = abilitazione;
+    }
+
+    public boolean getIsCertificatoPIVAUploaded() {
+        return isCertificatoPIVAUploaded;
+    }
+
+    public void setIsCertificatoPIVAUploaded(boolean isCertificatoPIVAUploaded) {
+        this.isCertificatoPIVAUploaded = isCertificatoPIVAUploaded;
+    }
+
+    public boolean getIsVisuraCameraleUploaded() {
+        return isVisuraCameraleUploaded;
+    }
+
+    public void setIsVisuraCameraleUploaded(boolean isVisuraCameraleUploaded) {
+        this.isVisuraCameraleUploaded = isVisuraCameraleUploaded;
     }
 }

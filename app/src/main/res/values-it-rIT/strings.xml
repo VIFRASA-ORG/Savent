@@ -4,6 +4,7 @@
     <string name="stringRegistrazione">Registrazione</string>
     <string name="stringAccesso">Accesso</string>
     <string name="PasswordDimenticata">Password dimenticata?</string>
+    <string name="accountNotActivated">Il tuo account non è ancora attivato!</string>
     <string name="modificaProfilo">Modifica</string>
     <string name="nomeUtente">Nome</string>
     <string name="cognomeUtente">Cognome</string>
@@ -80,6 +81,8 @@
     <string name="codice_fiscale">Codice fiscale</string>
     <string name="residenza">Residenza</string>
     <string name="numero_albo">Numero iscrizione Albo</string>
+    <string name="errorPIVA">Seleziona un certificato di Partita Iva!</string>
+    <string name="enteCreated">Ente creato! Appena le informazioni inserite saranno verificate,l\'account verrà attivato.</string>
 
     <string name="visura_camerale">Visura camerale</string>
     <string name="domicilio_fiscale">Domicilio fiscale</string>

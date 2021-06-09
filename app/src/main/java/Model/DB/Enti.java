@@ -24,6 +24,26 @@ public class Enti {
     private static final String ENTI_COLLECTION = "Enti";
 
 
+    /** Check if the ente with the given id is enabled from the provider.
+     *
+     * @param enteId    id of the Ente you want to check
+     * @param closureBool   get called with true if the ente is enabled, false otherwise.
+     */
+    public static final void isEnteEnabled(String enteId, ClosureBoolean closureBool){
+        FirestoreHelper.db.collection(ENTI_COLLECTION).document(enteId).get().addOnCompleteListener(task ->{
+            if(task.isSuccessful()){
+                Ente e = task.getResult().toObject(Ente.class);
+                if(e != null){
+                    if (closureBool != null) closureBool.closure(e.getAbilitazione());
+                }else{
+                    if (closureBool != null) closureBool.closure(false);
+                }
+            }else{
+                if (closureBool != null) closureBool.closure(false);
+            }
+        });
+    }
+
     /** Check if the Ente id given is a valid id.
      *
      * @param idEnte id to check
@@ -77,7 +97,26 @@ public class Enti {
     public static final void updateLiberoProfessionistaInformation(Ente ente, ClosureBoolean closureBool){
         if (AuthHelper.isLoggedIn()){
             FirestoreHelper.db.collection(ENTI_COLLECTION).document(AuthHelper.getUserId()).set(ente).addOnCompleteListener(task -> {
-                if(closureBool != null) closureBool.closure(task.isSuccessful());
+                //if(closureBool != null) closureBool.closure(task.isSuccessful());
+                if(task.isSuccessful()){
+                    if (ente.getCertificatoPIVA() != null) {
+
+                        //Upload the Partita iva certificate
+                        uploadCertificatoPIVA(ente.getCertificatoPIVA(), isSuccess -> {
+                            if(isSuccess){
+                                FirestoreHelper.db.collection(ENTI_COLLECTION).document(AuthHelper.getUserId()).update("isCertificatoPIVAUploaded",true).addOnCompleteListener(task1 -> {
+                                    if(closureBool!= null) closureBool.closure(task1.isSuccessful());
+                                });
+                            }else{
+                                if(closureBool != null) closureBool.closure(false);
+                            }
+                        });
+                    }else{
+                        if(closureBool != null) closureBool.closure(true);
+                    }
+                }else  {
+                    if(closureBool != null) closureBool.closure(false);
+                }
             });
         }
     }

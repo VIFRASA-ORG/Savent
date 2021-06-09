@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 
 import Helper.AuthHelper;
 import Model.Closures.ClosureBoolean;
+import Model.DB.Enti;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnFocusChangeListener {
@@ -100,6 +101,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     private final void loginEffettuato(){
+
+        AuthHelper.getLoggedUserType(closureRes -> {
+            switch (closureRes){
+                case Utente:
+                    loggedInAsUser();
+                    break;
+                case Ente:
+                    loggedInAsEnte();
+            }
+        });
+    }
+
+    private void loggedInAsEnte(){
+        Enti.isEnteEnabled(AuthHelper.getUserId(),closureBool ->{
+            if(closureBool){
+                //Start the activity for the ente
+                Log.i("AUTH","Loggato come ente");
+            }else{
+                Toast.makeText(getApplicationContext(),R.string.accountNotActivated,Toast.LENGTH_SHORT).show();
+                AuthHelper.logOut();
+            }
+        });
+    }
+
+    private void loggedInAsUser(){
         Toast.makeText(getApplicationContext(),getString(R.string.correctLogin),Toast.LENGTH_SHORT).show();
         Intent schermataHome = new Intent(getApplicationContext(), HomeActivity.class);
         schermataHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.

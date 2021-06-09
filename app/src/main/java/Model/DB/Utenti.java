@@ -73,28 +73,6 @@ public class Utenti extends ResultsConverter {
         }
     }
 
-    /** Return the user object with the specified phone number.
-     *
-     * @param phoneNumber   Phone number of the user to search for.
-     * @param closureBool    get called with the Utente object if the task is successful, null otherwise.
-     */
-    public static final void isPhoneNumberAlreadyTaken(String phoneNumber, ClosureBoolean closureBool){
-        FirestoreHelper.db.collection(UTENTI_COLLECTION).whereEqualTo("numeroDiTelefono",phoneNumber).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                List<Utente> l = convertResults(task,Utente.class);
-
-                if (l.size() == 1 ){
-                    if(closureBool != null) closureBool.closure(true);
-                }else{
-                    if(closureBool != null) closureBool.closure(false);
-                }
-            }else{
-                if(closureBool != null) closureBool.closure(false);
-            }
-        });
-
-    }
-
     /** Check if the given Utente id is a valid id.
      *
      * @param idUtente id ti check.
