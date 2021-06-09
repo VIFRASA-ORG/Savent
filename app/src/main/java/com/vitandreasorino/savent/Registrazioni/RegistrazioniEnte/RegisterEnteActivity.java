@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.RegistrazioniEnte;
+package com.vitandreasorino.savent.Registrazioni.RegistrazioniEnte;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 import com.vitandreasorino.savent.R;
-import com.vitandreasorino.savent.RegistrazioniEnte.PagerAdapter;
 
 public class RegisterEnteActivity extends AppCompatActivity {
 

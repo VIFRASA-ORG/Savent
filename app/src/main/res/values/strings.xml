@@ -16,9 +16,12 @@
     <string name="passwordUtente">Password</string>
     <string name="confermaPasswordUtente">Confirm password</string>
     <string name="passwordErrataRegister">Enter at least one uppercase, lowercase and numeric character</string>
+    <string name="passwordsNotMatching">The two passwords do not match!</string>
     <string name="campiErratiRegister">There are incorrect fields</string>
-    <string name="registrazioneEffettuataRegister">Registered user</string>
+    <string name="registrazioneEffettuataRegister">User registered and logged-in.</string>
+    <string name="registrazioneErrore">Errors during the registration.</string>
     <string name="account">Account</string>
+    <string name="phoneNumberAlreadyTaken">Phone number already used!</string>
     <string name="searchPlaceholder">Search here</string>
 
     <string name="TabBarHome">Home </string>

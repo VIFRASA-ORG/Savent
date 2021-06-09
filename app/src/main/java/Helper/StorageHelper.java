@@ -1,7 +1,12 @@
 package Helper;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 
@@ -10,6 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.io.IOException;
 
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;

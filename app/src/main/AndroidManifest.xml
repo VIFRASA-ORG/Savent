@@ -18,8 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Savent">
         <activity android:name=".EventiTab.EventDetailActivity"/>
-        <activity android:name=".RegistrazioniEnte.RegisterEnteActivity"></activity>
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".Registrazioni.RegistrazioniEnte.RegisterEnteActivity"></activity>
+        <activity android:name=".Registrazioni.RegisterActivity" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

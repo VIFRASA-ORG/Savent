@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.Registrazioni;
 
 
 
@@ -11,29 +11,52 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vitandreasorino.savent.RegistrazioniEnte.RegisterEnteActivity;
+import com.google.android.gms.auth.api.Auth;
+import com.vitandreasorino.savent.HomeActivity;
+import com.vitandreasorino.savent.R;
+import com.vitandreasorino.savent.Registrazioni.RegistrazioniEnte.RegisterEnteActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import Helper.AnimationHelper;
+import Helper.AuthHelper;
+import Helper.ImageHelper;
+import Model.DB.Utenti;
+import Model.Pojo.Utente;
 
-public class RegisterActivity extends AppCompatActivity {
+import static Helper.AuthHelper.UserType.Utente;
+
+
+public class RegisterActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
     ImageView imageView;
-    CheckBox cb1,cb2,cb3;
+    RadioButton rbM,rbF,rbU;
 
     EditText editTextNome,editTextCognome,editTextDataNascita,editTextTelefono,
              editTextEmail,editTextPassword,editTextConfermaPassword;
 
+    Button bottoneRegistrazione;
+    TextView textViewEditImage,textViewRegistrazioneEnte;
+    ProgressBar progressBar;
+
+    Uri imageSelected = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +64,9 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         imageView = (ImageView) findViewById(R.id.imageView);
-        cb1 = (CheckBox) findViewById(R.id.checkBox1);
-        cb2 = (CheckBox) findViewById(R.id.checkBox2);
-        cb3 = (CheckBox) findViewById(R.id.checkBox3);
+        rbM = (RadioButton) findViewById(R.id.radioButtonMale);
+        rbF = (RadioButton) findViewById(R.id.radioButtonFemale);
+        rbU = (RadioButton) findViewById(R.id.radioButtonUndefined);
 
         editTextNome = (EditText) findViewById(R.id.editTextNome);
         editTextCognome = (EditText) findViewById(R.id.editTextCognome);
@@ -53,45 +76,37 @@ public class RegisterActivity extends AppCompatActivity {
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         editTextConfermaPassword = (EditText) findViewById(R.id.editTextConfermaPassword);
 
+        bottoneRegistrazione = findViewById(R.id.buttonRegistrazione);
+        textViewEditImage = findViewById(R.id.textViewEditImage);
+        textViewRegistrazioneEnte = findViewById(R.id.textViewRegistrazioneEnte);
 
-        /**
-         * Metodo utilizzato per gestire la selezione di una singola checkbox per volta.
-         */
-        cb1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    cb2.setChecked(false);
-                    cb3.setChecked(false);
-                }
-            }
-        });
+        progressBar = findViewById(R.id.progressBar);
 
-        cb2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    cb1.setChecked(false);
-                    cb3.setChecked(false);
-                }
-            }
-        });
+        setAllFocusChanged();
+    }
 
-        cb3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    cb1.setChecked(false);
-                    cb2.setChecked(false);
-                }
-            }
-        });
+    /**
+     * Add to all the component in the view the focus change listener
+     * to reset the background when an error occur
+     */
+    private void setAllFocusChanged(){
+        editTextCognome.setOnFocusChangeListener(this);
+        editTextConfermaPassword.setOnFocusChangeListener(this);
+        editTextDataNascita.setOnFocusChangeListener(this);
+        editTextEmail.setOnFocusChangeListener(this);
+        editTextNome.setOnFocusChangeListener(this);
+        editTextPassword.setOnFocusChangeListener(this);
+        editTextTelefono.setOnFocusChangeListener(this);
+    }
 
-
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus){
+            v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
+        }
     }
 
     public void onRegistrationClick(View view) {
-
         controlloInputUtenteRegistrazione();
     }
 
@@ -103,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
         nome = editTextNome.getText().toString();
         cognome = editTextCognome.getText().toString();
         dataNascita = editTextDataNascita.getText().toString();
-        genere = null;
+        genere = getString(R.string.genereNonDefinito);
         telefono = editTextTelefono.getText().toString();
         email = editTextEmail.getText().toString();
         password = editTextPassword.getText().toString();
@@ -112,7 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         if( validazioneNome(nome) == false || validazioneCognome(cognome) == false  || validazioneDataNascita(dataNascita) == false ||
             dataNascita.length() < 9 || dataNascita.contains(".") || dataNascita.contains("-") || (validazioneDataNascita(dataNascita) == true && validazioneDataNascitaDue(dataNascita) == false)  ||
-           (!cb1.isChecked() && !cb2.isChecked() && !cb3.isChecked()) || validazioneTelefono(telefono) == false
+            validazioneTelefono(telefono) == false
             ||validazioneEmail(email) == false || validazionePassword(password) == false || !password.equals(confermaPassword)
              || password.contains(" ")) {
 
@@ -148,43 +163,123 @@ public class RegisterActivity extends AppCompatActivity {
                 editTextEmail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
-            if(validazionePassword(password) == false || password.contains(" ") || !password.equals(confermaPassword )) {
+            if(validazionePassword(password) == false || password.contains(" ")) {
                 editTextPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 editTextConfermaPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 Toast.makeText(this, getString(R.string.passwordErrataRegister), Toast.LENGTH_LONG).show();
-            }else{
-
+            }else if(!password.equals(confermaPassword)){
+                editTextPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                editTextConfermaPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                Toast.makeText(this, getString(R.string.passwordsNotMatching), Toast.LENGTH_LONG).show();
+            } else {
                 editTextPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
                 editTextConfermaPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
-
-            Toast.makeText(this, getString(R.string.campiErratiRegister), Toast.LENGTH_LONG).show();
 
         }else{
 
             backgroundTintEditText();
 
-            if(cb1.isChecked()){
-                genere = getString(R.string.genereMaschile);
-            }
-            if(cb2.isChecked()){
-                genere = getString(R.string.genereFemminile);
-            }
-            if(cb3.isChecked()){
-                genere = getString(R.string.genereNonDefinito);
-            }
+            if(rbM.isChecked()) genere = getString(R.string.genereMaschile);
+            else if(rbF.isChecked()) genere = getString(R.string.genereFemminile);
+            else if(rbU.isChecked()) genere = getString(R.string.genereNonDefinito);
 
-            Toast.makeText(this, getString(R.string.registrazioneEffettuataRegister), Toast.LENGTH_LONG).show();
+            Utente u = new Utente();
+            u.setCognome(cognome);
+            u.setNome(nome);
 
+            //Trying to convert the string to a Date object
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                Date date = format.parse(dataNascita);
+                u.setDataNascita(date);
+            } catch (ParseException e) {
+                editTextDataNascita.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                return;
+            }
+            u.setGenere(genere);
+
+            disableAllComponents();
+
+            //Check that the phone number is not already taken
+            Utenti.isPhoneNumberAlreadyTaken(telefono,closureBool -> {
+                if(!closureBool){
+                    u.setNumeroDiTelefono(telefono);
+                    computeRegistrationToServer(u,email,password);
+                }else{
+                    editTextTelefono.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                    Toast.makeText(this,R.string.phoneNumberAlreadyTaken,Toast.LENGTH_LONG).show();
+                    enableAllComponents();
+                    return;
+                }
+            });
         }
     }
 
+    private void computeRegistrationToServer(Utente user, String email, String psw){
+        Utenti.createNewUser(user, email, psw, imageSelected, this, closureBool -> {
+            if(closureBool){
+                Toast.makeText(this, getString(R.string.registrazioneEffettuataRegister), Toast.LENGTH_LONG).show();
+                Intent schermataHome = new Intent(getApplicationContext(), HomeActivity.class);
+                schermataHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
+                startActivity(schermataHome);
+                finish();
+            }else{
+                Toast.makeText(this, getString(R.string.registrazioneErrore), Toast.LENGTH_LONG).show();
+                AuthHelper.logOut();
+                enableAllComponents();
+            }
+        });
+    }
+
+    /**
+     * Re-enable the interaction with all the components and hide the progress bar
+     */
+    private void enableAllComponents(){
+        editTextTelefono.setEnabled(true);
+        editTextPassword.setEnabled(true);
+        editTextNome.setEnabled(true);
+        editTextEmail.setEnabled(true);
+        editTextDataNascita.setEnabled(true);
+        editTextConfermaPassword.setEnabled(true);
+        editTextCognome.setEnabled(true);
+        rbF.setEnabled(true);
+        rbM.setEnabled(true);
+        rbU.setEnabled(true);
+        bottoneRegistrazione.setEnabled(true);
+        textViewEditImage.setEnabled(true);
+        textViewRegistrazioneEnte.setEnabled(true);
+
+        //Hide the progress bar
+        AnimationHelper.fadeOut(progressBar,1000);
+    }
+
+    /**
+     * Disable the interaction with all the components and shows the progress bar
+     */
+    private void disableAllComponents(){
+        editTextTelefono.setEnabled(false);
+        editTextPassword.setEnabled(false);
+        editTextNome.setEnabled(false);
+        editTextEmail.setEnabled(false);
+        editTextDataNascita.setEnabled(false);
+        editTextConfermaPassword.setEnabled(false);
+        editTextCognome.setEnabled(false);
+        rbF.setEnabled(false);
+        rbM.setEnabled(false);
+        rbU.setEnabled(false);
+        bottoneRegistrazione.setEnabled(false);
+        textViewEditImage.setEnabled(false);
+        textViewRegistrazioneEnte.setEnabled(false);
+
+        //Show the progress bar
+        AnimationHelper.fadeIn(progressBar,1000);
+    }
 
     /**
      * Settaggio dell'underline a tutte le editText nel colore grigio.
      */
     public void backgroundTintEditText() {
-
         editTextNome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextCognome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextDataNascita.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
@@ -192,7 +287,6 @@ public class RegisterActivity extends AppCompatActivity {
         editTextEmail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextConfermaPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
-
     }
 
 
@@ -406,16 +500,13 @@ public class RegisterActivity extends AppCompatActivity {
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
                     // update the preview image in the layout
-                    imageView.setImageURI(selectedImageUri);
-
+                    // Compress it before it is shown into the imageView
+                    imageView.setImageBitmap(ImageHelper.decodeSampledBitmapFromUri(getContentResolver(),selectedImageUri,imageView));
+                    imageSelected = selectedImageUri;
                 }
             }
         }
     }
-
-
-
-
 }
 
 

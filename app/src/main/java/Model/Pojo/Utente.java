@@ -12,7 +12,6 @@ public class Utente {
     @DocumentId
     private String id;
 
-    @Exclude
     private boolean isProfileImageUploaded;
 
     private String nome;
@@ -20,12 +19,15 @@ public class Utente {
     private Date dataNascita;
     private String genere;
     private String numeroDiTelefono;
-    private String statusSanitario;
+    private int statusSanitario;
 
     // COSTRUTTORE DELLA CLASSE UTENTE
-    public Utente() { }
+    public Utente() {
+        this.statusSanitario = 0;
+        this.isProfileImageUploaded = false;
+    }
 
-    public Utente(String id, String nome, String cognome, Date dataNascita, String genere, String statusSanitario,String numeroDiTelefono) {
+    public Utente(String id, String nome, String cognome, Date dataNascita, String genere, int statusSanitario,String numeroDiTelefono) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -77,11 +79,11 @@ public class Utente {
         this.genere = genere;
     }
 
-    public String getStatusSanitario() {
+    public int getStatusSanitario() {
         return statusSanitario;
     }
 
-    public void setStatusSanitario(String statusSanitario) {
+    public void setStatusSanitario(int statusSanitario) {
         this.statusSanitario = statusSanitario;
     }
 
@@ -93,13 +95,11 @@ public class Utente {
         this.numeroDiTelefono = numeroDiTelefono;
     }
 
-    @Exclude
-    public boolean isProfileImageUploaded() {
+    public boolean getIsProfileImageUploaded() {
         return isProfileImageUploaded;
     }
 
-    @Exclude
-    public void setProfileImageUploaded(boolean profileImageUploaded) {
-        isProfileImageUploaded = profileImageUploaded;
+    public void setIsProfileImageUploaded(boolean isProfileImageUploaded) {
+        this.isProfileImageUploaded = isProfileImageUploaded;
     }
 }

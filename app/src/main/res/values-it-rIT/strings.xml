@@ -17,9 +17,12 @@
     <string name="passwordUtente">Password</string>
     <string name="confermaPasswordUtente">Conferma password</string>
     <string name="passwordErrataRegister">Inserire almeno un carattere maiuscolo, minuscolo e numerico</string>
+    <string name="passwordsNotMatching">Le due password non coincidono!</string>
     <string name="campiErratiRegister">Ci sono campi errati</string>
-    <string name="registrazioneEffettuataRegister">Utente registrato</string>
+    <string name="registrazioneEffettuataRegister">Utente registrato e loggato.</string>
+    <string name="registrazioneErrore">Si sono verificati degli errori.</string>
     <string name="account">Profilo</string>
+    <string name="phoneNumberAlreadyTaken">Numero di telefono già usato!</string>
     <string name="searchPlaceholder">Cerca qui</string>
 
 

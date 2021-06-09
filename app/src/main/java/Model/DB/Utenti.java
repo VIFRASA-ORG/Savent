@@ -1,5 +1,6 @@
 package Model.DB;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
@@ -72,6 +73,28 @@ public class Utenti extends ResultsConverter {
         }
     }
 
+    /** Return the user object with the specified phone number.
+     *
+     * @param phoneNumber   Phone number of the user to search for.
+     * @param closureBool    get called with the Utente object if the task is successful, null otherwise.
+     */
+    public static final void isPhoneNumberAlreadyTaken(String phoneNumber, ClosureBoolean closureBool){
+        FirestoreHelper.db.collection(UTENTI_COLLECTION).whereEqualTo("numeroDiTelefono",phoneNumber).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                List<Utente> l = convertResults(task,Utente.class);
+
+                if (l.size() == 1 ){
+                    if(closureBool != null) closureBool.closure(true);
+                }else{
+                    if(closureBool != null) closureBool.closure(false);
+                }
+            }else{
+                if(closureBool != null) closureBool.closure(false);
+            }
+        });
+
+    }
+
     /** Check if the given Utente id is a valid id.
      *
      * @param idUtente id ti check.
@@ -95,7 +118,7 @@ public class Utenti extends ResultsConverter {
      * @param profileImageUri   The user's profile image.
      * @param closureBool   get called with true if the task is successful, false otherwise.
      */
-    public static final void createNewUser(Utente user, String email, String psw, Uri profileImageUri, ClosureBoolean closureBool){
+    public static final void createNewUser(Utente user, String email, String psw, Uri profileImageUri, Context context, ClosureBoolean closureBool){
         //First thing first: create the new user as account
         AuthHelper.createNewAccount(email, psw, result -> {
             if (result == null){
@@ -110,7 +133,7 @@ public class Utenti extends ResultsConverter {
                     return;
                 }
 
-                updateUserInformation(user, profileImageUri, closureBool);
+                updateUserInformation(user, profileImageUri, context, closureBool);
             });
         });
     }
@@ -121,14 +144,14 @@ public class Utenti extends ResultsConverter {
      * @param profileImageUri   The profile image of the user.
      * @param closureBool   get called with true if the task is successful, false otherwise.
      */
-    public static final void updateUserInformation(Utente user, Uri profileImageUri, ClosureBoolean closureBool){
+    public static final void updateUserInformation(Utente user, Uri profileImageUri, Context context, ClosureBoolean closureBool){
         if (AuthHelper.isLoggedIn()){
             FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()).set(user).addOnCompleteListener(task -> {
                 if(task.isSuccessful()) {
                     if (profileImageUri != null) {
-                        uploadUserImage(profileImageUri, isSuccess -> {
+                        uploadUserImage(profileImageUri, context, isSuccess -> {
                             if (isSuccess){
-                                FirestoreHelper.db.collection(UTENTI_COLLECTION).document(user.getId()).update("isProfileImageUploaded",true).addOnCompleteListener(task1 -> {
+                                FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()).update("isProfileImageUploaded",true).addOnCompleteListener(task1 -> {
                                     if(closureBool!= null) closureBool.closure(task1.isSuccessful());
                                 });
                             } else if(closureBool != null) closureBool.closure(false);
@@ -152,7 +175,7 @@ public class Utenti extends ResultsConverter {
      * @param file file to upload.
      * @param closureBool   get called with true if the task is successful, false otherwise.
      */
-    public static final void uploadUserImage(Uri file, ClosureBoolean closureBool){
+    public static final void uploadUserImage(Uri file, Context context, ClosureBoolean closureBool){
         if (!AuthHelper.isLoggedIn()){
             if (closureBool != null) closureBool.closure(false);
             return;

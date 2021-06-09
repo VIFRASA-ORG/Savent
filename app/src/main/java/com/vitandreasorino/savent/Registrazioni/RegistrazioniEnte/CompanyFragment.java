@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.RegistrazioniEnte;
+package com.vitandreasorino.savent.Registrazioni.RegistrazioniEnte;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -18,17 +18,8 @@ import android.widget.Toast;
 
 import com.vitandreasorino.savent.R;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import Model.Closures.ClosureList;
-import Model.DB.Gruppi;
-import Model.Pojo.Gruppo;
 
 
 public class CompanyFragment extends Fragment {
