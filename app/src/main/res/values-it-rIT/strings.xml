@@ -82,4 +82,7 @@
     <string name="domicilio_fiscale">Domicilio fiscale</string>
     <string name="sede_azienda">Sede</string>
 
+    //Pagina dettaglio gruppo
+    <string name="groupPageTitle">Gruppo</string>
+
 </resources>

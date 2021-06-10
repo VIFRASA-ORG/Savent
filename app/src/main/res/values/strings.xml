@@ -62,7 +62,7 @@
     <string name="descrGroup">Description</string>
     <string name="adminGroup">Admin</string>
     <string name="groups">Groups</string>
-  
+
     <string name="text_register_ente"> <u>Are you an institution? Click here!</u></string>
     <string name="select_ente">Select institution</string>
     <string name="freelance">Freelance</string>
@@ -80,4 +80,6 @@
     <string name="domicilio_fiscale">Tax domicile</string>
     <string name="sede_azienda">Headquarters</string>
 
+    //Pagina dettaglio gruppo
+    <string name="groupPageTitle">Group</string>
 </resources>

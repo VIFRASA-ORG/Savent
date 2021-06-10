@@ -123,8 +123,8 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       /* cambiare HomeActivity.class
-        Intent i = new Intent(getContext(), HomeActivity.class);
+       // cambiare HomeActivity.class
+        Intent i = new Intent(getContext(), GroupDetailActivity.class);
         List<Gruppo> listaGruppiFiltrata = adapter.getFilteredData();
 
         if(listaGruppiFiltrata == null){
@@ -135,7 +135,6 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
 
         startActivity(i);
 
-        */
     }
 
 }
@@ -224,7 +223,8 @@ class GroupAdapter extends BaseAdapter implements Filterable {
         //imposta l'immagine del gruppo se esiste
         if(gruppo.getImmagineBitmap() != null) img.setImageBitmap(gruppo.getImmagineBitmap());
         //imposta etichetta Admin se si è amministratori del gruppo
-        if(gruppo.getIdAmministratore().equals(AuthHelper.getUserId())) textAdmin.setText(gruppo.getIdAmministratore());
+        if(gruppo.getIdAmministratore().equals(AuthHelper.getUserId())) textAdmin.setVisibility(View.VISIBLE);
+        else textAdmin.setVisibility(View.INVISIBLE);
 
         //ritorna la vista per la riga corrente
         return v;
