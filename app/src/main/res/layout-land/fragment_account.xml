@@ -23,7 +23,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingTop="70dp">
+                android:paddingTop="50dp">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:visibility="invisible"/>
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:layout_marginTop="-10dp"
+                    android:text="@string/account" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -35,7 +51,7 @@
                     app:layout_constraintVertical_bias="0.0"
                     tools:ignore="MissingConstraints"
                     tools:layout_editor_absoluteX="1dp"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="10dp">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="130dp"
@@ -83,7 +99,7 @@
                         android:textSize="45px" />
 
                     <EditText
-                        android:id="@+id/viewName"
+                        android:id="@+id/editTextNome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -108,7 +124,7 @@
                         android:textSize="45px" />
 
                     <EditText
-                        android:id="@+id/viewSurname"
+                        android:id="@+id/editTextCognome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -131,19 +147,38 @@
                         android:textColor="@color/black"
                         android:textSize="45px" />
 
-                    <EditText
-                        android:id="@+id/viewDateBirth"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="3dp"
-                        android:layout_marginTop="1dp"
-                        android:ems="10"
-                        android:enabled="true"
-                        android:gravity="center"
-                        android:inputType="date"
-                        android:hint="@string/dataNascita"
-                        android:textColor="@color/black" />
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="@dimen/margin_size"
+                        android:layout_weight="5">
+
+                        <TextView
+                            android:id="@+id/editTextBirth"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:enabled="true"
+                            android:gravity="center"
+                            android:hint="@string/dataNascita"
+                            android:textColor="@color/black"
+                            android:textSize="18dp"
+                            android:layout_weight="4"/>
+
+                        <ImageView
+                            android:id="@+id/imageViewCalendar"
+                            android:layout_width="0dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/calendar"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter">
+                        </ImageView>
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/textGender"
@@ -156,33 +191,31 @@
                         android:textSize="45px" />
 
                     <RadioGroup
+                        android:id="@+id/radioGroupSex"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
 
-                        <LinearLayout
+
+                        <RadioButton
+                            android:id="@+id/radioButtonMaleProfile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/genereMaschile" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonFemaleProfile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/genereFemminile" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonUndefinedProfile"
                             android:layout_width="match_parent"
-                            android:layout_height="35dp"
-                            android:orientation="horizontal">
-
-                            <CheckBox
-                                android:id="@+id/checkBoxMaleProfile"
-                                android:layout_width="98dp"
-                                android:layout_height="wrap_content"
-                                android:text="@string/genereMaschile" />
-
-                            <CheckBox
-                                android:id="@+id/checkBoxFemaleProfile"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:text="@string/genereFemminile" />
-
-                            <CheckBox
-                                android:id="@+id/checkBoxUndefinedProfile"
-                                android:layout_width="120dp"
-                                android:layout_height="wrap_content"
-                                android:text="@string/genereNonDefinito" />
-                        </LinearLayout>
+                            android:layout_height="wrap_content"
+                            android:text="@string/genereNonDefinito"
+                            android:checked="true"/>
 
                     </RadioGroup>
 
@@ -197,7 +230,7 @@
                         android:textSize="45px" />
 
                     <EditText
-                        android:id="@+id/viewTelephone"
+                        android:id="@+id/editTexPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -218,7 +251,8 @@
                         android:background="@drawable/ic_button_shape"
                         android:backgroundTint="@color/blueButton"
                         android:gravity="center"
-                        android:text="@string/salvaModifiche" />
+                        android:text="@string/salvaModifiche"
+                        android:enabled="false"/>
 
                     <TextView
                         android:id="@+id/textChangeData"

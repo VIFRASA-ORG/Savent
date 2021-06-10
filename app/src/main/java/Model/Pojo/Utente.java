@@ -5,9 +5,14 @@ import android.graphics.Bitmap;
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Utente {
+
+    public static final String MALE = "male";
+    public static final String FEMALE = "female";
+    public static final String UNDEFINED = "undefined";
 
     @DocumentId
     private String id;
@@ -101,5 +106,18 @@ public class Utente {
 
     public void setIsProfileImageUploaded(boolean isProfileImageUploaded) {
         this.isProfileImageUploaded = isProfileImageUploaded;
+    }
+
+    /**
+     * Return the event data and time formatted as following:
+     * dd/MM/yyyy HH:mm
+     *
+     * @return a string with the formatted data
+     */
+    public String getNeutralData(){
+        if(dataNascita == null) return null;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(dataNascita);
     }
 }

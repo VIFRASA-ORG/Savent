@@ -26,6 +26,12 @@
     <string name="phoneNumberAlreadyTaken">Numero di telefono già usato!</string>
     <string name="searchPlaceholder">Cerca qui</string>
 
+    //AccountFragment toast
+    <string name="informationUploaded">Informazioni aggiornate con successo!</string>
+    <string name="errorUpload">Qualcosa è andata storta durante l\'aggiornamento delle informazioni!</string>
+    <string name="noUpdates">Nulla da aggiornare!</string>
+
+
 
     <string name="TabBarHome">Home </string>
     <string name="TabBarGroups">Gruppi </string>

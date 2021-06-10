@@ -25,6 +25,12 @@
     <string name="phoneNumberAlreadyTaken">Phone number already used!</string>
     <string name="searchPlaceholder">Search here</string>
 
+    //AccountFragment toast
+    <string name="informationUploaded">Information updated successfully!</string>
+    <string name="errorUpload">Something went wrong while updating the information!</string>
+    <string name="noUpdates">Nothing to update!</string>
+
+
     <string name="TabBarHome">Home </string>
     <string name="TabBarGroups">Groups </string>
     <string name="TabBarEvents">Events </string>

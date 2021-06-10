@@ -42,8 +42,6 @@ import Model.DB.GenericUser;
 import Model.DB.Utenti;
 import Model.Pojo.Utente;
 
-import static Helper.AuthHelper.UserType.Utente;
-
 
 public class RegisterActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
@@ -181,9 +179,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
             backgroundTintEditText();
 
-            if(rbM.isChecked()) genere = getString(R.string.genereMaschile);
-            else if(rbF.isChecked()) genere = getString(R.string.genereFemminile);
-            else if(rbU.isChecked()) genere = getString(R.string.genereNonDefinito);
+            if(rbM.isChecked()) genere = Utente.MALE;
+            else if(rbF.isChecked()) genere = Utente.FEMALE;
+            else if(rbU.isChecked()) genere = Utente.UNDEFINED;
 
             Utente u = new Utente();
             u.setCognome(cognome);
