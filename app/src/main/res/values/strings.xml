@@ -62,7 +62,7 @@
     <string name="descrGroup">Description</string>
     <string name="adminGroup">Admin</string>
     <string name="groups">Groups</string>
-  
+
     <string name="text_register_ente"> <u>Are you an institution? Click here!</u></string>
     <string name="select_ente">Select institution</string>
     <string name="freelance">Freelance</string>
@@ -79,5 +79,23 @@
     <string name="visura_camerale">Chamber of commerce</string>
     <string name="domicilio_fiscale">Tax domicile</string>
     <string name="sede_azienda">Headquarters</string>
+
+    //Creazione evento
+    <string name="creazioneEvento">Create event</string>
+    <string name="descirzioneEvento">Description</string>
+    <string name="maxPartecipantiEvento">Maximum number of participants</string>
+    <string name="statusSanitario">Health status</string>
+    <string name="nomeEvento">Name</string>
+    <string name="dataEvento">Date</string>
+    <string name="selezionaData">Select date</string>
+    <string name="oraEvento">Hours</string>
+    <string name="selezionaOra">Select time</string>
+    <string name="posizioneEvento">Location</string>
+    <string name="pulsanteCreaEvento">Create</string>
+    <string name="inserisciPosizioneEvento">Enter location</string>
+    <string name="latitudineEvento">Latitude:   </string>
+    <string name="longitudineEvento">Longitude:   </string>
+    <string name="eventoCreato">Event created!</string>
+
 
 </resources>

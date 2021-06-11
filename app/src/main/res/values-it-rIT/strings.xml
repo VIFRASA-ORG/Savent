@@ -82,4 +82,23 @@
     <string name="domicilio_fiscale">Domicilio fiscale</string>
     <string name="sede_azienda">Sede</string>
 
+    //Creazione evento
+    <string name="creazioneEvento">Crea Evento</string>
+    <string name="descirzioneEvento">Descrizione</string>
+    <string name="maxPartecipantiEvento">Numero massimo partecipanti</string>
+    <string name="statusSanitario">Stato sanitario</string>
+    <string name="nomeEvento">Nome</string>
+    <string name="dataEvento">Data</string>
+    <string name="selezionaData">Seleziona data</string>
+    <string name="oraEvento">Orario</string>
+    <string name="selezionaOra">Seleziona ora</string>
+    <string name="posizioneEvento">Posizione</string>
+    <string name="pulsanteCreaEvento">Crea</string>
+    <string name="inserisciPosizioneEvento">Inserisci posizione</string>
+    <string name="latitudineEvento">Latitudine:   </string>
+    <string name="longitudineEvento">Longitudine:   </string>
+    <string name="eventoCreato">Evento creato!</string>
+
+
+
 </resources>
