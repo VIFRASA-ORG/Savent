@@ -34,6 +34,17 @@ public class AuthHelper {
 
 
     /**
+     * Return the email of the logged-in User
+     *
+     * @return the email of the logged-in user
+     */
+    public static final String getUserLoggedEmail(){
+        if(!isLoggedIn()) return null;
+
+        return mAuth.getCurrentUser().getEmail();
+    }
+
+    /**
      * Return the type of the user logged-in
      * @param closureRes
      */

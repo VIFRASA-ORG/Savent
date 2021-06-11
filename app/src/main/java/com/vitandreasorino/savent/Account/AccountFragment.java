@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.Account;
 
 
 import android.app.DatePickerDialog;
@@ -26,6 +26,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.vitandreasorino.savent.R;
 
 import org.w3c.dom.Text;
 
@@ -57,6 +59,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     ImageView imageViewProfile;
     TextView textEditProfilePhoto;
     TextView textViewtBirth;
+    TextView textViewChangeCredential;
 
     EditText editTextNome, editTextCognome, editTextPhone;
     Button buttonSaveData;
@@ -93,6 +96,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         buttonSaveData = (Button) rootView.findViewById(R.id.buttonSaveData);
         imageViewCalendar = (ImageView) rootView.findViewById(R.id.imageViewCalendar);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        textViewChangeCredential = (TextView) rootView.findViewById(R.id.textViewChangeCredential);
 
         buttonSaveData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +129,14 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 onCheckedChangedRadioGroup(group,checkedId);
+            }
+        });
+
+        textViewChangeCredential.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(),ChangeCredentialAccountActivity.class);
+                startActivity(i);
             }
         });
 
