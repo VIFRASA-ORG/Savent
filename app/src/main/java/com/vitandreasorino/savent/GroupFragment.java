@@ -88,18 +88,18 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         adapter.notifyDataSetChanged();
 
         /**
-         * metodo che richiama la successiva classe abbinata allo scopo di creare creare un nuovo gruppo
+         * metodo che richiama la successiva classe abbinata allo scopo di creare un nuovo gruppo
          * cliccando il tasto CreaGruppo
          */
         buttonCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
-                //cambiare homeActivity.class
-                Intent CreateGroup = new Intent(getActivity(), HomeActivity.class);
-                startActivity(CreateGroup);*/
+
+                Intent AddGroup = new Intent(getActivity(), AddGroup.class);
+                startActivity(AddGroup);
             }
         });
+
 
          // istanza che permette alla lista dei gruppi di essere cercata con la SearchView
         groupSearchView.setOnQueryTextListener(searchListener);
