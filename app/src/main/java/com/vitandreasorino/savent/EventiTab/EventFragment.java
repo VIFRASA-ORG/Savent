@@ -16,6 +16,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.vitandreasorino.savent.EventiTab.CreazioneEvento.NewEvent;
 import com.vitandreasorino.savent.R;
 
 public class EventFragment extends Fragment {
@@ -70,7 +71,7 @@ public class EventFragment extends Fragment {
         });
 
         buttonCreateEvent.setOnClickListener(v -> {
-            Intent i = new Intent(getActivity(),NewEvent.class);
+            Intent i = new Intent(getActivity(), NewEvent.class);
             startActivity(i);
         });
     }

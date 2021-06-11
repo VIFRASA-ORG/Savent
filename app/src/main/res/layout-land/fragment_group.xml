@@ -31,8 +31,7 @@
                 android:iconifiedByDefault="false"
                 android:queryHint="@string/searchPlaceholder"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:queryBackground="@null"/>
+                android:layout_marginRight="10dp" />
 
             <ListView
                 android:id="@+id/groupListView"

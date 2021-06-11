@@ -1,43 +1,25 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.GruppiTab.CreazioneGruppo;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.ListActivity;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CursorAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vitandreasorino.savent.R;
+
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class AddContacts extends AppCompatActivity implements SearchView.OnQueryTextListener {

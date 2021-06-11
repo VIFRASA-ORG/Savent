@@ -12,8 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.vitandreasorino.savent.Account.AccountFragment;
+import com.vitandreasorino.savent.AccountTab.AccountFragment;
 import com.vitandreasorino.savent.EventiTab.EventFragment;
+import com.vitandreasorino.savent.GruppiTab.GroupFragment;
 
 import Helper.AnimationHelper;
 

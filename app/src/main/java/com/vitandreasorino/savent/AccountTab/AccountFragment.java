@@ -1,14 +1,12 @@
-package com.vitandreasorino.savent.Account;
+package com.vitandreasorino.savent.AccountTab;
 
 
 import android.app.DatePickerDialog;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +27,7 @@ import android.widget.Toast;
 
 import com.vitandreasorino.savent.R;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,7 +37,6 @@ import java.util.regex.Pattern;
 
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
-import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureResult;
 import Model.DB.GenericUser;
 import Model.DB.Utenti;

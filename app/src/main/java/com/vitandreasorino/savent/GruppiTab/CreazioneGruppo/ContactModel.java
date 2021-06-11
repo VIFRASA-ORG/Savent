@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.GruppiTab.CreazioneGruppo;
 
 public class ContactModel {
     String name, number;

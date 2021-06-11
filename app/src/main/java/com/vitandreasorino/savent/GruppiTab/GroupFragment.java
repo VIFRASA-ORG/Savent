@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.GruppiTab;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vitandreasorino.savent.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +96,7 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
             @Override
             public void onClick(View view) {
 
-                Intent AddGroup = new Intent(getActivity(), AddGroup.class);
+                Intent AddGroup = new Intent(getActivity(), com.vitandreasorino.savent.GruppiTab.CreazioneGruppo.AddGroup.class);
                 startActivity(AddGroup);
             }
         });

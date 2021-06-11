@@ -1,9 +1,8 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.GruppiTab;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+
+import com.vitandreasorino.savent.R;
 
 import java.util.ArrayList;
 import java.util.List;

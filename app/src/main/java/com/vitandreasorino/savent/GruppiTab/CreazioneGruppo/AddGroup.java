@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.GruppiTab.CreazioneGruppo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vitandreasorino.savent.R;
 
 public class AddGroup extends AppCompatActivity {
     FloatingActionButton buttonNewContactGroup;
