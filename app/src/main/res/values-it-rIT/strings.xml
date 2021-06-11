@@ -95,6 +95,14 @@
     <string name="domicilio_fiscale">Domicilio fiscale</string>
     <string name="sede_azienda">Sede</string>
 
+    <string name="aggiungi_contatto">Chi vorresti aggiungere? Seleziona il contatto:</string>
+    <string name="nuovoGruppo">Nuovo gruppo</string>
+    <string name="stringaContatti">Contatti:</string>
+    <string name="bottoneCreaGruppo">Crea gruppo</string>
+    <string name="nomeContatto">Nome contatto</string>
+    <string name="numeroContatto">Numero di Telefono</string>
+    <string name="bottoneAggiungiContatto">Aggiungi contatto</string>
+
     //Pagina dettaglio gruppo
     <string name="groupPageTitle">Gruppo</string>
 

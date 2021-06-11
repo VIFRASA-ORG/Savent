@@ -22,6 +22,7 @@
             <SearchView
                 android:id="@+id/searchViewGroup"
                 android:layout_width="450dp"
+                android:queryBackground="@null"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
