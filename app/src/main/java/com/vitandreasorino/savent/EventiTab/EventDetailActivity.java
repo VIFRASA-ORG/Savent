@@ -61,7 +61,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         //Insert all model information in the view
         titleTextView.setText(eventModel.getNome());
         descriptionTextView.setText(eventModel.getDescrizione());
-        dateTime.setText(eventModel.getDataOra().toString());
+        dateTime.setText(eventModel.getNeutralData());
 
         //Computing the available places and the number of participant in the queue
         int maxPartecipation = eventModel.getNumeroMassimoPartecipanti();

@@ -61,6 +61,7 @@
         android:layout_height="19dp"
         android:layout_gravity="center"
         android:text="@string/PasswordDimenticata"
+        android:onClick="onClickPasswordForgot"
         android:textColor="@color/blueButton" />
 
 

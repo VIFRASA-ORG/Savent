@@ -197,7 +197,7 @@ class EventAdapter extends BaseAdapter implements Filterable {
 
         titolo.setText(e.getNome());
         desc.setText(e.getDescrizione());
-        date.setText(e.getDataOra().toString());
+        date.setText(e.getNeutralData());
         if(e.getImageBitmap()!= null) img.setImageBitmap(e.getImageBitmap());
         else img.setImageResource(R.drawable.event_placeholder_icon);
         if(!AuthHelper.getUserId().equals(e.getIdUtenteCreatore())) owner.setText("");

@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.RegistrazioniEnte;
+package com.vitandreasorino.savent.Registrazioni.RegistrazioniEnte;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

@@ -1,18 +1,28 @@
 package Helper;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
+
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
+import Model.Closures.ClosureResult;
 
 public class StorageHelper {
 
@@ -67,5 +77,34 @@ public class StorageHelper {
 
             }
         });
+    }
+
+    /** Download a generic image from Firebase Storage. The path is specified as a parameter.
+     *
+     * The user must be logged-in.
+     *
+     * @param child path from which to get the image.
+     * @param closureResult  get called with true if the task is successful, false otherwise.
+     */
+    public static final void downloadImage(String child, ClosureResult<File> closureResult){
+        // Create a reference with an initial file path and name
+        StorageReference pathReference = storageRef.child(child);
+
+        try {
+            File localFile = File.createTempFile("images", "");
+
+            pathReference.getFile(localFile).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+                    if(task.isSuccessful()){
+                        if(closureResult != null) closureResult.closure(localFile);
+                    }else{
+                        if(closureResult != null) closureResult.closure(null);
+                    }
+                }
+            });
+        } catch (IOException e) {
+            if(closureResult != null) closureResult.closure(null);
+        }
     }
 }
