@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -11,6 +12,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,11 +23,16 @@ import java.util.regex.Pattern;
 
 import Helper.AuthHelper;
 import Model.Closures.ClosureBoolean;
+import Model.DB.Enti;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
     EditText editTextEmailLogin, editTextPasswordLogin;
+    EditText editTextRecoveryEmail;
+
+    //Dialog for the password recovery
+    private AlertDialog pswRecoveryDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +42,21 @@ public class LoginActivity extends AppCompatActivity {
         editTextEmailLogin = (EditText) findViewById(R.id.editTextEmailLogin);
         editTextPasswordLogin = (EditText) findViewById(R.id.editTextPasswordLogin);
 
+        editTextEmailLogin.setOnFocusChangeListener(this);
+        editTextPasswordLogin.setOnFocusChangeListener(this);
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus){
+            v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
+        }
     }
 
     public void eventLoginClick(View view) {
-
+        editTextPasswordLogin.clearFocus();
+        editTextEmailLogin.clearFocus();
         controlloInputUtenteLogin();
-
     }
 
     private void controlloInputUtenteLogin() {
@@ -64,8 +81,6 @@ public class LoginActivity extends AppCompatActivity {
                 editTextPasswordLogin.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
-            Toast.makeText(this, getString(R.string.campiErratiRegister), Toast.LENGTH_LONG).show();
-
         }else{
             backgroundTintEditText();
             AuthHelper.singIn(emailLogin, passwordLogin, new ClosureBoolean() {
@@ -79,8 +94,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
-
-
     }
 
     private final void errorDuringLogin(){
@@ -88,8 +101,34 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private final void loginEffettuato(){
+
+        AuthHelper.getLoggedUserType(closureRes -> {
+            switch (closureRes){
+                case Utente:
+                    loggedInAsUser();
+                    break;
+                case Ente:
+                    loggedInAsEnte();
+            }
+        });
+    }
+
+    private void loggedInAsEnte(){
+        Enti.isEnteEnabled(AuthHelper.getUserId(),closureBool ->{
+            if(closureBool){
+                //Start the activity for the ente
+                Log.i("AUTH","Loggato come ente");
+            }else{
+                Toast.makeText(getApplicationContext(),R.string.accountNotActivated,Toast.LENGTH_SHORT).show();
+                AuthHelper.logOut();
+            }
+        });
+    }
+
+    private void loggedInAsUser(){
         Toast.makeText(getApplicationContext(),getString(R.string.correctLogin),Toast.LENGTH_SHORT).show();
         Intent schermataHome = new Intent(getApplicationContext(), HomeActivity.class);
+        schermataHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
         startActivity(schermataHome);
         finish();
     }
@@ -148,5 +187,42 @@ public class LoginActivity extends AppCompatActivity {
         return matchTrovato;
     }
 
+    /**
+     * On click event for the password recovery
+     * It shows the password recovery dialog
+     * @param v
+     */
+    public void onClickPasswordForgot(View v){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+        View view = layoutInflaterAndroid.inflate(R.layout.password_forgot_dialog, null);
+        builder.setView(view);
 
+        editTextRecoveryEmail = view.findViewById(R.id.recoveryPswEmail);
+        editTextRecoveryEmail.setOnFocusChangeListener(this);
+
+        pswRecoveryDialog = builder.create();
+        pswRecoveryDialog.show();
+    }
+
+    public void onClickSendRecoveryEmail(View v){
+        String value = editTextRecoveryEmail.getText().toString();
+        editTextRecoveryEmail.clearFocus();
+
+        if(value != null && !value.equals("") && validazioneEmail(value)){
+            Log.i("LOG",editTextRecoveryEmail.getText().toString());
+            AuthHelper.sendPswResetEmail(value,closureBool -> {
+                pswRecoveryDialog.dismiss();
+                Toast.makeText(this,R.string.pswRecoveryToast,Toast.LENGTH_LONG).show();
+            });
+        }else{
+            editTextRecoveryEmail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(pswRecoveryDialog != null) pswRecoveryDialog.dismiss();
+    }
 }

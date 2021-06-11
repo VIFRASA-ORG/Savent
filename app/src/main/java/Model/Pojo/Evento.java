@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Evento implements Serializable {
@@ -191,5 +192,18 @@ public class Evento implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    /**
+     * Return the event data and time formatted as following:
+     * dd/MM/yyyy HH:mm
+     *
+     * @return a string with the formatted data
+     */
+    public String getNeutralData(){
+        if(dataOra == null) return null;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(dataOra);
     }
 }

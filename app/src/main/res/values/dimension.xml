@@ -30,5 +30,6 @@
     <dimen name="margin_left_freelance_button_land">220dp</dimen>
     <dimen name="margin_left_company_button_land">220dp</dimen>
     <dimen name="margin_left_loadImage_land">205dp</dimen>
+    <dimen name="margin_left_seekBar_portrait">65dp</dimen>
 
 </resources>

@@ -7,30 +7,27 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textViewNameGroup"
+        android:id="@+id/textViewNameComponet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="22dp"
-        android:text="@string/nameGroup"
+        android:text="Nome Utente"
         android:textSize="17sp"
         android:layout_gravity="fill_vertical"
-        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewDescription"
-        android:layout_width="0dp"
-        android:layout_height="18dp"
+        android:id="@+id/textViewSurnameComponet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="@string/descrGroup"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Cognome Utente"
+        android:textSize="17sp"
+        android:layout_gravity="fill_vertical"
         app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNameGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewNameComponet" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -46,12 +43,11 @@
         tools:ignore="UnknownId">
 
         <ImageView
-            android:id="@+id/imageViewGroup"
+            android:id="@+id/imageViewComponent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="12dp"
-            android:background="@drawable/group_icon"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile_icon"/>
 
     </androidx.cardview.widget.CardView>
 
@@ -66,7 +62,7 @@
 
 
     <TextView
-        android:id="@+id/textAdmin"
+        android:id="@+id/textAdminGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

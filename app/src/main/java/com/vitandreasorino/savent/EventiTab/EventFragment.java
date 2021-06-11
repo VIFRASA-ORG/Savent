@@ -1,10 +1,12 @@
 package com.vitandreasorino.savent.EventiTab;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +23,7 @@ public class EventFragment extends Fragment {
     TabLayout upperTabBar;
     View rootView;
     ViewPager2 pager;
+    Button buttonCreateEvent;
 
     @Nullable
     @Override
@@ -32,6 +35,7 @@ public class EventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        buttonCreateEvent = view.findViewById(R.id.buttonCreaEvento);
         upperTabBar = view.findViewById(R.id.upperTabBar);
         pager = (ViewPager2) view.findViewById(R.id.pagerSearchAndNearbyEvents);
         pager.setSaveEnabled(false);
@@ -63,6 +67,11 @@ public class EventFragment extends Fragment {
                 if(position == 0) pager.setUserInputEnabled(true);
                 else if (position == 1) pager.setUserInputEnabled(false);
             }
+        });
+
+        buttonCreateEvent.setOnClickListener(v -> {
+            Intent i = new Intent(getActivity(),NewEvent.class);
+            startActivity(i);
         });
     }
 }

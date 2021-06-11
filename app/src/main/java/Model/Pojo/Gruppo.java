@@ -98,12 +98,12 @@ public class Gruppo implements Serializable {
         this.idComponenti = idComponenti;
     }
 
-    public boolean isImmagineUploaded() {
+    public boolean getIsImmagineUploaded() {
         return isImmagineUploaded;
     }
 
-    public void setImmagineUploaded(boolean immagineUploaded) {
-        isImmagineUploaded = immagineUploaded;
+    public void setIsImmagineUploaded(boolean isImmagineUploaded) {
+        isImmagineUploaded = isImmagineUploaded;
     }
 
     @Exclude

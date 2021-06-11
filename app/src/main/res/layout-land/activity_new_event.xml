@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".EventiTab.NewEvent"
+    android:orientation="vertical">
+
+    <Toolbar
+        android:id="@+id/toolbarStatusHome"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_box_status"
+        android:elevation="20dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentInsetLeft="0dp"
+        android:contentInsetStart="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetEnd="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetEnd="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:paddingTop="10dp"
+                android:gravity="top|center"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/backButton"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/abc_vector_test"
+                        android:backgroundTint="@color/blueButton"
+                        android:onClick="onBackButtonPressed"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewEventTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/creazioneEvento"
+                        android:textColor="@color/blueButton"
+                        android:textSize="24dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:orientation="vertical">
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </Toolbar>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/ic_box_rounded_top"
+                android:elevation="20dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="1dp">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/dimension_icon"
+                android:layout_height="@dimen/dimension_icon"
+                android:layout_gravity="center"
+                android:outlineAmbientShadowColor="@color/black"
+                app:cardCornerRadius="75dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintBottom_toTopOf="@+id/textView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/imageViewEvent"
+                    android:layout_width="@dimen/dimension_icon"
+                    android:layout_height="@dimen/dimension_icon"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/event_placeholder_icon" />
+
+                <View
+                    android:id="@+id/viewEvent2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom"
+                    android:background="#CCFFFFFF" />
+
+                <TextView
+                    android:id="@+id/textViewEvent2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="@string/modificaProfilo"
+                    android:textColor="#0000FF" />
+
+            </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <TextView
+                android:id="@+id/textViewNomeEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="190dp"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/nomeEvento"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextNomeEvento"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                app:backgroundTint="@color/gray" />
+
+            <TextView
+                android:id="@+id/textViewDescrizione"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="190dp"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/descirzioneEvento"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:maxLength="200"
+                android:ems="10"
+                android:layout_gravity="center"
+                android:inputType="textMultiLine"
+                app:backgroundTint="@color/gray"/>
+
+            <TextView
+                android:id="@+id/textViewNumeroMassimoPartecipanti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="190dp"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/maxPartecipantiEvento"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextNuumeroMassimoPartecipanti"
+                android:layout_width="@dimen/width_editText_register"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:inputType="number"
+                android:singleLine="true"
+                app:backgroundTint="@color/gray"/>
+
+            <TextView
+                android:id="@+id/textViewStatusSanitario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="190dp"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/statusSanitario"
+                android:textColor="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:weightSum="3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"/>
+
+                <SeekBar
+                    android:id="@+id/seekBarStatusProgress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:max="100"
+                    android:min="0"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/margin_size"
+                    android:layout_marginBottom="@dimen/margin_size"
+                    />
+
+                <TextView
+                    android:id="@+id/textViewContatoreStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="0%"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewDataEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="190dp"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/dataEvento"
+                android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/textViewSelectDataEvent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_size"
+                    android:text="@string/selezionaData"
+                    android:textSize="20dp"
+                    app:backgroundTint="@color/gray" />
+
+            <TextView
+                android:id="@+id/textViewOrarioEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="190dp"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/oraEvento"
+                android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/textViewSelectTimeEvent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_size"
+                    android:text="@string/selezionaOra"
+                    android:textSize="20dp"
+                    app:backgroundTint="@color/gray" />
+
+            <TextView
+                android:id="@+id/textViewPosizioneEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="190dp"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/posizioneEvento"
+                android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/buttonFragmentMappa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/blueButton"
+                    android:text="@string/inserisciPosizioneEvento"
+                    android:textColor="@color/white"
+                    app:cornerRadius="@dimen/radius_button_register"
+                    android:onClick="onMap"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:weightSum="7">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"/>
+
+                    <TextView
+                        android:id="@+id/textViewLatitudineScritta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_size"
+                        android:text="@string/latitudineEvento"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/textViewLatitudine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_size"
+                        android:layout_weight="3"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:weightSum="7">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"/>
+
+                    <TextView
+                        android:id="@+id/textViewLongitudineScritta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_size"
+                        android:text="@string/longitudineEvento"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/textViewLongitudine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_size"
+                        android:layout_weight="3"
+                        android:textColor="@color/black" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/buttonRegistrazione"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="45dp"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="@color/blueButton"
+                    android:text="@string/pulsanteCreaEvento"
+                    android:textColor="@color/white"
+                    app:cornerRadius="@dimen/radius_button_register"
+                    android:onClick="onCreateEvent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

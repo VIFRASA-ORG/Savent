@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.RegistrazioniEnte;
+package com.vitandreasorino.savent.Registrazioni.RegistrazioniEnte;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -15,18 +16,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vitandreasorino.savent.HomeActivity;
+import com.vitandreasorino.savent.LogSingInActivity;
 import com.vitandreasorino.savent.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import Model.DB.Utenti;
+import Helper.AnimationHelper;
+import Helper.AuthHelper;
+import Model.DB.Enti;
+import Model.DB.GenericUser;
+import Model.Pojo.Ente;
 
 
-public class FreelanceFragment extends Fragment {
+public class FreelanceFragment extends Fragment implements View.OnFocusChangeListener {
 
 
     private static final int RESULT_OK = -1;
@@ -38,7 +46,8 @@ public class FreelanceFragment extends Fragment {
 
     TextView textViewLabelCaricamento;
 
-    private Uri pathCertificatoPartitaIva;
+    private Uri pathCertificatoPartitaIva=null;
+    private ProgressBar progressBar=null;
 
 
     @Override
@@ -61,6 +70,7 @@ public class FreelanceFragment extends Fragment {
         editTextConfermaPasswordFreelance = (EditText) view.findViewById(R.id.editTextConfermaPasswordFreelance);
 
         textViewLabelCaricamento = (TextView) view.findViewById(R.id.textViewLabelCaricamento);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
 
         buttonCertificatoPartitaIvaFreelance.setOnClickListener(new View.OnClickListener() {
@@ -80,13 +90,60 @@ public class FreelanceFragment extends Fragment {
         buttonRegistrazioneFreelance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                removeAllFocus();
                 controlloInputUtenteRegistrazioneFreelance();
             }
 
         });
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setAllFocusChanged();
+    }
+
+    /**
+     * Add to all the component in the view the focus change listener
+     * to reset the background when an error occur
+     */
+    private void setAllFocusChanged(){
+        editTextPartitaIvaFreelance.setOnFocusChangeListener(this);
+        editTextNomeFreelance.setOnFocusChangeListener(this);
+        editTextCognomeFreelance.setOnFocusChangeListener(this);
+        editTextCodiceFiscaleFreelance.setOnFocusChangeListener(this);
+        editTextResidenzaFreelance.setOnFocusChangeListener(this);
+        editTextNumeroIscrizioneAlboFreelance.setOnFocusChangeListener(this);
+        editTextTelefonoFreelance.setOnFocusChangeListener(this);
+        editTextEmailFreelance.setOnFocusChangeListener(this);
+        editTextPasswordFreelance.setOnFocusChangeListener(this);
+        editTextConfermaPasswordFreelance.setOnFocusChangeListener(this);
+    }
+
+    /**
+     * Remove the focus from all the components.
+     */
+    private void removeAllFocus(){
+        editTextPartitaIvaFreelance.clearFocus();
+        editTextNomeFreelance.clearFocus();
+        editTextCognomeFreelance.clearFocus();
+        editTextCodiceFiscaleFreelance.clearFocus();
+        editTextResidenzaFreelance.clearFocus();
+        editTextNumeroIscrizioneAlboFreelance.clearFocus();
+        editTextTelefonoFreelance.clearFocus();
+        editTextEmailFreelance.clearFocus();
+        editTextPasswordFreelance.clearFocus();
+        editTextConfermaPasswordFreelance.clearFocus();
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus){
+            v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
+        }
     }
 
 
@@ -163,10 +220,16 @@ public class FreelanceFragment extends Fragment {
                 editTextEmailFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
-            if(validazionePasswordFreelance(passwordFreelance) == false || passwordFreelance.contains(" ") || !passwordFreelance.equals(confermaPasswordFreelance )) {
+            if(validazionePasswordFreelance(passwordFreelance) == false || passwordFreelance.contains(" ") ) {
                 editTextPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 editTextConfermaPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 Toast.makeText(getActivity(), getString(R.string.passwordErrataRegister), Toast.LENGTH_LONG).show();
+                return;
+            }else if(!passwordFreelance.equals(confermaPasswordFreelance )){
+                editTextPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                editTextConfermaPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                Toast.makeText(getActivity(), getString(R.string.passwordsNotMatching), Toast.LENGTH_LONG).show();
+                return;
             }else{
                 editTextPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
                 editTextConfermaPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
@@ -174,22 +237,99 @@ public class FreelanceFragment extends Fragment {
 
             if(pathCertificatoPartitaIva == null) {
                 textViewLabelCaricamento.setVisibility(View.INVISIBLE);
+                Toast.makeText(getActivity(),R.string.errorPIVA,Toast.LENGTH_LONG).show();
             }else{
                 textViewLabelCaricamento.setVisibility(View.VISIBLE);
             }
-
-
-            Toast.makeText(getActivity(), getString(R.string.campiErratiRegister), Toast.LENGTH_LONG).show();
-
         }else{
 
+            disableAllComponents();
+
             backgroundTintEditTextFreelanceFragment();
-            Toast.makeText(getActivity(), getString(R.string.registrazioneEffettuataRegister), Toast.LENGTH_LONG).show();
+            Ente e = new Ente();
+            e.setNomeLP(nomeFreelance);
+            e.setCognomeLP(cognomeFreelance);
+            e.setPartitaIva(numeroPartitaIva);
+            e.setCodiceFiscaleLP(codiceFiscaleFreelance);
+            e.setResidenzaLP(residenzaFreelance);
+            e.setNumeroIscrizioneAlboLP(numeroIscrizioneAlbo);
+            e.setCertificatoPIVA(pathCertificatoPartitaIva);
+
+            //Check if the phone number is already taken
+            GenericUser.isPhoneNumberAlreadyTaken(telefonoFreelance,closureBool -> {
+                if(!closureBool){
+                    e.setNumeroTelefono(telefonoFreelance);
+                    computeRegistrationToServer(e,emailFreelance,passwordFreelance);
+                }else{
+                    editTextTelefonoFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                    Toast.makeText(getActivity(),R.string.phoneNumberAlreadyTaken,Toast.LENGTH_LONG).show();
+                    enableAllComponents();
+                    return;
+                }
+            });
         }
-
-
     }
 
+
+    private void computeRegistrationToServer(Ente ente, String email, String password){
+        Enti.createNewEnteLiberoProfessionista(ente,email,password,closureBool ->{
+            if(closureBool){
+                /*  If the Ente creation is successful, execute the logout from the account because
+                *   it has to be enabled from the service provider after having verified all the information.
+                * */
+
+                //LogOut
+                AuthHelper.logOut();
+                Toast.makeText(getActivity(),R.string.enteCreated,Toast.LENGTH_LONG).show();
+
+                //Go back to the first page
+                Intent firstPage = new Intent(getActivity(), LogSingInActivity.class);
+                firstPage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the stack all the previous Activity.
+                startActivity(firstPage);
+                getActivity().finish();
+            }else{
+                Toast.makeText(getActivity(), getString(R.string.registrazioneErrore), Toast.LENGTH_LONG).show();
+                AuthHelper.logOut();
+                enableAllComponents();
+            }
+        });
+    }
+
+    private void disableAllComponents(){
+        editTextPartitaIvaFreelance.setEnabled(false);
+        editTextNomeFreelance.setEnabled(false);
+        editTextCognomeFreelance.setEnabled(false);
+        editTextCodiceFiscaleFreelance.setEnabled(false);
+        editTextResidenzaFreelance.setEnabled(false);
+        editTextNumeroIscrizioneAlboFreelance.setEnabled(false);
+        editTextTelefonoFreelance.setEnabled(false);
+        editTextEmailFreelance.setEnabled(false);
+        editTextPasswordFreelance.setEnabled(false);
+        editTextConfermaPasswordFreelance.setEnabled(false);
+
+        buttonCertificatoPartitaIvaFreelance.setEnabled(false);
+        buttonRegistrazioneFreelance.setEnabled(false);
+
+        AnimationHelper.fadeIn(progressBar,1000);
+    }
+
+    private void enableAllComponents(){
+        editTextPartitaIvaFreelance.setEnabled(true);
+        editTextNomeFreelance.setEnabled(true);
+        editTextCognomeFreelance.setEnabled(true);
+        editTextCodiceFiscaleFreelance.setEnabled(true);
+        editTextResidenzaFreelance.setEnabled(true);
+        editTextNumeroIscrizioneAlboFreelance.setEnabled(true);
+        editTextTelefonoFreelance.setEnabled(true);
+        editTextEmailFreelance.setEnabled(true);
+        editTextPasswordFreelance.setEnabled(true);
+        editTextConfermaPasswordFreelance.setEnabled(true);
+
+        buttonCertificatoPartitaIvaFreelance.setEnabled(true);
+        buttonRegistrazioneFreelance.setEnabled(true);
+
+        AnimationHelper.fadeOut(progressBar,1000);
+    }
 
 
     /**
@@ -421,6 +561,4 @@ public class FreelanceFragment extends Fragment {
             }
         }
     }
-
-
 }

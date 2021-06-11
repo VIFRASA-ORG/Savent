@@ -1,18 +1,24 @@
 package Model.DB;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import Helper.AuthHelper;
 import Helper.FirestoreHelper;
@@ -27,12 +33,57 @@ public class Utenti extends ResultsConverter {
 
     private static final String UTENTI_COLLECTION = "Utenti";
 
+    /**
+     * Used to update the information of the user into the updateField method.
+     */
+    public static final String NOME_FIELD = "nome";
+    public static final String COGNOME_FIELD = "cognome";
+    public static final String DATA_NASCITA_FIELD = "dataNascita";
+    public static final String NUMERO_TELEFONO_FIELD = "numeroDiTelefono";
+    public static final String GENERE_FIELD = "genere";
+    public static final String STATUS_SANITARIO_FIELD = "statusSanitario";
+    public static final String IS_PROFILE_IMAGE_FIELD = "isProfileImageUploaded";
+
+
+    /** Update the information of the user.
+     *
+     * @param userId the id of the user
+     * @param closureBool get called with true if the task is successful, false otherwise.
+     * @param firstField the name of the first field to update
+     * @param firstValue tha new value of the first field
+     * @param otherFieldAndValues an array of object with other field and values.
+     */
+    public static final void updateFields(String userId,ClosureBoolean closureBool, String firstField, Object firstValue, Object... otherFieldAndValues ){
+        FirestoreHelper.db.collection(UTENTI_COLLECTION).document(userId).update(firstField,firstValue,otherFieldAndValues).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(closureBool != null) closureBool.closure(task.isSuccessful());
+            }
+        });
+    }
+
+    /** Return the Utente object with the given id
+     *
+     * @param idUtente id of the user
+     * @param closureRes get called with the object if the task is successful, null otherwise.
+     */
+    public static final void getUser(String idUtente, ClosureResult<Utente> closureRes){
+        if(AuthHelper.isLoggedIn()){
+            FirestoreHelper.db.collection(UTENTI_COLLECTION).document(idUtente).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    if (closureRes != null) closureRes.closure(task.getResult().toObject(Utente.class));
+                }else{
+                    if (closureRes != null) closureRes.closure(null);
+                }
+            });
+        }
+    }
 
     /**
      * Return the name and surname of the user with the specified id.
      * The return value is formatted as follow: name + " " + surname.
      *
-     * @param idUtente id of the use whose name you want to know
+     * @param idUtente id of the user whose name you want to know
      * @param closureRes  get called with the value if the task is successful, null otherwise.
      */
     public static final void getNameSurnameOfUser(String idUtente, ClosureResult<String> closureRes){
@@ -95,7 +146,7 @@ public class Utenti extends ResultsConverter {
      * @param profileImageUri   The user's profile image.
      * @param closureBool   get called with true if the task is successful, false otherwise.
      */
-    public static final void createNewUser(Utente user, String email, String psw, Uri profileImageUri, ClosureBoolean closureBool){
+    public static final void createNewUser(Utente user, String email, String psw, Uri profileImageUri, Context context, ClosureBoolean closureBool){
         //First thing first: create the new user as account
         AuthHelper.createNewAccount(email, psw, result -> {
             if (result == null){
@@ -110,7 +161,7 @@ public class Utenti extends ResultsConverter {
                     return;
                 }
 
-                updateUserInformation(user, profileImageUri, closureBool);
+                updateUserInformation(user, profileImageUri, context, closureBool);
             });
         });
     }
@@ -121,14 +172,14 @@ public class Utenti extends ResultsConverter {
      * @param profileImageUri   The profile image of the user.
      * @param closureBool   get called with true if the task is successful, false otherwise.
      */
-    public static final void updateUserInformation(Utente user, Uri profileImageUri, ClosureBoolean closureBool){
+    public static final void updateUserInformation(Utente user, Uri profileImageUri, Context context, ClosureBoolean closureBool){
         if (AuthHelper.isLoggedIn()){
             FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()).set(user).addOnCompleteListener(task -> {
                 if(task.isSuccessful()) {
                     if (profileImageUri != null) {
-                        uploadUserImage(profileImageUri, isSuccess -> {
+                        uploadUserImage(profileImageUri, context, isSuccess -> {
                             if (isSuccess){
-                                FirestoreHelper.db.collection(UTENTI_COLLECTION).document(user.getId()).update("isProfileImageUploaded",true).addOnCompleteListener(task1 -> {
+                                FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()).update("isProfileImageUploaded",true).addOnCompleteListener(task1 -> {
                                     if(closureBool!= null) closureBool.closure(task1.isSuccessful());
                                 });
                             } else if(closureBool != null) closureBool.closure(false);
@@ -152,14 +203,20 @@ public class Utenti extends ResultsConverter {
      * @param file file to upload.
      * @param closureBool   get called with true if the task is successful, false otherwise.
      */
-    public static final void uploadUserImage(Uri file, ClosureBoolean closureBool){
+    public static final void uploadUserImage(Uri file, Context context, ClosureBoolean closureBool){
         if (!AuthHelper.isLoggedIn()){
             if (closureBool != null) closureBool.closure(false);
             return;
         }
 
         String finalChildName = UTENTI_COLLECTION + "/"+AuthHelper.getUserId()+"/immagineProfilo";
-        StorageHelper.uploadImage(file,finalChildName,closureBool);
+        StorageHelper.uploadImage(file,finalChildName,closureBoolean -> {
+            if (closureBoolean){
+                FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()).update("isProfileImageUploaded",true).addOnCompleteListener(task1 -> {
+                    if(closureBool!= null) closureBool.closure(task1.isSuccessful());
+                });
+            } else if(closureBool != null) closureBool.closure(false);
+        });
     }
 
     /** Download the user image from Firebase Storage.
@@ -176,5 +233,47 @@ public class Utenti extends ResultsConverter {
 
         String finalChildName = UTENTI_COLLECTION + "/" + AuthHelper.getUserId() + "/immagineProfilo";
         StorageHelper.downloadImage(finalChildName,closureBitmap);
+    }
+
+    public static final void downloadUserImage(String userId, ClosureBitmap closureBitmap){
+        if (!AuthHelper.isLoggedIn()){
+            if (closureBitmap != null) closureBitmap.closure(null);
+            return;
+        }
+
+        String finalChildName = UTENTI_COLLECTION + "/" + userId + "/immagineProfilo";
+        StorageHelper.downloadImage(finalChildName,closureBitmap);
+    }
+  
+    /** Download the user image from Firebase Storage.
+     *
+     * User must be logged-in.
+     *
+     * @param closureResult get called with the Bitmap if the task is successful, null otherwise.
+     */
+    public static final void downloadUserImage(ClosureResult<File> closureResult){
+        if (!AuthHelper.isLoggedIn()){
+            if (closureResult != null) closureResult.closure(null);
+            return;
+        }
+
+        String finalChildName = UTENTI_COLLECTION + "/" + AuthHelper.getUserId() + "/immagineProfilo";
+        StorageHelper.downloadImage(finalChildName,closureResult);
+    }
+
+    /** Download the user image from Firebase Storage.
+     *
+     * User must be logged-in.
+     *
+     * @param closureResult get called with the Bitmap if the task is successful, null otherwise.
+     */
+    public static final void downloadUserImage(String userId,ClosureResult<File> closureResult){
+        if (!AuthHelper.isLoggedIn()){
+            if (closureResult != null) closureResult.closure(null);
+            return;
+        }
+
+        String finalChildName = UTENTI_COLLECTION + "/" + userId + "/immagineProfilo";
+        StorageHelper.downloadImage(finalChildName,closureResult);
     }
 }
