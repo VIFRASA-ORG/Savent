@@ -95,6 +95,9 @@
     <string name="domicilio_fiscale">Domicilio fiscale</string>
     <string name="sede_azienda">Sede</string>
 
+    //Pagina dettaglio gruppo
+    <string name="groupPageTitle">Gruppo</string>
+
     //Creazione evento
     <string name="creazioneEvento">Crea Evento</string>
     <string name="descirzioneEvento">Descrizione</string>

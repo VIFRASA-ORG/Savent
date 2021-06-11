@@ -93,6 +93,9 @@
     <string name="domicilio_fiscale">Tax domicile</string>
     <string name="sede_azienda">Headquarters</string>
 
+    //Pagina dettaglio gruppo
+    <string name="groupPageTitle">Group</string>
+  
     //Creazione evento
     <string name="creazioneEvento">Create event</string>
     <string name="descirzioneEvento">Description</string>

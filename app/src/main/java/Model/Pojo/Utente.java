@@ -19,6 +19,9 @@ public class Utente {
 
     private boolean isProfileImageUploaded;
 
+    @Exclude
+    private Bitmap profileImageBitmap = null;
+
     private String nome;
     private String cognome;
     private Date dataNascita;
@@ -108,6 +111,16 @@ public class Utente {
         this.isProfileImageUploaded = isProfileImageUploaded;
     }
 
+    @Exclude
+    public Bitmap getProfileImageBitmap() {
+        return profileImageBitmap;
+    }
+
+    @Exclude
+    public void setProfileImageBitmap(Bitmap profileImageBitmap) {
+        this.profileImageBitmap = profileImageBitmap;
+    }
+  
     /**
      * Return the event data and time formatted as following:
      * dd/MM/yyyy HH:mm

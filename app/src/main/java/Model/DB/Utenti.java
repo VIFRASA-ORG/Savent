@@ -235,6 +235,29 @@ public class Utenti extends ResultsConverter {
         StorageHelper.downloadImage(finalChildName,closureBitmap);
     }
 
+    public static final void downloadUserImage(String userId, ClosureBitmap closureBitmap){
+        if (!AuthHelper.isLoggedIn()){
+            if (closureBitmap != null) closureBitmap.closure(null);
+            return;
+        }
+
+        String finalChildName = UTENTI_COLLECTION + "/" + userId + "/immagineProfilo";
+        StorageHelper.downloadImage(finalChildName,closureBitmap);
+    }
+
+    public static final void getUser(String idUtente, ClosureResult<Utente> closureRes){
+        if(AuthHelper.isLoggedIn()){
+            FirestoreHelper.db.collection(UTENTI_COLLECTION).document(idUtente).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    Utente user = task.getResult().toObject(Utente.class);
+                    if (closureRes != null) closureRes.closure(user);
+                }else{
+                    if (closureRes != null) closureRes.closure(null);
+                }
+            });
+        }
+    }
+  
     /** Download the user image from Firebase Storage.
      *
      * User must be logged-in.
