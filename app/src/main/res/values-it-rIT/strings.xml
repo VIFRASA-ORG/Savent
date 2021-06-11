@@ -4,6 +4,7 @@
     <string name="stringRegistrazione">Registrazione</string>
     <string name="stringAccesso">Accesso</string>
     <string name="PasswordDimenticata">Password dimenticata?</string>
+    <string name="accountNotActivated">Il tuo account non è ancora attivato!</string>
     <string name="modificaProfilo">Modifica</string>
     <string name="nomeUtente">Nome</string>
     <string name="cognomeUtente">Cognome</string>
@@ -17,10 +18,19 @@
     <string name="passwordUtente">Password</string>
     <string name="confermaPasswordUtente">Conferma password</string>
     <string name="passwordErrataRegister">Inserire almeno un carattere maiuscolo, minuscolo e numerico</string>
+    <string name="passwordsNotMatching">Le due password non coincidono!</string>
     <string name="campiErratiRegister">Ci sono campi errati</string>
-    <string name="registrazioneEffettuataRegister">Utente registrato</string>
+    <string name="registrazioneEffettuataRegister">Utente registrato e loggato.</string>
+    <string name="registrazioneErrore">Si sono verificati degli errori.</string>
     <string name="account">Profilo</string>
+    <string name="phoneNumberAlreadyTaken">Numero di telefono già usato!</string>
     <string name="searchPlaceholder">Cerca qui</string>
+
+    //AccountFragment toast
+    <string name="informationUploaded">Informazioni aggiornate con successo!</string>
+    <string name="errorUpload">Qualcosa è andata storta durante l\'aggiornamento delle informazioni!</string>
+    <string name="noUpdates">Nulla da aggiornare!</string>
+
 
 
     <string name="TabBarHome">Home </string>
@@ -77,9 +87,17 @@
     <string name="codice_fiscale">Codice fiscale</string>
     <string name="residenza">Residenza</string>
     <string name="numero_albo">Numero iscrizione Albo</string>
+    <string name="errorPIVA">Seleziona un certificato di Partita Iva!</string>
+    <string name="errorVCamerale">Seleziona una Visura Camerale!</string>
+    <string name="enteCreated">Ente creato! Appena le informazioni inserite saranno verificate,l\'account verrà attivato.</string>
 
     <string name="visura_camerale">Visura camerale</string>
     <string name="domicilio_fiscale">Domicilio fiscale</string>
     <string name="sede_azienda">Sede</string>
+
+    //Password recovery
+    <string name="pswRecoveryText">Recupero Password</string>
+    <string name="pswRecoveryButton">Invia email di recupero</string>
+    <string name="pswRecoveryToast">Se l\'email inserita è presente nei nostri server, ti verrà inviata una email di reset della password.</string>
 
 </resources>

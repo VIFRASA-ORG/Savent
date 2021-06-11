@@ -19,32 +19,47 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-                <TextView
-                    android:id="@+id/textViewRegistrazione"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_size"
-                    android:layout_marginTop="@dimen/margin_size"
-                    android:layout_marginBottom="@dimen/margin_size"
-                    android:text="@string/stringRegistrazione"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/dimension_text_register" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/textViewRegistrazioneEnte"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_size_register_ente"
-                    android:layout_marginRight="@dimen/margin_size"
-                    android:layout_marginTop="@dimen/margin_size"
-                    android:layout_marginBottom="@dimen/margin_size"
-                    android:text="@string/text_register_ente"
-                    android:textAlignment="center"
-                    android:textColor="@color/blueButton"
-                    android:textSize="@dimen/dimension_text_register_ente"
-                    android:onClick="onClickRegisterEnte"/>
+                    <TextView
+                        android:id="@+id/textViewRegistrazione"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_size"
+                        android:text="@string/stringRegistrazione"
+                        android:textColor="@color/black"
+                        android:gravity="left"
+                        android:layout_marginLeft="@dimen/margin_size"
+                        android:layout_marginTop="@dimen/margin_size"
+                        android:textSize="@dimen/dimension_text_register" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right">
+
+                    <TextView
+                        android:id="@+id/textViewRegistrazioneEnte"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_register_ente"
+                        android:textAlignment="center"
+                        android:layout_marginRight="@dimen/margin_size"
+                        android:layout_marginTop="@dimen/margin_size"
+                        android:textColor="@color/blueButton"
+                        android:textSize="@dimen/dimension_text_register_ente"
+                        android:onClick="onClickRegisterEnte"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -75,7 +90,7 @@
                     android:background="#CCFFFFFF" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/textViewEditImage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -158,36 +173,38 @@
                 android:text="@string/genereUtente"
                 android:textColor="@color/black" />
 
-            <RadioGroup
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center">
 
-                <LinearLayout
+                <RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:id="@+id/checkBox1"
+                    <RadioButton
+                        android:id="@+id/radioButtonMale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/genereMaschile" />
+                        android:text="@string/genereMaschile"
+                        />
 
-                    <CheckBox
-                        android:id="@+id/checkBox2"
+                    <RadioButton
+                        android:id="@+id/radioButtonFemale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/genereFemminile" />
+                        android:text="@string/genereFemminile"/>
 
-                    <CheckBox
-                        android:id="@+id/checkBox3"
+                    <RadioButton
+                        android:id="@+id/radioButtonUndefined"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/genereNonDefinito" />
-                </LinearLayout>
+                        android:text="@string/genereNonDefinito"
+                        android:checked="true"/>
+                </RadioGroup>
 
-            </RadioGroup>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textViewTelefono"
@@ -274,13 +291,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="45dp"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/blueButton"
                 android:text="@string/stringRegistrazione"
                 android:textColor="@color/white"
                 app:cornerRadius="@dimen/radius_button_register"
                 android:onClick="onRegistrationClick"/>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:visibility="invisible"/>
 
         </LinearLayout>
 
