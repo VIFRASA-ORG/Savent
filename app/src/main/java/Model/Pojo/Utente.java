@@ -1,6 +1,7 @@
 package Model.Pojo;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
@@ -21,6 +22,8 @@ public class Utente {
 
     @Exclude
     private Bitmap profileImageBitmap = null;
+    @Exclude
+    private Uri profileImageUri = null;
 
     private String nome;
     private String cognome;
@@ -132,5 +135,15 @@ public class Utente {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(dataNascita);
+    }
+
+    @Exclude
+    public Uri getProfileImageUri() {
+        return profileImageUri;
+    }
+
+    @Exclude
+    public void setProfileImageUri(Uri profileImageUri) {
+        this.profileImageUri = profileImageUri;
     }
 }

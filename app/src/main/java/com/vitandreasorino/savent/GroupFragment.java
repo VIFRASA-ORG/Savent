@@ -59,7 +59,7 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
             public void closure(List<Gruppo> list) {
              if(list != null){
                     for(Gruppo g : list){
-                        if(g.isImmagineUploaded()){
+                        if(g.getIsImmagineUploaded()){
                             Gruppi.downloadGroupImage(g.getId(), bitmap -> {
                                 if(bitmap != null){
                                     g.setImmagineBitmap(bitmap);

@@ -3,6 +3,7 @@ package com.vitandreasorino.savent;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import Model.Closures.ClosureBitmap;
 import Model.DB.Gruppi;
 import Model.DB.Utenti;
 
@@ -54,12 +56,15 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         descriptionDetailGroup.setText(groupModel.getDescrizione());
 
         //Scarica l'immagine del gruppo
-        Gruppi.downloadGroupImage(groupModel.getId(), bitmap -> {
-            if(bitmap != null){
-                imageViewDetailGroup.setImageBitmap(bitmap);
-                groupModel.setImmagineBitmap(bitmap);
-            }
-        });
+        if(groupModel.getIsImmagineUploaded()){
+            Gruppi.downloadGroupImage(groupModel.getId(), bitmap -> {
+                if(bitmap != null){
+                    imageViewDetailGroup.setImageBitmap(bitmap);
+                    groupModel.setImmagineBitmap(bitmap);
+                }
+            });
+        }
+
 
         //istanzia l'adapter personalizzato
         adapter = new ComponentGroupAdapter(this, groupModel.getIdAmministratore());
@@ -76,13 +81,14 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                         adapter.addItemToList(closureResult);
                         adapter.notifyDataSetChanged();
 
-                        Utenti.downloadUserImage(closureResult.getId(), closureBitmap ->{
-                            if(closureBitmap != null) {
-                                closureResult.setProfileImageBitmap(closureBitmap);
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-
+                        if(closureResult.getIsProfileImageUploaded()){
+                            Utenti.downloadUserImage(closureResult.getId(), (ClosureBitmap) bitmap -> {
+                                if(bitmap != null) {
+                                    closureResult.setProfileImageBitmap(bitmap);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
                     }
                 });
             }
