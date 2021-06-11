@@ -3,6 +3,7 @@
     <string name="stringRegistrazione">Sign up</string>
     <string name="stringAccesso">Login</string>
     <string name="PasswordDimenticata">Forgot password?</string>
+    <string name="accountNotActivated">Account not yet activated!</string>
     <string name="modificaProfilo">Edit</string>
     <string name="nomeUtente">Name</string>
     <string name="cognomeUtente">Surname</string>
@@ -16,10 +17,19 @@
     <string name="passwordUtente">Password</string>
     <string name="confermaPasswordUtente">Confirm password</string>
     <string name="passwordErrataRegister">Enter at least one uppercase, lowercase and numeric character</string>
+    <string name="passwordsNotMatching">The two passwords do not match!</string>
     <string name="campiErratiRegister">There are incorrect fields</string>
-    <string name="registrazioneEffettuataRegister">Registered user</string>
+    <string name="registrazioneEffettuataRegister">User registered and logged-in.</string>
+    <string name="registrazioneErrore">Errors during the registration.</string>
     <string name="account">Account</string>
+    <string name="phoneNumberAlreadyTaken">Phone number already used!</string>
     <string name="searchPlaceholder">Search here</string>
+
+    //AccountFragment toast
+    <string name="informationUploaded">Information updated successfully!</string>
+    <string name="errorUpload">Something went wrong while updating the information!</string>
+    <string name="noUpdates">Nothing to update!</string>
+
 
     <string name="TabBarHome">Home </string>
     <string name="TabBarGroups">Groups </string>
@@ -75,6 +85,9 @@
     <string name="codice_fiscale">Fiscal code</string>
     <string name="residenza">Residence</string>
     <string name="numero_albo">Registration number Albo</string>
+    <string name="errorPIVA">Select a VAT certificate</string>
+    <string name="errorVCamerale">Select a Chamber of commerce!</string>
+    <string name="enteCreated">Institution created! As soon as the information entered is verified, the account will be activated.</string>
 
     <string name="visura_camerale">Chamber of commerce</string>
     <string name="domicilio_fiscale">Tax domicile</string>
@@ -97,5 +110,9 @@
     <string name="longitudineEvento">Longitude:   </string>
     <string name="eventoCreato">Event created!</string>
 
+    //Password recovery
+    <string name="pswRecoveryText">Password Recovery</string>
+    <string name="pswRecoveryButton">Send Recovery Email</string>
+    <string name="pswRecoveryToast">If the entered email is on our servers, we will send you a password reset email.</string>
 
 </resources>

@@ -12,10 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vitandreasorino.savent.Account.AccountFragment;
 import com.vitandreasorino.savent.EventiTab.EventFragment;
 
 import Helper.AnimationHelper;
-import Helper.AuthHelper;
 
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
