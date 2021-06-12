@@ -89,16 +89,14 @@ public class Gruppi extends ResultsConverter{
     public static final void getAllMyGroups(ClosureList<Gruppo> closureList){
         if(AuthHelper.isLoggedIn()){
             //Group of which the user is the administrator
-            Task firstTask = FirestoreHelper.db.collection(GRUPPO_COLLECTION).whereEqualTo("idAmministratore",AuthHelper.getUserId()).get();
-            Task secondTask = FirestoreHelper.db.collection(GRUPPO_COLLECTION).whereArrayContains("idComponenti",AuthHelper.getUserId()).get();
-
-            Task combinedTask = Tasks.whenAllComplete(firstTask,secondTask).addOnCompleteListener(task -> {
-                if(task.isSuccessful() && closureList != null){
-                    List<Gruppo> finalList = new ArrayList<Gruppo>();
-                    for(Task<?> t : task.getResult()){
-                        finalList.addAll(convertResults((Task<QuerySnapshot>) t,Gruppo.class));
+            Task secondTask = FirestoreHelper.db.collection(GRUPPO_COLLECTION).whereArrayContains("idComponenti",AuthHelper.getUserId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()){
+                        if(closureList != null) closureList.closure(convertResults(task,Gruppo.class));
+                    }else{
+                        if(closureList != null) closureList.closure(null);
                     }
-                    closureList.closure(finalList);
                 }
             });
         }
@@ -116,7 +114,6 @@ public class Gruppi extends ResultsConverter{
                         closureList.closure(convertResults(task,Gruppo.class));
                     }else closureList.closure(null);
                 }
-
             });
         }
     }

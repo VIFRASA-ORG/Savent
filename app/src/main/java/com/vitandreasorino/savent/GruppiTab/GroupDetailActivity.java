@@ -3,7 +3,9 @@ package com.vitandreasorino.savent.GruppiTab;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +20,12 @@ import android.widget.TextView;
 
 import com.vitandreasorino.savent.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import Model.Closures.ClosureBitmap;
+import Model.Closures.ClosureResult;
 import Model.DB.Gruppi;
 import Model.DB.Utenti;
 
@@ -83,11 +87,9 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                         adapter.notifyDataSetChanged();
 
                         if(closureResult.getIsProfileImageUploaded()){
-                            Utenti.downloadUserImage(closureResult.getId(), (ClosureBitmap) bitmap -> {
-                                if(bitmap != null) {
-                                    closureResult.setProfileImageBitmap(bitmap);
-                                    adapter.notifyDataSetChanged();
-                                }
+                            Utenti.downloadUserImage(closureResult.getId(), (ClosureResult<File>) file -> {
+                                closureResult.setProfileImageUri(Uri.fromFile(file));
+                                adapter.notifyDataSetChanged();
                             });
                         }
                     }
@@ -105,7 +107,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     private void inflateAll() {
         nameDetailGroup = findViewById(R.id.nameDetailGroup);
         descriptionDetailGroup = findViewById(R.id.descriptionContentTextViewGroup);
-        imageViewDetailGroup = findViewById(R.id.imageViewProfile);
+        imageViewDetailGroup = findViewById(R.id.imageViewDetailGroup);
         componentListView = findViewById(R.id.componenGrouptListView);
         searchView = findViewById(R.id.searchViewComponentGroup);
     }
@@ -198,6 +200,7 @@ class ComponentGroupAdapter extends BaseAdapter implements Filterable {
         txtName.setText(utente.getNome());
         txtSurname.setText(utente.getCognome());
         if(utente.getProfileImageBitmap() != null) img.setImageBitmap(utente.getProfileImageBitmap());
+        else if(utente.getProfileImageUri() != null) img.setImageURI(utente.getProfileImageUri());
         else img.setImageResource(R.drawable.profile_icon);
 
         //imposta etichetta "Amm.re" nel caso un componente del gruppo è il creatore di tale del gruppo
