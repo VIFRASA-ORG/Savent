@@ -130,6 +130,7 @@ public class Utente {
      *
      * @return a string with the formatted data
      */
+    @Exclude
     public String getNeutralData(){
         if(dataNascita == null) return null;
 

@@ -126,4 +126,22 @@
     <string name="pswRecoveryButton">Send Recovery Email</string>
     <string name="pswRecoveryToast">If the entered email is on our servers, we will send you a password reset email.</string>
 
+    //Change credential Activity
+    <string name="changeLoginCredential">Change login credential</string>
+    <string name="changeEmail">Change Email</string>
+    <string name="changePassword">Change Password</string>
+    <string name="oldPassword">Old Password</string>
+    <string name="newPassword">New Password</string>
+    <string name="confirmNewPassword">Confirm new Password</string>
+    <string name="passwordChangeSuccess">Password updated successfully!</string>
+    <string name="passwordChangeError">Error updating password!</string>
+    <string name="oldPasswordError">Wrong old password!</string>
+    <string name="emailChangeSuccess">Email updated successfully!</string>
+    <string name="emailChangeError">Error updating email!</string>
+    <string name="wrongPassword">Wrong password!</string>
+
+    //Password request dialog
+    <string name="passwordRequired">Password required</string>
+    <string name="cancelButton">CANCEL</string>
+
 </resources>

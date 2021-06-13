@@ -129,4 +129,22 @@
     <string name="pswRecoveryButton">Invia email di recupero</string>
     <string name="pswRecoveryToast">Se l\'email inserita è presente nei nostri server, ti verrà inviata una email di reset della password.</string>
 
+    //Change credential Activity
+    <string name="changeLoginCredential">Modifica credenziali</string>
+    <string name="changeEmail">Modifica email</string>
+    <string name="changePassword">Modifica password</string>
+    <string name="oldPassword">Vecchia Password</string>
+    <string name="newPassword">Nuova Password</string>
+    <string name="confirmNewPassword">Conferma nuova password</string>
+    <string name="passwordChangeSuccess">Password cambiata con successo!</string>
+    <string name="passwordChangeError">Errore nella modifica della password!</string>
+    <string name="oldPasswordError">Vecchia password errata!</string>
+    <string name="emailChangeSuccess">Email cambiata con successo!</string>
+    <string name="emailChangeError">Errore nella modifica dell\'email!</string>
+    <string name="wrongPassword">Password errata!</string>
+
+    //Password request dialog
+    <string name="passwordRequired">Password richiesta</string>
+    <string name="cancelButton">ANNULLA</string>
+
 </resources>
