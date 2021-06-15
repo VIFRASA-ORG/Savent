@@ -1,6 +1,7 @@
 package Model.Pojo;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
@@ -16,6 +17,9 @@ public class Evento implements Serializable {
 
     @Exclude
     private transient Bitmap imageBitmap;
+
+    @Exclude
+    private transient Uri imageUri;
     private boolean isImageUploaded;
 
     private String nome;
@@ -28,6 +32,7 @@ public class Evento implements Serializable {
     private int sogliaAccettazioneStatus;
     private int numeroMassimoPartecipanti;
     private int numeroPartecipanti;
+    private int numeroPartecipantiInCoda;
 
     // COSTRUTTORI DELLA CLASSE EVENTO
     public Evento() {
@@ -41,6 +46,7 @@ public class Evento implements Serializable {
         sogliaAccettazioneStatus = 0;
         numeroMassimoPartecipanti = 0;
         numeroPartecipanti = 0;
+        numeroPartecipantiInCoda = 0;
         isImageUploaded = false;
     }
 
@@ -59,7 +65,7 @@ public class Evento implements Serializable {
      * @param numeroPartecipanti
      */
     public Evento(String id, String nome, String descrizione, double longitudine, double latitudine, Date dataOra, String idUtenteCreatore,
-                  int sogliaAccettazioneStatus, int numeroMassimoPartecipanti, int numeroPartecipanti, boolean isImageUploaded) {
+                  int sogliaAccettazioneStatus, int numeroMassimoPartecipanti, int numeroPartecipanti,int numeroPartecipantiInCoda, boolean isImageUploaded) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -71,6 +77,7 @@ public class Evento implements Serializable {
         this.numeroMassimoPartecipanti = numeroMassimoPartecipanti;
         this.numeroPartecipanti = numeroPartecipanti;
         this.isImageUploaded = isImageUploaded;
+        this.numeroPartecipantiInCoda = numeroPartecipantiInCoda;
     }
 
 
@@ -205,5 +212,23 @@ public class Evento implements Serializable {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return sdf.format(dataOra);
+    }
+
+    public int getNumeroPartecipantiInCoda() {
+        return numeroPartecipantiInCoda;
+    }
+
+    public void setNumeroPartecipantiInCoda(int numeroPartecipantiInCoda) {
+        this.numeroPartecipantiInCoda = numeroPartecipantiInCoda;
+    }
+
+    @Exclude
+    public Uri getImageUri() {
+        return imageUri;
+    }
+
+    @Exclude
+    public void setImageUri(Uri imageUri) {
+        this.imageUri = imageUri;
     }
 }

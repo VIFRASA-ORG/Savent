@@ -85,7 +85,8 @@
                         android:layout_height="30dp"
                         android:background="@drawable/share_icon"
                         android:backgroundTint="@color/blueButton"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop"
+                        android:onClick="onShareButtonClick"/>
 
                 </LinearLayout>
 
@@ -145,7 +146,7 @@
                             android:id="@+id/imageViewProfile"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/profile_icon"
+                            android:background="@drawable/event_placeholder_icon"
                             android:scaleType="centerCrop" />
 
                     </androidx.cardview.widget.CardView>
@@ -157,7 +158,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="20dp"
                         android:textAlignment="center"
-                        android:text="Bel titolo di merda"
+                        android:text="Bel titolo"
                         android:layout_marginRight="10dp"
                         android:layout_marginLeft="10dp"
                         android:textSize="22sp" />
@@ -223,7 +224,7 @@
                         android:background="?android:attr/listDivider" />
 
                     <Button
-                        android:id="@+id/buttonSaveData"
+                        android:id="@+id/buttonPartecipate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -231,8 +232,35 @@
                         android:background="@drawable/ic_button_shape"
                         android:backgroundTint="@color/blueButton"
                         android:gravity="center"
-                        android:text="@string/joinEvent" />
+                        android:text="@string/joinEvent"
+                        android:onClick="onParticipateButtonPressed"
+                        android:enabled="true"
+                        android:visibility="visible"/>
 
+
+                    <Button
+                        android:id="@+id/buttonLeaveEvent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/ic_button_shape"
+                        android:backgroundTint="@color/blueButton"
+                        android:gravity="center"
+                        android:text="@string/leaveEvent"
+                        android:enabled="true"
+                        android:visibility="visible"
+                        android:onClick="onLeaveButtonPressed"/>
+
+                    <TextView
+                        android:id="@+id/messageBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
+                        android:text=""
+                        android:textColor="#050505"
+                        android:textSize="12sp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -360,7 +388,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="5dp"
-                                android:text="Vitandrea Sorino"
+                                android:text=""
                                 android:textAlignment="center"
                                 android:textSize="18sp"
                                 tools:layout_editor_absoluteX="192dp"

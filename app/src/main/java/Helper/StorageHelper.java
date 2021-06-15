@@ -107,4 +107,24 @@ public class StorageHelper {
             if(closureResult != null) closureResult.closure(null);
         }
     }
+
+    /** Download a generic image from Firebase Storage. The path is specified as a parameter.
+     *
+     * The user must be logged-in.
+     *
+     * @param child path from which to get the image.
+     * @param closureResult  get called with true if the task is successful, false otherwise.
+     */
+    public static final void downloadImageUri(String child, ClosureResult<Uri> closureResult){
+        // Create a reference with an initial file path and name
+        StorageReference pathReference = storageRef.child(child);
+
+        pathReference.getDownloadUrl().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                if(closureResult != null) closureResult.closure(task.getResult());
+            }else{
+                if(closureResult != null) closureResult.closure(null);
+            }
+        });
+    }
 }

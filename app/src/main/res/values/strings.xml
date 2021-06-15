@@ -60,11 +60,31 @@
     <string name="eventDescription">Description</string>
     <string name="eventLocation">Location</string>
     <string name="availablePlaces">Places Available:</string>
-    <string name="queuePlaces">People on the waiting list: :</string>
+    <string name="queuePlaces">People on the waiting list:</string>
     <string name="eventOwner">Created by:</string>
     <string name="joinEvent">Join the event</string>
     <string name="eventOwnerLabel">Owner</string>
     <string name="events">Events</string>
+    <string name="leaveEvent">Leave event</string>
+
+    <string name="queueMessage">You are queueing up.\nAs soon as someone leaves the event,\n the queue will go up in order of booking.</string>
+    <string name="participationMessage">Your participation has been accepted!</string>
+    <string name="messageStatus">You are queueing up.\nYour health status does not satisfy the minimum requirements.\nYou will climb the queue as soon as you reach them!</string>
+
+    //Popup join event
+    <string name="yesValue">Yes</string>
+    <string name="areUSure">Are you sure?</string>
+    <string name="popUpJoinHealthOkPlacesOk">Your health status meets the requirements and there are seats available.\nAre you sure you want to attend this event?</string>
+    <string name="popUpJoinHealthOkPlacesNO">Your health status meets the requirements but there are no seats available. You will be added to the queue and as soon as seats become available, the queue will scale in order of booking. You will be notified if you can attend the event.\nWould you like to proceed?</string>
+    <string name="popUpJoinHealthNO">Your health status does not meet the requirements. You will be added to the queue and as soon as you meet the requirements you will receive a notification confirming your participation.\nDo you want to proceed?</string>
+    <string name="participationCorrectlySent">Participation sent successfully!</string>
+    <string name="errorJoiningEvent">An error occurred while submitting your event participation!</string>
+
+    //Popup leave the event
+    <string name="youSureLeavingEvent">Are you sure you want to leave the event?</string>
+    <string name="eventAbandonedCorrectly">Event successfully abandoned!</string>
+    <string name="errorAbandoningEvent">An error occurred while abandoning the event!</string>
+
 
     //Pagina mappa con eventi nelle vicinanze
     <string name="searchInThisArea">Search in this area</string>

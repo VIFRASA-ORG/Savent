@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Helper.AuthHelper;
+import Model.Closures.ClosureBitmap;
 import Model.DB.Eventi;
 import Model.Pojo.Evento;
 
@@ -56,7 +57,7 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
                 for(Evento e : list){
                     //download the image
                     if(e.getIsImageUploaded() == true){
-                        Eventi.downloadEventImage(e.getId(), bitmap -> {
+                        Eventi.downloadEventImage(e.getId(),(ClosureBitmap) bitmap -> {
                             e.setImageBitmap(bitmap);
                             adapter.notifyDataSetChanged();
                         });
@@ -200,7 +201,8 @@ class EventAdapter extends BaseAdapter implements Filterable {
         date.setText(e.getNeutralData());
         if(e.getImageBitmap()!= null) img.setImageBitmap(e.getImageBitmap());
         else img.setImageResource(R.drawable.event_placeholder_icon);
-        if(!AuthHelper.getUserId().equals(e.getIdUtenteCreatore())) owner.setText("");
+        if(!AuthHelper.getUserId().equals(e.getIdUtenteCreatore())) owner.setVisibility(View.INVISIBLE);
+        else owner.setVisibility(View.VISIBLE);
         return v;
     }
 
