@@ -1,11 +1,14 @@
 package com.vitandreasorino.savent.EventiTab.CreazioneEvento;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,14 +20,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vitandreasorino.savent.R;
 
+import Helper.ImageHelper;
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private Button buttonConfermaLatLong;
     private MapView mapView;
     GoogleMap map;
 
     private double latitudine = 0;
     private double longitudine = 0;
+    private boolean isNotNull;
 
     MarkerOptions markerOptions = null;
 
@@ -34,13 +39,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        buttonConfermaLatLong = (Button) findViewById(R.id.buttonConfermaLatLong);
         mapView = (MapView) findViewById(R.id.mapViewEvent);
         mapView.onCreate(savedInstanceState);
 
 
         mapView.getMapAsync(this);
-
 
 
     }
@@ -74,6 +77,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         map = googleMap;
 
+        isNotNull = getIntent().getBooleanExtra("isNotNull", false);
+        latitudine = getIntent().getDoubleExtra("latitudine",0);
+        longitudine = getIntent().getDoubleExtra("longitudine",0);
+        MarkerOptions marker = new MarkerOptions();
+        LatLng oggetto = new LatLng(latitudine,longitudine);
+        marker.position(oggetto);
+        map.clear();
+
+        if(isNotNull) {
+            map.addMarker(marker);
+        }
+
+
+
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
@@ -105,6 +122,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
+
     public void onLocation(View view) {
 
         Intent intent = new Intent();
@@ -116,6 +134,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         finish();
 
     }
+
 
     public void onBackButtonPressed(View view) {
         super.onBackPressed();
