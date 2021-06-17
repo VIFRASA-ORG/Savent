@@ -93,13 +93,17 @@
     <string name="domicilio_fiscale">Tax domicile</string>
     <string name="sede_azienda">Headquarters</string>
 
-    <string name="aggiungi_contatto">Would you like to add?Choose the contact:</string>
+    <string name="aggiungi_contatto">Would you like to add?</string>
     <string name="nuovoGruppo">New group</string>
     <string name="stringaContatti">Contacts:</string>
+    <string name="selezionaContatti">Choose contacts</string>
     <string name="bottoneCreaGruppo">Create group</string>
+    <string name="labelCreaGruppo">Create</string>
     <string name="nomeContatto">Name contact</string>
     <string name="numeroContatto">Phone number</string>
-    <string name="bottoneAggiungiContatto">Add contact</string>
+    <string name="avvisoNoContatti">No contacts found!</string>
+    <string name="bottoneAggiungiContatti">Add contacts</string>
+
 
     //Pagina dettaglio gruppo
     <string name="groupPageTitle">Group</string>

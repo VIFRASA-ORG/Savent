@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Savent">
-        <activity android:name=".GruppiTab.CreazioneGruppo.AddContacts"/>
+        <activity android:name=".GruppiTab.CreazioneGruppo.AddContacts"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".GruppiTab.CreazioneGruppo.AddGroup" />
         <activity android:name=".GruppiTab.GroupDetailActivity"></activity>
         <activity android:name=".EventiTab.CreazioneEvento.MapActivity"></activity>
