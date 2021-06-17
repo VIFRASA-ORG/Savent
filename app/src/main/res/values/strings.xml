@@ -66,6 +66,7 @@
     <string name="eventOwnerLabel">Owner</string>
     <string name="events">Events</string>
     <string name="leaveEvent">Leave event</string>
+    <string name="myPartecipations">Participations</string>
 
     <string name="queueMessage">You are queueing up.\nAs soon as someone leaves the event,\n the queue will go up in order of booking.</string>
     <string name="participationMessage">Your participation has been accepted!</string>

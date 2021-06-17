@@ -3,6 +3,7 @@ package com.vitandreasorino.savent.EventiTab;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureBitmap;
 import Model.DB.Eventi;
@@ -35,8 +38,16 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     SearchView searchView;
     EventAdapter adapter;
 
+    ProgressBar progressBar;
+    TextView emptyTextView;
+
     //List of event shown in he ListView.
     List<Evento> listaDiEventi = new ArrayList<>();
+
+    SearchEventType pageVisualizationType = SearchEventType.ALL_EVENT;
+
+
+
 
     @Nullable
     @Override
@@ -44,11 +55,53 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
         return inflater.inflate(R.layout.search_event, container, false);
     }
 
+    public FragmentSearchEvent(SearchEventType mode) {
+        pageVisualizationType = mode;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         eventListView = view.findViewById(R.id.eventListView);
         searchView = view.findViewById(R.id.searchViewEvent);
+        progressBar = view.findViewById(R.id.progressBar);
+        emptyTextView = view.findViewById(R.id.emptyTextView);
+
+        eventListView.setEmptyView(view.findViewById(R.id.emptyResults));
+
+        switch (pageVisualizationType){
+            case ALL_EVENT:
+                downloadAllEvents();
+                break;
+            case MY_EVENT:
+                downloadMyEvents();
+                break;
+        }
+
+        adapter = new EventAdapter(this.getContext(),listaDiEventi);
+        eventListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        /**
+         * Setting the listener for the filterable search
+         * and for the click on the item in the list.
+         */
+        searchView.setOnQueryTextListener(this);
+        eventListView.setOnItemClickListener(this);
+    }
+
+    private void toggleDownloadingElements(boolean isDownloading){
+        if(isDownloading){
+            AnimationHelper.fadeIn(progressBar,0);
+            emptyTextView.setVisibility(View.INVISIBLE);
+        }else{
+            AnimationHelper.fadeOut(progressBar,0);
+            emptyTextView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void downloadAllEvents(){
+        toggleDownloadingElements(true);
 
         //Download all the event present in the firestore database
         Eventi.getAllEvent(list -> {
@@ -69,19 +122,38 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
                 adapter = new EventAdapter(getContext(),listaDiEventi);
                 eventListView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+
+                toggleDownloadingElements(false);
             }
         });
+    }
 
-        adapter = new EventAdapter(this.getContext(),listaDiEventi);
-        eventListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+    private void downloadMyEvents(){
+        toggleDownloadingElements(true);
 
-        /**
-         * Setting the listener for the filterable search
-         * and for the click on the item in the list.
-         */
-        searchView.setOnQueryTextListener(this);
-        eventListView.setOnItemClickListener(this);
+        //Download all the event present in the firestore database
+        Eventi.getMyEvent(list -> {
+            if(list != null){
+
+                for(Evento e : list){
+                    //download the image
+                    if(e.getIsImageUploaded() == true){
+                        Eventi.downloadEventImage(e.getId(),(ClosureBitmap) bitmap -> {
+                            e.setImageBitmap(bitmap);
+                            adapter.notifyDataSetChanged();
+                        });
+                    }
+                }
+                listaDiEventi = list;
+
+                //Setting up the custom made adapter for the ListView.
+                adapter = new EventAdapter(getContext(),listaDiEventi);
+                eventListView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+                toggleDownloadingElements(false);
+            }
+        });
     }
 
 
@@ -117,6 +189,15 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     public boolean onQueryTextChange(String newText) {
         adapter.getFilter().filter(newText);
         return true;
+    }
+
+
+
+
+
+    enum SearchEventType{
+        ALL_EVENT,
+        MY_EVENT;
     }
 }
 

@@ -53,7 +53,11 @@ public class EventFragment extends Fragment {
                         tab.setText(R.string.searchEvents);
                         break;
                     case 1:
+                        tab.setText(R.string.myEvents);
+                        break;
+                    case 2:
                         tab.setText(R.string.nearbyEvents);
+                        break;
                 }
             }
         }).attach();
@@ -65,8 +69,8 @@ public class EventFragment extends Fragment {
                 super.onPageSelected(position);
 
                 //disabling the gesture in the map view and re-enabling it in the list view.
-                if(position == 0) pager.setUserInputEnabled(true);
-                else if (position == 1) pager.setUserInputEnabled(false);
+                if(position == 0 || position == 1) pager.setUserInputEnabled(true);
+                else if (position == 2) pager.setUserInputEnabled(false);
             }
         });
 
@@ -92,9 +96,12 @@ class CollectionAdapter extends FragmentStateAdapter{
 
         switch (position){
             case 0:
-                return new FragmentSearchEvent();
+                return new FragmentSearchEvent(FragmentSearchEvent.SearchEventType.ALL_EVENT);
             case 1:
+                return new FragmentSearchEvent(FragmentSearchEvent.SearchEventType.MY_EVENT);
+            case 2:
                 return new FragmentMaps();
+
             default:
                 return null;
         }
@@ -102,6 +109,6 @@ class CollectionAdapter extends FragmentStateAdapter{
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 }

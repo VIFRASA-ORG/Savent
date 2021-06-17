@@ -68,6 +68,7 @@
     <string name="eventOwnerLabel">Prop.</string>
     <string name="events">Eventi</string>
     <string name="leaveEvent">Abbandona evento</string>
+    <string name="myPartecipations">Partecipazioni</string>
 
     <string name="queueMessage">Sei in coda.\nAppena qualcuno rinuncia a partecipare,\n la coda scalerà in ordine di prenotazione.</string>
     <string name="participationMessage">La tua partecipazione è stata accettata!</string>

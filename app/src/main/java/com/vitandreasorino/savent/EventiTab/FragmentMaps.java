@@ -280,11 +280,11 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
         mapView.onResume();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        mapView.onPause();
+//    }
 
     @Override
     public void onDestroy() {

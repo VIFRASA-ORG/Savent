@@ -49,7 +49,7 @@
                 android:background="@drawable/ic_button_shape"
                 android:backgroundTint="@color/blueButton"
                 android:gravity="center"
-                android:text="@string/myEvents" />
+                android:text="@string/myPartecipations" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,6 +69,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/searchEvents" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/myEvents" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"

@@ -155,11 +155,11 @@ public class Eventi extends ResultsConverter {
         }
     }
 
-    /** Return a list of all the event created by the logged-in user.
+    /** Return a list of all the event in which the user participate
      *
      * @param closureList the parameter list is null in case the task is not successful.
      */
-    public static final void getMyPartecipationEvents(ClosureList<Evento> closureList){
+    public static final void getMyParticipationEvents(ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
             Partecipazioni.getMyPartecipations(list -> {
                 Collection<Task<?>> taskList = new ArrayList<Task<?>>();
@@ -228,9 +228,33 @@ public class Eventi extends ResultsConverter {
             FirestoreHelper.db.collection(EVENTO_COLLECTION).whereEqualTo("idUtenteCreatore",AuthHelper.getUserId()).get().addOnCompleteListener(task -> {
                 if (closureList != null){
                     if(task.isSuccessful()){
-                        closureList.closure(convertResults(task,Evento.class));
+                        List<Evento> l = convertResults(task,Evento.class);
+
+                        //Sorting by name, impossible to do into the query on different field
+                        Collections.sort(l);
+                        closureList.closure(l);
                     }else closureList.closure(null);
                 }
+            });
+        }
+    }
+
+    /** NOT WORKING YET
+     *  Return a list with all events created by the logged in user
+     *
+     * @param closureList the parameter list is null in case the task is not successful.
+     */
+    public static final void getAllMyEvents(ClosureList<Evento> closureList){
+        if(AuthHelper.isLoggedIn()){
+            //Downloading all the event created by the user
+            List<Evento> listEventi = new ArrayList<>();
+
+            getMyEvent(list -> {
+                listEventi.addAll(list);
+
+                //Download all the event of all the groups in which the user is inside
+
+
             });
         }
     }

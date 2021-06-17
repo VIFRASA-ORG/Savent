@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Evento implements Serializable {
+public class Evento implements Serializable, Comparable<Evento> {
 
     @DocumentId
     private String id;
@@ -230,5 +230,10 @@ public class Evento implements Serializable {
     @Exclude
     public void setImageUri(Uri imageUri) {
         this.imageUri = imageUri;
+    }
+
+    @Override
+    public int compareTo(Evento o) {
+        return this.nome.compareTo(o.nome);
     }
 }
