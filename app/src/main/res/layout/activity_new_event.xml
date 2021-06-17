@@ -150,7 +150,8 @@
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
                     android:text="@string/modificaProfilo"
-                    android:textColor="#0000FF" />
+                    android:textColor="#0000FF"
+                    android:onClick="onClickPhotoEvent"/>
 
             </androidx.cardview.widget.CardView>
 
@@ -158,6 +159,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"></LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/textViewNomeAccountCreatore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="@dimen/margin_left_textView_register"
+                    android:layout_marginTop="@dimen/margin_size"
+                    android:text="@string/accountCreatoreLabel"
+                    android:textColor="@color/black" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/fui_transparent"
+                    android:theme="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoComplete"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:enabled="false"
+                        android:textColor="@color/black"
+                        android:backgroundTint="@color/fui_transparent"
+                        android:inputType="none">
+                    </AutoCompleteTextView>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <TextView
                 android:id="@+id/textViewNomeEvento"

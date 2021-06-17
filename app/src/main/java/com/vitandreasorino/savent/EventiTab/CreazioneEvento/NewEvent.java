@@ -9,11 +9,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -21,12 +26,28 @@ import android.widget.Toast;
 
 import com.vitandreasorino.savent.R;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import Helper.AuthHelper;
+import Helper.ImageHelper;
+import Model.DB.Gruppi;
+import Model.DB.Utenti;
+import Model.Pojo.Gruppo;
+
 public class NewEvent extends AppCompatActivity {
+
+    AutoCompleteTextView autoComplete;
+    Uri immagineSelezionata;
+    ImageView imageViewEvent;
+
+    String idAccountCreatore;
+    ArrayList<String> arrayId = new ArrayList<>();
+    ArrayList<String> arrayNome = new ArrayList<>();
 
     Date dataInserita;
     private Double valoreLatitudine = null;
@@ -41,7 +62,6 @@ public class NewEvent extends AppCompatActivity {
     private EditText editTextTextMultiLine;
     private EditText editTextNuumeroMassimoPartecipanti;
 
-
     private SeekBar statusProgress;
     private TextView textViewContatoreStatus;
 
@@ -53,12 +73,69 @@ public class NewEvent extends AppCompatActivity {
     Context context = this;
 
 
+    private void setAdapter(){
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.options_item, arrayNome);
+        try{
+            autoComplete.setText(arrayAdapter.getItem(0).toString(), false);
+        }catch(IndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
+        autoComplete.setAdapter(arrayAdapter);
+        autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = arrayId.get(position);
+                idAccountCreatore = item;
+
+            }
+        });
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
+
+
+        autoComplete = (AutoCompleteTextView) findViewById(R.id.autoComplete);
+        arrayNome.clear();
+        arrayId.clear();
+
+        /*
+        inserisco il nome e cognome utente all'interno del popup
+         */
+        String idUtenteLoggato = AuthHelper.getUserId();
+        Utenti.getNameSurnameOfUser(idUtenteLoggato, closureResult -> {
+
+            if(closureResult != null) {
+                arrayId.add(AuthHelper.getUserId());
+                arrayNome.add("<" + closureResult + "> " + getString(R.string.accountCreatore));
+                idAccountCreatore = AuthHelper.getUserId();
+                setAdapter();
+
+
+                /*
+                inserisco il nome dei gruppi per il quale l'utente loggato è amministratore
+                 */
+                Gruppi.getAdministrationGroups(closureList -> {
+                    if(closureList != null) {
+                        for(Gruppo g : closureList) {
+                            arrayId.add(g.getId());
+                            arrayNome.add(g.getNome());
+                            setAdapter();
+                        }
+                    }
+                });
+            }
+        });
+
+
+        setAdapter();
+
+        imageViewEvent = (ImageView) findViewById(R.id.imageViewEvent);
+
 
         textViewLatitudine = (TextView) findViewById(R.id.textViewLatitudine);
         textViewLongitudine = (TextView) findViewById(R.id.textViewLongitudine);
@@ -189,14 +266,29 @@ public class NewEvent extends AppCompatActivity {
 
     public void onMap(View view) {
 
-
         Intent mapActivity = new Intent(this, MapActivity.class);
+        mapActivity.putExtra("isNotNull", (valoreLatitudine != null && valoreLongitudine != null));
+        mapActivity.putExtra("latitudine", valoreLatitudine);
+        mapActivity.putExtra("longitudine",valoreLongitudine);
         startActivityForResult(mapActivity, 203);
+
+    }
+
+
+    public void onClickPhotoEvent(View view){
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+
+        // pass the constant to compare it
+        // with the returned requestCode
+        startActivityForResult(Intent.createChooser(i, "Select Picture"), 210);
     }
 
 
     /*
     Metodo utilizzato per il ritorno della longitudine e latitudine dall'activity "MapActivity.java"
+    e per il settaggio di un immagine all'interno della textView
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -204,8 +296,8 @@ public class NewEvent extends AppCompatActivity {
 
         if(requestCode == 203) {
 
-            if(resultCode == RESULT_OK) {
 
+            if(resultCode == RESULT_OK) {
                 boolean isNull = data.getBooleanExtra("isNull", true);
 
                 if(isNull == true) {
@@ -220,11 +312,25 @@ public class NewEvent extends AppCompatActivity {
                     textViewLongitudine.setText("" + valoreLongitudine);
 
                 }
-
-
-
             }
+        }
 
+
+        if (resultCode == RESULT_OK) {
+            // compare the resultCode with the
+            // SELECT_PICTURE constant
+
+            if (requestCode == 210) {
+
+                // Get the url of the image from data
+                Uri selectedImageUri = data.getData();
+                if (null != selectedImageUri) {
+                    // update the preview image in the layout
+                    // Compress it before it is shown into the imageView
+                    imageViewEvent.setImageBitmap(ImageHelper.decodeSampledBitmapFromUri(getContentResolver(),selectedImageUri,imageViewEvent));
+                    immagineSelezionata = selectedImageUri;
+                }
+            }
         }
     }
 
@@ -241,7 +347,6 @@ public class NewEvent extends AppCompatActivity {
      Metodo Utilizzato per creare l'evento da parte dell'utente
      */
     public void onCreateEvent(View view) {
-
         controlloInputUtenteCreazioneEvento();
     }
 
@@ -293,6 +398,10 @@ public class NewEvent extends AppCompatActivity {
 
             backgroundTintEditTextCreateEvent();
             statusProgress.getProgress();
+            // prendere la variabile globale idAccountCreatore
+            // prende l'immagine (l'uri è salvato già in una variabile globale immagineSelezionata)
+            // prendere Data (già fatti i controlli basta prendere la data)
+            // prendere Ora (già fatti i controlli basta prendere la data)
             // valoreLatitudine;
             // valoreLongitudine;
             Toast.makeText(this, getString(R.string.eventoCreato), Toast.LENGTH_LONG).show();
@@ -388,7 +497,6 @@ public class NewEvent extends AppCompatActivity {
         }
 
     }
-
 
 
 

@@ -120,6 +120,8 @@
     <string name="latitudineEvento">Latitude:   </string>
     <string name="longitudineEvento">Longitude:   </string>
     <string name="eventoCreato">Event created!</string>
+    <string name="accountCreatoreLabel">Account creator</string>
+    <string name="accountCreatore">Me</string>
 
     //Password recovery
     <string name="pswRecoveryText">Password Recovery</string>

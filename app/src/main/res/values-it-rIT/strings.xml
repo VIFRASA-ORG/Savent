@@ -122,6 +122,8 @@
     <string name="latitudineEvento">Latitudine:   </string>
     <string name="longitudineEvento">Longitudine:   </string>
     <string name="eventoCreato">Evento creato!</string>
+    <string name="accountCreatoreLabel">Account creatore</string>
+    <string name="accountCreatore">Io</string>
 
 
     //Password recovery
