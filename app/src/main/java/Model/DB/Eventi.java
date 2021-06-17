@@ -1,8 +1,10 @@
 package Model.DB;
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -10,9 +12,12 @@ import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,6 +41,30 @@ public class Eventi extends ResultsConverter {
 
     private static final String EVENTO_COLLECTION = "Eventi";
 
+
+    /**
+     * Add a listener to all the updates from the server to the selected event.
+     *
+     * @param eventId id of the event whose changes you want to listen.
+     * @param activity the context of the owner activity
+     * @param closureResult event that will be invoked every time an update is found. it will give the event object if found, null otherwise.
+     */
+    public static final void addDocumentListener(String eventId, Activity activity, ClosureResult<Evento> closureResult){
+        FirestoreHelper.db.collection(EVENTO_COLLECTION).document(eventId).addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    if(closureResult != null) closureResult.closure(null);
+                }
+
+                if (value != null && value.exists()) {
+                    if(closureResult != null) closureResult.closure(value.toObject(Evento.class));
+                } else {
+                    if(closureResult != null) closureResult.closure(null);
+                }
+            }
+        });
+    }
 
     /**
      * Return all the event in the map visible region.
@@ -126,29 +155,11 @@ public class Eventi extends ResultsConverter {
         }
     }
 
-    /** Return the Firebase Task which increases the number of participants of a specific event.
-     *
-     * @param idEvento
-     * @return the Firestore Task.
-     */
-    public static final Task getIncrementNumberOfPartecipantTask(String idEvento){
-        return FirestoreHelper.db.collection(EVENTO_COLLECTION).document(idEvento).update("numeroPartecipanti", FieldValue.increment(1));
-    }
-
-    /** Return the Firebase Task which decreases the number of participants of a specific event.
-     *
-     * @param idEvento
-     * @return the Firestore Task.
-     */
-    public static final Task getDecrementNumberOfPartecipantTask(String idEvento){
-        return FirestoreHelper.db.collection(EVENTO_COLLECTION).document(idEvento).update("numeroPartecipanti", FieldValue.increment(-1));
-    }
-
-    /** Return a list of all the event created by the logged-in user.
+    /** Return a list of all the event in which the user participate
      *
      * @param closureList the parameter list is null in case the task is not successful.
      */
-    public static final void getMyPartecipationEvents(ClosureList<Evento> closureList){
+    public static final void getMyParticipationEvents(ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
             Partecipazioni.getMyPartecipations(list -> {
                 Collection<Task<?>> taskList = new ArrayList<Task<?>>();
@@ -217,9 +228,33 @@ public class Eventi extends ResultsConverter {
             FirestoreHelper.db.collection(EVENTO_COLLECTION).whereEqualTo("idUtenteCreatore",AuthHelper.getUserId()).get().addOnCompleteListener(task -> {
                 if (closureList != null){
                     if(task.isSuccessful()){
-                        closureList.closure(convertResults(task,Evento.class));
+                        List<Evento> l = convertResults(task,Evento.class);
+
+                        //Sorting by name, impossible to do into the query on different field
+                        Collections.sort(l);
+                        closureList.closure(l);
                     }else closureList.closure(null);
                 }
+            });
+        }
+    }
+
+    /** NOT WORKING YET
+     *  Return a list with all events created by the logged in user
+     *
+     * @param closureList the parameter list is null in case the task is not successful.
+     */
+    public static final void getAllMyEvents(ClosureList<Evento> closureList){
+        if(AuthHelper.isLoggedIn()){
+            //Downloading all the event created by the user
+            List<Evento> listEventi = new ArrayList<>();
+
+            getMyEvent(list -> {
+                listEventi.addAll(list);
+
+                //Download all the event of all the groups in which the user is inside
+
+
             });
         }
     }
@@ -305,6 +340,38 @@ public class Eventi extends ResultsConverter {
 
         String finalChildName = EVENTO_COLLECTION + "/" + idEvento + "/locandina";
         StorageHelper.downloadImage(finalChildName,closureBitmap);
+    }
+
+    /** Download the user image from Firebase Storage.
+     *
+     * User must be logged-in.
+     *
+     * @param closureResult get called with the Bitmap if the task is successful, null otherwise.
+     */
+    public static final void downloadEventImage(String idEvento, ClosureResult<File> closureResult){
+        if (!AuthHelper.isLoggedIn()){
+            if (closureResult != null) closureResult.closure(null);
+            return;
+        }
+
+        String finalChildName = EVENTO_COLLECTION + "/" + idEvento + "/locandina";
+        StorageHelper.downloadImage(finalChildName,closureResult);
+    }
+
+    /** Download the user image from Firebase Storage.
+     *
+     * User must be logged-in.
+     *
+     * @param closureResult get called with the Bitmap if the task is successful, null otherwise.
+     */
+    public static final void downloadEventImageUri(String idEvento, ClosureResult<Uri> closureResult){
+        if (!AuthHelper.isLoggedIn()){
+            if (closureResult != null) closureResult.closure(null);
+            return;
+        }
+
+        String finalChildName = EVENTO_COLLECTION + "/" + idEvento + "/locandina";
+        StorageHelper.downloadImageUri(finalChildName,closureResult);
     }
 
 }

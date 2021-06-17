@@ -67,6 +67,27 @@
     <string name="joinEvent">Partecipa all\'evento</string>
     <string name="eventOwnerLabel">Prop.</string>
     <string name="events">Eventi</string>
+    <string name="leaveEvent">Abbandona evento</string>
+    <string name="myPartecipations">Partecipazioni</string>
+
+    <string name="queueMessage">Sei in coda.\nAppena qualcuno rinuncia a partecipare,\n la coda scalerà in ordine di prenotazione.</string>
+    <string name="participationMessage">La tua partecipazione è stata accettata!</string>
+    <string name="messageStatus">Sei in coda.\nIl tuo status sanitario non soddisfa i requisiti minimi.\nScalerai la coda appena li soddisferai!</string>
+
+    //Popup join event
+    <string name="yesValue">Si</string>
+    <string name="areUSure">Sei sicuro?</string>
+    <string name="popUpJoinHealthOkPlacesOk">Il tuo status sanitario soddisfa i requisiti e ci sono dei posti disponibili.\nSei sicuro di voler partecipare a questo evento?</string>
+    <string name="popUpJoinHealthOkPlacesNO">Il tuo status sanitario soddisfa i requisiti ma non ci sono posti disponibili. Verrai aggiunto alla coda e non appena si liberano dei posti, la coda scalerà in ordine di prenotazione. Riceverai una notifica se potrai partecipare all\'evento.\nVuoi procedere?</string>
+    <string name="popUpJoinHealthNO">Il tuo status sanitario non soddisfa i requisiti. Verrai aggiunto alla coda e non appena soddisferai i requisiti, riceverai una notifica con la conferma della partecipazione.\nVuoi procedere?</string>
+    <string name="participationCorrectlySent">Partecipazione inviata correttamente!</string>
+    <string name="errorJoiningEvent">Si è verificato un errore durante l\'invio della partecipazione all\'evento!</string>
+
+    //Popup leave the event
+    <string name="youSureLeavingEvent">Sei sicuro di voler abbandonare l\'evento?</string>
+    <string name="eventAbandonedCorrectly">Evento abbandonato con successo!</string>
+    <string name="errorAbandoningEvent">Si è verificato un errore durante l\'abbandonato dell\'evento!</string>
+
 
     //Pagina mappa con eventi nelle vicinanze
     <string name="searchInThisArea">Cerca in questa zona</string>
@@ -128,5 +149,23 @@
     <string name="pswRecoveryText">Recupero Password</string>
     <string name="pswRecoveryButton">Invia email di recupero</string>
     <string name="pswRecoveryToast">Se l\'email inserita è presente nei nostri server, ti verrà inviata una email di reset della password.</string>
+
+    //Change credential Activity
+    <string name="changeLoginCredential">Modifica credenziali</string>
+    <string name="changeEmail">Modifica email</string>
+    <string name="changePassword">Modifica password</string>
+    <string name="oldPassword">Vecchia Password</string>
+    <string name="newPassword">Nuova Password</string>
+    <string name="confirmNewPassword">Conferma nuova password</string>
+    <string name="passwordChangeSuccess">Password cambiata con successo!</string>
+    <string name="passwordChangeError">Errore nella modifica della password!</string>
+    <string name="oldPasswordError">Vecchia password errata!</string>
+    <string name="emailChangeSuccess">Email cambiata con successo!</string>
+    <string name="emailChangeError">Errore nella modifica dell\'email!</string>
+    <string name="wrongPassword">Password errata!</string>
+
+    //Password request dialog
+    <string name="passwordRequired">Password richiesta</string>
+    <string name="cancelButton">ANNULLA</string>
 
 </resources>

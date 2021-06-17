@@ -2,13 +2,22 @@ package com.vitandreasorino.savent.EventiTab;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,15 +28,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vitandreasorino.savent.R;
 
+import java.io.File;
+
+import Helper.AuthHelper;
+import Model.Closures.ClosureBitmap;
+import Model.Closures.ClosureResult;
 import Model.DB.Eventi;
 import Model.DB.Gruppi;
+import Model.DB.Partecipazioni;
 import Model.DB.Utenti;
 import Model.Pojo.Evento;
+import Model.Pojo.Partecipazione;
+import Model.Pojo.Utente;
 
 public class EventDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     //Model that contains all the information shown in the interface
     Evento eventModel;
+    Utente userModel;
 
     TextView titleTextView;
     TextView descriptionTextView;
@@ -37,8 +55,14 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     TextView queueTextView;
     TextView creatorTextView;
 
+    Button buttonPartecipate;
+    Button buttonLeave;
+    TextView messageBox;
+
     MapView mapView;
     GoogleMap map;
+
+    PageMode pageMode = PageMode.JOIN_EVENT;
     
 
 
@@ -58,6 +82,23 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        //Adding the listener for updates
+        Eventi.addDocumentListener(eventModel.getId(),this,closureResult -> {
+            if(closureResult != null){
+                eventModel = closureResult;
+                refreshData();
+            }
+        });
+
+        //Downloading the user info
+        Utenti.getUser(AuthHelper.getUserId(),utente -> {
+            userModel = utente;
+        });
+
+        refreshData();
+    }
+
+    private void refreshData(){
         //Insert all model information in the view
         titleTextView.setText(eventModel.getNome());
         descriptionTextView.setText(eventModel.getDescrizione());
@@ -66,16 +107,23 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         //Computing the available places and the number of participant in the queue
         int maxPartecipation = eventModel.getNumeroMassimoPartecipanti();
         int actualPartecipation = eventModel.getNumeroPartecipanti();
-        int queuePartecipant = (actualPartecipation > maxPartecipation) ? Math.abs(maxPartecipation - actualPartecipation) : 0;
 
         availablePlacesTextView.setText((actualPartecipation >= maxPartecipation) ? "0" : (maxPartecipation-actualPartecipation) + "");
-        queueTextView.setText(queuePartecipant+"");
+        queueTextView.setText(eventModel.getNumeroPartecipantiInCoda() + "");
 
         //We have to download the image all over again because the intent allow you to pass just file under the size of 1mb
-        Eventi.downloadEventImage(eventModel.getId(), bitmap -> {
-            if(bitmap != null){
-                eventLocandinaImageView.setImageBitmap(bitmap);
-                eventModel.setImageBitmap(bitmap);
+        Eventi.downloadEventImage(eventModel.getId(), (ClosureBitmap) result -> {
+            eventModel.setImageBitmap(result);
+            eventLocandinaImageView.setImageBitmap(result);
+        });
+
+        //Download the url
+        Eventi.downloadEventImageUri(eventModel.getId(), new ClosureResult<Uri>() {
+            @Override
+            public void closure(Uri result) {
+                if(result != null){
+                    eventModel.setImageUri(result);
+                }
             }
         });
 
@@ -88,6 +136,89 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
             Gruppi.getGroupName(eventModel.getIdGruppoCreatore(), closureResult -> {
                 if(closureResult != null) creatorTextView.setText(closureResult);
             });
+        }
+
+        //Locate the map to the correct position
+        addMarkerToPosition(new LatLng(eventModel.getLatitudine(),eventModel.getLongitudine()));
+
+        //Enable or disable the correct button inside the view
+        participationManager();
+    }
+
+    /**
+     * Method that perform all the controls and enable or disable the correct component
+     * based on the user and the participation to the event.
+     */
+    private void participationManager(){
+
+        //trying to download the partecipation instance to this event
+        Partecipazioni.getMyPartecipationAtEvent(eventModel.getId(), partecipazione -> {
+            if(partecipazione != null){
+                //User has already joined the event
+
+                if(partecipazione.getAccettazione()){
+                    if(partecipazione.getListaAttesa()){
+                        //Accepted and in the queue
+                        setPageMode(PageMode.LEAVE_EVENT_FROM_QUEUE);
+                    }else{
+                        //Accepted but not in queue
+                        setPageMode(PageMode.LEAVE_EVENT_FROM_PARTICIPATION);
+                    }
+                }else{
+                    if(partecipazione.getListaAttesa()){
+                        //Not accepted but in queue
+                        setPageMode(PageMode.LEAVE_EVENT_FROM_QUEUE_DUE_STATUS);
+                    }
+                }
+            }else{
+                //User is not joining the event yet
+                setPageMode(PageMode.JOIN_EVENT);
+            }
+        });
+    }
+
+    /**
+     * Enable the correct component based to the mode given.
+     *
+     * @param newPageMode the new mode.
+     */
+    private void setPageMode(PageMode newPageMode){
+        switch (newPageMode){
+            case JOIN_EVENT:
+                //Not joined the event yet
+                buttonLeave.setVisibility(View.GONE);
+                buttonPartecipate.setVisibility(View.VISIBLE);
+                buttonPartecipate.setEnabled(true);
+                messageBox.setVisibility(View.GONE);
+                break;
+            case LEAVE_EVENT_FROM_QUEUE:
+                //Joined but in queue
+                buttonLeave.setVisibility(View.VISIBLE);
+                buttonPartecipate.setVisibility(View.GONE);
+                buttonLeave.setEnabled(true);
+
+                messageBox.setVisibility(View.VISIBLE);
+                messageBox.setText(R.string.queueMessage);
+                break;
+            case LEAVE_EVENT_FROM_PARTICIPATION:
+                //Joined and not in queue
+                buttonLeave.setVisibility(View.VISIBLE);
+                buttonPartecipate.setVisibility(View.GONE);
+                buttonLeave.setEnabled(true);
+
+                messageBox.setVisibility(View.VISIBLE);
+                messageBox.setText(R.string.participationMessage);
+                break;
+
+            case LEAVE_EVENT_FROM_QUEUE_DUE_STATUS:
+                //Joined but in queue due to health minimun requirement not meet.
+                buttonLeave.setVisibility(View.VISIBLE);
+                buttonPartecipate.setVisibility(View.GONE);
+                buttonLeave.setEnabled(true);
+
+                messageBox.setVisibility(View.VISIBLE);
+                messageBox.setText(R.string.messageStatus);
+                break;
         }
     }
 
@@ -103,6 +234,10 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         availablePlacesTextView = findViewById(R.id.availablePlacesContentTextView);
         queueTextView = findViewById(R.id.queueContentTextView);
         creatorTextView = findViewById(R.id.creatorContentTextView);
+
+        buttonPartecipate = findViewById(R.id.buttonPartecipate);
+        buttonLeave = findViewById(R.id.buttonLeaveEvent);
+        messageBox = findViewById(R.id.messageBox);
     }
 
     /**
@@ -114,6 +249,106 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         finish();
     }
 
+    /**
+     * On click method for the join event button.
+     *
+     * @param view
+     */
+    public void onParticipateButtonPressed(View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.yesValue, joinEventListener)
+                .setNegativeButton("No", joinEventListener)
+                .setTitle(R.string.areUSure);
+
+        if(userModel == null || eventModel == null) return;
+
+        //Determine the message to insert into the dialog
+        if(userModel.getStatusSanitario() <= eventModel.getSogliaAccettazioneStatus()){
+            //The health status is OK
+            if(eventModel.getNumeroPartecipanti() < eventModel.getNumeroMassimoPartecipanti()){
+                // Health OK, available Places OK
+                builder.setMessage(R.string.popUpJoinHealthOkPlacesOk);
+            }else{
+                // Health OK, available places NOT OK
+                builder.setMessage(R.string.popUpJoinHealthOkPlacesNO);
+            }
+        }else{
+            //The health status is NOT OK
+            //The message is the same for both the cases
+            builder.setMessage(R.string.popUpJoinHealthNO);
+        }
+
+        builder.show();
+    }
+
+    /**
+     * On click event for the leave button.
+     *
+     * @param view
+     */
+    public void onLeaveButtonPressed(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.yesValue, leaveEventListener)
+                .setNegativeButton("No", leaveEventListener)
+                .setTitle(R.string.areUSure);
+        builder.setMessage(R.string.youSureLeavingEvent).show();
+    }
+
+    public void onShareButtonClick(View view){
+//        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+//        sharingIntent.setType("text/plain");
+//        String shareBody = "Here is the share content body";
+//        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+//        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+//        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
+
+
+
+
+
+
+    /*
+
+        DialogInterface.OnClickListener
+        IT IS USED TO MANAGE THE OncClick ON THE TWO BUTTON IN THE DIALOG
+        TO JOIN AND LEAVE AN EVENT.
+
+     */
+    DialogInterface.OnClickListener leaveEventListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    Partecipazioni.removeMyPartecipationTransaction(eventModel.getId(), closureBool -> {
+                        if(closureBool) Toast.makeText(getApplicationContext(),R.string.eventAbandonedCorrectly, Toast.LENGTH_SHORT).show();
+                        else Toast.makeText(getApplicationContext(),R.string.errorAbandoningEvent, Toast.LENGTH_SHORT).show();
+                    });
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    };
+
+    DialogInterface.OnClickListener joinEventListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    //Yes button clicked
+                    Partecipazioni.addMyPartecipationTransaction(eventModel.getId(), part ->{
+                        if(part != null) Toast.makeText(getApplicationContext(),R.string.participationCorrectlySent, Toast.LENGTH_SHORT).show();
+                        else Toast.makeText(getApplicationContext(),R.string.errorJoiningEvent, Toast.LENGTH_SHORT).show();
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
 
 
@@ -133,13 +368,20 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.getUiSettings().setAllGesturesEnabled(false);
 
-        LatLng eventPlace = new LatLng(eventModel.getLatitudine(),eventModel.getLongitudine());
+        if(eventModel != null){
+            addMarkerToPosition(new LatLng(eventModel.getLatitudine(),eventModel.getLongitudine()));
+        }
+    }
+
+    private void addMarkerToPosition(LatLng latLng){
+        if (map == null) return;
+        map.clear();
 
         map.addMarker(new MarkerOptions()
-                .position(eventPlace)
+                .position(latLng)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_icon))
                 .title(eventModel.getNome()));
-        moveToLocation(eventPlace);
+        moveToLocation(latLng);
     }
 
     /**
@@ -177,4 +419,23 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         super.onLowMemory();
         mapView.onLowMemory();
     }
+
+
+
+
+
+
+    /*
+
+        ENUM USED TO DEFINE THE STATUS OF THE PAGE
+
+     */
+
+    private enum PageMode{
+        JOIN_EVENT,
+        LEAVE_EVENT_FROM_QUEUE,
+        LEAVE_EVENT_FROM_PARTICIPATION,
+        LEAVE_EVENT_FROM_QUEUE_DUE_STATUS;
+    }
+
 }

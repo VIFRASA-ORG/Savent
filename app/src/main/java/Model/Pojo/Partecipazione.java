@@ -36,7 +36,7 @@ public class Partecipazione {
         this.idUtente = idUtente;
     }
 
-    public boolean isAccettazione() {
+    public boolean getAccettazione() {
         return accettazione;
     }
 
@@ -52,7 +52,7 @@ public class Partecipazione {
         this.dataOra = dataOra;
     }
 
-    public boolean isListaAttesa() {
+    public boolean getListaAttesa() {
         return listaAttesa;
     }
 
