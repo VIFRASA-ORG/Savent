@@ -3,7 +3,6 @@ package com.vitandreasorino.savent.EventiTab;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +23,15 @@ import androidx.fragment.app.Fragment;
 import com.vitandreasorino.savent.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureBitmap;
 import Model.DB.Eventi;
+import Model.DB.Gruppi;
 import Model.Pojo.Evento;
 
 public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
@@ -44,7 +46,12 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     //List of event shown in he ListView.
     List<Evento> listaDiEventi = new ArrayList<>();
 
-    SearchEventType pageVisualizationType = SearchEventType.ALL_EVENT;
+    //Used to store the names of creator group in case the event is created by a group
+    //The key is the groupId, the value is the name of the group
+    Map<String,String> groupsName = new HashMap<>();
+
+    //Default visualization
+    SearchEventType pageVisualizationType = SearchEventType.ALL_EVENTS;
 
 
 
@@ -55,9 +62,16 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
         return inflater.inflate(R.layout.search_event, container, false);
     }
 
+    /**
+     * Constructor used to specify the visualization type.
+     *
+     * @param mode the visualization type.
+     */
     public FragmentSearchEvent(SearchEventType mode) {
         pageVisualizationType = mode;
     }
+
+    public FragmentSearchEvent( ) {}
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -70,10 +84,10 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
         eventListView.setEmptyView(view.findViewById(R.id.emptyResults));
 
         switch (pageVisualizationType){
-            case ALL_EVENT:
+            case ALL_EVENTS:
                 downloadAllEvents();
                 break;
-            case MY_EVENT:
+            case MY_EVENTS:
                 downloadMyEvents();
                 break;
         }
@@ -90,6 +104,11 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
         eventListView.setOnItemClickListener(this);
     }
 
+    /**
+     * Enable or disable the progress bar or the emptyTextView.
+     *
+     * @param isDownloading the flag indicating if the download is still going or not
+     */
     private void toggleDownloadingElements(boolean isDownloading){
         if(isDownloading){
             AnimationHelper.fadeIn(progressBar,0);
@@ -100,6 +119,9 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
         }
     }
 
+    /**
+     * Method to download all the event in firebase in case the type of visualization is SearchEventType.ALL_EVENTS
+     */
     private void downloadAllEvents(){
         toggleDownloadingElements(true);
 
@@ -128,11 +150,14 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
         });
     }
 
+    /**
+     * Method to download all the event in firebase in case the type of visualization is SearchEventType.MY_EVENTS
+     */
     private void downloadMyEvents(){
         toggleDownloadingElements(true);
 
         //Download all the event present in the firestore database
-        Eventi.getMyEvent(list -> {
+        Eventi.getAllMyEvents(list -> {
             if(list != null){
 
                 for(Evento e : list){
@@ -143,11 +168,22 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
                             adapter.notifyDataSetChanged();
                         });
                     }
+
+                    //download the group name if the creator of the event is a group
+                    if(!e.getIdGruppoCreatore().isEmpty()){
+                        Gruppi.getGroupName(e.getIdGruppoCreatore(), groupName -> {
+                            if(groupName != null){
+                                groupsName.put(e.getIdGruppoCreatore(),groupName);
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
                 }
+
                 listaDiEventi = list;
 
                 //Setting up the custom made adapter for the ListView.
-                adapter = new EventAdapter(getContext(),listaDiEventi);
+                adapter = new EventAdapter(getContext(),listaDiEventi,groupsName);
                 eventListView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 
@@ -172,6 +208,8 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     }
 
 
+
+
     /*
 
         OVERRIDE OF THE METHODs IN THE SearchView.OnQueryTextListener INTERFACE
@@ -193,11 +231,12 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
 
 
 
-
-
+    /**
+     * Enum used to determine the type of visualization to use for this instance.
+     */
     enum SearchEventType{
-        ALL_EVENT,
-        MY_EVENT;
+        ALL_EVENTS,
+        MY_EVENTS;
     }
 }
 
@@ -210,12 +249,27 @@ class EventAdapter extends BaseAdapter implements Filterable {
 
     //Entire list of events present in the ListView.
     private List<Evento> events=null;
+    Map<String,String> groupsName = new HashMap<>();
 
     //List of events shown after a search.
     private List<Evento>filteredData = null;
 
     private Context context=null;
     ItemFilter mFilter = new ItemFilter();
+
+    /**
+     * Constructor
+     *
+     * @param context the reference context
+     * @param events list of event to show in the ListView.
+     */
+    public EventAdapter(Context context,List<Evento> events,Map<String,String> groupsName)
+    {
+        this.events=events;
+        this.context=context;
+        this.filteredData = events;
+        this.groupsName = groupsName;
+    }
 
     /**
      * Constructor
@@ -276,14 +330,36 @@ class EventAdapter extends BaseAdapter implements Filterable {
         ImageView img = v.findViewById(R.id.imageViewProfile);
         TextView date = v.findViewById(R.id.textViewDateTime);
         TextView owner = v.findViewById(R.id.textViewOwner);
+        TextView groupCreator = v.findViewById(R.id.textViewGroupCreator);
 
         titolo.setText(e.getNome());
         desc.setText(e.getDescrizione());
         date.setText(e.getNeutralData());
         if(e.getImageBitmap()!= null) img.setImageBitmap(e.getImageBitmap());
         else img.setImageResource(R.drawable.event_placeholder_icon);
-        if(!AuthHelper.getUserId().equals(e.getIdUtenteCreatore())) owner.setVisibility(View.INVISIBLE);
-        else owner.setVisibility(View.VISIBLE);
+
+        if(!e.getIdUtenteCreatore().isEmpty()){
+            //Showing the label "owner" in case the logged in user is the creator of this event
+            if(!AuthHelper.getUserId().equals(e.getIdUtenteCreatore())){
+                owner.setVisibility(View.INVISIBLE);
+                groupCreator.setVisibility(View.INVISIBLE);
+            } else {
+                owner.setVisibility(View.VISIBLE);
+                groupCreator.setVisibility(View.INVISIBLE);
+            }
+        }else if(!e.getIdGruppoCreatore().isEmpty()){
+            //Hiding the label "owner" and showing the creator name label if the event is
+            //being create by a group in which the user is a member.
+            if(groupsName.containsKey(e.getIdGruppoCreatore())){
+                owner.setVisibility(View.INVISIBLE);
+                groupCreator.setVisibility(View.VISIBLE);
+                groupCreator.setText(groupsName.get(e.getIdGruppoCreatore()));
+            }else{
+                owner.setVisibility(View.INVISIBLE);
+                groupCreator.setVisibility(View.INVISIBLE);
+            }
+        }
+
         return v;
     }
 
