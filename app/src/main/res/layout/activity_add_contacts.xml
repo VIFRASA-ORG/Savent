@@ -69,7 +69,7 @@
                         android:id="@+id/NewGroupTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/nuovoGruppo"
+                        android:text="@string/selezionaContatti"
                         android:textColor="@color/blueButton"
                         android:textSize="24dp" />
 
@@ -92,49 +92,97 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
+        android:paddingTop="20dp"
         android:background="@drawable/ic_box_rounded_top"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="10">
 
-        <TextView
-            android:id="@+id/textViewAddContacts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/aggiungi_contatto"
-            android:textColor="@color/black"
-            android:textSize="17dp" />
-
-        <SearchView
-            android:id="@+id/searchContact"
-            android:layout_width="320dp"
-            android:queryBackground="@null"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/ic_button_shape"
-            android:backgroundTint="@color/white"
-            android:iconifiedByDefault="false"
-            android:queryHint="@string/searchPlaceholder"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ListContacts"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="450dp"
-            tools:listitem="@layout/contact_list_row"/>
-        <Button
-            android:id="@+id/buttonAddGroup"
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:backgroundTint="@color/blueButton"
-            android:text="@string/bottoneAggiungiContatto"
-            android:textColor="@color/white"
-            app:cornerRadius="@dimen/radius_button_register"
-            />
+            android:layout_height="0dp"
+            android:layout_weight="1.7"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewAddContacts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/aggiungi_contatto"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+            <SearchView
+                android:id="@+id/searchContact"
+                android:layout_width="320dp"
+                android:queryBackground="@null"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/ic_button_shape"
+                android:backgroundTint="@color/white"
+                android:iconifiedByDefault="false"
+                android:queryHint="@string/searchPlaceholder"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/recycleListLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7.3"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ListContacts"
+                android:layout_width="match_parent"
+                android:layout_height="440dp"
+                android:choiceMode="multipleChoice"
+                tools:listitem="@layout/contact_list_row" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/emptyListLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7.3"
+            android:orientation="vertical"
+            android:gravity="center|center_vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/avvisoNoContatti"
+                android:textSize="23sp"
+                ></TextView>
+        </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:orientation="vertical"
+           android:layout_weight="1"
+           android:gravity="center">
+
+           <Button
+               android:id="@+id/buttonAddContacts"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="bottom|center"
+               android:backgroundTint="@color/blueButton"
+               android:text="@string/bottoneAggiungiContatti"
+               android:onClick="onClickAddContacts"
+               android:textColor="@color/white"
+               app:cornerRadius="@dimen/radius_button_register"
+               />
+       </LinearLayout>
     </LinearLayout>
 
 

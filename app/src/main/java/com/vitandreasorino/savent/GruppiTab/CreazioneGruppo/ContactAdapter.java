@@ -1,10 +1,11 @@
 package com.vitandreasorino.savent.GruppiTab.CreazioneGruppo;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -17,15 +18,18 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable {
+import Model.ContactModel;
 
-     List<ContactModel> contactListFiltered;
-     List<ContactModel> contactListAll;
-     Activity activity;
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable{
+
+    List<ContactModel> contactListFiltered;
+    List<ContactModel> contactListAll;
+    Activity activity;
+    List<ContactModel> checkedContactList = new ArrayList<>();
 
 
     public ContactAdapter(Activity activity, ArrayList<ContactModel> arrayList) {
-        this.contactListFiltered= arrayList;
+        this.contactListFiltered = arrayList;
         this.contactListAll = arrayList;
         this.activity = activity;
 
@@ -42,13 +46,29 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContactAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         ContactModel model = contactListFiltered.get(position);
         //Set name
         holder.tvName.setText(model.getName());
-       //set number
+        //set number
         holder.tvNumber.setText(model.getNumber());
+
+        holder.checkBox.setChecked(model.isChecked());
+
+        if (model.isChecked()) {
+            checkedContactList.add(model);
+        }
+
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                model.setChecked(isChecked);
+                if(isChecked) checkedContactList.add(model);
+                else checkedContactList.remove(model);
+
+            }
+        });
     }
 
     @Override
@@ -60,7 +80,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     public Filter getFilter() {
         return filter;
     }
-    Filter filter = new Filter(){
+
+    Filter filter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             String filterString = constraint.toString().toLowerCase();
@@ -74,14 +95,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                 filterableContact = list.get(i);
 
                 //Logic of confront
-                if(filterableContact.getName().toLowerCase().contains(filterString)){
+                if (filterableContact.getName().toLowerCase().contains(filterString)) {
                     nlist.add(filterableContact);
                 }
 
             }
             results.values = nlist;
             results.count = nlist.size();
-            Log.i("ciao", nlist.toString());
             return results;
         }
 
@@ -92,14 +112,20 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         }
     };
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvNumber;
+        CheckBox checkBox;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvName= itemView.findViewById(R.id.NameContact);
-            tvNumber= itemView.findViewById(R.id.PhoneContact);
+
+            tvName = itemView.findViewById(R.id.NameContact);
+            tvNumber = itemView.findViewById(R.id.PhoneContact);
+            checkBox = itemView.findViewById(R.id.checkboxContacts);
+
         }
 
     }
+
 }
