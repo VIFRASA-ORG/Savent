@@ -105,6 +105,29 @@
 
     //Pagina dettaglio gruppo
     <string name="groupPageTitle">Gruppo</string>
+    <string name="leaveGroup">Abbandona</string>
+    <string name="removeUserFromTheGroup">Rimuovi utente</string>
+    <string name="confirmRemoveUserFromTheGroup">Sei sicuro di voler eliminare questo utente?</string>
+    <string name="confirmPositive">Si</string>
+    <string name="confirmNegative">No</string>
+    <string name="confirmDelete">Utente Eliminato!</string>
+    <string name="noConfirmDelete">Utente no Eliminato!</string>
+    <string name="titleLeaveGroup">Abbandona gruppo</string>
+    <string name="msgLeaveGroup">Sei sicuro di voler abbandonare questo gruppo?</string>
+    <string name="leaveSuccess">Hai abbandonato il gruppo con successo!</string>
+    <string name="leaveInSuccess">Fai ancora parte di questo gruppo!</string>
+    <string name="msgYouAreAdmin">Sei amm.re!</string>
+
+
+
+
+
+    //Modifica gruppo
+    <string name="editGroup">Modifica gruppo</string>
+    <string name="textNameGroup">Nome:</string>
+    <string name="editNameGroup">Nome gruppo</string>
+    <string name="textDescriptionGroup">Descrizione:</string>
+    <string name="editDescriptionGroup">Descrizione gruppo</string>
 
     //Creazione evento
     <string name="creazioneEvento">Crea Evento</string>

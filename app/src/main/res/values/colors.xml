@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#AAAAAA</color>
     <color name="blueButton">#5751FF</color>
+    <color name="blueButtonDisabled">#42000000</color>
     <color name="lightWhite">#FFFFFF</color>
     <color name="backgroundBlue">#C3BEFF</color>
     <color name="red">#FF0000</color>

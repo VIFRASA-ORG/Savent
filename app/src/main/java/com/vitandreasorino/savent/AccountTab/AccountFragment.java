@@ -354,7 +354,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
                             enableAllComponent();
                             buttonSaveData.setEnabled(false);
                             newSelectedImage = null;
-                            Toast.makeText(getContext(),R.string.informationUploaded,Toast.LENGTH_SHORT);
+                            Toast.makeText(getContext(),R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                         }else{
                             enableAllComponent();
                             Toast.makeText(getContext(),R.string.errorUpload,Toast.LENGTH_SHORT).show();
@@ -567,13 +567,12 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
 
         if (resultCode == -1) {
 
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
+            // confronta il resultCode con il SELECT_PICTURE constant
             if (requestCode == 200) {
-                // Get the url of the image from data
+                // Ottieni l'URL dell'immagine dai dati
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
-                    // update the preview image in the layout
+                    // aggiorna l'immagine di anteprima nel layout
                     imageViewProfile.setImageURI(selectedImageUri);
                     newSelectedImage = selectedImageUri;
                     checkSaveButtonActivation();
