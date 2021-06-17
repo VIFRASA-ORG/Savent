@@ -85,7 +85,6 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         Gruppi.getAllMyGroups(new ClosureList<Gruppo>() {
             @Override
             public void closure(List<Gruppo> list) {
-                Log.i("prova", "L MUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
                 if(list != null){
                     for(Gruppo g : list){
                         if(g.getIsImmagineUploaded()){
