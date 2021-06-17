@@ -3,6 +3,7 @@ package com.vitandreasorino.savent.GruppiTab;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,8 @@ import Model.Closures.ClosureList;
 import Model.DB.Gruppi;
 import Model.Pojo.Gruppo;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class GroupFragment extends Fragment implements AdapterView.OnItemClickListener {
     List<Gruppo> listaGruppi = new ArrayList<>();
@@ -51,14 +54,39 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         groupListView = view.findViewById(R.id.groupListView);
         buttonCreateGroup = view.findViewById(R.id.buttonCreateGroup);
 
+        downloadDataList();
+
+        /**
+         * metodo che richiama la successiva classe abbinata allo scopo di creare un nuovo gruppo
+         * cliccando il tasto CreaGruppo
+         */
+        buttonCreateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent AddGroup = new Intent(getActivity(), com.vitandreasorino.savent.GruppiTab.CreazioneGruppo.AddGroup.class);
+                startActivity(AddGroup);
+            }
+        });
+
+
+         // istanza che permette alla lista dei gruppi di essere cercata con la SearchView
+        groupSearchView.setOnQueryTextListener(searchListener);
+
+        groupListView.setOnItemClickListener(this);
+    }
+
+    private void downloadDataList(){
+
         /*Metodo che permette la visualizzazione dei gruppi salvati sul database, con successivo
-        * metodo che che controlla se ad ogni gruppo sono associate le rispettive immagini di profilo
-        * abbinate
+         * metodo che che controlla se ad ogni gruppo sono associate le rispettive immagini di profilo
+         * abbinate
          */
         Gruppi.getAllMyGroups(new ClosureList<Gruppo>() {
             @Override
             public void closure(List<Gruppo> list) {
-             if(list != null){
+                Log.i("prova", "L MUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
+                if(list != null){
                     for(Gruppo g : list){
                         if(g.getIsImmagineUploaded()){
                             Gruppi.downloadGroupImage(g.getId(), bitmap -> {
@@ -88,24 +116,6 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         groupListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        /**
-         * metodo che richiama la successiva classe abbinata allo scopo di creare un nuovo gruppo
-         * cliccando il tasto CreaGruppo
-         */
-        buttonCreateGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent AddGroup = new Intent(getActivity(), com.vitandreasorino.savent.GruppiTab.CreazioneGruppo.AddGroup.class);
-                startActivity(AddGroup);
-            }
-        });
-
-
-         // istanza che permette alla lista dei gruppi di essere cercata con la SearchView
-        groupSearchView.setOnQueryTextListener(searchListener);
-
-        groupListView.setOnItemClickListener(this);
     }
 
     SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
@@ -124,7 +134,7 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       // cambiare HomeActivity.class
+
         Intent i = new Intent(getContext(), GroupDetailActivity.class);
         List<Gruppo> listaGruppiFiltrata = adapter.getFilteredData();
 
@@ -134,10 +144,20 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
             i.putExtra("IdGrouppoLista", listaGruppiFiltrata.get(position));
         }
 
-        startActivity(i);
+        startActivityForResult(i, 125);
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK){
+            if(requestCode == 125){
+                downloadDataList();
+            }
+        }
+    }
 }
 
 /**

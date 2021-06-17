@@ -18,7 +18,7 @@ public class Gruppo implements Serializable {
     private Uri immagine;
 
     @Exclude
-    private Bitmap immagineBitmap;
+    private transient Bitmap immagineBitmap;
 
     private String nome;
     private String descrizione;
@@ -103,7 +103,7 @@ public class Gruppo implements Serializable {
     }
 
     public void setIsImmagineUploaded(boolean isImmagineUploaded) {
-        isImmagineUploaded = isImmagineUploaded;
+        this.isImmagineUploaded = isImmagineUploaded;
     }
 
     @Exclude

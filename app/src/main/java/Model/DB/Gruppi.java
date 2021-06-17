@@ -34,6 +34,31 @@ public class Gruppi extends ResultsConverter{
     private static final String GRUPPO_COLLECTION = "Gruppi";
 
     /**
+     * Used to update the information of the group into the updateField method.
+     */
+    public static final String NOME_FIELD = "nome";
+    public static final String DESCRIZIONE_FIELD = "descrizione";
+
+
+
+    /** Update the information of the GROUP.
+     *
+     * @param groupId the id of the group
+     * @param closureBool get called with true if the task is successful, false otherwise.
+     * @param firstField the name of the first field to update
+     * @param firstValue tha new value of the first field
+     * @param otherFieldAndValues an array of object with other field and values.
+     */
+    public static final void updateFields(String groupId,ClosureBoolean closureBool, String firstField, Object firstValue, Object... otherFieldAndValues ){
+        FirestoreHelper.db.collection(GRUPPO_COLLECTION).document(groupId).update(firstField,firstValue,otherFieldAndValues).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(closureBool != null) closureBool.closure(task.isSuccessful());
+            }
+        });
+    }
+
+    /**
      * Return the name of the group given as parameter.
      *
      * @param groupId id of the group whose name you want to know.
