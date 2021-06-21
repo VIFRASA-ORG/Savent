@@ -88,21 +88,33 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="right"
-        tools:ignore="RtlHardcoded">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlHardcoded"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/buttonCreateGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="30dp"
+            android:backgroundTint="@color/blueButton"
+            android:onClick="onNewContactClick"
             android:src="@drawable/ic_baseline_add_24"
             tools:ignore="ContentDescription" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/addGroup"
+            android:textColor="@color/blueButton"></TextView>
+
     </LinearLayout>
+
 
 </RelativeLayout>

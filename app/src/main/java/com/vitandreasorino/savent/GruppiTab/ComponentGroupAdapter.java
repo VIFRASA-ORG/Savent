@@ -78,8 +78,8 @@ public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
         return filteredData;
     }
 
-    public List<Utente> getNoFilteredData(){
-        return users;
+    public ArrayList<Utente> getNoFilteredData(){
+        return new ArrayList<>(users);
     }
 
     @Override

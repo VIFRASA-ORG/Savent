@@ -38,6 +38,7 @@ public class Gruppi extends ResultsConverter{
      */
     public static final String NOME_FIELD = "nome";
     public static final String DESCRIZIONE_FIELD = "descrizione";
+    public static final String COMPONENTI_FIELD = "idComponenti";
 
 
 

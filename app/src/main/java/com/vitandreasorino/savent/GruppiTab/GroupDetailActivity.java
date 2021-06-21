@@ -36,12 +36,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.common.util.CollectionUtils;
+import com.vitandreasorino.savent.GruppiTab.CreazioneGruppo.AddContacts;
 import com.vitandreasorino.savent.LoginActivity;
 import com.vitandreasorino.savent.R;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,7 +63,12 @@ import Model.Pojo.Utente;
 
 public class GroupDetailActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, View.OnFocusChangeListener{
 
+
+    private static final int ADD_CONTACTS_RESULT = 11;
+
+
     Gruppo groupModel;
+    Utente admin;
 
     ImageView imageViewDetailGroup;
     TextView editProfilePhotoGroup;
@@ -76,6 +84,10 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     ComponentGroupAdapter adapter;
     ProgressBar progressBarPage;
     TextView emptyTextView;
+
+    ArrayList<Utente> groupComponentsOriginal = new ArrayList<>();
+    ArrayList<Utente> groupComponentsUpdated = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -252,15 +264,18 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
             for(String id : groupModel.getIdComponenti()){
 
-                Utenti.getUser(id, closureResult -> {
-                    if(closureResult != null){
-                        adapter.addItemToList(closureResult);
+                Utenti.getUser(id, utente -> {
+                    if(utente != null){
+                        if(utente.getId().equals(AuthHelper.getUserId())) admin = utente;
+                        adapter.addItemToList(utente);
+                        groupComponentsOriginal.add(utente);
+                        groupComponentsUpdated.add(utente);
                         adapter.notifyDataSetChanged();
                         updateIntent();
 
-                        if(closureResult.getIsProfileImageUploaded()){
-                            Utenti.downloadUserImage(closureResult.getId(), (ClosureResult<File>) file -> {
-                                closureResult.setProfileImageUri(Uri.fromFile(file));
+                        if(utente.getIsProfileImageUploaded()){
+                            Utenti.downloadUserImage(utente.getId(), (ClosureResult<File>) file -> {
+                                utente.setProfileImageUri(Uri.fromFile(file));
                                 adapter.notifyDataSetChanged();
                                 updateIntent();
                             });
@@ -311,6 +326,19 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         if(!descriptionDetailGroup.getText().toString().equals(groupModel.getDescrizione())){
             listOfUpdates.add(Gruppi.DESCRIZIONE_FIELD);
             listOfUpdates.add(descriptionDetailGroup.getText().toString());
+        }
+
+        //cariamento componenti
+        ArrayList<Utente> copy = new ArrayList<>(groupComponentsOriginal);
+        copy.retainAll(groupComponentsUpdated);
+
+        if(groupComponentsOriginal.size() != groupComponentsUpdated.size() || copy.size() != groupComponentsOriginal.size() ){
+            //modifiche
+            ArrayList<String> componentsId = new ArrayList<>();
+            for(Utente u : groupComponentsUpdated) componentsId.add(u.getId());
+
+            listOfUpdates.add(Gruppi.COMPONENTI_FIELD);
+            listOfUpdates.add(componentsId);
         }
 
         if(listOfUpdates.size() == 0) {
@@ -556,8 +584,11 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     private void checkSaveButtonActivation(){
         if(groupModel == null) return;
 
+        ArrayList<Utente> copy = new ArrayList<>(groupComponentsOriginal);
+        copy.retainAll(groupComponentsUpdated);
+
         if(!nameDetailGroup.getText().toString().equals(groupModel.getNome()) || !descriptionDetailGroup.getText().toString().equals(groupModel.getDescrizione()) ||
-            newSelectedImage != null){
+            newSelectedImage != null || groupComponentsOriginal.size() != groupComponentsUpdated.size() || copy.size() != groupComponentsOriginal.size() ){
             buttonSaveDataGroup.setEnabled(true);
         } else {
             buttonSaveDataGroup.setEnabled(false);
@@ -569,11 +600,11 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == -1) {
+        if (requestCode == 200) {
 
             // compare the resultCode with the
             // SELECT_PICTURE constant
-            if (requestCode == 200) {
+            if (resultCode == RESULT_OK) {
                 // Get the url of the image from data
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
@@ -583,7 +614,31 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                     checkSaveButtonActivation();
                 }
             }
+        }else if(requestCode == ADD_CONTACTS_RESULT){
+            if(resultCode == RESULT_OK){
+                List<Utente> selectedUsers = data.getParcelableArrayListExtra(AddContacts.EXTRA_ARRAY_CHECKED_CONTACTS);
 
+                for(Utente u: selectedUsers){
+                    if(u.getIsProfileImageUploaded()){
+                        Utenti.downloadUserImage(u.getId(), new ClosureResult<File>() {
+                            @Override
+                            public void closure(File result) {
+                                u.setProfileImageUri(Uri.fromFile(result));
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+
+                if(adapter.getNoFilteredData().size() >= 1) adapter.mergeNewList(selectedUsers);
+                else adapter.addItemsToList(selectedUsers);
+
+                adapter.addItemToList(admin);
+                groupComponentsUpdated = adapter.getNoFilteredData();
+
+                adapter.notifyDataSetChanged();
+                checkSaveButtonActivation();
+            }
         }
     }
 
@@ -614,8 +669,9 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
     public void buttonAddUserToGroup(View view) {
 
-        Toast.makeText(GroupDetailActivity.this, "Creare evento", Toast.LENGTH_LONG).show();
-
-
+        //Toast.makeText(GroupDetailActivity.this, "Creare evento", Toast.LENGTH_LONG).show();
+        Intent i = new Intent(this, AddContacts.class);
+        i.putParcelableArrayListExtra(AddContacts.EXTRA_ARRAY_CHECKED_CONTACTS,groupComponentsUpdated);
+        startActivityForResult(i,ADD_CONTACTS_RESULT);
     }
 }//fine classe GroupDetailActivity

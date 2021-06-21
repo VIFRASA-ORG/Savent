@@ -133,6 +133,7 @@
 
     //pagina gruppo
     <string name="noItemFound">No item found</string>
+    <string name="addGroup">New group</string>
 
     //Pagina dettaglio gruppo
     <string name="groupPageTitle">Group</string>

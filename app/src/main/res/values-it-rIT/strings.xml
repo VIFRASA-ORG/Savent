@@ -134,6 +134,7 @@
 
     /pagina gruppo
     <string name="noItemFound">Item non trovato</string>
+    <string name="addGroup">Nuovo gruppo</string>
 
     //Pagina dettaglio gruppo
     <string name="groupPageTitle">Gruppo</string>

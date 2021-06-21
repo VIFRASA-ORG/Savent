@@ -154,6 +154,8 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        groupSearchView.clearFocus();
+
         Intent i = new Intent(getContext(), GroupDetailActivity.class);
         List<Gruppo> listaGruppiFiltrata = adapter.getFilteredData();
 
