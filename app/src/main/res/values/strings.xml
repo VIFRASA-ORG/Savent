@@ -131,6 +131,8 @@
     <string name="groupCreatedWithSomeDownloadError">Group created successfully! However, something went wrong while downloading the information.Try later!</string>
     <string name="groupCreationError">Something went wrong when creating the event!</string>
 
+    //pagina gruppo
+    <string name="noItemFound">No item found</string>
 
     //Pagina dettaglio gruppo
     <string name="groupPageTitle">Group</string>

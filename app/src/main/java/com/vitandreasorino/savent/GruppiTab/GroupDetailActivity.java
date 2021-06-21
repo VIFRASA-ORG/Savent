@@ -65,20 +65,17 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     ImageView imageViewDetailGroup;
     TextView editProfilePhotoGroup;
     Uri newSelectedImage;
-
     EditText nameDetailGroup;
     EditText descriptionDetailGroup;
     Button leaveGroup;
     View viewEditGroupPhoto;
-
     ListView componentListView;
     SearchView searchView;
-
     ImageView buttonSaveDataGroup;
-
     ProgressBar progressBar;
-
     ComponentGroupAdapter adapter;
+    ProgressBar progressBarPage;
+    TextView emptyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,12 +103,14 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             });
         }
 
-
+        /**
+         * Metodo attivabile tramite una pressione prolungata sul singolo componente del gruppo.
+         */
         componentListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // ricerca dell'id dell'utente che si vuole eliminare
+                // ricerca dell'utente che si vuole eliminare con relativo id e id del gruppo di appartenenza
                 Utente utente = (adapter.getFilteredData().size() == 0) ? adapter.getNoFilteredData().get(position): adapter.getFilteredData().get(position);
                 String idUser = utente.getId();
                 String idGroup = groupModel.getId();
@@ -139,6 +138,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                                         adapter.removeItemFromList(utente);
                                         adapter.notifyDataSetChanged();
 
+                                        updateIntent();
                                     }
                                 });
                             }
@@ -156,8 +156,6 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                     alertRemoveUser.create().show();
 
                 }
-
-
                 return false;
             }
         });
@@ -165,12 +163,9 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
         //Funzionalità in base al ruolo: se sono l'admin del gruppo posso modificare, altrimenti posso solo abbandonare
         if(groupModel.getIdAmministratore().equals(AuthHelper.getUserId())){
-
             leaveGroup.setEnabled(false);
             leaveGroup.setVisibility(View.INVISIBLE);
-
         } else {
-
             leaveGroup.setEnabled(true);
             leaveGroup.setVisibility(View.VISIBLE);
             nameDetailGroup.setEnabled(false);
@@ -188,7 +183,6 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         editProfilePhotoGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent imageProfile = new Intent();
                 imageProfile.setType("image/*");
                 imageProfile.setAction(Intent.ACTION_GET_CONTENT);
@@ -199,7 +193,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         });
 
         /**
-         * bottone che permette di salvare gli eventuali dati modificati
+         * pulsante SALVA che permette di salvare gli eventuali dati modificati
          */
         buttonSaveDataGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,6 +202,45 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             }
         });
 
+        downloadDataList();
+        //settaggio delle informazioni
+        nameDetailGroup.addTextChangedListener(textWatcher);
+        descriptionDetailGroup.addTextChangedListener(textWatcher);
+        nameDetailGroup.setOnFocusChangeListener(this);
+        descriptionDetailGroup.setOnFocusChangeListener(this);
+        searchView.setOnQueryTextListener(this);
+
+        checkSaveButtonActivation();
+
+    }//fine onCreate
+
+    /**
+     * metodo che indica che tale modifica è andata a buon fine
+     */
+    private void updateIntent() {
+        Intent i = new Intent();
+        setResult(RESULT_OK, i);
+    }
+
+    /**
+     * metodo che permette di visualizzare la lista seè piena o di non visualizzarla se è vuota
+     * @param isDownloading
+     */
+    private void toggleDownloadingElements(boolean isDownloading){
+        if(isDownloading){
+            AnimationHelper.fadeIn(progressBarPage,0);
+            emptyTextView.setVisibility(View.INVISIBLE);
+        }else{
+            AnimationHelper.fadeOut(progressBarPage,0);
+            emptyTextView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * metodo che carica le info da db è nel momento di caricamento visualizza la progressbar
+     */
+    private void downloadDataList() {
+        toggleDownloadingElements(true);
 
         //istanzia l'adapter personalizzato
         adapter = new ComponentGroupAdapter(this, groupModel.getIdAmministratore());
@@ -223,30 +256,21 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                     if(closureResult != null){
                         adapter.addItemToList(closureResult);
                         adapter.notifyDataSetChanged();
+                        updateIntent();
 
                         if(closureResult.getIsProfileImageUploaded()){
                             Utenti.downloadUserImage(closureResult.getId(), (ClosureResult<File>) file -> {
                                 closureResult.setProfileImageUri(Uri.fromFile(file));
                                 adapter.notifyDataSetChanged();
+                                updateIntent();
                             });
                         }
                     }
                 });
             }
         }
-
-        nameDetailGroup.addTextChangedListener(textWatcher);
-        descriptionDetailGroup.addTextChangedListener(textWatcher);
-        nameDetailGroup.setOnFocusChangeListener(this);
-        descriptionDetailGroup.setOnFocusChangeListener(this);
-
-        searchView.setOnQueryTextListener(this);
-
-        checkSaveButtonActivation();
-
-
-
-    }//fine onCreate
+        toggleDownloadingElements(false);
+    }
 
 
     /**
@@ -372,7 +396,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     }
 
     /**
-     * Check all the new information entered in the nome, cognome and phoneNumer fields.
+     * Check all the new information entered in the nome, cognome  fields.
      * @return true if all the new values are of the correct pattern, false otherwise.
      */
     private boolean checkAllNewValues(){
@@ -438,10 +462,14 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         progressBar = findViewById(R.id.progressBarGroup);
         leaveGroup = findViewById(R.id.leavegroupButton);
         viewEditGroupPhoto = findViewById(R.id.viewEditGroupPhoto);
+
+        progressBarPage = findViewById(R.id.progressBar);
+        emptyTextView = findViewById(R.id.emptyTextView);
+        componentListView.setEmptyView(findViewById(R.id.emptyResults));
     }
 
     /**
-     * Evento tramite Click che permette di tornare indietro
+     * Evento tramite Click che permette di tornare indietro con eventauale aggiornamento
      * @param view
      */
     public void onBackButtonPressed(View view){
@@ -555,6 +583,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                     checkSaveButtonActivation();
                 }
             }
+
         }
     }
 
