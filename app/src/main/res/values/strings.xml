@@ -125,6 +125,8 @@
     <string name="avvisoNoContatti">No contacts found!</string>
     <string name="bottoneAggiungiContatti">Add contacts</string>
 
+    //pagina gruppo
+    <string name="noItemFound">No item found</string>
 
     //Pagina dettaglio gruppo
     <string name="groupPageTitle">Group</string>

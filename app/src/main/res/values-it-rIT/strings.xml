@@ -127,6 +127,8 @@
     <string name="avvisoNoContatti">Non ci sono contatti!</string>
     <string name="bottoneAggiungiContatti">Aggiungi contatti</string>
 
+    /pagina gruppo
+    <string name="noItemFound">Item non trovato</string>
 
     //Pagina dettaglio gruppo
     <string name="groupPageTitle">Gruppo</string>
