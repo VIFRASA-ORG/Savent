@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,6 +26,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Helper.ImageHelper;
 import Model.Closures.ClosureResult;
@@ -40,6 +43,8 @@ public class AddGroup extends AppCompatActivity {
     ListView listView;
     ArrayList<ContactModel> contactsGroupList = new ArrayList<>();
     LinearLayout emptyListLayout;
+    ProgressBar progressBar;
+    TextView selectPhotoTextView;
 
     ComponentGroupAdapter adapter;
 
@@ -67,6 +72,9 @@ public class AddGroup extends AppCompatActivity {
         editTextGroupName = findViewById(R.id.editNameGroup);
         editTextDescription = findViewById(R.id.editDescrGroup);
         imageNewGroup = findViewById(R.id.imageNewGroup);
+        progressBar = findViewById(R.id.progressBar);
+        selectPhotoTextView = findViewById(R.id.selectPhotoTextView);
+        buttonNewContactGroup = findViewById(R.id.buttonNewContactGroup);
 
         editTextGroupName.addTextChangedListener(textWatcher);
         editTextDescription.addTextChangedListener(textWatcher);
@@ -185,6 +193,8 @@ public class AddGroup extends AppCompatActivity {
      * @param view
      */
     public void onSaveButtonClick(View view){
+        toggleDownloadMode(true);
+
         //Save all the information on the server
         Gruppo newGroup = new Gruppo();
         newGroup.setNome(editTextGroupName.getText().toString());
@@ -204,23 +214,43 @@ public class AddGroup extends AppCompatActivity {
             if(groupId != null){
                 Gruppi.getGroup(groupId, gruppo -> {
                     if(gruppo != null){
+                        toggleDownloadMode(false);
                         Toast.makeText(this,R.string.groupCreated,Toast.LENGTH_LONG).show();
                         Intent i = new Intent(this, GroupDetailActivity.class);
                         i.putExtra("IdGrouppoLista",gruppo);
                         startActivity(i);
-
                         finish();
                     }else{
                         Toast.makeText(this,R.string.groupCreatedWithSomeDownloadError,Toast.LENGTH_LONG).show();
+                        toggleDownloadMode(false);
                         super.onBackPressed();
                         finish();
                     }
                 });
             }else{
                 Toast.makeText(this,R.string.groupCreationError,Toast.LENGTH_LONG).show();
-                super.onBackPressed();
-                finish();
+                toggleDownloadMode(false);
             }
         });
+    }
+
+    private void toggleDownloadMode(boolean isEnabled){
+        if(isEnabled){
+            buttonSaveDataGroup.setEnabled(false);
+            buttonNewContactGroup.setEnabled(false);
+            editTextDescription.setEnabled(false);
+            editTextGroupName.setEnabled(false);
+            selectPhotoTextView.setEnabled(false);
+
+            AnimationHelper.fadeIn(progressBar,500);
+        }else{
+            buttonSaveDataGroup.setEnabled(true);
+            buttonNewContactGroup.setEnabled(true);
+            editTextDescription.setEnabled(true);
+            editTextGroupName.setEnabled(true);
+            selectPhotoTextView.setEnabled(true);
+
+            AnimationHelper.fadeOut(progressBar,500);
+        }
     }
 }

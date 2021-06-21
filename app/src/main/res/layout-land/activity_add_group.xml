@@ -102,17 +102,21 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:weightSum="5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_below="@+id/toolbarDetailGroup"
+        >
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:gravity="center_vertical"
             android:orientation="vertical">
 
+            <ProgressBar
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="invisible"
+                android:layout_gravity="center"
+                android:id="@+id/progressBar" />
 
             <LinearLayout
                 android:id="@+id/linearLayout2"
@@ -120,12 +124,11 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/nav_bar_land">
+                android:layout_marginTop="-30dp">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="center"
                     android:outlineAmbientShadowColor="@color/black"
                     app:cardCornerRadius="50dp"
                     app:layout_constraintBottom_toTopOf="@+id/textView"
@@ -149,7 +152,7 @@
                         android:background="#CCFFFFFF" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/selectPhotoTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
@@ -159,7 +162,6 @@
                         android:text="@string/modificaProfilo"
                         android:textColor="#0000FF" />
                 </androidx.cardview.widget.CardView>
-
 
                 <TextView
                     android:id="@+id/textNameGroup"
@@ -210,12 +212,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:paddingTop="@dimen/nav_bar_land">
+            android:paddingTop="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/ic_box_rounded_top"
                 android:orientation="vertical">
 
