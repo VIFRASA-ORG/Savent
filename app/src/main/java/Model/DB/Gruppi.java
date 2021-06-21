@@ -146,16 +146,27 @@ public class Gruppi extends ResultsConverter{
     /** Add a new group to Firestore. The idGroup is randomly picked and the id inside the pojo object is avoided.
      *
      * @param g group to add to Firestore
-     * @param closureBool get called with true if the task is successful, false otherwise.
+     * @param closureRes invoked with the id of the created group if the creation is successful, with null otherwise.
      */
-    public static final void addNewGroup(Gruppo g, ClosureBoolean closureBool){
+    public static final void addNewGroup(Gruppo g, ClosureResult<String> closureRes){
 
         FirestoreHelper.db.collection(GRUPPO_COLLECTION).add(g).addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 String groupId = task.getResult().getId();
-                uploadGroupImage(g.getImmagine(),groupId,closureBool);
+                if(g.getImmagine()!= null) {
+                    uploadGroupImage(g.getImmagine(),groupId,isSuccessful -> {
+                        if(isSuccessful){
+                            if (closureRes != null) closureRes.closure(groupId);
+                        }else{
+                            if (closureRes != null) closureRes.closure(null);
+                        }
+
+                    });
+                }else{
+                    if (closureRes != null) closureRes.closure(groupId);
+                }
             }else{
-                if (closureBool != null) closureBool.closure(task.isSuccessful());
+                if (closureRes != null) closureRes.closure(null);
             }
 
         });
@@ -171,6 +182,20 @@ public class Gruppi extends ResultsConverter{
                 if(task.isSuccessful()){
                     closureList.closure(convertResults(task,Gruppo.class));
                 }else closureList.closure(null);
+            }
+        });
+    }
+
+    /** Return the group with the specified id
+     *
+     * @param closureRes the closure invoked with the group.
+     */
+    public static final void getGroup(String idGruppo, ClosureResult<Gruppo> closureRes){
+        FirestoreHelper.db.collection(GRUPPO_COLLECTION).document(idGruppo).get().addOnCompleteListener(task -> {
+            if(closureRes!= null){
+                if(task.isSuccessful()){
+                    closureRes.closure(task.getResult().toObject(Gruppo.class));
+                }else closureRes.closure(null);
             }
         });
     }

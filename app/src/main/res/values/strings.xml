@@ -114,7 +114,8 @@
     <string name="domicilio_fiscale">Tax domicile</string>
     <string name="sede_azienda">Headquarters</string>
 
-    <string name="aggiungi_contatto">Would you like to add?</string>
+    //Create group
+    <string name="aggiungi_contatto">Who would you like to add?</string>
     <string name="nuovoGruppo">New group</string>
     <string name="stringaContatti">Contacts:</string>
     <string name="selezionaContatti">Choose contacts</string>
@@ -122,8 +123,13 @@
     <string name="labelCreaGruppo">Create</string>
     <string name="nomeContatto">Name contact</string>
     <string name="numeroContatto">Phone number</string>
-    <string name="avvisoNoContatti">No contacts found!</string>
+    <string name="avvisoNoContattiSelezionati">No contacts selected!</string>
+    <string name="avvisoNoContatti">No contacts!</string>
     <string name="bottoneAggiungiContatti">Add contacts</string>
+    <string name="add">Add</string>
+    <string name="groupCreated">Group created successfully!</string>
+    <string name="groupCreatedWithSomeDownloadError">Group created successfully! However, something went wrong while downloading the information.Try later!</string>
+    <string name="groupCreationError">Something went wrong when creating the event!</string>
 
 
     //Pagina dettaglio gruppo

@@ -124,8 +124,13 @@
     <string name="labelCreaGruppo">Crea</string>
     <string name="nomeContatto">Nome contatto</string>
     <string name="numeroContatto">Numero di Telefono</string>
+    <string name="avvisoNoContattiSelezionati">Non hai selezionato alcun contatto!</string>
     <string name="avvisoNoContatti">Non ci sono contatti!</string>
     <string name="bottoneAggiungiContatti">Aggiungi contatti</string>
+    <string name="add">Aggiungi</string>
+    <string name="groupCreated">Gruppo creato con successo!</string>
+    <string name="groupCreatedWithSomeDownloadError">Gruppo creato con successo! Tuttavia, qualcosa è andato storta durante il download delle informazioni dal server. Riprova più tardi.</string>
+    <string name="groupCreationError">Qualcosa è andato storta durante la creazione del gruppo!</string>
 
 
     //Pagina dettaglio gruppo

@@ -1,32 +1,28 @@
 package Model.DB;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import Helper.AuthHelper;
 import Helper.FirestoreHelper;
 import Helper.StorageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
+import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
-import Model.Pojo.Evento;
+import Model.Pojo.ContactModel;
 import Model.Pojo.Utente;
 
 public class Utenti extends ResultsConverter {
@@ -44,6 +40,61 @@ public class Utenti extends ResultsConverter {
     public static final String STATUS_SANITARIO_FIELD = "statusSanitario";
     public static final String IS_PROFILE_IMAGE_FIELD = "isProfileImageUploaded";
 
+
+    /**
+     * Search a list of contacts taken, from the phone contact list, among all the users on the firestore.
+     *
+     * @param contactsList the list of contact to search on the database
+     * @param closureList the list of users found.
+     */
+    public static final void searchContactsInPhoneBooks(List<ContactModel> contactsList, ClosureList<Utente> closureList){
+        if(AuthHelper.isLoggedIn()){
+            List<String> contactsPhone = new ArrayList<>();
+
+            //Exrapolating the phone number, the search is based on that.
+            for (ContactModel c : contactsList) contactsPhone.add(c.getNumber());
+
+            //The in query support only a list of maximum 10 elements
+            //Dividing the list in chucks of length 10
+            if(contactsPhone.size() > 10){
+                Collection<Task<?>> taskList = new ArrayList<Task<?>>();
+                int numbersOfChucks = contactsPhone.size() / 10;
+
+                //Adding the chunked query to the list
+                for(int i=0; i <= numbersOfChucks; i++){
+                    Task t;
+                    if(i == numbersOfChucks) t = FirestoreHelper.db.collection(UTENTI_COLLECTION).whereIn(NUMERO_TELEFONO_FIELD,contactsPhone.subList(10*i,contactsPhone.size())).get();
+                    else t = FirestoreHelper.db.collection(UTENTI_COLLECTION).whereIn(NUMERO_TELEFONO_FIELD,contactsPhone.subList(10*i,10*i+10)).get();
+                    taskList.add(t);
+                }
+
+                Task combinedTask = Tasks.whenAllComplete(taskList).addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
+                    @Override
+                    public void onComplete(@NonNull Task<List<Task<?>>> task) {
+                        if(closureList != null){
+                            if(task.isSuccessful()){
+                                List<Utente> finalList = new ArrayList<>();
+                                for(Task<?> t : task.getResult()){
+                                    finalList.addAll(convertResults((Task<QuerySnapshot>) t,Utente.class));
+                                }
+                                closureList.closure(finalList);
+                            }else closureList.closure(null);
+                        }
+                    }
+                });
+            }else{
+                FirestoreHelper.db.collection(UTENTI_COLLECTION).whereIn(NUMERO_TELEFONO_FIELD,contactsPhone).get().addOnCompleteListener( task -> {
+                    if(!task.isSuccessful()){
+                        if(closureList != null) closureList.closure(null);
+                        return;
+                    }
+
+                    if(closureList != null) closureList.closure(convertResults(task,Utente.class));
+                });
+            }
+        }
+
+    }
 
     /** Update the information of the user.
      *
