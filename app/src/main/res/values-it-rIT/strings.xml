@@ -144,12 +144,17 @@
     <string name="confirmPositive">Si</string>
     <string name="confirmNegative">No</string>
     <string name="confirmDelete">Utente Eliminato!</string>
-    <string name="noConfirmDelete">Utente no Eliminato!</string>
+    <string name="noConfirmDelete">Utente non eliminato!</string>
     <string name="titleLeaveGroup">Abbandona gruppo</string>
     <string name="msgLeaveGroup">Sei sicuro di voler abbandonare questo gruppo?</string>
     <string name="leaveSuccess">Hai abbandonato il gruppo con successo!</string>
     <string name="leaveInSuccess">Fai ancora parte di questo gruppo!</string>
     <string name="msgYouAreAdmin">Sei amm.re!</string>
+    <string name="deleteGroup">Elimina</string>
+    <string name="titleDeleteGroup">Elimina gruppo</string>
+    <string name="msgDeleteGroup">Sei sicuro di voler eliminare questo gruppo?</string>
+    <string name="deleteSuccess">Hai eliminato il gruppo con successo!</string>
+    <string name="deleteInsuccess">Eliminazione non riuscita!</string>
 
 
 
