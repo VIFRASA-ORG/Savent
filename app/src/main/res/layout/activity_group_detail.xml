@@ -210,17 +210,40 @@
                             android:layout_weight="2.5"
                             android:gravity="center|top">
 
-                            <Button
-                                android:id="@+id/leavegroupButton"
-                                android:layout_width="75dp"
-                                android:layout_height="40dp"
-                                android:textSize="6dp"
-                                android:gravity="center"
-                                android:textColor="@color/white"
-                                android:backgroundTint="@color/red"
-                                app:cornerRadius="@dimen/radius_button_register"
-                                android:text="@string/leaveGroup"
-                                android:onClick="onLeaveGroup"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <Button
+                                    android:id="@+id/leavegroupButton"
+                                    android:layout_width="75dp"
+                                    android:layout_height="40dp"
+                                    android:textSize="6dp"
+                                    android:gravity="center"
+                                    android:textColor="@color/white"
+                                    android:backgroundTint="@color/red"
+                                    app:cornerRadius="@dimen/radius_button_register"
+                                    android:text="@string/leaveGroup"
+                                    android:onClick="onLeaveGroup"
+                                    android:visibility="gone"/>
+
+                                <Button
+                                    android:id="@+id/deleteGroupButton"
+                                    android:layout_width="75dp"
+                                    android:layout_height="40dp"
+                                    android:textSize="6dp"
+                                    android:gravity="center"
+                                    android:textColor="@color/white"
+                                    android:backgroundTint="@color/red"
+                                    app:cornerRadius="@dimen/radius_button_register"
+                                    android:text="@string/deleteGroup"
+                                    android:onClick="onDeleteGroup"
+                                    android:visibility="gone"/>
+
+                            </LinearLayout>
+
+
 
                         </LinearLayout>
 
@@ -306,7 +329,42 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
-                        android:scrollbars="vertical"/>
+                        android:scrollbars="vertical"
+                        android:visibility="gone"/>
+
+                    <LinearLayout
+                        android:id="@+id/emptyResults"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:layout_gravity="center">
+
+                            <TextView
+                                android:id="@+id/emptyTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/noItemFound"
+                                android:textSize="25sp"
+                                android:visibility="visible" />
+                            <ProgressBar
+                                android:id="@+id/progressBar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="invisible"/>
+
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -367,21 +425,36 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="right"
-        tools:ignore="RtlHardcoded">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlHardcoded"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/buttonAddUserToGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:backgroundTint="@color/blueButton"
             android:onClick="buttonAddUserToGroup"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
             android:src="@drawable/ic_baseline_add_24"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/textAddUserToGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/bottoneAggiungiContatti"
+            android:textColor="@color/blueButton"
+            android:visibility="gone">
+
+        </TextView>
 
     </LinearLayout>
 

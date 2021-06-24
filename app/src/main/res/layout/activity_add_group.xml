@@ -57,17 +57,15 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/NewGroupTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="35dp"
                         android:text="@string/nuovoGruppo"
                         android:textColor="@color/blueButton"
                         android:textSize="24dp" />
@@ -75,20 +73,20 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="right"
-                    android:orientation="vertical">
+                    android:gravity="right">
 
-                    <TextView
-                        android:id="@+id/CreateGroup"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/labelCreaGruppo"
-                        android:textColor="@color/blueButton"
-                        android:textSize="22sp" />
+                    <ImageView
+                        android:id="@+id/buttonSaveDataGroup"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/ic_baseline_save_24"
+                        android:backgroundTint="@color/blue_button_advanced"
+                        android:enabled="false"
+                        android:onClick="onSaveButtonClick"/>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -103,131 +101,102 @@
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
         android:background="@drawable/ic_box_rounded_top"
-        android:orientation="vertical"
-        android:weightSum="10">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4.5"
-            android:orientation="vertical">
+        <androidx.cardview.widget.CardView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:outlineAmbientShadowColor="@color/black"
+            app:cardCornerRadius="65dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.cardview.widget.CardView
+            <ImageView
+                android:id="@+id/imageNewGroup"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:outlineAmbientShadowColor="@color/black"
-                app:cardCornerRadius="65dp"
-                app:layout_constraintBottom_toTopOf="@+id/textView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/group_icon" />
 
-                <ImageView
-                    android:id="@+id/imageNewGroup"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/group_icon" />
-
-                <View
-                    android:id="@+id/view2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="bottom"
-                    android:background="#CCFFFFFF" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:onClick="onClickPhoto"
-                    android:text="@string/modificaProfilo"
-                    android:textColor="#0000FF" />
-            </androidx.cardview.widget.CardView>
+            <View
+                android:id="@+id/view2"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:background="#CCFFFFFF" />
 
             <TextView
-                android:id="@+id/textNameGroup"
-                android:layout_width="wrap_content"
+                android:id="@+id/selectPhotoTextView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/nameGroup"
-                android:textColor="@color/black" />
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:onClick="onClickPhoto"
+                android:text="@string/modificaProfilo"
+                android:textColor="#0000FF" />
+        </androidx.cardview.widget.CardView>
 
-            <EditText
-                android:id="@+id/editNameGroup"
-                android:layout_width="@dimen/width_editText_register"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:inputType="text"
-                android:singleLine="true"
-                app:backgroundTint="@color/gray" />
+        <TextView
+            android:id="@+id/textNameGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="@dimen/margin_size"
+            android:text="@string/nameGroup"
+            android:textColor="@color/black" />
 
-            <TextView
-                android:id="@+id/textDescrGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/descrGroup"
-                android:textColor="@color/black" />
+        <EditText
+            android:id="@+id/editNameGroup"
+            android:layout_width="@dimen/width_editText_register"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:inputType="text"
+            android:singleLine="true"
+            app:backgroundTint="@color/gray" />
 
-            <EditText
-                android:id="@+id/editDescrGroup"
-                android:layout_width="@dimen/width_editText_register"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:singleLine="true"
-                app:backgroundTint="@color/gray" />
+        <TextView
+            android:id="@+id/textDescrGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="@dimen/margin_size"
+            android:text="@string/descrGroup"
+            android:textColor="@color/black" />
 
-        </LinearLayout>
+        <EditText
+            android:id="@+id/editDescrGroup"
+            android:layout_width="@dimen/width_editText_register"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:singleLine="true"
+            app:backgroundTint="@color/gray" />
+
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?android:attr/listDivider" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4.5"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textContactsGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/stringaContatti"
-                android:textColor="@color/black" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/contactGroupList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scrollbars="vertical"
-                    tools:listitem="@layout/contact_list_row" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/emptyListLayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="4.5"
+                android:layout_height="match_parent"
                 android:gravity="center|center_vertical"
                 android:orientation="vertical"
                 android:visibility="visible">
@@ -235,66 +204,71 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/avvisoNoContatti"
+                    android:text="@string/avvisoNoContattiSelezionati"
                     android:textSize="23sp"></TextView>
             </LinearLayout>
 
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+                <ListView
+                    android:id="@+id/contactGroupList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    android:visibility="gone"/>
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/buttonAddContacts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/blueButton"
-                android:text="@string/bottoneCreaGruppo"
-                android:textColor="@color/white"
-                app:cornerRadius="@dimen/radius_button_register" />
-        </LinearLayout>
+
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="right"
-        tools:ignore="RtlHardcoded">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlHardcoded"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/buttonNewContactGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="90dp"
             android:backgroundTint="@color/blueButton"
             android:onClick="onNewContactClick"
             android:src="@drawable/ic_baseline_add_24"
             tools:ignore="ContentDescription" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="right">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="38dp"
             android:text="@string/bottoneAggiungiContatti"
             android:textColor="@color/blueButton"></TextView>
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlHardcoded"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:layout_marginTop="52dp">
+
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="invisible"
+            android:id="@+id/progressBar"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

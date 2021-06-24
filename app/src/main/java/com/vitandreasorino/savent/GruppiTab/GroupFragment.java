@@ -13,6 +13,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureList;
 import Model.DB.Gruppi;
@@ -40,6 +42,8 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
     SearchView groupSearchView;
     GroupAdapter adapter;
     FloatingActionButton buttonCreateGroup;
+    ProgressBar progressBar;
+    TextView emptyTextView;
 
     @Nullable
     @Override
@@ -53,6 +57,9 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         groupSearchView = view.findViewById(R.id.searchViewGroup);
         groupListView = view.findViewById(R.id.groupListView);
         buttonCreateGroup = view.findViewById(R.id.buttonCreateGroup);
+        progressBar = view.findViewById(R.id.progressBar);
+        emptyTextView = view.findViewById(R.id.emptyTextView);
+        groupListView.setEmptyView(view.findViewById(R.id.emptyResults));
 
         downloadDataList();
 
@@ -76,12 +83,23 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         groupListView.setOnItemClickListener(this);
     }
 
-    private void downloadDataList(){
+    private void toggleDownloadingElements(boolean isDownloading){
+        if(isDownloading){
+            AnimationHelper.fadeIn(progressBar,0);
+            emptyTextView.setVisibility(View.INVISIBLE);
+        }else{
+            AnimationHelper.fadeOut(progressBar,0);
+            emptyTextView.setVisibility(View.VISIBLE);
+        }
+    }
 
-        /*Metodo che permette la visualizzazione dei gruppi salvati sul database, con successivo
-         * metodo che che controlla se ad ogni gruppo sono associate le rispettive immagini di profilo
-         * abbinate
-         */
+    /*Metodo che permette la visualizzazione dei gruppi salvati sul database, con successivo
+     * metodo che che controlla se ad ogni gruppo sono associate le rispettive immagini di profilo
+     * abbinate
+     */
+    private void downloadDataList(){
+        toggleDownloadingElements(true);
+
         Gruppi.getAllMyGroups(new ClosureList<Gruppo>() {
             @Override
             public void closure(List<Gruppo> list) {
@@ -105,6 +123,8 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
                     // collegamento dell'adapter alla ListView
                     groupListView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+
+                    toggleDownloadingElements(false);
                 }
             }
         });
@@ -133,6 +153,8 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        groupSearchView.clearFocus();
 
         Intent i = new Intent(getContext(), GroupDetailActivity.class);
         List<Gruppo> listaGruppiFiltrata = adapter.getFilteredData();

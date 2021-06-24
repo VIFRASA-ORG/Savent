@@ -5,7 +5,6 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
@@ -13,7 +12,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -22,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import Helper.AuthHelper;
 import Helper.FirestoreHelper;
@@ -239,21 +236,60 @@ public class Eventi extends ResultsConverter {
         }
     }
 
-    /** NOT WORKING YET
-     *  Return a list with all events created by the logged in user
+    /**
+     * Return a list with all the event created by all group given as parameter
+     *
+     * @param adminGroupIdList the list of all the group id.
+     * @param closureList invoked with the list of the event in case of success, null otherwise.
+     */
+    private static final void getAllEventCreatedByMyAdminGroup(List<String> adminGroupIdList, ClosureList<Evento> closureList){
+        if(AuthHelper.isLoggedIn()){
+            FirestoreHelper.db.collection(EVENTO_COLLECTION).whereIn("idGruppoCreatore",adminGroupIdList).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    if(closureList != null) closureList.closure(convertResults(task,Evento.class));
+                }else{
+                    if(closureList != null) closureList.closure(null);
+                }
+            });
+        }
+    }
+
+    /**
+     * Return a list with all the events created by the user and created from all groups in which the user is a member.
      *
      * @param closureList the parameter list is null in case the task is not successful.
      */
     public static final void getAllMyEvents(ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
-            //Downloading all the event created by the user
             List<Evento> listEventi = new ArrayList<>();
 
+            //Downloading all the event created by the logged in user
             getMyEvent(list -> {
-                listEventi.addAll(list);
 
-                //Download all the event of all the groups in which the user is inside
+                //Adding them to the final list
+                if(list != null) listEventi.addAll(list);
 
+                //Downloading all the group of which the user is the admin or member.
+                Gruppi.getAllMyGroups(listOfGroup -> {
+
+                    //If the list is null
+                    //return only the one downloaded since now
+                    if(listOfGroup == null){
+                        if(closureList != null) closureList.closure(listEventi);
+                        return;
+                    }
+
+                    //Extrapolating only the id of the group to perform the query with the in operator
+                    List<String> adminGroupIdList = new ArrayList<>();
+                    for(Gruppo group : listOfGroup ) adminGroupIdList.add(group.getId());
+
+                    getAllEventCreatedByMyAdminGroup(adminGroupIdList, newEvents -> {
+                        if(newEvents != null) listEventi.addAll(newEvents);
+
+                        if(closureList != null) closureList.closure(listEventi);
+                    });
+
+                });
 
             });
         }
