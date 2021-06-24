@@ -31,7 +31,9 @@
     <string name="errorUpload">Qualcosa è andata storta durante l\'aggiornamento delle informazioni!</string>
     <string name="noUpdates">Nulla da aggiornare!</string>
 
-
+    <string name="greenStatusText">Ottimo</string>
+    <string name="yelloStatusText">A rischio</string>
+    <string name="redStatusText">Pericolo</string>
 
     <string name="TabBarHome">Home </string>
     <string name="TabBarGroups">Gruppi </string>

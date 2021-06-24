@@ -30,6 +30,9 @@
     <string name="errorUpload">Something went wrong while updating the information!</string>
     <string name="noUpdates">Nothing to update!</string>
 
+    <string name="greenStatusText">Good</string>
+    <string name="yelloStatusText">At risk</string>
+    <string name="redStatusText">Danger</string>
 
     <string name="TabBarHome">Home </string>
     <string name="TabBarGroups">Groups </string>

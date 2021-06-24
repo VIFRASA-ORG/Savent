@@ -1,13 +1,18 @@
 package Model.DB;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
@@ -40,6 +45,34 @@ public class Utenti extends ResultsConverter {
     public static final String STATUS_SANITARIO_FIELD = "statusSanitario";
     public static final String IS_PROFILE_IMAGE_FIELD = "isProfileImageUploaded";
 
+
+
+
+    /**
+     * Add a listener to all the updates from the server to the logged user.
+     *
+     * @param activity the context of the owner activity
+     * @param closureResult user that will be invoked every time an update is found. it will give the user object if found, null otherwise.
+     */
+    public static final void addDocumentListener( Activity activity, ClosureResult<Utente> closureResult){
+        if(AuthHelper.isLoggedIn()){
+            FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()).addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    if (error != null) {
+                        if(closureResult != null) closureResult.closure(null);
+                    }
+
+                    if (value != null && value.exists()) {
+                        if(closureResult != null) closureResult.closure(value.toObject(Utente.class));
+                    } else {
+                        if(closureResult != null) closureResult.closure(null);
+                    }
+                }
+            });
+        }
+
+    }
 
     /**
      * Search a list of contacts taken, from the phone contact list, among all the users on the firestore.
