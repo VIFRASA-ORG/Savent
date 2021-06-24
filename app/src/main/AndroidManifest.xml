@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -20,13 +21,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Savent">
-        <activity android:name=".GruppiTab.CreazioneGruppo.AddContacts"
-            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".EventiTab.EditEvent"></activity>
+        <activity
+            android:name=".GruppiTab.CreazioneGruppo.AddContacts"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".GruppiTab.CreazioneGruppo.AddGroup" />
-        <activity android:name=".GruppiTab.GroupDetailActivity"></activity>
-        <activity android:name=".EventiTab.CreazioneEvento.MapActivity"></activity>
+        <activity android:name=".GruppiTab.GroupDetailActivity" />
+        <activity android:name=".EventiTab.CreazioneEvento.MapActivity" />
         <activity android:name=".EventiTab.CreazioneEvento.NewEvent" />
-        <activity android:name=".AccountTab.ChangeCredentialAccountActivity"></activity>
+        <activity android:name=".AccountTab.ChangeCredentialAccountActivity" />
         <activity android:name=".EventiTab.EventDetailActivity" />
         <activity android:name=".Registrazioni.RegistrazioniEnte.RegisterEnteActivity" />
         <activity android:name=".Registrazioni.RegisterActivity" />

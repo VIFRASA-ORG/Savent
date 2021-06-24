@@ -172,6 +172,11 @@
     <string name="eventoCreato">Evento creato!</string>
     <string name="accountCreatoreLabel">Account creatore</string>
     <string name="accountCreatore">Io</string>
+    <string name="luogoEvento">Inserire il luogo dove si svolgerà l\'evento</string>
+    <string name="messaggioDataOraEvento">Inserisci la data e l\'orario dell evento</string>
+
+    //Modifica evento
+    <string name="modificaEvento">Modifica evento</string>
 
 
     //Password recovery
