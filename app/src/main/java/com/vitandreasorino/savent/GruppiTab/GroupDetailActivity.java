@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 
 import com.google.android.gms.common.util.CollectionUtils;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vitandreasorino.savent.GruppiTab.CreazioneGruppo.AddContacts;
 import com.vitandreasorino.savent.LoginActivity;
 import com.vitandreasorino.savent.R;
@@ -63,9 +64,7 @@ import Model.Pojo.Utente;
 
 public class GroupDetailActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, View.OnFocusChangeListener{
 
-
     private static final int ADD_CONTACTS_RESULT = 11;
-
 
     Gruppo groupModel;
     Utente admin;
@@ -76,6 +75,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     EditText nameDetailGroup;
     EditText descriptionDetailGroup;
     Button leaveGroup;
+    Button deleteGroup;
     View viewEditGroupPhoto;
     ListView componentListView;
     SearchView searchView;
@@ -84,6 +84,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     ComponentGroupAdapter adapter;
     ProgressBar progressBarPage;
     TextView emptyTextView;
+    FloatingActionButton buttonAddUserToGroup;
+    TextView textAddUserToGroup;
 
     ArrayList<Utente> groupComponentsOriginal = new ArrayList<>();
     ArrayList<Utente> groupComponentsUpdated = new ArrayList<>();
@@ -149,7 +151,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                                         Toast.makeText(GroupDetailActivity.this, R.string.confirmDelete, Toast.LENGTH_LONG).show();
                                         adapter.removeItemFromList(utente);
                                         adapter.notifyDataSetChanged();
-
+                                        //aggiorna quanto cancelli un componente dal gruppo
                                         updateIntent();
                                     }
                                 });
@@ -172,22 +174,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             }
         });
 
-
-        //Funzionalità in base al ruolo: se sono l'admin del gruppo posso modificare, altrimenti posso solo abbandonare
-        if(groupModel.getIdAmministratore().equals(AuthHelper.getUserId())){
-            leaveGroup.setEnabled(false);
-            leaveGroup.setVisibility(View.INVISIBLE);
-        } else {
-            leaveGroup.setEnabled(true);
-            leaveGroup.setVisibility(View.VISIBLE);
-            nameDetailGroup.setEnabled(false);
-            descriptionDetailGroup.setEnabled(false);
-            editProfilePhotoGroup.setEnabled(false);
-            editProfilePhotoGroup.setVisibility(View.INVISIBLE);
-            viewEditGroupPhoto.setVisibility(View.INVISIBLE);
-            buttonSaveDataGroup.setEnabled(false);
-            buttonSaveDataGroup.setVisibility(View.INVISIBLE);
-        }
+        functionsBasedOnRole();
 
         /**
          * metodo che permette di selezionare la nuova immagine
@@ -225,6 +212,32 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         checkSaveButtonActivation();
 
     }//fine onCreate
+
+    /**
+     * Metodo che permette di attivare e disattivare le funzioni in base al ruolo di appartenenza
+     */
+    private void functionsBasedOnRole() {
+
+        if(groupModel.getIdAmministratore().equals(AuthHelper.getUserId())){
+            deleteGroup.setEnabled(true);
+            deleteGroup.setVisibility(View.VISIBLE);
+            textAddUserToGroup.setEnabled(true);
+            textAddUserToGroup.setVisibility(View.VISIBLE);
+            buttonAddUserToGroup.setEnabled(true);
+            buttonAddUserToGroup.setVisibility(View.VISIBLE);
+        } else {
+
+            leaveGroup.setEnabled(true);
+            leaveGroup.setVisibility(View.VISIBLE);
+            nameDetailGroup.setEnabled(false);
+            descriptionDetailGroup.setEnabled(false);
+            editProfilePhotoGroup.setEnabled(false);
+            editProfilePhotoGroup.setVisibility(View.INVISIBLE);
+            viewEditGroupPhoto.setVisibility(View.INVISIBLE);
+            buttonSaveDataGroup.setEnabled(false);
+            buttonSaveDataGroup.setVisibility(View.INVISIBLE);
+        }
+    }
 
     /**
      * metodo che indica che tale modifica è andata a buon fine
@@ -271,13 +284,11 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                         groupComponentsOriginal.add(utente);
                         groupComponentsUpdated.add(utente);
                         adapter.notifyDataSetChanged();
-                        updateIntent();
 
                         if(utente.getIsProfileImageUploaded()){
                             Utenti.downloadUserImage(utente.getId(), (ClosureResult<File>) file -> {
                                 utente.setProfileImageUri(Uri.fromFile(file));
                                 adapter.notifyDataSetChanged();
-                                updateIntent();
                             });
                         }
                     }
@@ -489,7 +500,10 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         buttonSaveDataGroup = findViewById(R.id.buttonSaveDataGroup);
         progressBar = findViewById(R.id.progressBarGroup);
         leaveGroup = findViewById(R.id.leavegroupButton);
+        deleteGroup = findViewById(R.id.deleteGroupButton);
         viewEditGroupPhoto = findViewById(R.id.viewEditGroupPhoto);
+        buttonAddUserToGroup = findViewById(R.id.buttonAddUserToGroup);
+        textAddUserToGroup = findViewById(R.id.textAddUserToGroup);
 
         progressBarPage = findViewById(R.id.progressBar);
         emptyTextView = findViewById(R.id.emptyTextView);
@@ -502,10 +516,56 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
      */
     public void onBackButtonPressed(View view){
         super.onBackPressed();
-
-        Intent i = new Intent();
-        setResult(RESULT_CANCELED, i);
         finish();
+    }
+
+    /**
+     * tasto che permette all'admin di cancellare il gruppo da lui creato
+     * @param view
+     */
+    public void onDeleteGroup(View view) {
+        String myId = AuthHelper.getUserId();
+        String idGroup = groupModel.getId();
+        AlertDialog.Builder alertDelete = new  AlertDialog.Builder(GroupDetailActivity.this);
+        alertDelete.setTitle(R.string.titleDeleteGroup);
+        alertDelete.setMessage(R.string.msgDeleteGroup);
+
+        /**
+         * Se si è admin del gruppo allora posso visualizzare il dialog per poter eliminare tale gruppo
+         */
+        if(AuthHelper.getUserId().equals(groupModel.getIdAmministratore())){
+            alertDelete.setPositiveButton(R.string.confirmPositive, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //Elimina il tuo gruppo
+                    Gruppi.deleteGroup(groupModel.getId(), closureBool -> {
+                        if(closureBool){
+                            Toast.makeText(GroupDetailActivity.this, R.string.deleteSuccess, Toast.LENGTH_SHORT).show();
+
+                            Intent i = new Intent();
+                            setResult(RESULT_OK, i);
+                            finish();
+                        }
+                    });
+
+                  String.valueOf(groupModel.getIdComponenti().size());
+
+                }
+            });
+
+            //Nel caso di risposta negativa nel dialog, stampa solo
+            alertDelete.setNegativeButton(R.string.confirmNegative, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //tost conferma gruppo non eliminato!
+                    Toast.makeText(GroupDetailActivity.this, R.string.deleteInsuccess, Toast.LENGTH_SHORT).show();
+                }
+            });
+            alertDelete.create().show();
+
+        }
 
     }
 
@@ -674,4 +734,5 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         i.putParcelableArrayListExtra(AddContacts.EXTRA_ARRAY_CHECKED_CONTACTS,groupComponentsUpdated);
         startActivityForResult(i,ADD_CONTACTS_RESULT);
     }
+
 }//fine classe GroupDetailActivity

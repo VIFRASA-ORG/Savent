@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
@@ -89,6 +90,19 @@ public class Gruppi extends ResultsConverter{
     public static final void removeUserFromGroup(String idUser, String idGroup, ClosureBoolean closureBool){
         if(AuthHelper.isLoggedIn()){
             FirestoreHelper.db.collection(GRUPPO_COLLECTION).document(idGroup).update("idComponenti", FieldValue.arrayRemove(idUser)).addOnCompleteListener(task -> {
+                if (closureBool != null) closureBool.closure(task.isSuccessful());
+            });
+        }
+    }
+
+    /** Delete group.
+     *
+     * @param idGroup   id of the group to delete.
+     * @param closureBool   get called with true if the task is successful, false otherwise.
+     */
+    public static final void deleteGroup(String idGroup, ClosureBoolean closureBool){
+        if(AuthHelper.isLoggedIn()){
+            FirestoreHelper.db.collection(GRUPPO_COLLECTION).document(idGroup).delete().addOnCompleteListener(task -> {
                 if (closureBool != null) closureBool.closure(task.isSuccessful());
             });
         }
