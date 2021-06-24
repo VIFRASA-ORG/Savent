@@ -124,7 +124,7 @@
     <string name="labelCreaGruppo">Crea</string>
     <string name="nomeContatto">Nome contatto</string>
     <string name="numeroContatto">Numero di Telefono</string>
-    <string name="avvisoNoContattiSelezionati">Non hai selezionato alcun contatto!</string>
+    <string name="avvisoNoContattiSelezionati">Nessun contatto selezionato.</string>
     <string name="avvisoNoContatti">Non ci sono contatti!</string>
     <string name="bottoneAggiungiContatti">Aggiungi contatti</string>
     <string name="add">Aggiungi</string>
