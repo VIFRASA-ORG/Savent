@@ -4,10 +4,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,6 +39,33 @@ import Model.Pojo.*;
 public class Eventi extends ResultsConverter {
 
     private static final String EVENTO_COLLECTION = "Eventi";
+    public static final String NOME_FIELD = "nome";
+    public static final String DESCRIZIONE_FIELD = "descrizione";
+    public static final String MAX_PARTECIPANTI_FIELD = "numeroMassimoPartecipanti";
+    public static final String STATUS_SOGLIA_FIELD = "sogliaAccettazioneStatus";
+    public static final String LATITUDINE_FIELD = "latitudine";
+    public static final String LONGITUDINE_FIELD = "longitudine";
+    public static final String DATA_ORA_FIELD = "dataOra";
+    public static final String UTENTE_CREATORE_FIELD = "idUtenteCreatore";
+    public static final String GRUPPO_CREATORE_FIELD = "idGruppoCreatore";
+
+
+    /** Update the information of the GROUP.
+     *
+     * @param eventId the id of the event
+     * @param closureBool get called with true if the task is successful, false otherwise.
+     * @param firstField the name of the first field to update
+     * @param firstValue tha new value of the first field
+     * @param otherFieldAndValues an array of object with other field and values.
+     */
+    public static final void updateFields(String eventId,ClosureBoolean closureBool, String firstField, Object firstValue, Object... otherFieldAndValues ){
+        FirestoreHelper.db.collection(EVENTO_COLLECTION).document(eventId).update(firstField,firstValue,otherFieldAndValues).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(closureBool != null) closureBool.closure(task.isSuccessful());
+            }
+        });
+    }
 
 
     /**
@@ -298,12 +327,18 @@ public class Eventi extends ResultsConverter {
     /** Add a new event to Firestore. The idEvent is randomly picked and the id inside the pojo object is avoided.
      *
      * @param e event to add to Firestore
-     * @param closureBool get called with true if the task is successful, false otherwise.
+     * @param closureResult get called with the event id created if the task is successful, false otherwise
      */
-    public static final void addNewEvent(Evento e, ClosureBoolean closureBool){
+    public static final void addNewEvent(Evento e, ClosureResult<String> closureResult){
 
         FirestoreHelper.db.collection(EVENTO_COLLECTION).add(e).addOnCompleteListener(task -> {
-            if (closureBool != null) closureBool.closure(task.isSuccessful());
+
+            if(task.isSuccessful()) {
+                if (closureResult != null) closureResult.closure(task.getResult().getId());
+            }else{
+                if (closureResult != null) closureResult.closure(null);
+            }
+
         });
     }
 

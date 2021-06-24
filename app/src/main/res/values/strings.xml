@@ -181,6 +181,12 @@
     <string name="eventoCreato">Event created!</string>
     <string name="accountCreatoreLabel">Account creator</string>
     <string name="accountCreatore">Me</string>
+    <string name="luogoEvento">Enter the place where the event will take place</string>
+    <string name="messaggioDataOraEvento">Enter the data and time of the event</string>
+
+    //Modifica evento
+    <string name="modificaEvento">Edit event</string>
+
 
     //Password recovery
     <string name="pswRecoveryText">Password Recovery</string>

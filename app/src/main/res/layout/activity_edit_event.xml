@@ -49,7 +49,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/backButton"
+                        android:id="@+id/backButtonEditEvent"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:background="@drawable/abc_vector_test"
@@ -66,10 +66,9 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textViewEventTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/creazioneEvento"
+                        android:text="@string/modificaEvento"
                         android:textColor="@color/blueButton"
                         android:textSize="24dp" />
                 </LinearLayout>
@@ -81,6 +80,14 @@
                     android:gravity="right"
                     android:orientation="vertical">
 
+                    <ImageView
+                        android:id="@+id/saveSettings"
+                        android:enabled="false"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/ic_baseline_save_24"
+                        android:backgroundTint="@color/blue_button_advanced"
+                        />
 
                 </LinearLayout>
 
@@ -100,11 +107,20 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <ProgressBar
+                android:id="@+id/progressBarEvent"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="40dp"
                 android:background="@drawable/ic_box_rounded_top"
                 android:elevation="20dp"
                 android:orientation="vertical"
@@ -129,21 +145,21 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/imageViewEvent"
+                        android:id="@+id/imageViewEditEvent"
                         android:layout_width="@dimen/dimension_icon"
                         android:layout_height="@dimen/dimension_icon"
                         android:scaleType="centerCrop"
                         app:srcCompat="@drawable/event_placeholder_icon" />
 
                     <View
-                        android:id="@+id/viewEvent2"
+                        android:id="@+id/viewEditEvent"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_gravity="bottom"
                         android:background="#CCFFFFFF" />
 
                     <TextView
-                        android:id="@+id/textViewEvent2"
+                        android:id="@+id/textViewEditEvent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
@@ -151,7 +167,7 @@
                         android:gravity="center"
                         android:text="@string/modificaProfilo"
                         android:textColor="#0000FF"
-                        android:onClick="onClickPhotoEvent"/>
+                        android:onClick="onClickPhotoEditEvent"/>
 
                 </androidx.cardview.widget.CardView>
 
@@ -166,19 +182,19 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.5">
+                        android:layout_weight="1.5">
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textViewNomeAccountCreatore"
+                        android:id="@+id/textViewEditNomeAccountCreatore"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:layout_gravity="left"
                         android:text="@string/accountCreatoreLabel"
                         android:textColor="@color/black"
-                        android:layout_weight="5"
+                        android:layout_weight="7"
 
                         />
 
@@ -193,7 +209,7 @@
                     >
 
                     <AutoCompleteTextView
-                        android:id="@+id/autoComplete"
+                        android:id="@+id/autoCompleteEditEvent"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -216,26 +232,26 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.5">
+                        android:layout_weight="1.5">
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textViewNomeEvento"
+                        android:id="@+id/textViewEditNomeEvento"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:layout_gravity="left"
                         android:text="@string/nomeEvento"
                         android:textColor="@color/black"
-                        android:layout_weight="5"/>
+                        android:layout_weight="7"/>
                         />
 
                 </LinearLayout>
 
 
                 <EditText
-                    android:id="@+id/editTextNomeEvento"
+                    android:id="@+id/editTextEditNomeEvento"
                     android:layout_width="@dimen/width_editText_register"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -254,26 +270,26 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.5">
+                        android:layout_weight="1.5">
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textViewDescrizione"
+                        android:id="@+id/textViewEditDescrizione"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:textSize="16sp"
                         android:text="@string/descirzioneEvento"
                         android:textColor="@color/black"
-                        android:layout_weight="5"/>
+                        android:layout_weight="7"/>
 
                     />
 
                 </LinearLayout>
 
                 <EditText
-                    android:id="@+id/editTextTextMultiLine"
+                    android:id="@+id/editTextEditDescrizione"
                     android:layout_width="@dimen/width_editText_register"
                     android:layout_height="wrap_content"
                     android:maxLength="200"
@@ -292,24 +308,24 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.5">
+                        android:layout_weight="1.5">
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textViewNumeroMassimoPartecipanti"
+                        android:id="@+id/textViewEditNumeroMassimoPartecipanti"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:textSize="16sp"
                         android:text="@string/maxPartecipantiEvento"
                         android:textColor="@color/black"
-                        android:layout_weight="5"/>
+                        android:layout_weight="7"/>
 
                 </LinearLayout>
 
                 <EditText
-                    android:id="@+id/editTextNuumeroMassimoPartecipanti"
+                    android:id="@+id/editTextEditNuumeroMassimoPartecipanti"
                     android:layout_width="@dimen/width_editText_register"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -328,18 +344,18 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.5">
+                        android:layout_weight="1.5">
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textViewStatusSanitario"
+                        android:id="@+id/textViewEditStatusSanitario"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:layout_gravity="left"
                         android:text="@string/statusSanitario"
-                        android:layout_weight="5"
+                        android:layout_weight="7"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
@@ -350,34 +366,34 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:layout_gravity="center"
-                    android:weightSum="10">
+                    android:weightSum="5">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="3"/>
+                        android:layout_weight="1"/>
 
                     <SeekBar
-                        android:id="@+id/seekBarStatusProgress"
+                        android:id="@+id/seekBarStatusProgressEditEvent"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:max="100"
                         android:min="0"
-                        android:layout_weight="4"
+                        android:layout_weight="3"
                         android:layout_marginTop="@dimen/margin_size"
                         android:layout_marginBottom="@dimen/margin_size"
                         />
 
                     <TextView
-                        android:id="@+id/textViewContatoreStatus"
+                        android:id="@+id/textViewEditContatoreStatus"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="0%"
                         android:textColor="@color/black"
-                        android:layout_weight="3"/>
+                        android:layout_weight="1"/>
 
                 </LinearLayout>
 
@@ -391,25 +407,25 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.5">
+                        android:layout_weight="1.5">
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textViewDataEvento"
+                        android:id="@+id/textViewEditDataEvento"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:textSize="16sp"
                         android:text="@string/dataEvento"
-                        android:layout_weight="5"
+                        android:layout_weight="7"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
 
 
                 <TextView
-                    android:id="@+id/textViewSelectDataEvent"
+                    android:id="@+id/textViewEditSelectDataEvent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -428,24 +444,24 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.5">
+                        android:layout_weight="1.5">
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textViewOrarioEvento"
+                        android:id="@+id/textViewEditOrarioEvento"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:textSize="16sp"
                         android:text="@string/oraEvento"
-                        android:layout_weight="5"
+                        android:layout_weight="7"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textViewSelectTimeEvent"
+                    android:id="@+id/textViewEditSelectTimeEvent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -464,17 +480,17 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.5">
+                        android:layout_weight="1.5">
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textViewPosizioneEvento"
+                        android:id="@+id/textViewEditPosizioneEvento"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:textSize="16sp"
-                        android:layout_weight="5"
+                        android:layout_weight="7"
                         android:text="@string/posizioneEvento"
                         android:textColor="@color/black" />
 
@@ -482,7 +498,7 @@
 
 
                 <Button
-                    android:id="@+id/buttonFragmentMappa"
+                    android:id="@+id/buttonEditFragmentMappa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -505,7 +521,7 @@
                         android:layout_weight="2"/>
 
                     <TextView
-                        android:id="@+id/textViewLatitudineScritta"
+                        android:id="@+id/textViewEditLatitudineScritta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_size"
@@ -513,7 +529,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/textViewLatitudine"
+                        android:id="@+id/textViewEditLatitudine"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_size"
@@ -532,7 +548,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:weightSum="7">
+                    android:weightSum="7"
+                    android:layout_marginBottom="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -540,7 +557,7 @@
                         android:layout_weight="2"/>
 
                     <TextView
-                        android:id="@+id/textViewLongitudineScritta"
+                        android:id="@+id/textViewEditLongitudineScritta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_size"
@@ -548,7 +565,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/textViewLongitudine"
+                        android:id="@+id/textViewEditLongitudine"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_size"
@@ -560,21 +577,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"/>
-
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/buttonRegistrazione"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="45dp"
-                    android:layout_marginTop="20dp"
-                    android:backgroundTint="@color/blueButton"
-                    android:text="@string/pulsanteCreaEvento"
-                    android:textColor="@color/white"
-                    app:cornerRadius="@dimen/radius_button_register"
-                    android:onClick="onCreateEvent"/>
 
             </LinearLayout>
 

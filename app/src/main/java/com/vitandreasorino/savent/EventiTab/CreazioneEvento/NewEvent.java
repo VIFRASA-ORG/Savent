@@ -26,17 +26,21 @@ import android.widget.Toast;
 
 import com.vitandreasorino.savent.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import Helper.AuthHelper;
 import Helper.ImageHelper;
+import Model.DB.Eventi;
 import Model.DB.Gruppi;
 import Model.DB.Utenti;
+import Model.Pojo.Evento;
 import Model.Pojo.Gruppo;
 
 public class NewEvent extends AppCompatActivity {
@@ -49,14 +53,17 @@ public class NewEvent extends AppCompatActivity {
     ArrayList<String> arrayId = new ArrayList<>();
     ArrayList<String> arrayNome = new ArrayList<>();
 
+    int anno; int mese; int giorno;
+    int ora; int minuti;
+
     Date dataInserita;
-    private Double valoreLatitudine = null;
-    private Double valoreLongitudine = null;
     private TextView textViewLatitudineScritta;
     private TextView textViewLongitudineScritta;
 
     private TextView textViewLatitudine;
     private TextView textViewLongitudine;
+    private Double valoreLatitudine = null;
+    private Double valoreLongitudine = null;
 
     private EditText editTextNomeEvento;
     private EditText editTextTextMultiLine;
@@ -212,11 +219,16 @@ public class NewEvent extends AppCompatActivity {
                     cal.setTimeInMillis(dataInserita.getTime());
                 }
 
+
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
+
+
                 DatePickerDialog dialog = new DatePickerDialog(NewEvent.this,
                         dateSetListener, year, month, day);
+
+
                 dialog.getDatePicker().setMinDate(cal1.getTime().getTime());
 
                 dialog.show();
@@ -235,6 +247,11 @@ public class NewEvent extends AppCompatActivity {
                 calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 calendario.set(Calendar.MONTH, month);
                 calendario.set(Calendar.YEAR, year);
+
+                anno = year;
+                mese = month;
+                giorno = dayOfMonth;
+
                 dataInserita = calendario.getTime();
 
 
@@ -255,6 +272,8 @@ public class NewEvent extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         displayTime.setText(hourOfDay + ":" + minute);
+                        ora = hourOfDay;
+                        minuti = minute;
                     }
                 },hour, minute, android.text.format.DateFormat.is24HourFormat(context));
                 timePickerDialog.show();
@@ -368,7 +387,8 @@ public class NewEvent extends AppCompatActivity {
         if(validazioneNomeEvento(nomeEvento) == false || nomeEvento.isEmpty() ||
            validazioneDescrizioneEvento(descrizioneEvento) == false || descrizioneEvento.isEmpty() ||
            numeroPartecipantiEvento.isEmpty() || validazioneNumeroPartecipantiEvento(numeroPartecipantiEvento) == false ||
-           valoreLatitudine == null || valoreLongitudine == null){
+           valoreLatitudine == null || valoreLongitudine == null || selezioneData.equals("Select date")|| selezioneData.equals("Seleziona data") ||
+                selezionaOra.equals("Select time")|| selezionaOra.equals("Seleziona ora")){
 
             if(validazioneNomeEvento(nomeEvento) == false || nomeEvento.isEmpty()) {
                 editTextNomeEvento.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
@@ -389,7 +409,13 @@ public class NewEvent extends AppCompatActivity {
             }
 
             if(valoreLatitudine == null || valoreLongitudine == null) {
+                Toast.makeText(this, getString(R.string.luogoEvento), Toast.LENGTH_SHORT).show();
+            }
 
+            if(selezioneData.equals("Select date")|| selezioneData.equals("Seleziona data") ||
+               selezionaOra.equals("Select time")|| selezionaOra.equals("Seleziona ora")) {
+
+                Toast.makeText(this, getString(R.string.messaggioDataOraEvento), Toast.LENGTH_SHORT).show();
             }
 
             Toast.makeText(this, getString(R.string.campiErratiRegister), Toast.LENGTH_LONG).show();
@@ -397,14 +423,50 @@ public class NewEvent extends AppCompatActivity {
         }else{
 
             backgroundTintEditTextCreateEvent();
-            statusProgress.getProgress();
-            // prendere la variabile globale idAccountCreatore
-            // prende l'immagine (l'uri è salvato già in una variabile globale immagineSelezionata)
-            // prendere Data (già fatti i controlli basta prendere la data)
-            // prendere Ora (già fatti i controlli basta prendere la data)
-            // valoreLatitudine;
-            // valoreLongitudine;
-            Toast.makeText(this, getString(R.string.eventoCreato), Toast.LENGTH_LONG).show();
+            Evento e = new Evento();
+            e.setImageUri(immagineSelezionata);
+
+            for(int i=0; i<arrayId.size(); i++) {
+
+                if(idAccountCreatore.equals(arrayId.get(i))) {
+                    if(i==0) {
+                        e.setUtenteCreatore(idAccountCreatore);
+                    }else{
+                        e.setGruppoCreatore(idAccountCreatore);
+                    }
+                }
+            }
+
+            e.setNome(nomeEvento);
+            e.setDescrizione(descrizioneEvento);
+            e.setNumeroPartecipanti(0);
+            e.setNumeroMassimoPartecipanti(Integer.parseInt(numeroPartecipantiEvento));
+            e.setSogliaAccettazioneStatus(statusProgress.getProgress());
+
+            Calendar c = Calendar.getInstance();
+            c.set(anno,mese,giorno, ora, minuti);
+            e.setDataOra(c.getTime());
+
+
+            e.setLatitudine(valoreLatitudine);
+            e.setLongitudine(valoreLongitudine);
+
+            Eventi.addNewEvent(e, closureResult -> {
+
+                if(closureResult != null){
+
+                    if(immagineSelezionata != null) {
+                        Eventi.uploadEventImage(immagineSelezionata, closureResult, closureBool-> {
+                            if(closureBool) {
+                                Toast.makeText(this, getString(R.string.eventoCreato), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }else{
+                        Toast.makeText(this, getString(R.string.eventoCreato), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            });
 
         }
 
@@ -429,25 +491,7 @@ public class NewEvent extends AppCompatActivity {
      */
     public boolean validazioneNomeEvento(String controlloNomeEvento) {
 
-        int contatoreCaratteri = 0;
-
-        if(controlloNomeEvento == null)  {
-            return false;
-        }
-
-        Pattern p = Pattern.compile("^[a-zA-Z ]*$", Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(controlloNomeEvento);
-        boolean matchTrovato = m.matches();
-
-        for (int i=0; i<controlloNomeEvento.length(); i++) {
-
-           if(controlloNomeEvento.charAt(i) != ' ' ) {
-               contatoreCaratteri++;
-           }
-
-        }
-
-        return matchTrovato && contatoreCaratteri > 0;
+        return !controlloNomeEvento.isEmpty();
     }
 
 
@@ -497,7 +541,6 @@ public class NewEvent extends AppCompatActivity {
         }
 
     }
-
 
 
 }

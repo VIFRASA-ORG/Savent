@@ -201,6 +201,7 @@ public class Evento implements Serializable, Comparable<Evento> {
         return Objects.hash(id);
     }
 
+    @Exclude
     /**
      * Return the event data and time formatted as following:
      * dd/MM/yyyy HH:mm
