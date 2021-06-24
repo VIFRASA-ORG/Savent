@@ -1,5 +1,6 @@
 package com.vitandreasorino.savent.EventiTab;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +37,10 @@ import Model.Pojo.Evento;
 
 public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
 
+
+    private static final int EDIT_EVENT_ACTIVITY_RESULT = 1;
+
+
     ListView eventListView;
     SearchView searchView;
     EventAdapter adapter;
@@ -49,6 +54,7 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     //Used to store the names of creator group in case the event is created by a group
     //The key is the groupId, the value is the name of the group
     Map<String,String> groupsName = new HashMap<>();
+    Map<String,Boolean> isAdminMap = new HashMap<>();
 
     //Default visualization
     SearchEventType pageVisualizationType = SearchEventType.ALL_EVENTS;
@@ -171,9 +177,10 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
 
                     //download the group name if the creator of the event is a group
                     if(!e.getIdGruppoCreatore().isEmpty()){
-                        Gruppi.getGroupName(e.getIdGruppoCreatore(), groupName -> {
-                            if(groupName != null){
-                                groupsName.put(e.getIdGruppoCreatore(),groupName);
+                        Gruppi.getGroupName(e.getIdGruppoCreatore(), pair -> {
+                            if(pair != null){
+                                groupsName.put(e.getIdGruppoCreatore(),pair.first);
+                                isAdminMap.put(e.getIdGruppoCreatore(),pair.second);
                                 adapter.notifyDataSetChanged();
                             }
                         });
@@ -201,14 +208,59 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent i = new Intent(getContext(), EventDetailActivity.class);
-        List<Evento> eventi = adapter.getFilteredData();
-        i.putExtra("eventObj",(eventi == null ) ? listaDiEventi.get(position) : eventi.get(position));
-        startActivity(i);
+
+        if(pageVisualizationType == SearchEventType.ALL_EVENTS){
+            Intent i = new Intent(getContext(), EventDetailActivity.class);
+            List<Evento> eventi = adapter.getFilteredData();
+            i.putExtra("eventObj",(eventi == null ) ? listaDiEventi.get(position) : eventi.get(position));
+            startActivity(i);
+        }else if(pageVisualizationType == SearchEventType.MY_EVENTS){
+            List<Evento> eventi = adapter.getFilteredData();
+            Evento selectedEvent = (eventi == null ) ? listaDiEventi.get(position) : eventi.get(position);
+
+            if(!selectedEvent.getIdGruppoCreatore().isEmpty()){
+                if(isAdminMap.containsKey(selectedEvent.getIdGruppoCreatore())){
+                    Boolean isAdmin = isAdminMap.get(selectedEvent.getIdGruppoCreatore());
+
+                    if(isAdmin){
+                        Intent i = new Intent(getContext(), EditEvent.class);
+                        i.putExtra("eventObj",selectedEvent);
+                        startActivityForResult(i,EDIT_EVENT_ACTIVITY_RESULT);
+                    }else{
+                        Intent i = new Intent(getContext(), EventDetailActivity.class);
+                        i.putExtra("eventObj",selectedEvent);
+                        startActivity(i);
+                    }
+                }
+            }else{
+                //Means that the creator of the event is the logged in user
+                Intent i = new Intent(getContext(), EditEvent.class);
+                i.putExtra("eventObj",selectedEvent);
+                startActivityForResult(i,EDIT_EVENT_ACTIVITY_RESULT);
+            }
+        }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == EDIT_EVENT_ACTIVITY_RESULT){
+            System.out.println(resultCode);
+            if(resultCode == Activity.RESULT_OK){
+                switch (pageVisualizationType){
+                    case ALL_EVENTS:
+                        downloadAllEvents();
+                        break;
+                    case MY_EVENTS:
 
+                        downloadMyEvents();
+                        break;
+                }
+            }
+        }
+
+    }
 
     /*
 

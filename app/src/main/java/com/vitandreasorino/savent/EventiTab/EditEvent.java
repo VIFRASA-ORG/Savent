@@ -56,6 +56,8 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
 
     String creatoreId;
 
+    private boolean isModified = false;
+
     ImageView saveSettings;
     ProgressBar progressBarEvent;
 
@@ -568,6 +570,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
                         enableAllComponent();
                         saveSettings.setEnabled(false);
                         immagineSelezionataEdit = null;
+                        isModified = true;
                         Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                     }else{
                         enableAllComponent();
@@ -600,6 +603,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
                             enableAllComponent();
                             saveSettings.setEnabled(false);
                             immagineSelezionataEdit = null;
+                            isModified = true;
                             Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                         }else{
                             enableAllComponent();
@@ -610,6 +614,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
                     enableAllComponent();
                     saveSettings.setEnabled(false);
                     updateModel();
+                    isModified = true;
                     Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                 }
             }else{
@@ -717,13 +722,13 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
 
     @Override
     public void onBackPressed() {
+        if(isModified) setResult(RESULT_OK);
         super.onBackPressed();
         finish();
     }
 
     public void onBackButtonPressed(View view) {
-        super.onBackPressed();
-        finish();
+        onBackPressed();
     }
 
     /*

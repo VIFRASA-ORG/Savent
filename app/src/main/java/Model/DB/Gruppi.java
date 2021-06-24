@@ -2,6 +2,7 @@ package Model.DB;
 
 import android.net.Uri;
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import Helper.AuthHelper;
 import Helper.FirestoreHelper;
@@ -64,15 +66,15 @@ public class Gruppi extends ResultsConverter{
      * Return the name of the group given as parameter.
      *
      * @param groupId id of the group whose name you want to know.
-     * @param closureRes get called with the value if the task is successful, null otherwise.
+     * @param closureRes invoked with Pair <String, Boolean> with the group name and a flag indicating is the logged in user is the admin of the group if the task is successful, null otherwise.
      */
-    public static final void getGroupName(String groupId, ClosureResult<String> closureRes){
+    public static final void getGroupName(String groupId, ClosureResult<Pair<String,Boolean>> closureRes){
         if(AuthHelper.isLoggedIn()){
             FirestoreHelper.db.collection(GRUPPO_COLLECTION).document(groupId).get().addOnCompleteListener(task -> {
                 if(task.isSuccessful()){
                     if (closureRes != null){
                         Gruppo g = task.getResult().toObject(Gruppo.class);
-                        closureRes.closure(g.getNome());
+                        closureRes.closure(new Pair<>(g.getNome(), (g.getIdAmministratore().equals(AuthHelper.getUserId())) ? true : false ));
                     }
                 }else {
                     if(closureRes != null) closureRes.closure(null);

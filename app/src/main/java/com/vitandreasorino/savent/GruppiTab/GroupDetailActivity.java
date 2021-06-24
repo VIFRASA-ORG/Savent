@@ -66,6 +66,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
     private static final int ADD_CONTACTS_RESULT = 11;
 
+    private boolean isModified = false;
+
     Gruppo groupModel;
     Utente admin;
 
@@ -253,8 +255,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
      */
     private void toggleDownloadingElements(boolean isDownloading){
         if(isDownloading){
+            emptyTextView.setVisibility(View.GONE);
             AnimationHelper.fadeIn(progressBarPage,0);
-            emptyTextView.setVisibility(View.INVISIBLE);
         }else{
             AnimationHelper.fadeOut(progressBarPage,0);
             emptyTextView.setVisibility(View.VISIBLE);
@@ -360,6 +362,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                         enableAllComponent();
                         buttonSaveDataGroup.setEnabled(false);
                         newSelectedImage = null;
+                        isModified = true;
                         //toast relativo alla sola immagine del grouppo
                         Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                     }else{
@@ -397,6 +400,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                             enableAllComponent();
                             buttonSaveDataGroup.setEnabled(false);
                             newSelectedImage = null;
+                            isModified = true;
                             //tost quando si carica l'immagine
                             Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                         }else{
@@ -408,6 +412,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                     enableAllComponent();
                     buttonSaveDataGroup.setEnabled(false);
                     updateModel();
+                    isModified = true;
                     Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                 }
             }else{
@@ -510,13 +515,20 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         componentListView.setEmptyView(findViewById(R.id.emptyResults));
     }
 
+    @Override
+    public void onBackPressed() {
+        if(isModified) setResult(RESULT_OK);
+
+        super.onBackPressed();
+        finish();
+    }
+
     /**
      * Evento tramite Click che permette di tornare indietro con eventauale aggiornamento
      * @param view
      */
     public void onBackButtonPressed(View view){
-        super.onBackPressed();
-        finish();
+        onBackPressed();
     }
 
     /**
