@@ -25,7 +25,7 @@ public class GenericUser extends ResultsConverter{
     /** Check if the given phone number is already used into another account
      *
      * @param phoneNumber   Phone number of the user to search for.
-     * @param closureBool    get called with the true is the phone number is already used, false otherwise.
+     * @param closureBool    get called with true if the phone number is already used, false otherwise.
      */
     public static final void isPhoneNumberAlreadyTaken(String phoneNumber, ClosureBoolean closureBool){
         Task utentiTask = FirestoreHelper.db.collection(UTENTI_COLLECTION).whereEqualTo("numeroDiTelefono",phoneNumber).get();

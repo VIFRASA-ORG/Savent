@@ -6,16 +6,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -23,13 +23,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.vitandreasorino.savent.HomeActivity;
 import com.vitandreasorino.savent.R;
 import com.vitandreasorino.savent.Registrazioni.RegistrazioniEnte.RegisterEnteActivity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -48,8 +45,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
     ImageView imageView;
     RadioButton rbM,rbF,rbU;
 
-    EditText editTextNome,editTextCognome,editTextDataNascita,editTextTelefono,
-             editTextEmail,editTextPassword,editTextConfermaPassword;
+    EditText editTextNome,editTextCognome,editTextTelefono,
+             editTextEmail,editTextPassword,editTextConfermaPassword,editTextCodiceFiscale;
+
+    TextView textViewBirth;
+    ImageView imageViewCalendar;
+    DatePickerDialog picker;
+    Calendar selectedBirthDate;
 
     Button bottoneRegistrazione;
     TextView textViewEditImage,textViewRegistrazioneEnte;
@@ -69,11 +71,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
         editTextNome = (EditText) findViewById(R.id.editTextNome);
         editTextCognome = (EditText) findViewById(R.id.editTextCognome);
-        editTextDataNascita = (EditText) findViewById(R.id.editTextDataNascita);
         editTextTelefono = (EditText) findViewById(R.id.editTextTelefono);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         editTextConfermaPassword = (EditText) findViewById(R.id.editTextConfermaPassword);
+        editTextCodiceFiscale = findViewById(R.id.editTextCodiceFiscale);
+
+        textViewBirth = findViewById(R.id.textViewBirth);
+        imageViewCalendar = findViewById(R.id.imageViewCalendar);
+        selectedBirthDate = Calendar.getInstance();
+        selectedBirthDate.set(Calendar.MINUTE,0);
+        selectedBirthDate.set(Calendar.HOUR,0);
+        selectedBirthDate.set(Calendar.HOUR_OF_DAY,0);
+        selectedBirthDate.set(Calendar.SECOND,0);
+        selectedBirthDate.set(Calendar.MILLISECOND,0);
+        textViewBirth.setText(selectedBirthDate.get(Calendar.DAY_OF_MONTH) + "/" + ((((selectedBirthDate.get(Calendar.MONTH)+1)+"").length() == 1) ? "0" : "") +((selectedBirthDate.get(Calendar.MONTH)+1)+"") + "/" + selectedBirthDate.get(Calendar.YEAR));
 
         bottoneRegistrazione = findViewById(R.id.buttonRegistrazione);
         textViewEditImage = findViewById(R.id.textViewEditImage);
@@ -91,11 +103,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
     private void setAllFocusChanged(){
         editTextCognome.setOnFocusChangeListener(this);
         editTextConfermaPassword.setOnFocusChangeListener(this);
-        editTextDataNascita.setOnFocusChangeListener(this);
         editTextEmail.setOnFocusChangeListener(this);
         editTextNome.setOnFocusChangeListener(this);
         editTextPassword.setOnFocusChangeListener(this);
         editTextTelefono.setOnFocusChangeListener(this);
+        editTextCodiceFiscale.setOnFocusChangeListener(this);
+    }
+
+    private void clearAllFocus(){
+        editTextCognome.clearFocus();
+        editTextConfermaPassword.clearFocus();
+        editTextEmail.clearFocus();
+        editTextNome.clearFocus();
+        editTextPassword.clearFocus();
+        editTextTelefono.clearFocus();
+        editTextCodiceFiscale.clearFocus();
     }
 
     @Override
@@ -113,21 +135,20 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
     private void controlloInputUtenteRegistrazione() {
 
-        String nome, cognome, dataNascita, genere, telefono, email, password, confermaPassword;
+        String nome, cognome, dataNascita, genere, telefono, email, password, confermaPassword, codiceFiscale;
         nome = editTextNome.getText().toString();
         cognome = editTextCognome.getText().toString();
-        dataNascita = editTextDataNascita.getText().toString();
         genere = getString(R.string.genereNonDefinito);
         telefono = editTextTelefono.getText().toString();
         email = editTextEmail.getText().toString();
         password = editTextPassword.getText().toString();
         confermaPassword = editTextConfermaPassword.getText().toString();
+        codiceFiscale = editTextCodiceFiscale.getText().toString();
 
 
-        if( validazioneNome(nome) == false || validazioneCognome(cognome) == false  || validazioneDataNascita(dataNascita) == false ||
-            dataNascita.length() < 9 || dataNascita.contains(".") || dataNascita.contains("-") || (validazioneDataNascita(dataNascita) == true && validazioneDataNascitaDue(dataNascita) == false)  ||
-            validazioneTelefono(telefono) == false
-            ||validazioneEmail(email) == false || validazionePassword(password) == false || !password.equals(confermaPassword)
+        if( validazioneNome(nome) == false || validazioneCognome(cognome) == false || validazioneCodiceFiscale(codiceFiscale) == false ||
+            validazioneTelefono(telefono) == false || selectedBirthDate == null
+            || validazioneEmail(email) == false || validazionePassword(password) == false || !password.equals(confermaPassword)
              || password.contains(" ")) {
 
             if(validazioneNome(nome) == false) {
@@ -142,12 +163,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
                 editTextCognome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
-            if(validazioneDataNascita(dataNascita) == false || dataNascita.length() < 9 ||
-                    dataNascita.contains(".") || dataNascita.contains("-") || (validazioneDataNascita(dataNascita) == true &&
-                    validazioneDataNascitaDue(dataNascita) == false) ) {
-                editTextDataNascita.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
-            }else{
-                editTextDataNascita.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
+            if(validazioneCodiceFiscale(codiceFiscale) == false) {
+                editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+            }else {
+                editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
+            }
+
+            if(selectedBirthDate == null){
+                Toast.makeText(this, "Data di nascita non selezionata!", Toast.LENGTH_LONG).show();
             }
 
             if(validazioneTelefono(telefono) == false) {
@@ -178,6 +201,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         }else{
 
             backgroundTintEditText();
+            clearAllFocus();
 
             if(rbM.isChecked()) genere = Utente.MALE;
             else if(rbF.isChecked()) genere = Utente.FEMALE;
@@ -187,15 +211,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
             u.setCognome(cognome);
             u.setNome(nome);
 
-            //Trying to convert the string to a Date object
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            try {
-                Date date = format.parse(dataNascita);
-                u.setDataNascita(date);
-            } catch (ParseException e) {
-                editTextDataNascita.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
-                return;
-            }
+            u.setDataNascita(selectedBirthDate.getTime());
             u.setGenere(genere);
 
             disableAllComponents();
@@ -204,7 +220,20 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
             GenericUser.isPhoneNumberAlreadyTaken(telefono, closureBool -> {
                 if(!closureBool){
                     u.setNumeroDiTelefono(telefono);
-                    computeRegistrationToServer(u,email,password);
+
+                    //Check the fiscal code
+                    Utenti.isFiscalCodeAlreadyUsed(codiceFiscale, isUsed -> {
+                        Log.i("PORCO",isUsed + "");
+                        if(isUsed){
+                            editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                            Toast.makeText(this,R.string.fiscalCodeAlreadyTaken,Toast.LENGTH_LONG).show();
+                            enableAllComponents();
+                            return;
+                        }else{
+                            u.setCodiceFiscale(codiceFiscale.toUpperCase());
+                            computeRegistrationToServer(u,email,password);
+                        }
+                    });
                 }else{
                     editTextTelefono.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                     Toast.makeText(this,R.string.phoneNumberAlreadyTaken,Toast.LENGTH_LONG).show();
@@ -232,6 +261,30 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
     }
 
     /**
+     * Show and manage the results of the DataPickerDialog.
+     */
+    public void onClickCalendarImageView(View view){
+
+        Calendar c = Calendar.getInstance();
+        if(selectedBirthDate != null){
+            c = selectedBirthDate;
+        }
+
+        picker = new DatePickerDialog(this,new DatePickerDialog.OnDateSetListener(){
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                if(selectedBirthDate == null) selectedBirthDate = Calendar.getInstance();
+                selectedBirthDate.set(year,month,dayOfMonth);
+
+                textViewBirth.setText(dayOfMonth + "/" + ((((month+1)+"").length() == 1) ? "0" : "") +((month+1)+"") + "/" + year);
+            }
+        },c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH));
+
+        picker.getDatePicker().setMaxDate(new Date().getTime());
+        picker.show();
+    }
+
+    /**
      * Re-enable the interaction with all the components and hide the progress bar
      */
     private void enableAllComponents(){
@@ -239,7 +292,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         editTextPassword.setEnabled(true);
         editTextNome.setEnabled(true);
         editTextEmail.setEnabled(true);
-        editTextDataNascita.setEnabled(true);
+        imageViewCalendar.setEnabled(true);
         editTextConfermaPassword.setEnabled(true);
         editTextCognome.setEnabled(true);
         rbF.setEnabled(true);
@@ -248,6 +301,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         bottoneRegistrazione.setEnabled(true);
         textViewEditImage.setEnabled(true);
         textViewRegistrazioneEnte.setEnabled(true);
+        editTextCodiceFiscale.setEnabled(true);
 
         //Hide the progress bar
         AnimationHelper.fadeOut(progressBar,1000);
@@ -261,7 +315,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         editTextPassword.setEnabled(false);
         editTextNome.setEnabled(false);
         editTextEmail.setEnabled(false);
-        editTextDataNascita.setEnabled(false);
+        imageViewCalendar.setEnabled(false);
         editTextConfermaPassword.setEnabled(false);
         editTextCognome.setEnabled(false);
         rbF.setEnabled(false);
@@ -270,6 +324,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         bottoneRegistrazione.setEnabled(false);
         textViewEditImage.setEnabled(false);
         textViewRegistrazioneEnte.setEnabled(false);
+        editTextCodiceFiscale.setEnabled(false);
 
         //Show the progress bar
         AnimationHelper.fadeIn(progressBar,1000);
@@ -281,7 +336,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
     public void backgroundTintEditText() {
         editTextNome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextCognome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
-        editTextDataNascita.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextTelefono.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextEmail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
@@ -329,79 +383,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
         return matchTrovato;
     }
-
-
-    /**
-     * Controllo che la data di nascita in input rispetti i seguenti formati
-     * gg/mm/aaaa
-     * gg-mm-aaaa
-     * gg.mm.aaaa
-     * @param controlloDataNascita stringa da controllare
-     * @return ritorna true se la stringa è formattata correttamente, altrimenti false
-     */
-    public boolean validazioneDataNascita(String controlloDataNascita) {
-
-        if(controlloDataNascita == null )  {
-            return false;
-        }
-
-        Pattern p = Pattern.compile("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[13-9]|1[0-2])\\2))" +
-                                    "(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?" +
-                                    "(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?" +
-                                    "[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$");
-        Matcher m = p.matcher(controlloDataNascita);
-        boolean matchTrovato = m.matches();
-
-        return matchTrovato;
-    }
-
-
-    /**
-     * Metodo per effettuare la convalida della data inserita da parte dell'utente, nello specifico
-     * si controlla se l'anno inserito dall'utente rispetta la formattazione prevista "aaaa" e inoltre
-     * si controlla che l'anno inserito dall'utente è più piccolo dell'anno attuale.
-     *
-     * @param controlloDataNascita stringa da controllare
-     * @return false se il valore inserito dall'utente è incorretto, altrimenti true
-     */
-    public boolean validazioneDataNascitaDue(String controlloDataNascita) {
-
-        // Ottengo inizialmente la data del sistema e la formatto nel seguente modo "dd-mm-yyyy"
-        Calendar calendario = Calendar.getInstance();
-        SimpleDateFormat formattazione = new SimpleDateFormat("dd-MM-yyyy");
-
-        // la data formattata l'assegno ad un oggetto String
-        String dataAttuale = null;
-        dataAttuale = formattazione.format(calendario.getTime());
-
-        String definizioneDataAttuale = "";
-        String definizioneDataInserita = "";
-        int valoreRisultanteInserito = 0, valoreRisultanteCorrente = 0;
-
-        // Memorizzo in due oggetti scritta creati i due anni, rispettivamente il primo
-        // coincide con l'anno attuale fornito dal sistema, il secondo coincide con l'inserimento dell'utente
-        // infine li metto a confronto per stabilire se l'anno corrente è maggiore dell'anno inserito.
-        definizioneDataAttuale += dataAttuale.charAt(6);
-        definizioneDataAttuale += dataAttuale.charAt(7);
-        definizioneDataAttuale += dataAttuale.charAt(8);
-        definizioneDataAttuale += dataAttuale.charAt(9);
-        valoreRisultanteCorrente = Integer.parseInt(definizioneDataAttuale);
-
-
-        definizioneDataInserita += controlloDataNascita.charAt(6);
-        definizioneDataInserita += controlloDataNascita.charAt(7);
-        definizioneDataInserita += controlloDataNascita.charAt(8);
-        definizioneDataInserita += controlloDataNascita.charAt(9);
-        valoreRisultanteInserito = Integer.parseInt(definizioneDataInserita);
-
-
-        if (valoreRisultanteCorrente <= valoreRisultanteInserito) {
-            return false;
-        }
-
-        return true;
-    }
-
 
     /**
      * Controllo che il numero di telefono rispetti le seguenti caratteristiche:
@@ -462,6 +443,25 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
         Pattern p = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})");
         Matcher m = p.matcher(controlloPassword);
+        boolean matchTrovato = m.matches();
+
+        return matchTrovato;
+    }
+
+    /**
+     * Controlla che la stringa in input sia conforme alla formattazione e alla lunghezza
+     * di un comune codice fiscale.
+     * @param controlloCodiceFiscaleFreelance stringa da controllare
+     * @return ritorna true se la stringa è formattata correttamente, altrimenti false
+     */
+    public boolean validazioneCodiceFiscale(String controlloCodiceFiscaleFreelance) {
+
+        if(controlloCodiceFiscaleFreelance == null)  {
+            return false;
+        }
+
+        Pattern p = Pattern.compile("[a-zA-Z]{6}\\d\\d[a-zA-Z]\\d\\d[a-zA-Z]\\d\\d\\d[a-zA-Z]", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(controlloCodiceFiscaleFreelance);
         boolean matchTrovato = m.matches();
 
         return matchTrovato;

@@ -24,6 +24,7 @@
     <string name="registrazioneErrore">Si sono verificati degli errori.</string>
     <string name="account">Profilo</string>
     <string name="phoneNumberAlreadyTaken">Numero di telefono già usato!</string>
+    <string name="fiscalCodeAlreadyTaken">Codice fiscale già utilizzato!</string>
     <string name="searchPlaceholder">Cerca qui</string>
 
     //AccountFragment toast
@@ -135,7 +136,7 @@
     <string name="groupCreationError">Qualcosa è andato storta durante la creazione del gruppo!</string>
 
     /pagina gruppo
-    <string name="noItemFound">Item non trovato</string>
+    <string name="noItemFound">Item non trovati</string>
     <string name="addGroup">Nuovo gruppo</string>
 
     //Pagina dettaglio gruppo

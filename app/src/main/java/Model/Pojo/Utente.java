@@ -33,6 +33,7 @@ public class Utente implements Parcelable {
     private String genere;
     private String numeroDiTelefono;
     private int statusSanitario;
+    private String codiceFiscale;
 
     // COSTRUTTORE DELLA CLASSE UTENTE
     public Utente() {
@@ -49,7 +50,7 @@ public class Utente implements Parcelable {
         this.numeroDiTelefono = numeroDiTelefono;
     }
 
-    public Utente(String id, String nome, String cognome, Date dataNascita, String genere, int statusSanitario,String numeroDiTelefono) {
+    public Utente(String id, String nome, String cognome, Date dataNascita, String genere, int statusSanitario,String numeroDiTelefono, String codiceFiscale) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -58,6 +59,7 @@ public class Utente implements Parcelable {
         this.statusSanitario = statusSanitario;
         this.numeroDiTelefono = numeroDiTelefono;
         this.isProfileImageUploaded = false;
+        this.codiceFiscale = codiceFiscale;
     }
 
     // GETTER E SETTTER
@@ -157,6 +159,14 @@ public class Utente implements Parcelable {
     @Exclude
     public void setProfileImageUri(Uri profileImageUri) {
         this.profileImageUri = profileImageUri;
+    }
+
+    public String getCodiceFiscale() {
+        return codiceFiscale;
+    }
+
+    public void setCodiceFiscale(String codiceFiscale) {
+        this.codiceFiscale = codiceFiscale;
     }
 
     @Override

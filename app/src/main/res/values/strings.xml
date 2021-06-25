@@ -23,6 +23,7 @@
     <string name="registrazioneErrore">Errors during the registration.</string>
     <string name="account">Account</string>
     <string name="phoneNumberAlreadyTaken">Phone number already used!</string>
+    <string name="fiscalCodeAlreadyTaken">Fiscal code already used!</string>
     <string name="searchPlaceholder">Search here</string>
 
     //AccountFragment toast
@@ -135,7 +136,7 @@
     <string name="groupCreationError">Something went wrong when creating the event!</string>
 
     //pagina gruppo
-    <string name="noItemFound">No item found</string>
+    <string name="noItemFound">No items found</string>
     <string name="addGroup">New group</string>
 
     //Pagina dettaglio gruppo

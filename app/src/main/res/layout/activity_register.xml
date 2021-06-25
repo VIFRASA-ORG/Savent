@@ -44,8 +44,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="right">
+                    android:layout_weight="1">
 
                     <TextView
                         android:id="@+id/textViewRegistrazioneEnte"
@@ -53,6 +52,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/text_register_ente"
                         android:textAlignment="center"
+                        android:gravity="center"
                         android:layout_marginRight="@dimen/margin_size"
                         android:layout_marginTop="@dimen/margin_size"
                         android:textColor="@color/blueButton"
@@ -152,16 +152,59 @@
                 android:text="@string/dataNascitaUtente"
                 android:textColor="@color/black" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="@dimen/margin_size"
+                android:layout_weight="5">
+
+                <TextView
+                    android:id="@+id/textViewBirth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="true"
+                    android:gravity="center"
+                    android:hint="@string/dataNascita"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:layout_weight="4"/>
+
+                <ImageView
+                    android:id="@+id/imageViewCalendar"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/calendar"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:onClick="onClickCalendarImageView">
+                </ImageView>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewCodiceFiscale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_left_textView_register"
+                android:layout_marginTop="@dimen/margin_size"
+                android:text="@string/codice_fiscale"
+                android:textColor="@color/black" />
+
             <EditText
-                android:id="@+id/editTextDataNascita"
+                android:id="@+id/editTextCodiceFiscale"
                 android:layout_width="@dimen/width_editText_register"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:ems="10"
-                android:hint="gg/mm/aaaa"
-                android:inputType="date"
+                android:inputType="text"
                 android:singleLine="true"
-                app:backgroundTint="@color/gray"/>
+                app:backgroundTint="@color/gray" />
 
             <TextView
                 android:id="@+id/textViewGenere"

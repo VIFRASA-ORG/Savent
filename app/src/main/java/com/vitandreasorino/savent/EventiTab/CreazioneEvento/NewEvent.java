@@ -139,8 +139,6 @@ public class NewEvent extends AppCompatActivity {
         });
 
 
-        setAdapter();
-
         imageViewEvent = (ImageView) findViewById(R.id.imageViewEvent);
 
 

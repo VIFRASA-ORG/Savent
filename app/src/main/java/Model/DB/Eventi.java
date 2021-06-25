@@ -273,6 +273,10 @@ public class Eventi extends ResultsConverter {
      */
     private static final void getAllEventCreatedByMyAdminGroup(List<String> adminGroupIdList, ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
+            if(adminGroupIdList.size() == 0){
+                if(closureList != null) closureList.closure(null);
+                return;
+            }
             FirestoreHelper.db.collection(EVENTO_COLLECTION).whereIn("idGruppoCreatore",adminGroupIdList).get().addOnCompleteListener(task -> {
                 if(task.isSuccessful()){
                     if(closureList != null) closureList.closure(convertResults(task,Evento.class));

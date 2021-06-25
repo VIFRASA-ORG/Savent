@@ -44,9 +44,26 @@ public class Utenti extends ResultsConverter {
     public static final String GENERE_FIELD = "genere";
     public static final String STATUS_SANITARIO_FIELD = "statusSanitario";
     public static final String IS_PROFILE_IMAGE_FIELD = "isProfileImageUploaded";
+    public static final String CODICE_FISCALE_FIELD = "codiceFiscale";
 
 
+    /**
+     * Check if the given fiscal code is already used by another account
+     *
+     * @param fiscalCode fiscal code of the user to search for.
+     * @param closureBool invoked with true if the fiscal code is already used, false otherwise.
+     */
+    public static final void isFiscalCodeAlreadyUsed(String fiscalCode, @Nullable ClosureBoolean closureBool){
+        FirestoreHelper.db.collection(UTENTI_COLLECTION).whereEqualTo(CODICE_FISCALE_FIELD,fiscalCode.toUpperCase()).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                List<Utente> l = convertResults(task,Utente.class);
 
+                if(closureBool != null) closureBool.closure(l.size() > 0);
+            }else{
+                if(closureBool != null) closureBool.closure(true);
+            }
+        });
+    }
 
     /**
      * Add a listener to all the updates from the server to the logged user.
@@ -56,18 +73,15 @@ public class Utenti extends ResultsConverter {
      */
     public static final void addDocumentListener( Activity activity, ClosureResult<Utente> closureResult){
         if(AuthHelper.isLoggedIn()){
-            FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()).addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                    if (error != null) {
-                        if(closureResult != null) closureResult.closure(null);
-                    }
+            FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()).addSnapshotListener(activity, (value, error) -> {
+                if (error != null) {
+                    if(closureResult != null) closureResult.closure(null);
+                }
 
-                    if (value != null && value.exists()) {
-                        if(closureResult != null) closureResult.closure(value.toObject(Utente.class));
-                    } else {
-                        if(closureResult != null) closureResult.closure(null);
-                    }
+                if (value != null && value.exists()) {
+                    if(closureResult != null) closureResult.closure(value.toObject(Utente.class));
+                } else {
+                    if(closureResult != null) closureResult.closure(null);
                 }
             });
         }
@@ -101,18 +115,15 @@ public class Utenti extends ResultsConverter {
                     taskList.add(t);
                 }
 
-                Task combinedTask = Tasks.whenAllComplete(taskList).addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
-                    @Override
-                    public void onComplete(@NonNull Task<List<Task<?>>> task) {
-                        if(closureList != null){
-                            if(task.isSuccessful()){
-                                List<Utente> finalList = new ArrayList<>();
-                                for(Task<?> t : task.getResult()){
-                                    finalList.addAll(convertResults((Task<QuerySnapshot>) t,Utente.class));
-                                }
-                                closureList.closure(finalList);
-                            }else closureList.closure(null);
-                        }
+                Task combinedTask = Tasks.whenAllComplete(taskList).addOnCompleteListener(task -> {
+                    if(closureList != null){
+                        if(task.isSuccessful()){
+                            List<Utente> finalList = new ArrayList<>();
+                            for(Task<?> t : task.getResult()){
+                                finalList.addAll(convertResults((Task<QuerySnapshot>) t,Utente.class));
+                            }
+                            closureList.closure(finalList);
+                        }else closureList.closure(null);
                     }
                 });
             }else{
