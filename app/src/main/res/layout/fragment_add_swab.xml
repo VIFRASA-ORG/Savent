@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center|top"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/scrollViewAddSwab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/fragmentAddSwabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="60dp"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-10dp"
+                    android:paddingLeft="20dp"
+                    android:text="@string/stringSwabResult" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/ic_box"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textTypeSwab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="60dp"
+                            android:text="@string/stringSwabType" />
+
+                        <Spinner
+                            android:id="@+id/spinnerSwabType"
+                            android:layout_width="150dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/white"
+                            android:entries="@array/typeSwab" />
+
+                        <TextView
+                            android:id="@+id/textResultSwab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/stringResult" />
+
+                        <Spinner
+                            android:id="@+id/spinnerResultSwab"
+                            android:layout_width="150dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/white"
+                            android:entries="@array/resultSwab" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/patientData"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/stringPatient" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="20dp"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/stringNoPatientResult"
+                                    android:textColor="@color/blueButton"
+                                    android:textSize="20dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <ListView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    tools:listitem="@layout/component_group_list_row" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="top|center"
+                                android:orientation="vertical">
+
+                                <Button
+                                    android:id="@+id/buttonSelectPatient"
+                                    android:onClick="buttonSelectPatient"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@color/blueButton"
+                                    android:text="@string/stringSelectPatient"
+                                    android:textColor="@color/white"
+                                    app:cornerRadius="@dimen/radius_button_register" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="60dp"
+                        android:gravity="top|center"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/buttonSendSwabResult"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|center"
+                            android:layout_marginTop="20dp"
+                            android:backgroundTint="@color/blueButton"
+                            android:text="@string/stringSendResultSwab"
+                            app:cornerRadius="@dimen/radius_button_register" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </ScrollView>
+    </LinearLayout>
+
+
+</RelativeLayout>

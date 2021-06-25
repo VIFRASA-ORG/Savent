@@ -197,4 +197,29 @@
     <string name="passwordRequired">Password richiesta</string>
     <string name="cancelButton">ANNULLA</string>
 
+    //String per layout ente
+    <string-array name="typeSwab">
+        <item>Rapido</item>
+        <item>Molecolare</item>
+        <item>Sierologico</item>
+    </string-array>
+
+    <string-array name="resultSwab">
+        <item>Negativo</item>
+        <item>Positivo</item>
+    </string-array>
+    <string name="stringPatient">Paziente</string>
+    <string name="stringPatients">Patienti</string>
+    <string name="stringInsertDate">Inserire data</string>
+    <string name="stringFilter">Filtri</string>
+    <string name="stringSelectPatient">Seleziona paziente</string>
+    <string name="stringSendResultSwab">Invia risultato tampone</string>
+    <string name="stringNoPatientResult">Nessun paziente selezionato!</string>
+    <string name="stringStatus">Stato sanitario</string>
+    <string name="stringSwabResult">Esito tampone</string>
+    <string name="stringSwabType">Tipo tampone</string>
+    <string name="stringResult">Esito</string>
+    <string name="stringSaventEnti">Savent Enti</string>
+    <string name="textHomeSwabResult">Inserisci i risultati dei tamponi dei tuoi pazienti. Ci occupiamo noi di comunicarlo al paziente!</string>
+    <string name="textHomeCommunities">Con la nostra rete di comunicazione che utilizza la tecnologia Bluetooth Low Energy, tutte le persone che hanno avuto un contatto con il tuo paziente negli ultimi 14 giorni avranno una comunicazione del rischio.</string>
 </resources>
