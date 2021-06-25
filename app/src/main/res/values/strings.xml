@@ -215,4 +215,28 @@
     <string name="passwordRequired">Password required</string>
     <string name="cancelButton">CANCEL</string>
 
+    //String per layout ente
+    <string-array name="typeSwab">
+        <item>Quick</item>
+        <item>Molecular</item>
+        <item>Serological</item>
+    </string-array>
+    <string-array name="resultSwab">
+        <item>Negative</item>
+        <item>Positive</item>
+    </string-array>
+    <string name="stringInsertDate">Insert date</string>
+    <string name="stringPatient">Patient</string>
+    <string name="stringPatients">Patients</string>
+    <string name="stringFilter">Filters</string>
+    <string name="stringSelectPatient">Select patient</string>
+    <string name="stringSendResultSwab">Send swab result</string>
+    <string name="stringNoPatientResult">No patient selected!</string>
+    <string name="stringStatus">Health status</string>
+    <string name="stringSwabResult">Swab result</string>
+    <string name="stringSwabType">Swab type</string>
+    <string name="stringResult">Result</string>
+    <string name="stringSaventEnti">Savent Companies</string>
+    <string name="textHomeSwabResult">Insert the swab results of your patients. We take care of communicating it to the patient!</string>
+    <string name="textHomeCommunities">With our communication network using Bluetooth Low Energy technology, all people who have had contact with your patient in the last 14 days will have a communication of the risk. </string>
 </resources>
