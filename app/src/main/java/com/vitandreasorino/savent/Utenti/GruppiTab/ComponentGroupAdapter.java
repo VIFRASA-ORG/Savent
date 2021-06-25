@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.GruppiTab;
+package com.vitandreasorino.savent.Utenti.GruppiTab;
 
 import android.content.Context;
 import android.view.LayoutInflater;

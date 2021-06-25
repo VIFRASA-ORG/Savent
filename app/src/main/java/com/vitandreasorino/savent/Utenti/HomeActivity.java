@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.Utenti;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,9 +15,10 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.vitandreasorino.savent.AccountTab.AccountFragment;
-import com.vitandreasorino.savent.EventiTab.EventFragment;
-import com.vitandreasorino.savent.GruppiTab.GroupFragment;
+import com.vitandreasorino.savent.Utenti.AccountTab.AccountFragment;
+import com.vitandreasorino.savent.Utenti.EventiTab.EventFragment;
+import com.vitandreasorino.savent.Utenti.GruppiTab.GroupFragment;
+import com.vitandreasorino.savent.R;
 
 import Helper.AnimationHelper;
 import Model.DB.Utenti;

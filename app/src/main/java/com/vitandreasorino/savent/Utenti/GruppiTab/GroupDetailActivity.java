@@ -1,12 +1,9 @@
-package com.vitandreasorino.savent.GruppiTab;
+package com.vitandreasorino.savent.Utenti.GruppiTab;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -14,48 +11,30 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.text.TextWatcher;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.vitandreasorino.savent.GruppiTab.CreazioneGruppo.AddContacts;
-import com.vitandreasorino.savent.LoginActivity;
+import com.vitandreasorino.savent.Utenti.GruppiTab.CreazioneGruppo.AddContacts;
 import com.vitandreasorino.savent.R;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
-import Model.Closures.ClosureBitmap;
-import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureResult;
-import Model.DB.GenericUser;
 import Model.DB.Gruppi;
 import Model.DB.Utenti;
 

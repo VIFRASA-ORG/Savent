@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.EventiTab.CreazioneEvento;
+package com.vitandreasorino.savent.Utenti.EventiTab.CreazioneEvento;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,14 +26,9 @@ import android.widget.Toast;
 
 import com.vitandreasorino.savent.R;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import Helper.AuthHelper;
 import Helper.ImageHelper;

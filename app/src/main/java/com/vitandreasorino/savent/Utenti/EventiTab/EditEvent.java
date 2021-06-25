@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.EventiTab;
+package com.vitandreasorino.savent.Utenti.EventiTab;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,7 +7,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ReceiverCallNotAllowedException;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
@@ -28,17 +27,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.vitandreasorino.savent.EventiTab.CreazioneEvento.MapActivity;
+import com.vitandreasorino.savent.Utenti.EventiTab.CreazioneEvento.MapActivity;
 import com.vitandreasorino.savent.R;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
@@ -46,7 +40,6 @@ import Helper.ImageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureResult;
 import Model.DB.Eventi;
-import Model.DB.GenericUser;
 import Model.DB.Gruppi;
 import Model.DB.Utenti;
 import Model.Pojo.Evento;

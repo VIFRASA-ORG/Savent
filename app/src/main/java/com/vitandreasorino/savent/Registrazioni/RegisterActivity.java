@@ -23,7 +23,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vitandreasorino.savent.HomeActivity;
+import com.vitandreasorino.savent.Utenti.HomeActivity;
 import com.vitandreasorino.savent.R;
 import com.vitandreasorino.savent.Registrazioni.RegistrazioniEnte.RegisterEnteActivity;
 

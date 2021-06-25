@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.EventiTab;
+package com.vitandreasorino.savent.Utenti.EventiTab;
 
 import android.app.Activity;
 import android.content.Context;

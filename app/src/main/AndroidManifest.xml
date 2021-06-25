@@ -21,17 +21,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Savent">
-        <activity android:name=".SelectPatientActivity" />
-        <activity android:name=".EventiTab.EditEvent"></activity>
+        <activity android:name=".Enti.AddSwabTab.SelectPatientActivity" />
+        <activity android:name=".Utenti.EventiTab.EditEvent"></activity>
         <activity
-            android:name=".GruppiTab.CreazioneGruppo.AddContacts"
+            android:name=".Utenti.GruppiTab.CreazioneGruppo.AddContacts"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".GruppiTab.CreazioneGruppo.AddGroup" />
-        <activity android:name=".GruppiTab.GroupDetailActivity" />
-        <activity android:name=".EventiTab.CreazioneEvento.MapActivity" />
-        <activity android:name=".EventiTab.CreazioneEvento.NewEvent" />
-        <activity android:name=".AccountTab.ChangeCredentialAccountActivity" />
-        <activity android:name=".EventiTab.EventDetailActivity" />
+        <activity android:name=".Utenti.GruppiTab.CreazioneGruppo.AddGroup" />
+        <activity android:name=".Utenti.GruppiTab.GroupDetailActivity" />
+        <activity android:name=".Utenti.EventiTab.CreazioneEvento.MapActivity" />
+        <activity android:name=".Utenti.EventiTab.CreazioneEvento.NewEvent" />
+        <activity android:name=".Utenti.AccountTab.ChangeCredentialAccountActivity" />
+        <activity android:name=".Utenti.EventiTab.EventDetailActivity" />
         <activity android:name=".Registrazioni.RegistrazioniEnte.RegisterEnteActivity" />
         <activity android:name=".Registrazioni.RegisterActivity" />
         <activity android:name=".SplashActivity">
@@ -43,8 +43,8 @@
         </activity>
         <activity android:name=".LogSingInActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".HomeActivityEnte"/>
+        <activity android:name=".Utenti.HomeActivity" />
+        <activity android:name=".Enti.HomeActivityEnte"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

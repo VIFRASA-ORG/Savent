@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.GruppiTab.CreazioneGruppo;
+package com.vitandreasorino.savent.Utenti.GruppiTab.CreazioneGruppo;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.vitandreasorino.savent.GruppiTab.ComponentGroupAdapter;
-import com.vitandreasorino.savent.GruppiTab.GroupDetailActivity;
+import com.vitandreasorino.savent.Utenti.GruppiTab.ComponentGroupAdapter;
+import com.vitandreasorino.savent.Utenti.GruppiTab.GroupDetailActivity;
 import com.vitandreasorino.savent.R;
 
 import java.io.File;

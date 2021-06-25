@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.EventiTab;
+package com.vitandreasorino.savent.Utenti.EventiTab;
 
 
 import android.content.Intent;
@@ -16,7 +16,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.vitandreasorino.savent.EventiTab.CreazioneEvento.NewEvent;
+import com.vitandreasorino.savent.Utenti.EventiTab.CreazioneEvento.NewEvent;
 import com.vitandreasorino.savent.R;
 
 public class EventFragment extends Fragment {
