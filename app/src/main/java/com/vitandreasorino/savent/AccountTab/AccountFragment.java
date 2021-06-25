@@ -56,6 +56,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     TextView textViewChangeCredential;
 
     EditText editTextNome, editTextCognome, editTextPhone;
+    EditText editTextCodiceFiscale;
     Button buttonSaveData;
     ImageView imageViewCalendar;
     ProgressBar progressBar;
@@ -85,6 +86,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         editTextCognome = (EditText) rootView.findViewById(R.id.editTextCognome);
         editTextNome = (EditText) rootView.findViewById(R.id.editTextNome);
         editTextPhone = (EditText) rootView.findViewById(R.id.editTexPhone);
+        editTextCodiceFiscale = rootView.findViewById(R.id.editTextCodiceFiscale);
         textViewtBirth = (TextView) rootView.findViewById(R.id.editTextBirth);
 
         buttonSaveData = (Button) rootView.findViewById(R.id.buttonSaveData);
@@ -137,12 +139,66 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         editTextCognome.addTextChangedListener(textWatcher);
         editTextNome.addTextChangedListener(textWatcher);
         editTextPhone.addTextChangedListener(textWatcher);
+        editTextCodiceFiscale.addTextChangedListener(textWatcher);
 
         editTextPhone.setOnFocusChangeListener(this);
         editTextNome.setOnFocusChangeListener(this);
         editTextCognome.setOnFocusChangeListener(this);
+        editTextCodiceFiscale.setOnFocusChangeListener(this);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if(savedInstanceState != null){
+            newSelectedImage = null;
+            newSelectedDate = Calendar.getInstance();
+        }
+
+        disableAllComponent();
+
+        //Download all the user informations
+        Utenti.getUser(AuthHelper.getUserId(),closureRes -> {
+            if(closureRes != null){
+                userModel = closureRes;
+                editTextNome.setText(closureRes.getNome());
+                editTextCognome.setText(closureRes.getCognome());
+                editTextPhone.setText(closureRes.getNumeroDiTelefono());
+                textViewtBirth.setText(closureRes.getNeutralData());
+                newSelectedDate.setTime(closureRes.getDataNascita());
+                editTextCodiceFiscale.setText(userModel.getCodiceFiscale());
+
+                switch (closureRes.getGenere()){
+                    case Utente.MALE:
+                        radioButtonMaleProfile.setChecked(true);
+                        break;
+                    case Utente.FEMALE:
+                        radioButtonFemaleProfile.setChecked(true);
+                        break;
+                    case Utente.UNDEFINED:
+                        radioButtonUndefinedProfile.setChecked(true);
+                        break;
+                }
+
+                if(userModel.getIsProfileImageUploaded()){
+                    Utenti.downloadUserImage(new ClosureResult<File>() {
+                        @Override
+                        public void closure(File result) {
+                            if(result != null){
+                                imageViewProfile.setImageURI(Uri.fromFile(result));
+                            }
+                        }
+                    });
+                }
+
+                enableAllComponent();
+                checkSaveButtonActivation();
+            }
+        });
+
     }
 
     @Override
@@ -180,7 +236,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
 
         Calendar storedDate = Calendar.getInstance();
         storedDate.setTime(userModel.getDataNascita());
-        if(!editTextNome.getText().toString().equals(userModel.getNome()) || !editTextCognome.getText().toString().equals(userModel.getCognome()) || !editTextPhone.getText().toString().equals(userModel.getNumeroDiTelefono())
+        if(!editTextCodiceFiscale.getText().toString().equalsIgnoreCase(userModel.getCodiceFiscale()) || !editTextNome.getText().toString().equals(userModel.getNome()) || !editTextCognome.getText().toString().equals(userModel.getCognome()) || !editTextPhone.getText().toString().equals(userModel.getNumeroDiTelefono())
             || !getSelectedGenere().equals(userModel.getGenere()) || newSelectedImage != null ||
             storedDate.get(Calendar.YEAR) != newSelectedDate.get(Calendar.YEAR) || storedDate.get(Calendar.MONTH) != newSelectedDate.get(Calendar.MONTH) || storedDate.get(Calendar.DAY_OF_MONTH) != newSelectedDate.get(Calendar.DAY_OF_MONTH)){
             buttonSaveData.setEnabled(true);
@@ -196,12 +252,13 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     private boolean checkAllNewValues(){
         boolean flag = true;
 
-        String nome,cognome,phoneNumber;
+        String nome,cognome,phoneNumber, codiceFiscale;
         nome = editTextNome.getText().toString();
         cognome = editTextCognome.getText().toString();
         phoneNumber = editTextPhone.getText().toString();
+        codiceFiscale = editTextCodiceFiscale.getText().toString().toUpperCase();
 
-        if( !validazioneCognome(cognome) || !validazioneNome(nome) || !validazioneTelefono(phoneNumber)){
+        if( !validazioneCognome(cognome) || !validazioneNome(nome) || !validazioneTelefono(phoneNumber) || !validazioneCodiceFiscale(codiceFiscale)){
             if(validazioneNome(nome) == false) {
                 editTextNome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 flag = false;
@@ -222,6 +279,13 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
             }else{
                 editTextPhone.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
+
+            if(validazioneCodiceFiscale(codiceFiscale) == false) {
+                editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                flag = false;
+            }else{
+                editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
+            }
         }
 
         return flag;
@@ -237,6 +301,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         editTextPhone.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextCognome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextNome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
+        editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
     }
 
     /**
@@ -257,7 +322,18 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
             if(!editTextPhone.getText().toString().equals(userModel.getNumeroDiTelefono())){
                 GenericUser.isPhoneNumberAlreadyTaken(editTextPhone.getText().toString(),closureBool -> {
                     if(!closureBool){
-                        updateFieldToServer();
+
+                        Utenti.isFiscalCodeAlreadyUsed(editTextCodiceFiscale.getText().toString().toUpperCase(), isTaken -> {
+                            if(isTaken){
+                                editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                                enableAllComponent();
+                                buttonSaveData.setEnabled(true);
+                                Toast.makeText(getContext(),R.string.fiscalCodeAlreadyTaken,Toast.LENGTH_LONG).show();
+                                return;
+                            }else{
+                                updateFieldToServer();
+                            }
+                        });
                     }else{
                         editTextPhone.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                         enableAllComponent();
@@ -297,6 +373,12 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         if(!editTextPhone.getText().toString().equals(userModel.getNumeroDiTelefono())){
             listOfUpdates.add(Utenti.NUMERO_TELEFONO_FIELD);
             listOfUpdates.add(editTextPhone.getText().toString());
+        }
+
+        //codice fiscale
+        if(!editTextCodiceFiscale.getText().toString().equalsIgnoreCase(userModel.getCodiceFiscale())){
+            listOfUpdates.add(Utenti.CODICE_FISCALE_FIELD);
+            listOfUpdates.add(editTextCodiceFiscale.getText().toString().toUpperCase());
         }
 
         //data di nascita
@@ -382,6 +464,26 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         userModel.setCognome(editTextCognome.getText().toString());
         userModel.setGenere(getSelectedGenere());
         userModel.setDataNascita(newSelectedDate.getTime());
+        userModel.setCodiceFiscale(editTextCodiceFiscale.getText().toString().toUpperCase());
+    }
+
+    /**
+     * Controlla che la stringa in input sia conforme alla formattazione e alla lunghezza
+     * di un comune codice fiscale.
+     * @param controlloCodiceFiscaleFreelance stringa da controllare
+     * @return ritorna true se la stringa è formattata correttamente, altrimenti false
+     */
+    public boolean validazioneCodiceFiscale(String controlloCodiceFiscaleFreelance) {
+
+        if(controlloCodiceFiscaleFreelance == null)  {
+            return false;
+        }
+
+        Pattern p = Pattern.compile("[a-zA-Z]{6}\\d\\d[a-zA-Z]\\d\\d[a-zA-Z]\\d\\d\\d[a-zA-Z]", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(controlloCodiceFiscaleFreelance);
+        boolean matchTrovato = m.matches();
+
+        return matchTrovato;
     }
 
     /**
@@ -484,57 +586,6 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         picker.show();
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        if(savedInstanceState != null){
-            newSelectedImage = null;
-            newSelectedDate = Calendar.getInstance();
-        }
-
-        disableAllComponent();
-
-        //Download all the user informations
-        Utenti.getUser(AuthHelper.getUserId(),closureRes -> {
-            if(closureRes != null){
-                userModel = closureRes;
-                editTextNome.setText(closureRes.getNome());
-                editTextCognome.setText(closureRes.getCognome());
-                editTextPhone.setText(closureRes.getNumeroDiTelefono());
-                textViewtBirth.setText(closureRes.getNeutralData());
-                newSelectedDate.setTime(closureRes.getDataNascita());
-
-                switch (closureRes.getGenere()){
-                    case Utente.MALE:
-                        radioButtonMaleProfile.setChecked(true);
-                        break;
-                    case Utente.FEMALE:
-                        radioButtonFemaleProfile.setChecked(true);
-                        break;
-                    case Utente.UNDEFINED:
-                        radioButtonUndefinedProfile.setChecked(true);
-                        break;
-                }
-
-                if(userModel.getIsProfileImageUploaded()){
-                    Utenti.downloadUserImage(new ClosureResult<File>() {
-                        @Override
-                        public void closure(File result) {
-                            if(result != null){
-                                imageViewProfile.setImageURI(Uri.fromFile(result));
-                            }
-                        }
-                    });
-                }
-
-                enableAllComponent();
-                checkSaveButtonActivation();
-            }
-        });
-
-    }
-
     private void disableAllComponent(){
         editTextNome.setEnabled(false);
         editTextPhone.setEnabled(false);
@@ -544,6 +595,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         radioButtonFemaleProfile.setEnabled(false);
         textEditProfilePhoto.setEnabled(false);
         imageViewCalendar.setEnabled(false);
+        editTextCodiceFiscale.setEnabled(false);
 
         AnimationHelper.fadeIn(progressBar,1000);
     }
@@ -557,6 +609,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         radioButtonFemaleProfile.setEnabled(true);
         textEditProfilePhoto.setEnabled(true);
         imageViewCalendar.setEnabled(true);
+        editTextCodiceFiscale.setEnabled(true);
 
         AnimationHelper.fadeOut(progressBar,1000);
     }

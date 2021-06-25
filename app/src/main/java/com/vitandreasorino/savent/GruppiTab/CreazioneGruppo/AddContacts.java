@@ -14,26 +14,47 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vitandreasorino.savent.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import Model.ContactModel;
+import Model.Pojo.ContactModel;
+import Model.DB.Utenti;
+import Model.Pojo.Utente;
 
 
 public class AddContacts extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
+    public static final String EXTRA_ARRAY_CHECKED_CONTACTS = "checkedContacts";
+
+
     RecyclerView recyclerView;
     SearchView searchView;
+
     ArrayList<ContactModel> arrayList = new ArrayList<ContactModel>();
+    ArrayList<Utente> utentiList = new ArrayList<>();
+    List<Utente> alreadySelectedUsers;
+
     ContactAdapter adapter;
     LinearLayout emptyListLayout;
     LinearLayout recycleListLayout;
+
+    //Empty layout textView inside
+    TextView emptyLayoutNoContacts;
+    TextView emptyListNoPermissionGranted;
+    ProgressBar progressBar;
+
+    FloatingActionButton buttonSaveContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +67,23 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
         emptyListLayout =findViewById(R.id.emptyListLayout);
         recycleListLayout =findViewById(R.id.recycleListLayout);
 
+        emptyLayoutNoContacts = findViewById(R.id.noContacts);
+        emptyListNoPermissionGranted = findViewById(R.id.noPermission);
+        progressBar = findViewById(R.id.progressBar);
+
+        buttonSaveContacts = findViewById(R.id.buttonSaveContacts);
+
         searchView.setOnQueryTextListener(this);
+
+        setEmptyLayoutType(EmptyLayoutType.NORMAL);
+
+        //Setting the adapter
+        alreadySelectedUsers = getIntent().getParcelableArrayListExtra(EXTRA_ARRAY_CHECKED_CONTACTS);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new ContactAdapter(this, arrayList);
+        recyclerView.setAdapter(adapter);
+
 
         //Verifica il permesso
         checkPermission();
@@ -58,7 +95,6 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
         if (ContextCompat.checkSelfPermission(AddContacts.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             //Quando il permesso non è richiesto, richiedilo
 
-            Toast.makeText(AddContacts.this, "Permission denied!", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(AddContacts.this, new String[]{Manifest.permission.READ_CONTACTS}, 100);
         } else {
             //una volta ottenuto il permesso, accedi ai dati in rubrica richiamando il metodo
@@ -72,11 +108,15 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
      */
     private void getContactList() {
 
+        setEmptyLayoutType(EmptyLayoutType.DOWNLOADING);
+
         Uri uri = ContactsContract.Contacts.CONTENT_URI;
         //Ordina in modo crescente
         String sort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
         //Inizializza il cursore
         Cursor cursor = getContentResolver().query(uri, null, null, null, sort);
+
+        ArrayList<ContactModel> tempArrayList = new ArrayList<ContactModel>();
 
         //Verifica condizioni
         if (cursor.getCount() > 0) {
@@ -84,25 +124,21 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
             while (cursor.moveToNext()) {
                 //Il cursore si muove verso il successivo, e ottiene l'id del contatto e il nome
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
                 Uri uriPhone = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-
                 String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
-
                 Cursor phoneCursor = getContentResolver().query(uriPhone, null, selection, new String[]{id}, null);
-
 
                 if (phoneCursor.moveToNext()) {
                     String number = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    number = PhoneNumberUtils.normalizeNumber(number);
 
                     ContactModel model = new ContactModel();
                     model.setName(name);
                     model.setNumber(number);
                     model.setId(id);
                     //Add model in array list
-                    arrayList.add(model);
+                    tempArrayList.add(model);
                     //Close phone cursor
                     phoneCursor.close();
                 }
@@ -111,27 +147,82 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
             cursor.close();
         }
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ContactAdapter(this, arrayList);
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        //Checking if the contact list is empty
+        if(tempArrayList.size() == 0){
+            setEmptyLayoutType(EmptyLayoutType.NORMAL);
+            return;
+        }
 
-        toggleEmptyLayout(arrayList.size() == 0);
+        //Download all the users from firebase with those phone numbers
+        Utenti.searchContactsInPhoneBooks(tempArrayList, listOfUsers -> {
+            for(Utente u : listOfUsers){
+                //Adding all contact with an active account on the servers to the listView adapter.
+                int index = tempArrayList.lastIndexOf(new ContactModel(u.getNumeroDiTelefono()));
+                if(index >= 0){
+                    ContactModel c = tempArrayList.get(index);
+                    c.setDocumentId(u.getId());
+                    arrayList.add(c);
+                    utentiList.add(u);
+                }
+            }
+
+            if(arrayList.size() == 0) setEmptyLayoutType(EmptyLayoutType.NORMAL);
+            else setEmptyLayoutType(EmptyLayoutType.INVISIBLE);
+
+            checkAlreadySelected();
+            adapter.notifyDataSetChanged();
+        });
+
     }
 
     /**
-     * metodo che serve per decidere quale tipologia di lista vedere: nel caso in cui la rubrica
-     * abbia almeno un contatto si rende visibile la lista piena, altrimenti si visionerà la lista vuota
-     * contenente un messaggio che notifica l'assenza di contatti in rubrica
-     * @param isEmpty
+     * Method used to check the checkbox of the user already checked before.
      */
-    private void toggleEmptyLayout(boolean isEmpty){
-        if(isEmpty){
-            recycleListLayout.setVisibility(View.GONE);
-            emptyListLayout.setVisibility(View.VISIBLE);
-        }else{
-            recycleListLayout.setVisibility(View.VISIBLE);
-            emptyListLayout.setVisibility(View.GONE);
+    private void checkAlreadySelected(){
+        if(alreadySelectedUsers == null) return;
+        if(alreadySelectedUsers.size() == 0) return;
+
+        for(Utente selectedUser : alreadySelectedUsers){
+            int index = utentiList.lastIndexOf(selectedUser);
+            if(index >= 0){
+                arrayList.get(index).setChecked(true);
+            }
+        }
+    }
+
+    /**
+     * Showing the list view or the emptyView based the number of result from the cantact list and from the server.
+     *
+     * @param newType
+     */
+    private void setEmptyLayoutType(EmptyLayoutType newType){
+        switch (newType){
+            case NORMAL:
+                //This is tha case in which show only the message of empty list
+                recycleListLayout.setVisibility(View.GONE);
+                emptyListLayout.setVisibility(View.VISIBLE);
+                emptyLayoutNoContacts.setVisibility(View.VISIBLE);
+                emptyListNoPermissionGranted.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                break;
+            case DOWNLOADING:
+                recycleListLayout.setVisibility(View.GONE);
+                emptyListLayout.setVisibility(View.VISIBLE);
+                emptyLayoutNoContacts.setVisibility(View.GONE);
+                emptyListNoPermissionGranted.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                break;
+            case CONTACT_ACCESS_NOT_GRANTED:
+                recycleListLayout.setVisibility(View.GONE);
+                emptyListLayout.setVisibility(View.VISIBLE);
+                emptyLayoutNoContacts.setVisibility(View.GONE);
+                emptyListNoPermissionGranted.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                break;
+            case INVISIBLE:
+                emptyListLayout.setVisibility(View.GONE);
+                recycleListLayout.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
@@ -154,8 +245,9 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
         } else {
             //quando viene rifiutato il permesso si lancia un messaggio di avviso
             Toast.makeText(AddContacts.this, "Permission denied!", Toast.LENGTH_SHORT).show();
+
             //poi si rende la lista vuota visibile, poichè non è stato concesso il permesso
-            toggleEmptyLayout(true);
+            setEmptyLayoutType(EmptyLayoutType.CONTACT_ACCESS_NOT_GRANTED);
         }
 
     }
@@ -163,14 +255,19 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
     @Override
     public boolean onQueryTextSubmit(String query) {
         adapter.getFilter().filter(query);
-        toggleEmptyLayout(adapter.contactListFiltered.size()==0);
+
+        if(arrayList.size() == 0) setEmptyLayoutType(EmptyLayoutType.NORMAL);
+        else setEmptyLayoutType(EmptyLayoutType.INVISIBLE);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
         adapter.getFilter().filter(newText);
-        toggleEmptyLayout(adapter.contactListFiltered.size()==0);
+
+        if(arrayList.size() == 0) setEmptyLayoutType(EmptyLayoutType.NORMAL);
+        else setEmptyLayoutType(EmptyLayoutType.INVISIBLE);
+
         return false;
     }
 
@@ -178,9 +275,43 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
         super.onBackPressed();
         finish();
     }
-    public void onClickAddContacts(View view){
-        Intent createGroup = new Intent(this, AddGroup.class);
-        startActivity(createGroup);
 
+    public void onClickAddContacts(View view){
+        //adapter.
+        Intent i = new Intent();
+        i.putParcelableArrayListExtra(EXTRA_ARRAY_CHECKED_CONTACTS,getCheckedUsers());
+        setResult(RESULT_OK,i);
+        finish();
+    }
+
+    /**
+     * Find all the users selected.
+     *
+     * @return a list of Utente object indicating the selected objects.
+     */
+    private ArrayList<Utente> getCheckedUsers(){
+        List<ContactModel> checkedContacts = adapter.getCheckedContacts();
+        ArrayList<Utente> finalList = new ArrayList<>();
+
+        for(ContactModel c : checkedContacts){
+            int index = utentiList.lastIndexOf(new Utente(c.getDocumentId(),c.getNumber()));
+            if(index >= 0){
+                Utente u = utentiList.get(index);
+                finalList.add(u);
+            }
+        }
+
+        return finalList;
+    }
+
+
+    /**
+     * Various state of the user interface for this Activity
+     */
+    private enum EmptyLayoutType{
+        NORMAL,
+        CONTACT_ACCESS_NOT_GRANTED,
+        DOWNLOADING,
+        INVISIBLE;
     }
 }

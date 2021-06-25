@@ -4,16 +4,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import Helper.AuthHelper;
 import Helper.FirestoreHelper;
@@ -40,6 +39,33 @@ import Model.Pojo.*;
 public class Eventi extends ResultsConverter {
 
     private static final String EVENTO_COLLECTION = "Eventi";
+    public static final String NOME_FIELD = "nome";
+    public static final String DESCRIZIONE_FIELD = "descrizione";
+    public static final String MAX_PARTECIPANTI_FIELD = "numeroMassimoPartecipanti";
+    public static final String STATUS_SOGLIA_FIELD = "sogliaAccettazioneStatus";
+    public static final String LATITUDINE_FIELD = "latitudine";
+    public static final String LONGITUDINE_FIELD = "longitudine";
+    public static final String DATA_ORA_FIELD = "dataOra";
+    public static final String UTENTE_CREATORE_FIELD = "idUtenteCreatore";
+    public static final String GRUPPO_CREATORE_FIELD = "idGruppoCreatore";
+
+
+    /** Update the information of the GROUP.
+     *
+     * @param eventId the id of the event
+     * @param closureBool get called with true if the task is successful, false otherwise.
+     * @param firstField the name of the first field to update
+     * @param firstValue tha new value of the first field
+     * @param otherFieldAndValues an array of object with other field and values.
+     */
+    public static final void updateFields(String eventId,ClosureBoolean closureBool, String firstField, Object firstValue, Object... otherFieldAndValues ){
+        FirestoreHelper.db.collection(EVENTO_COLLECTION).document(eventId).update(firstField,firstValue,otherFieldAndValues).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(closureBool != null) closureBool.closure(task.isSuccessful());
+            }
+        });
+    }
 
 
     /**
@@ -239,21 +265,64 @@ public class Eventi extends ResultsConverter {
         }
     }
 
-    /** NOT WORKING YET
-     *  Return a list with all events created by the logged in user
+    /**
+     * Return a list with all the event created by all group given as parameter
+     *
+     * @param adminGroupIdList the list of all the group id.
+     * @param closureList invoked with the list of the event in case of success, null otherwise.
+     */
+    private static final void getAllEventCreatedByMyAdminGroup(List<String> adminGroupIdList, ClosureList<Evento> closureList){
+        if(AuthHelper.isLoggedIn()){
+            if(adminGroupIdList.size() == 0){
+                if(closureList != null) closureList.closure(null);
+                return;
+            }
+            FirestoreHelper.db.collection(EVENTO_COLLECTION).whereIn("idGruppoCreatore",adminGroupIdList).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    if(closureList != null) closureList.closure(convertResults(task,Evento.class));
+                }else{
+                    if(closureList != null) closureList.closure(null);
+                }
+            });
+        }
+    }
+
+    /**
+     * Return a list with all the events created by the user and created from all groups in which the user is a member.
      *
      * @param closureList the parameter list is null in case the task is not successful.
      */
     public static final void getAllMyEvents(ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
-            //Downloading all the event created by the user
             List<Evento> listEventi = new ArrayList<>();
 
+            //Downloading all the event created by the logged in user
             getMyEvent(list -> {
-                listEventi.addAll(list);
 
-                //Download all the event of all the groups in which the user is inside
+                //Adding them to the final list
+                if(list != null) listEventi.addAll(list);
 
+                //Downloading all the group of which the user is the admin or member.
+                Gruppi.getAllMyGroups(listOfGroup -> {
+
+                    //If the list is null
+                    //return only the one downloaded since now
+                    if(listOfGroup == null){
+                        if(closureList != null) closureList.closure(listEventi);
+                        return;
+                    }
+
+                    //Extrapolating only the id of the group to perform the query with the in operator
+                    List<String> adminGroupIdList = new ArrayList<>();
+                    for(Gruppo group : listOfGroup ) adminGroupIdList.add(group.getId());
+
+                    getAllEventCreatedByMyAdminGroup(adminGroupIdList, newEvents -> {
+                        if(newEvents != null) listEventi.addAll(newEvents);
+
+                        if(closureList != null) closureList.closure(listEventi);
+                    });
+
+                });
 
             });
         }
@@ -262,12 +331,18 @@ public class Eventi extends ResultsConverter {
     /** Add a new event to Firestore. The idEvent is randomly picked and the id inside the pojo object is avoided.
      *
      * @param e event to add to Firestore
-     * @param closureBool get called with true if the task is successful, false otherwise.
+     * @param closureResult get called with the event id created if the task is successful, false otherwise
      */
-    public static final void addNewEvent(Evento e, ClosureBoolean closureBool){
+    public static final void addNewEvent(Evento e, ClosureResult<String> closureResult){
 
         FirestoreHelper.db.collection(EVENTO_COLLECTION).add(e).addOnCompleteListener(task -> {
-            if (closureBool != null) closureBool.closure(task.isSuccessful());
+
+            if(task.isSuccessful()) {
+                if (closureResult != null) closureResult.closure(task.getResult().getId());
+            }else{
+                if (closureResult != null) closureResult.closure(null);
+            }
+
         });
     }
 

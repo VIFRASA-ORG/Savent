@@ -24,6 +24,7 @@
     <string name="registrazioneErrore">Si sono verificati degli errori.</string>
     <string name="account">Profilo</string>
     <string name="phoneNumberAlreadyTaken">Numero di telefono già usato!</string>
+    <string name="fiscalCodeAlreadyTaken">Codice fiscale già utilizzato!</string>
     <string name="searchPlaceholder">Cerca qui</string>
 
     //AccountFragment toast
@@ -31,7 +32,9 @@
     <string name="errorUpload">Qualcosa è andata storta durante l\'aggiornamento delle informazioni!</string>
     <string name="noUpdates">Nulla da aggiornare!</string>
 
-
+    <string name="greenStatusText">Ottimo</string>
+    <string name="yelloStatusText">A rischio</string>
+    <string name="redStatusText">Pericolo</string>
 
     <string name="TabBarHome">Home </string>
     <string name="TabBarGroups">Gruppi </string>
@@ -124,9 +127,17 @@
     <string name="labelCreaGruppo">Crea</string>
     <string name="nomeContatto">Nome contatto</string>
     <string name="numeroContatto">Numero di Telefono</string>
+    <string name="avvisoNoContattiSelezionati">Nessun contatto selezionato.</string>
     <string name="avvisoNoContatti">Non ci sono contatti!</string>
     <string name="bottoneAggiungiContatti">Aggiungi contatti</string>
+    <string name="add">Aggiungi</string>
+    <string name="groupCreated">Gruppo creato con successo!</string>
+    <string name="groupCreatedWithSomeDownloadError">Gruppo creato con successo! Tuttavia, qualcosa è andato storta durante il download delle informazioni dal server. Riprova più tardi.</string>
+    <string name="groupCreationError">Qualcosa è andato storta durante la creazione del gruppo!</string>
 
+    /pagina gruppo
+    <string name="noItemFound">Item non trovati</string>
+    <string name="addGroup">Nuovo gruppo</string>
 
     //Pagina dettaglio gruppo
     <string name="groupPageTitle">Gruppo</string>
@@ -136,12 +147,17 @@
     <string name="confirmPositive">Si</string>
     <string name="confirmNegative">No</string>
     <string name="confirmDelete">Utente Eliminato!</string>
-    <string name="noConfirmDelete">Utente no Eliminato!</string>
+    <string name="noConfirmDelete">Utente non eliminato!</string>
     <string name="titleLeaveGroup">Abbandona gruppo</string>
     <string name="msgLeaveGroup">Sei sicuro di voler abbandonare questo gruppo?</string>
     <string name="leaveSuccess">Hai abbandonato il gruppo con successo!</string>
     <string name="leaveInSuccess">Fai ancora parte di questo gruppo!</string>
     <string name="msgYouAreAdmin">Sei amm.re!</string>
+    <string name="deleteGroup">Elimina</string>
+    <string name="titleDeleteGroup">Elimina gruppo</string>
+    <string name="msgDeleteGroup">Sei sicuro di voler eliminare questo gruppo?</string>
+    <string name="deleteSuccess">Hai eliminato il gruppo con successo!</string>
+    <string name="deleteInsuccess">Eliminazione non riuscita!</string>
 
 
 
@@ -172,6 +188,11 @@
     <string name="eventoCreato">Evento creato!</string>
     <string name="accountCreatoreLabel">Account creatore</string>
     <string name="accountCreatore">Io</string>
+    <string name="luogoEvento">Inserire il luogo dove si svolgerà l\'evento</string>
+    <string name="messaggioDataOraEvento">Inserisci la data e l\'orario dell evento</string>
+
+    //Modifica evento
+    <string name="modificaEvento">Modifica evento</string>
 
 
     //Password recovery

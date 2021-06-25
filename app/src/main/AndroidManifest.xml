@@ -22,6 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Savent">
         <activity android:name=".SelectPatientActivity" />
+        <activity android:name=".EventiTab.EditEvent"></activity>
         <activity
             android:name=".GruppiTab.CreazioneGruppo.AddContacts"
             android:windowSoftInputMode="adjustNothing" />

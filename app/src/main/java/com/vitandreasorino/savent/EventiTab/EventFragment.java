@@ -96,9 +96,9 @@ class CollectionAdapter extends FragmentStateAdapter{
 
         switch (position){
             case 0:
-                return new FragmentSearchEvent(FragmentSearchEvent.SearchEventType.ALL_EVENT);
+                return new FragmentSearchEvent(FragmentSearchEvent.SearchEventType.ALL_EVENTS);
             case 1:
-                return new FragmentSearchEvent(FragmentSearchEvent.SearchEventType.MY_EVENT);
+                return new FragmentSearchEvent(FragmentSearchEvent.SearchEventType.MY_EVENTS);
             case 2:
                 return new FragmentMaps();
 

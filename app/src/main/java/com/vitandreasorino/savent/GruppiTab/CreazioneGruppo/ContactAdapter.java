@@ -18,14 +18,14 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.ContactModel;
+import Model.Pojo.ContactModel;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable{
 
-    List<ContactModel> contactListFiltered;
-    List<ContactModel> contactListAll;
-    Activity activity;
-    List<ContactModel> checkedContactList = new ArrayList<>();
+    private List<ContactModel> contactListFiltered;
+    private List<ContactModel> contactListAll;
+    private Activity activity;
+    private List<ContactModel> checkedContactList = new ArrayList<>();
 
 
     public ContactAdapter(Activity activity, ArrayList<ContactModel> arrayList) {
@@ -34,6 +34,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         this.activity = activity;
 
         notifyDataSetChanged();
+    }
+
+    public List<ContactModel> getCheckedContacts(){
+        return checkedContactList;
     }
 
     @NonNull
@@ -49,11 +53,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         ContactModel model = contactListFiltered.get(position);
-        //Set name
-        holder.tvName.setText(model.getName());
-        //set number
-        holder.tvNumber.setText(model.getNumber());
 
+        holder.tvName.setText(model.getName());
+        holder.tvNumber.setText(model.getNumber());
         holder.checkBox.setChecked(model.isChecked());
 
         if (model.isChecked()) {
@@ -66,7 +68,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                 model.setChecked(isChecked);
                 if(isChecked) checkedContactList.add(model);
                 else checkedContactList.remove(model);
-
             }
         });
     }

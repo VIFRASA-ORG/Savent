@@ -133,8 +133,8 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                 if(closureResult != null) creatorTextView.setText(closureResult);
             });
         }else if (!eventModel.getIdGruppoCreatore().isEmpty()){
-            Gruppi.getGroupName(eventModel.getIdGruppoCreatore(), closureResult -> {
-                if(closureResult != null) creatorTextView.setText(closureResult);
+            Gruppi.getGroupName(eventModel.getIdGruppoCreatore(), pair -> {
+                if(pair != null) creatorTextView.setText(pair.first);
             });
         }
 

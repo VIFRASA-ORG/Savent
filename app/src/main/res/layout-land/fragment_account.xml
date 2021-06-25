@@ -181,6 +181,28 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/textViewCodiceFiscale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_left_Horizontal_profile"
+                        android:layout_marginTop="@dimen/margin_size_profile"
+                        android:text="@string/codice_fiscale"
+                        android:textColor="#020202"
+                        android:textSize="45px" />
+
+                    <EditText
+                        android:id="@+id/editTextCodiceFiscale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="1dp"
+                        android:ems="10"
+                        android:enabled="true"
+                        android:gravity="center"
+                        android:textColor="@color/black" />
+
+                    <TextView
                         android:id="@+id/textGender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -36,12 +36,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.common.util.CollectionUtils;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vitandreasorino.savent.GruppiTab.CreazioneGruppo.AddContacts;
 import com.vitandreasorino.savent.LoginActivity;
 import com.vitandreasorino.savent.R;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,25 +64,34 @@ import Model.Pojo.Utente;
 
 public class GroupDetailActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, View.OnFocusChangeListener{
 
+    private static final int ADD_CONTACTS_RESULT = 11;
+
+    private boolean isModified = false;
+
     Gruppo groupModel;
+    Utente admin;
 
     ImageView imageViewDetailGroup;
     TextView editProfilePhotoGroup;
     Uri newSelectedImage;
-
     EditText nameDetailGroup;
     EditText descriptionDetailGroup;
     Button leaveGroup;
+    Button deleteGroup;
     View viewEditGroupPhoto;
-
     ListView componentListView;
     SearchView searchView;
-
     ImageView buttonSaveDataGroup;
-
     ProgressBar progressBar;
-
     ComponentGroupAdapter adapter;
+    ProgressBar progressBarPage;
+    TextView emptyTextView;
+    FloatingActionButton buttonAddUserToGroup;
+    TextView textAddUserToGroup;
+
+    ArrayList<Utente> groupComponentsOriginal = new ArrayList<>();
+    ArrayList<Utente> groupComponentsUpdated = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,12 +119,14 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             });
         }
 
-
+        /**
+         * Metodo attivabile tramite una pressione prolungata sul singolo componente del gruppo.
+         */
         componentListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // ricerca dell'id dell'utente che si vuole eliminare
+                // ricerca dell'utente che si vuole eliminare con relativo id e id del gruppo di appartenenza
                 Utente utente = (adapter.getFilteredData().size() == 0) ? adapter.getNoFilteredData().get(position): adapter.getFilteredData().get(position);
                 String idUser = utente.getId();
                 String idGroup = groupModel.getId();
@@ -138,7 +153,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                                         Toast.makeText(GroupDetailActivity.this, R.string.confirmDelete, Toast.LENGTH_LONG).show();
                                         adapter.removeItemFromList(utente);
                                         adapter.notifyDataSetChanged();
-
+                                        //aggiorna quanto cancelli un componente dal gruppo
+                                        updateIntent();
                                     }
                                 });
                             }
@@ -156,19 +172,61 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                     alertRemoveUser.create().show();
 
                 }
-
-
                 return false;
             }
         });
 
+        functionsBasedOnRole();
 
-        //Funzionalità in base al ruolo: se sono l'admin del gruppo posso modificare, altrimenti posso solo abbandonare
+        /**
+         * metodo che permette di selezionare la nuova immagine
+         */
+        editProfilePhotoGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent imageProfile = new Intent();
+                imageProfile.setType("image/*");
+                imageProfile.setAction(Intent.ACTION_GET_CONTENT);
+                // pass the constant to compare it
+                // with the returned requestCode
+                startActivityForResult(Intent.createChooser(imageProfile, "Select Picture"), 200);
+            }
+        });
+
+        /**
+         * pulsante SALVA che permette di salvare gli eventuali dati modificati
+         */
+        buttonSaveDataGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSaveDataButtonClick(v);
+            }
+        });
+
+        downloadDataList();
+        //settaggio delle informazioni
+        nameDetailGroup.addTextChangedListener(textWatcher);
+        descriptionDetailGroup.addTextChangedListener(textWatcher);
+        nameDetailGroup.setOnFocusChangeListener(this);
+        descriptionDetailGroup.setOnFocusChangeListener(this);
+        searchView.setOnQueryTextListener(this);
+
+        checkSaveButtonActivation();
+
+    }//fine onCreate
+
+    /**
+     * Metodo che permette di attivare e disattivare le funzioni in base al ruolo di appartenenza
+     */
+    private void functionsBasedOnRole() {
+
         if(groupModel.getIdAmministratore().equals(AuthHelper.getUserId())){
-
-            leaveGroup.setEnabled(false);
-            leaveGroup.setVisibility(View.INVISIBLE);
-
+            deleteGroup.setEnabled(true);
+            deleteGroup.setVisibility(View.VISIBLE);
+            textAddUserToGroup.setEnabled(true);
+            textAddUserToGroup.setVisibility(View.VISIBLE);
+            buttonAddUserToGroup.setEnabled(true);
+            buttonAddUserToGroup.setVisibility(View.VISIBLE);
         } else {
 
             leaveGroup.setEnabled(true);
@@ -181,33 +239,35 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             buttonSaveDataGroup.setEnabled(false);
             buttonSaveDataGroup.setVisibility(View.INVISIBLE);
         }
+    }
 
-        /**
-         * metodo che permette di selezionare la nuova immagine
-         */
-        editProfilePhotoGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    /**
+     * metodo che indica che tale modifica è andata a buon fine
+     */
+    private void updateIntent() {
+        Intent i = new Intent();
+        setResult(RESULT_OK, i);
+    }
 
-                Intent imageProfile = new Intent();
-                imageProfile.setType("image/*");
-                imageProfile.setAction(Intent.ACTION_GET_CONTENT);
-                // pass the constant to compare it
-                // with the returned requestCode
-                startActivityForResult(Intent.createChooser(imageProfile, "Select Picture"), 200);
-            }
-        });
+    /**
+     * metodo che permette di visualizzare la lista seè piena o di non visualizzarla se è vuota
+     * @param isDownloading
+     */
+    private void toggleDownloadingElements(boolean isDownloading){
+        if(isDownloading){
+            emptyTextView.setVisibility(View.GONE);
+            AnimationHelper.fadeIn(progressBarPage,0);
+        }else{
+            AnimationHelper.fadeOut(progressBarPage,0);
+            emptyTextView.setVisibility(View.VISIBLE);
+        }
+    }
 
-        /**
-         * bottone che permette di salvare gli eventuali dati modificati
-         */
-        buttonSaveDataGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSaveDataButtonClick(v);
-            }
-        });
-
+    /**
+     * metodo che carica le info da db è nel momento di caricamento visualizza la progressbar
+     */
+    private void downloadDataList() {
+        toggleDownloadingElements(true);
 
         //istanzia l'adapter personalizzato
         adapter = new ComponentGroupAdapter(this, groupModel.getIdAmministratore());
@@ -219,14 +279,17 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
             for(String id : groupModel.getIdComponenti()){
 
-                Utenti.getUser(id, closureResult -> {
-                    if(closureResult != null){
-                        adapter.addItemToList(closureResult);
+                Utenti.getUser(id, utente -> {
+                    if(utente != null){
+                        if(utente.getId().equals(AuthHelper.getUserId())) admin = utente;
+                        adapter.addItemToList(utente);
+                        groupComponentsOriginal.add(utente);
+                        groupComponentsUpdated.add(utente);
                         adapter.notifyDataSetChanged();
 
-                        if(closureResult.getIsProfileImageUploaded()){
-                            Utenti.downloadUserImage(closureResult.getId(), (ClosureResult<File>) file -> {
-                                closureResult.setProfileImageUri(Uri.fromFile(file));
+                        if(utente.getIsProfileImageUploaded()){
+                            Utenti.downloadUserImage(utente.getId(), (ClosureResult<File>) file -> {
+                                utente.setProfileImageUri(Uri.fromFile(file));
                                 adapter.notifyDataSetChanged();
                             });
                         }
@@ -234,19 +297,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                 });
             }
         }
-
-        nameDetailGroup.addTextChangedListener(textWatcher);
-        descriptionDetailGroup.addTextChangedListener(textWatcher);
-        nameDetailGroup.setOnFocusChangeListener(this);
-        descriptionDetailGroup.setOnFocusChangeListener(this);
-
-        searchView.setOnQueryTextListener(this);
-
-        checkSaveButtonActivation();
-
-
-
-    }//fine onCreate
+        toggleDownloadingElements(false);
+    }
 
 
     /**
@@ -289,6 +341,19 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             listOfUpdates.add(descriptionDetailGroup.getText().toString());
         }
 
+        //cariamento componenti
+        ArrayList<Utente> copy = new ArrayList<>(groupComponentsOriginal);
+        copy.retainAll(groupComponentsUpdated);
+
+        if(groupComponentsOriginal.size() != groupComponentsUpdated.size() || copy.size() != groupComponentsOriginal.size() ){
+            //modifiche
+            ArrayList<String> componentsId = new ArrayList<>();
+            for(Utente u : groupComponentsUpdated) componentsId.add(u.getId());
+
+            listOfUpdates.add(Gruppi.COMPONENTI_FIELD);
+            listOfUpdates.add(componentsId);
+        }
+
         if(listOfUpdates.size() == 0) {
             //Controlla se è necessario caricare l'immagine
             if(newSelectedImage != null){
@@ -297,6 +362,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                         enableAllComponent();
                         buttonSaveDataGroup.setEnabled(false);
                         newSelectedImage = null;
+                        isModified = true;
                         //toast relativo alla sola immagine del grouppo
                         Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                     }else{
@@ -334,6 +400,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                             enableAllComponent();
                             buttonSaveDataGroup.setEnabled(false);
                             newSelectedImage = null;
+                            isModified = true;
                             //tost quando si carica l'immagine
                             Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                         }else{
@@ -345,6 +412,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                     enableAllComponent();
                     buttonSaveDataGroup.setEnabled(false);
                     updateModel();
+                    isModified = true;
                     Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                 }
             }else{
@@ -372,7 +440,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     }
 
     /**
-     * Check all the new information entered in the nome, cognome and phoneNumer fields.
+     * Check all the new information entered in the nome, cognome  fields.
      * @return true if all the new values are of the correct pattern, false otherwise.
      */
     private boolean checkAllNewValues(){
@@ -437,19 +505,79 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         buttonSaveDataGroup = findViewById(R.id.buttonSaveDataGroup);
         progressBar = findViewById(R.id.progressBarGroup);
         leaveGroup = findViewById(R.id.leavegroupButton);
+        deleteGroup = findViewById(R.id.deleteGroupButton);
         viewEditGroupPhoto = findViewById(R.id.viewEditGroupPhoto);
+        buttonAddUserToGroup = findViewById(R.id.buttonAddUserToGroup);
+        textAddUserToGroup = findViewById(R.id.textAddUserToGroup);
+
+        progressBarPage = findViewById(R.id.progressBar);
+        emptyTextView = findViewById(R.id.emptyTextView);
+        componentListView.setEmptyView(findViewById(R.id.emptyResults));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isModified) setResult(RESULT_OK);
+
+        super.onBackPressed();
+        finish();
     }
 
     /**
-     * Evento tramite Click che permette di tornare indietro
+     * Evento tramite Click che permette di tornare indietro con eventauale aggiornamento
      * @param view
      */
     public void onBackButtonPressed(View view){
-        super.onBackPressed();
+        onBackPressed();
+    }
 
-        Intent i = new Intent();
-        setResult(RESULT_CANCELED, i);
-        finish();
+    /**
+     * tasto che permette all'admin di cancellare il gruppo da lui creato
+     * @param view
+     */
+    public void onDeleteGroup(View view) {
+        String myId = AuthHelper.getUserId();
+        String idGroup = groupModel.getId();
+        AlertDialog.Builder alertDelete = new  AlertDialog.Builder(GroupDetailActivity.this);
+        alertDelete.setTitle(R.string.titleDeleteGroup);
+        alertDelete.setMessage(R.string.msgDeleteGroup);
+
+        /**
+         * Se si è admin del gruppo allora posso visualizzare il dialog per poter eliminare tale gruppo
+         */
+        if(AuthHelper.getUserId().equals(groupModel.getIdAmministratore())){
+            alertDelete.setPositiveButton(R.string.confirmPositive, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //Elimina il tuo gruppo
+                    Gruppi.deleteGroup(groupModel.getId(), closureBool -> {
+                        if(closureBool){
+                            Toast.makeText(GroupDetailActivity.this, R.string.deleteSuccess, Toast.LENGTH_SHORT).show();
+
+                            Intent i = new Intent();
+                            setResult(RESULT_OK, i);
+                            finish();
+                        }
+                    });
+
+                  String.valueOf(groupModel.getIdComponenti().size());
+
+                }
+            });
+
+            //Nel caso di risposta negativa nel dialog, stampa solo
+            alertDelete.setNegativeButton(R.string.confirmNegative, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //tost conferma gruppo non eliminato!
+                    Toast.makeText(GroupDetailActivity.this, R.string.deleteInsuccess, Toast.LENGTH_SHORT).show();
+                }
+            });
+            alertDelete.create().show();
+
+        }
 
     }
 
@@ -528,8 +656,11 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     private void checkSaveButtonActivation(){
         if(groupModel == null) return;
 
+        ArrayList<Utente> copy = new ArrayList<>(groupComponentsOriginal);
+        copy.retainAll(groupComponentsUpdated);
+
         if(!nameDetailGroup.getText().toString().equals(groupModel.getNome()) || !descriptionDetailGroup.getText().toString().equals(groupModel.getDescrizione()) ||
-            newSelectedImage != null){
+            newSelectedImage != null || groupComponentsOriginal.size() != groupComponentsUpdated.size() || copy.size() != groupComponentsOriginal.size() ){
             buttonSaveDataGroup.setEnabled(true);
         } else {
             buttonSaveDataGroup.setEnabled(false);
@@ -541,11 +672,11 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == -1) {
+        if (requestCode == 200) {
 
             // compare the resultCode with the
             // SELECT_PICTURE constant
-            if (requestCode == 200) {
+            if (resultCode == RESULT_OK) {
                 // Get the url of the image from data
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
@@ -554,6 +685,31 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                     newSelectedImage = selectedImageUri;
                     checkSaveButtonActivation();
                 }
+            }
+        }else if(requestCode == ADD_CONTACTS_RESULT){
+            if(resultCode == RESULT_OK){
+                List<Utente> selectedUsers = data.getParcelableArrayListExtra(AddContacts.EXTRA_ARRAY_CHECKED_CONTACTS);
+
+                for(Utente u: selectedUsers){
+                    if(u.getIsProfileImageUploaded()){
+                        Utenti.downloadUserImage(u.getId(), new ClosureResult<File>() {
+                            @Override
+                            public void closure(File result) {
+                                u.setProfileImageUri(Uri.fromFile(result));
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+
+                if(adapter.getNoFilteredData().size() >= 1) adapter.mergeNewList(selectedUsers);
+                else adapter.addItemsToList(selectedUsers);
+
+                adapter.addItemToList(admin);
+                groupComponentsUpdated = adapter.getNoFilteredData();
+
+                adapter.notifyDataSetChanged();
+                checkSaveButtonActivation();
             }
         }
     }
@@ -585,143 +741,10 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
     public void buttonAddUserToGroup(View view) {
 
-        Toast.makeText(GroupDetailActivity.this, "Creare evento", Toast.LENGTH_LONG).show();
-
-
+        //Toast.makeText(GroupDetailActivity.this, "Creare evento", Toast.LENGTH_LONG).show();
+        Intent i = new Intent(this, AddContacts.class);
+        i.putParcelableArrayListExtra(AddContacts.EXTRA_ARRAY_CHECKED_CONTACTS,groupComponentsUpdated);
+        startActivityForResult(i,ADD_CONTACTS_RESULT);
     }
+
 }//fine classe GroupDetailActivity
-
-
-
-class ComponentGroupAdapter extends BaseAdapter implements Filterable {
-
-    private List<Utente> users = null;
-    private List<Utente> filteredData = null;
-    private Context context = null;
-    private String idAdmin;
-    ItemFilter mFilter = new ItemFilter();
-
-    //Costruttori
-    public ComponentGroupAdapter(Context context, String idAdmin) {
-        this.users = new ArrayList<>();
-        this.context=context;
-        this.filteredData = new ArrayList<>();
-        this.idAdmin = idAdmin;
-    }
-
-    public void addItemToList(Utente user){
-        users.add(user);
-        filteredData.add(user);
-    }
-
-    public void removeItemFromList(Utente user){
-
-        if(users.indexOf(user) >= 0) users.remove(user);
-        if(filteredData.indexOf(user) >= 0) filteredData.remove(user);
-
-    }
-
-    public List<Utente> getFilteredData(){
-        return filteredData;
-    }
-
-    public List<Utente> getNoFilteredData(){
-        return users;
-    }
-
-    @Override
-    public int getCount() {
-        return filteredData.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return filteredData.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View v, ViewGroup vg) {
-
-        //espandi il layout per ogni riga della lista
-        if (v == null) {
-            v = LayoutInflater.from(context).inflate(R.layout.component_group_list_row, null);
-        }
-
-        Utente utente = (Utente) getItem(position);
-        ImageView img = v.findViewById(R.id.imageViewComponent);
-        TextView txtName = v.findViewById(R.id.textViewNameComponet);
-        TextView txtSurname = v.findViewById(R.id.textViewSurnameComponet);
-        TextView textAdmin = v.findViewById(R.id.textAdminGroup);
-
-        //imposta il testo per il nome e la descrizione del gruppo
-        txtName.setText(utente.getNome());
-        txtSurname.setText(utente.getCognome());
-        if(utente.getProfileImageBitmap() != null) img.setImageBitmap(utente.getProfileImageBitmap());
-        else if(utente.getProfileImageUri() != null) img.setImageURI(utente.getProfileImageUri());
-        else img.setImageResource(R.drawable.profile_icon);
-
-        //imposta etichetta "Amm.re" nel caso un componente del gruppo è il creatore di tale del gruppo
-        if(utente.getId().equals(idAdmin)){
-            textAdmin.setVisibility(View.VISIBLE);
-        } else {
-            textAdmin.setVisibility(View.INVISIBLE);
-        }
-
-        //ritorna la vista per la riga corrente
-        return v;
-    }
-
-    @Override
-    public Filter getFilter() {
-        return mFilter;
-    }
-
-
-    private class ItemFilter extends Filter{
-
-        /**
-         * Metodo utilizzato per eseguire l'operazione di filtraggio.
-         * @param constraint
-         * @return
-         */
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-
-            FilterResults results = new FilterResults();
-            String filterString = constraint.toString().toLowerCase();
-            final List<Utente> list = users;
-            int count = list.size();
-            final ArrayList<Utente> nlist = new ArrayList<Utente>(count);
-
-            Utente filterable;
-
-            for (int i = 0; i < count; i++) {
-                filterable = list.get(i);
-                //permette di leggere dalla lista nomi e cognome per poter ricercarli attraverso la SearchView
-                if (filterable.getNome().toLowerCase().contains(filterString) || filterable.getCognome().toLowerCase().contains(filterString)) {
-                    nlist.add(filterable);
-                }
-            }
-
-            results.values = nlist;
-            results.count = nlist.size();
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredData = (ArrayList<Utente>) results.values;
-
-            // aggiorna l'elenco con i dati filtrati
-            notifyDataSetChanged();
-        }
-
-    }
-
-}//fine classe2

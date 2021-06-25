@@ -81,6 +81,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:orientation="vertical">
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -95,13 +96,11 @@
         android:layout_marginTop="30dp"
         android:paddingTop="20dp"
         android:background="@drawable/ic_box_rounded_top"
-        android:orientation="vertical"
-        android:weightSum="10">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.7"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -117,7 +116,9 @@
 
             <SearchView
                 android:id="@+id/searchContact"
-                android:layout_width="320dp"
+                android:layout_width="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:queryBackground="@null"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -130,59 +131,82 @@
         </LinearLayout>
 
 
-        <LinearLayout
+        <TableLayout
             android:id="@+id/recycleListLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7.3"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="visible">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ListContacts"
                 android:layout_width="match_parent"
-                android:layout_height="440dp"
+                android:layout_height="match_parent"
+                android:paddingBottom="80dp"
+                android:clipToPadding="false"
                 android:choiceMode="multipleChoice"
                 tools:listitem="@layout/contact_list_row" />
 
-        </LinearLayout>
+        </TableLayout>
 
         <LinearLayout
             android:id="@+id/emptyListLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7.3"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center|center_vertical"
             android:visibility="gone">
 
             <TextView
+                android:id="@+id/noContacts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/avvisoNoContatti"
                 android:textSize="23sp"
+                android:visibility="visible"
                 ></TextView>
+            <TextView
+                android:id="@+id/noPermission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact permission not granted!"
+                android:textSize="23sp"
+                ></TextView>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:orientation="vertical"
-           android:layout_weight="1"
-           android:gravity="center">
+    </LinearLayout>
 
-           <Button
-               android:id="@+id/buttonAddContacts"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_gravity="bottom|center"
-               android:backgroundTint="@color/blueButton"
-               android:text="@string/bottoneAggiungiContatti"
-               android:onClick="onClickAddContacts"
-               android:textColor="@color/white"
-               app:cornerRadius="@dimen/radius_button_register"
-               />
-       </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlHardcoded"
+        android:gravity="center"
+        android:layout_gravity="right"
+        android:orientation="vertical"
+        android:layout_marginTop="-95dp"
+        android:layout_marginRight="20dp">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonSaveContacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blueButton"
+            android:src="@drawable/ic_baseline_tick"
+            tools:ignore="ContentDescription"
+            android:onClick="onClickAddContacts"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:text="@string/add"
+            android:textColor="@color/blueButton"></TextView>
+
     </LinearLayout>
 
 

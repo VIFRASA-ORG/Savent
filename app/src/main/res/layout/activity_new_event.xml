@@ -73,16 +73,13 @@
                         android:textColor="@color/blueButton"
                         android:textSize="24dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:orientation="vertical">
-
-
-
-                </LinearLayout>
+                    android:orientation="vertical"/>
 
             </LinearLayout>
 
@@ -115,61 +112,74 @@
                 tools:layout_editor_absoluteX="1dp">
 
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="@dimen/dimension_icon"
-                android:layout_height="@dimen/dimension_icon"
-                android:layout_gravity="center"
-                android:outlineAmbientShadowColor="@color/black"
-                app:cardCornerRadius="75dp"
-                android:layout_marginTop="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/textView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/imageViewEvent"
+                <androidx.cardview.widget.CardView
                     android:layout_width="@dimen/dimension_icon"
                     android:layout_height="@dimen/dimension_icon"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/event_placeholder_icon" />
+                    android:layout_gravity="center"
+                    android:outlineAmbientShadowColor="@color/black"
+                    app:cardCornerRadius="75dp"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintBottom_toTopOf="@+id/textView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <View
-                    android:id="@+id/viewEvent2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="bottom"
-                    android:background="#CCFFFFFF" />
+                    <ImageView
+                        android:id="@+id/imageViewEvent"
+                        android:layout_width="@dimen/dimension_icon"
+                        android:layout_height="@dimen/dimension_icon"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/event_placeholder_icon" />
 
-                <TextView
-                    android:id="@+id/textViewEvent2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:text="@string/modificaProfilo"
-                    android:textColor="#0000FF"
-                    android:onClick="onClickPhotoEvent"/>
+                    <View
+                        android:id="@+id/viewEvent2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="bottom"
+                        android:background="#CCFFFFFF" />
 
-            </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/textViewEvent2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:text="@string/modificaProfilo"
+                        android:textColor="#0000FF"
+                        android:onClick="onClickPhotoEvent"/>
+
+                </androidx.cardview.widget.CardView>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"></LinearLayout>
-
-
-                <TextView
-                    android:id="@+id/textViewNomeAccountCreatore"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="@dimen/margin_left_textView_register"
                     android:layout_marginTop="@dimen/margin_size"
-                    android:text="@string/accountCreatoreLabel"
-                    android:textColor="@color/black" />
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textViewNomeAccountCreatore"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:layout_gravity="left"
+                        android:text="@string/accountCreatoreLabel"
+                        android:textColor="@color/black"
+                        android:layout_weight="7"
+
+                        />
+
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="250dp"
@@ -193,121 +203,207 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <TextView
-                android:id="@+id/textViewNomeEvento"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/nomeEvento"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/editTextNomeEvento"
-                android:layout_width="@dimen/width_editText_register"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:singleLine="true"
-                app:backgroundTint="@color/gray" />
-
-            <TextView
-                android:id="@+id/textViewDescrizione"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/descirzioneEvento"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/editTextTextMultiLine"
-                android:layout_width="@dimen/width_editText_register"
-                android:layout_height="wrap_content"
-                android:maxLength="200"
-                android:ems="10"
-                android:layout_gravity="center"
-                android:inputType="textMultiLine"
-                app:backgroundTint="@color/gray"/>
-
-            <TextView
-                android:id="@+id/textViewNumeroMassimoPartecipanti"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/maxPartecipantiEvento"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/editTextNuumeroMassimoPartecipanti"
-                android:layout_width="@dimen/width_editText_register"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:inputType="number"
-                android:singleLine="true"
-                app:backgroundTint="@color/gray"/>
-
-            <TextView
-                android:id="@+id/textViewStatusSanitario"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/statusSanitario"
-                android:textColor="@color/black" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:weightSum="5">
-
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"/>
-
-                <SeekBar
-                    android:id="@+id/seekBarStatusProgress"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:max="100"
-                    android:min="0"
-                    android:layout_weight="3"
                     android:layout_marginTop="@dimen/margin_size"
-                    android:layout_marginBottom="@dimen/margin_size"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textViewNomeEvento"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:layout_gravity="left"
+                        android:text="@string/nomeEvento"
+                        android:textColor="@color/black"
+                        android:layout_weight="7"/>
                     />
 
-                <TextView
-                    android:id="@+id/textViewContatoreStatus"
-                    android:layout_width="0dp"
+                </LinearLayout>
+
+
+                <EditText
+                    android:id="@+id/editTextNomeEvento"
+                    android:layout_width="@dimen/width_editText_register"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="0%"
-                    android:textColor="@color/black"
-                    android:layout_weight="1"/>
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"
+                    app:backgroundTint="@color/gray" />
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_size"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
 
-            <TextView
-                android:id="@+id/textViewDataEvento"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/dataEvento"
-                android:textColor="@color/black" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textViewDescrizione"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:textSize="16sp"
+                        android:text="@string/descirzioneEvento"
+                        android:textColor="@color/black"
+                        android:layout_weight="7"/>
+
+                    />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/editTextTextMultiLine"
+                    android:layout_width="@dimen/width_editText_register"
+                    android:layout_height="wrap_content"
+                    android:maxLength="200"
+                    android:ems="10"
+                    android:layout_gravity="center"
+                    android:inputType="textMultiLine"
+                    app:backgroundTint="@color/gray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_size"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textViewNumeroMassimoPartecipanti"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:textSize="16sp"
+                        android:text="@string/maxPartecipantiEvento"
+                        android:textColor="@color/black"
+                        android:layout_weight="7"/>
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/editTextNuumeroMassimoPartecipanti"
+                    android:layout_width="@dimen/width_editText_register"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    app:backgroundTint="@color/gray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_size"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textViewStatusSanitario"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:layout_gravity="left"
+                        android:text="@string/statusSanitario"
+                        android:layout_weight="7"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"/>
+
+                    <SeekBar
+                        android:id="@+id/seekBarStatusProgress"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:max="100"
+                        android:min="0"
+                        android:layout_weight="3"
+                        android:layout_marginTop="@dimen/margin_size"
+                        android:layout_marginBottom="@dimen/margin_size"
+                        />
+
+                    <TextView
+                        android:id="@+id/textViewContatoreStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="0%"
+                        android:textColor="@color/black"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_size"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textViewDataEvento"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:textSize="16sp"
+                        android:text="@string/dataEvento"
+                        android:layout_weight="7"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/textViewSelectDataEvent"
@@ -319,15 +415,31 @@
                     android:textSize="20dp"
                     app:backgroundTint="@color/gray" />
 
-            <TextView
-                android:id="@+id/textViewOrarioEvento"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/oraEvento"
-                android:textColor="@color/black" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_size"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textViewOrarioEvento"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:textSize="16sp"
+                        android:text="@string/oraEvento"
+                        android:layout_weight="7"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/textViewSelectTimeEvent"
@@ -339,22 +451,38 @@
                     android:textSize="20dp"
                     app:backgroundTint="@color/gray" />
 
-            <TextView
-                android:id="@+id/textViewPosizioneEvento"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/margin_left_textView_register"
-                android:layout_marginTop="@dimen/margin_size"
-                android:text="@string/posizioneEvento"
-                android:textColor="@color/black" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_size"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textViewPosizioneEvento"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:textSize="16sp"
+                        android:layout_weight="7"
+                        android:text="@string/posizioneEvento"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
 
                 <Button
                     android:id="@+id/buttonFragmentMappa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/blueButton"
                     android:text="@string/inserisciPosizioneEvento"

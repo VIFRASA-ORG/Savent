@@ -23,6 +23,7 @@
     <string name="registrazioneErrore">Errors during the registration.</string>
     <string name="account">Account</string>
     <string name="phoneNumberAlreadyTaken">Phone number already used!</string>
+    <string name="fiscalCodeAlreadyTaken">Fiscal code already used!</string>
     <string name="searchPlaceholder">Search here</string>
 
     //AccountFragment toast
@@ -30,6 +31,9 @@
     <string name="errorUpload">Something went wrong while updating the information!</string>
     <string name="noUpdates">Nothing to update!</string>
 
+    <string name="greenStatusText">Good</string>
+    <string name="yelloStatusText">At risk</string>
+    <string name="redStatusText">Danger</string>
 
     <string name="TabBarHome">Home </string>
     <string name="TabBarGroups">Groups </string>
@@ -114,7 +118,8 @@
     <string name="domicilio_fiscale">Tax domicile</string>
     <string name="sede_azienda">Headquarters</string>
 
-    <string name="aggiungi_contatto">Would you like to add?</string>
+    //Create group
+    <string name="aggiungi_contatto">Who would you like to add?</string>
     <string name="nuovoGruppo">New group</string>
     <string name="stringaContatti">Contacts:</string>
     <string name="selezionaContatti">Choose contacts</string>
@@ -122,9 +127,17 @@
     <string name="labelCreaGruppo">Create</string>
     <string name="nomeContatto">Name contact</string>
     <string name="numeroContatto">Phone number</string>
-    <string name="avvisoNoContatti">No contacts found!</string>
+    <string name="avvisoNoContattiSelezionati">No contacts selected!</string>
+    <string name="avvisoNoContatti">No contacts!</string>
     <string name="bottoneAggiungiContatti">Add contacts</string>
+    <string name="add">Add</string>
+    <string name="groupCreated">Group created successfully!</string>
+    <string name="groupCreatedWithSomeDownloadError">Group created successfully! However, something went wrong while downloading the information.Try later!</string>
+    <string name="groupCreationError">Something went wrong when creating the event!</string>
 
+    //pagina gruppo
+    <string name="noItemFound">No items found</string>
+    <string name="addGroup">New group</string>
 
     //Pagina dettaglio gruppo
     <string name="groupPageTitle">Group</string>
@@ -140,6 +153,11 @@
     <string name="leaveSuccess">You have successfully left the group!</string>
     <string name="leaveInSuccess">You are still part of this group!</string>
     <string name="msgYouAreAdmin">You are admin!</string>
+    <string name="deleteGroup">Delete</string>
+    <string name="titleDeleteGroup">Delete group</string>
+    <string name="msgDeleteGroup">Are you sure you want to delete this group?</string>
+    <string name="deleteSuccess">You have successfully eliminated the group!</string>
+    <string name="deleteInsuccess">Deletion failed!</string>
 
 
     //Modifica gruppo
@@ -167,6 +185,12 @@
     <string name="eventoCreato">Event created!</string>
     <string name="accountCreatoreLabel">Account creator</string>
     <string name="accountCreatore">Me</string>
+    <string name="luogoEvento">Enter the place where the event will take place</string>
+    <string name="messaggioDataOraEvento">Enter the data and time of the event</string>
+
+    //Modifica evento
+    <string name="modificaEvento">Edit event</string>
+
 
     //Password recovery
     <string name="pswRecoveryText">Password Recovery</string>

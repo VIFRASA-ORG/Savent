@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -14,6 +16,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 
 import com.vitandreasorino.savent.R;
 
@@ -74,14 +83,14 @@ public class AnimationHelper {
         view.setVisibility(View.VISIBLE);
 
         view.animate().alpha(0f)
-                .setDuration(duration)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        view.setVisibility(View.INVISIBLE);
-                    }
-                });
+            .setDuration(duration)
+            .setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    view.setVisibility(View.INVISIBLE);
+                }
+            });
     }
 
     /**
@@ -95,8 +104,64 @@ public class AnimationHelper {
         view.setVisibility(View.VISIBLE);
 
         view.animate().alpha(1f)
-                .setDuration(duration)
-                .setListener(null);
+            .setDuration(duration)
+            .setListener(null);
+    }
+
+    /**
+     * Switch between the selected image into the imageView and the given image.
+     * The switch takes place with a fade out/in animation.
+     *
+     * @param imageView the source imageView
+     * @param resId the resource id of the new image.
+     */
+    public static final void switchImageWithFadeAnimations(ImageView imageView, @DrawableRes int resId){
+        imageView.animate()
+            .alpha(0f)
+            .setDuration(100)
+            .setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) { }
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    imageView.setImageResource(resId);
+                    imageView.animate().alpha(1).setDuration(100);
+                }
+                @Override
+                public void onAnimationCancel(Animator animator) { }
+                @Override
+                public void onAnimationRepeat(Animator animator) { }
+            });
+    }
+
+    /**
+     * Switch between the actual text into the textView and the given new text.
+     * The switch takes places with a fade out/in animation.
+     * If color is set, the animation include also a text color change.
+     *
+     * @param textView the source textView
+     * @param resId the resource id of the new string.
+     * @param color the resources of the new color.
+     */
+    public static final void switchTextWithFadeAnimation(TextView textView, @StringRes int resId, @ColorRes Integer color){
+        textView.animate()
+            .alpha(0f)
+            .setDuration(100)
+            .setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) { }
+                @SuppressLint("ResourceAsColor")
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    textView.setText(resId);
+                    textView.animate().alpha(1).setDuration(100);
+                    if(color != null) textView.setTextColor(color);
+                }
+                @Override
+                public void onAnimationCancel(Animator animator) { }
+                @Override
+                public void onAnimationRepeat(Animator animator) { }
+            });
     }
 
 }
