@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.Utenti;
 
 
 import android.os.Bundle;
@@ -6,20 +6,16 @@ import android.view.LayoutInflater;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toolbar;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-
-import Helper.AuthHelper;
+import com.vitandreasorino.savent.R;
 
 
-public class HomeFragment extends Fragment {
+public class HomeTabFragment extends Fragment {
 
     @Nullable
     @Override

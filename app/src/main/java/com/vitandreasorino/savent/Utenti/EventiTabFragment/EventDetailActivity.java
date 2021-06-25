@@ -1,18 +1,12 @@
-package com.vitandreasorino.savent.EventiTab;
+package com.vitandreasorino.savent.Utenti.EventiTabFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.text.HtmlCompat;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,8 +22,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vitandreasorino.savent.R;
 
-import java.io.File;
-
 import Helper.AuthHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureResult;
@@ -38,7 +30,6 @@ import Model.DB.Gruppi;
 import Model.DB.Partecipazioni;
 import Model.DB.Utenti;
 import Model.Pojo.Evento;
-import Model.Pojo.Partecipazione;
 import Model.Pojo.Utente;
 
 public class EventDetailActivity extends AppCompatActivity implements OnMapReadyCallback {

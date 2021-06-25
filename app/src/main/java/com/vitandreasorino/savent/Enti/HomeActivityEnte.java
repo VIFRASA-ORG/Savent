@@ -1,24 +1,19 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.Enti;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.vitandreasorino.savent.AccountTab.AccountFragment;
-import com.vitandreasorino.savent.EventiTab.EventFragment;
-import com.vitandreasorino.savent.GruppiTab.GroupFragment;
-
-import Helper.AnimationHelper;
+import com.vitandreasorino.savent.Enti.AddSwabTabFragment.AddSwabFragment;
+import com.vitandreasorino.savent.R;
 
 public class HomeActivityEnte extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private HomeFragmentEnte homeFragmentEnte = new HomeFragmentEnte();
+    private HomeEnteTabFragment homeFragmentEnte = new HomeEnteTabFragment();
     private AddSwabFragment swabFragmentEnte = new AddSwabFragment();
     BottomNavigationView bottomNavigationEnte;
     Class previousFragmentClass = null;

@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.GruppiTab.CreazioneGruppo;
+package com.vitandreasorino.savent.Utenti.GruppiTabFragment.CreazioneGruppo;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;

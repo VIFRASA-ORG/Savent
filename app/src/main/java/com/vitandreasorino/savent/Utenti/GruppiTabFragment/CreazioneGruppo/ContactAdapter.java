@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.GruppiTab.CreazioneGruppo;
+package com.vitandreasorino.savent.Utenti.GruppiTabFragment.CreazioneGruppo;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

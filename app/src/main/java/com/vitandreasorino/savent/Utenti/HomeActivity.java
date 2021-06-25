@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.Utenti;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.vitandreasorino.savent.AccountTab.AccountFragment;
-import com.vitandreasorino.savent.EventiTab.EventFragment;
-import com.vitandreasorino.savent.GruppiTab.GroupFragment;
+import com.vitandreasorino.savent.Utenti.AccountTabFragment.AccountFragment;
+import com.vitandreasorino.savent.Utenti.EventiTabFragment.EventFragment;
+import com.vitandreasorino.savent.Utenti.GruppiTabFragment.GroupFragment;
+import com.vitandreasorino.savent.R;
 
 import Helper.AnimationHelper;
 
@@ -28,7 +29,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     Class previousFragmentClass = null;
     TopBarConfiguration previousConfiguration = TopBarConfiguration.BIG;
 
-    private HomeFragment homeFragment = new HomeFragment();
+    private HomeTabFragment homeFragment = new HomeTabFragment();
     private GroupFragment groupFragment = new GroupFragment();
     private AccountFragment accountFragment = new AccountFragment();
     private EventFragment eventFragment = new EventFragment();
@@ -47,7 +48,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         statusLogoTopLeft = (ImageView) findViewById(R.id.logoStatusHome1);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) statusLogoTopLeft.setAlpha(0f);
 
-        if(savedInstanceState == null) loadFragment(new HomeFragment());
+        if(savedInstanceState == null) loadFragment(new HomeTabFragment());
         else{
             boolean prevS = savedInstanceState.getBoolean("previousConfiguration_BIG");
             if(prevS == true) previousConfiguration = TopBarConfiguration.BIG;
@@ -83,7 +84,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         switch (item.getItemId()){
             case R.id.nav_home:
                 selectedFragment = homeFragment;
-                moveTopBar(TopBarConfiguration.BIG,HomeFragment.class);
+                moveTopBar(TopBarConfiguration.BIG, HomeTabFragment.class);
                 break;
             case R.id.nav_group:
                 selectedFragment = groupFragment;

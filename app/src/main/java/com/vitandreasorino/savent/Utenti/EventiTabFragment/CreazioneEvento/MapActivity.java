@@ -1,16 +1,12 @@
-package com.vitandreasorino.savent.EventiTab.CreazioneEvento;
+package com.vitandreasorino.savent.Utenti.EventiTabFragment.CreazioneEvento;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,8 +15,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vitandreasorino.savent.R;
-
-import Helper.ImageHelper;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 

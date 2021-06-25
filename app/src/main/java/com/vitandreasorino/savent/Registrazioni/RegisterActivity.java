@@ -11,11 +11,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -23,8 +20,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
-import com.vitandreasorino.savent.HomeActivity;
+import com.vitandreasorino.savent.Utenti.HomeActivity;
 import com.vitandreasorino.savent.R;
 import com.vitandreasorino.savent.Registrazioni.RegistrazioniEnte.RegisterEnteActivity;
 

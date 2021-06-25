@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.EventiTab.CreazioneEvento;
+package com.vitandreasorino.savent.Utenti.EventiTabFragment.CreazioneEvento;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +29,6 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
