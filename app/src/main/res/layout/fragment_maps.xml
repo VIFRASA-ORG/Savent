@@ -38,4 +38,17 @@
             android:textSize="20sp" />
     </LinearLayout>
 
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonMyPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/blueButton"
+        android:src="@drawable/ic_baseline_my_location_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ContentDescription"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

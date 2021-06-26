@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vitandreasorino.savent.R;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
 
     LinearLayout searchButtonLinearLayout;
     private boolean firstTimeRenderingTheMap = true;
+    private FloatingActionButton buttonMyPosition;
 
     MapView mapView;
     GoogleMap map;
@@ -77,6 +79,14 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
 
         //Setting up the event for the button used to search in the zone
         searchButtonLinearLayout = view.findViewById(R.id.searchInThisZoneLinearLayout);
+        buttonMyPosition = view.findViewById(R.id.buttonMyPosition);
+        buttonMyPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDeviceLocation();
+            }
+        });
+
         searchButtonLinearLayout.setOnClickListener(v -> {
             searchInThisZoneOnClick(v);
         });
@@ -172,7 +182,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
      * Move the map camera to the default location
      */
     private void moveToDefaultLocation(){
-        map.moveCamera(CameraUpdateFactory
+        map.animateCamera(CameraUpdateFactory
                 .newLatLngZoom(defaultLocation, MAP_CAMERA_ZOOM));
     }
 
@@ -187,7 +197,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
          */
         try {
             if (isLocationGranted) {
-                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+                @SuppressLint("MissingPermission") Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
@@ -195,7 +205,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
                             // Set the map's camera position to the current location of the device.
                             lastKnownLocation = task.getResult();
                             if (lastKnownLocation != null) {
-                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(lastKnownLocation.getLatitude(),
                                                 lastKnownLocation.getLongitude()), MAP_CAMERA_ZOOM));
 
@@ -208,7 +218,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
 
                             //Download all the event in the nearby of the default location.
                             showAllNearbyEvents(defaultLocation,MAP_NEARBY_RADIUS);
-                            map.getUiSettings().setMyLocationButtonEnabled(false);
+                            map.getUiSettings().setMyLocationButtonEnabled(true);
                         }
                     }
                 });
@@ -218,7 +228,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
 
                 //Download all the event in the nearby of the default location.
                 showAllNearbyEvents(defaultLocation,MAP_NEARBY_RADIUS);
-                map.getUiSettings().setMyLocationButtonEnabled(false);
+                map.getUiSettings().setMyLocationButtonEnabled(true);
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage(), e);
@@ -228,7 +238,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
     /**
      * Update the map ui component with the new parameter
      */
-    @SuppressLint("LongLogTag")
+    @SuppressLint({"LongLogTag", "MissingPermission"})
     private void updateLocationUi(){
         if(map == null) return;
         else{

@@ -3,10 +3,12 @@ package com.vitandreasorino.savent.Utenti;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -24,9 +26,9 @@ import Helper.AnimationHelper;
 import Model.DB.Utenti;
 
 
-public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity  {
 
-    HealthStatus actualHealtStatus = HealthStatus.NOT_DEFINED_YET;
+    HealthStatus actualHealthStatus = HealthStatus.NOT_DEFINED_YET;
 
     Toolbar topBar;
     LinearLayout imageAndStatusContainer;
@@ -36,13 +38,10 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     TextView textStatusHomeBig;
     TextView textStatusHomeSmall;
 
-    Class previousFragmentClass = null;
+    Class previousFragmentClass = HomeFragment.class;
     TopBarConfiguration previousConfiguration = TopBarConfiguration.BIG;
 
-    private HomeFragment homeFragment = new HomeFragment();
-    private GroupFragment groupFragment = new GroupFragment();
-    private AccountFragment accountFragment = new AccountFragment();
-    private EventFragment eventFragment = new EventFragment();
+    ViewPager2 viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,6 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
         //getting bottom navigation view and attaching the listener
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
-        navigation.setOnNavigationItemSelectedListener(this);
 
         topBar = (Toolbar) findViewById(R.id.toolbarStatusHome);
         imageAndStatusContainer = (LinearLayout) findViewById(R.id.imageAndStatusLayoutContainer);
@@ -61,14 +59,68 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         textStatusHomeSmall = findViewById(R.id.textStatusHomeSmall);
         textStatusHomeBig = findViewById(R.id.textStatusHomeBig);
 
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setSaveEnabled(false);
+        viewPager.setAdapter(new HomeFragmentAdapter(this));
+        viewPager.setUserInputEnabled(false);
+
+        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_home:
+                        moveTopBar(TopBarConfiguration.BIG,HomeFragment.class);
+                        viewPager.setCurrentItem(0,false);
+                        previousFragmentClass = HomeFragment.class;
+                        return true;
+                    case R.id.nav_group:
+                        moveTopBar(TopBarConfiguration.SMALL,GroupFragment.class);
+                        viewPager.setCurrentItem(1,false);
+                        previousFragmentClass = GroupFragment.class;
+                        return true;
+                    case R.id.nav_event:
+                        moveTopBar(TopBarConfiguration.SMALL,EventFragment.class);
+                        viewPager.setCurrentItem(2,false);
+                        previousFragmentClass = EventFragment.class;
+                        return true;
+                    case R.id.nav_account:
+                        moveTopBar(TopBarConfiguration.SMALL,AccountFragment.class);
+                        viewPager.setCurrentItem(3,false);
+                        previousFragmentClass = AccountFragment.class;
+                        return true;
+                }
+                return false;
+            }
+        });
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) statusLogoSmall.setAlpha(0f);
 
-        if(savedInstanceState == null) loadFragment(new HomeFragment());
-        else{
+        // Restore the previous state, in case a orientation change append
+        if(savedInstanceState != null){
             boolean prevS = savedInstanceState.getBoolean("previousConfiguration_BIG");
             if(prevS == true) previousConfiguration = TopBarConfiguration.BIG;
             else previousConfiguration = TopBarConfiguration.SMALL;
             reloadConfiguration();
+
+            String prevClass = savedInstanceState.getString("previousFragmentClass");
+            switch (prevClass){
+                case "HomeFragment":
+                    viewPager.setCurrentItem(0);
+                    navigation.setSelectedItemId(R.id.nav_home);
+                    break;
+                case "GroupFragment":
+                    viewPager.setCurrentItem(1);
+                    navigation.setSelectedItemId(R.id.nav_group);
+                    break;
+                case "EventFragment":
+                    viewPager.setCurrentItem(2);
+                    navigation.setSelectedItemId(R.id.nav_event);
+                    break;
+                case "AccountFragment":
+                    viewPager.setCurrentItem(3);
+                    navigation.setSelectedItemId(R.id.nav_account);
+                    break;
+            }
         }
 
         //Setting the listener to the logged in user.
@@ -81,6 +133,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("previousConfiguration_BIG",previousConfiguration == TopBarConfiguration.BIG);
+        outState.putString("previousFragmentClass",previousFragmentClass.getSimpleName());
     }
 
     /**
@@ -91,47 +144,47 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     @SuppressLint("ResourceType")
     private void setHealthStatusInView(int healthStatus){
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            if(healthStatus <= 33 && actualHealtStatus != HealthStatus.GREEN) {
+            if(healthStatus <= 33 && actualHealthStatus != HealthStatus.GREEN) {
                 //Green
                 if(previousConfiguration == TopBarConfiguration.SMALL) AnimationHelper.switchImageWithFadeAnimations(statusLogoSmall,R.drawable.green_status_icon);
                 else statusLogoSmall.setImageResource(R.drawable.green_status_icon);
 
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoBig,R.drawable.green_status_icon);
                 AnimationHelper.switchTextWithFadeAnimation(textStatusHomeBig,R.string.greenStatusText, null);
-                actualHealtStatus = HealthStatus.GREEN;
-            }else if(healthStatus > 33 && healthStatus <= 66 && actualHealtStatus != HealthStatus.YELLOW){
+                actualHealthStatus = HealthStatus.GREEN;
+            }else if(healthStatus > 33 && healthStatus <= 66 && actualHealthStatus != HealthStatus.YELLOW){
                 //Yellow
                 if(previousConfiguration == TopBarConfiguration.SMALL) AnimationHelper.switchImageWithFadeAnimations(statusLogoSmall,R.drawable.yellow_status_icon);
                 else statusLogoSmall.setImageResource(R.drawable.yellow_status_icon);
 
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoBig,R.drawable.yellow_status_icon);
                 AnimationHelper.switchTextWithFadeAnimation(textStatusHomeBig,R.string.yelloStatusText,null);
-                actualHealtStatus = HealthStatus.YELLOW;
-            }else if(healthStatus > 66 && healthStatus <= 100 && actualHealtStatus != HealthStatus.RED){
+                actualHealthStatus = HealthStatus.YELLOW;
+            }else if(healthStatus > 66 && healthStatus <= 100 && actualHealthStatus != HealthStatus.RED){
                 //Red
                 if(previousConfiguration == TopBarConfiguration.SMALL) AnimationHelper.switchImageWithFadeAnimations(statusLogoSmall,R.drawable.red_status_icon);
                 else statusLogoSmall.setImageResource(R.drawable.red_status_icon);
 
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoBig,R.drawable.red_status_icon);
                 AnimationHelper.switchTextWithFadeAnimation(textStatusHomeBig,R.string.redStatusText,null);
-                actualHealtStatus = HealthStatus.RED;
+                actualHealthStatus = HealthStatus.RED;
             }
         }else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            if(healthStatus <= 33 && actualHealtStatus != HealthStatus.GREEN) {
+            if(healthStatus <= 33 && actualHealthStatus != HealthStatus.GREEN) {
                 //Green
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoSmall,R.drawable.green_status_icon);
                 AnimationHelper.switchTextWithFadeAnimation(textStatusHomeSmall,R.string.greenStatusText,null);
-                actualHealtStatus = HealthStatus.GREEN;
-            }else if(healthStatus > 33 && healthStatus <= 66 && actualHealtStatus != HealthStatus.YELLOW){
+                actualHealthStatus = HealthStatus.GREEN;
+            }else if(healthStatus > 33 && healthStatus <= 66 && actualHealthStatus != HealthStatus.YELLOW){
                 //Yellow
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoSmall,R.drawable.yellow_status_icon);
                 AnimationHelper.switchTextWithFadeAnimation(textStatusHomeSmall,R.string.yelloStatusText,null);
-                actualHealtStatus = HealthStatus.YELLOW;
-            }else if(healthStatus > 66 && healthStatus <= 100 && actualHealtStatus != HealthStatus.RED){
+                actualHealthStatus = HealthStatus.YELLOW;
+            }else if(healthStatus > 66 && healthStatus <= 100 && actualHealthStatus != HealthStatus.RED){
                 //Red
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoSmall,R.drawable.red_status_icon);
                 AnimationHelper.switchTextWithFadeAnimation(textStatusHomeSmall,R.string.redStatusText,null);
-                actualHealtStatus = HealthStatus.RED;
+                actualHealthStatus = HealthStatus.RED;
             }
         }
     }
@@ -153,44 +206,6 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment selectedFragment = null;
-
-        switch (item.getItemId()){
-            case R.id.nav_home:
-                selectedFragment = homeFragment;
-                moveTopBar(TopBarConfiguration.BIG,HomeFragment.class);
-                break;
-            case R.id.nav_group:
-                selectedFragment = groupFragment;
-                moveTopBar(TopBarConfiguration.SMALL,GroupFragment.class);
-                break;
-            case R.id.nav_event:
-                selectedFragment = eventFragment;
-                moveTopBar(TopBarConfiguration.SMALL,EventFragment.class);
-                break;
-            case R.id.nav_account:
-                selectedFragment = accountFragment;
-                moveTopBar(TopBarConfiguration.SMALL,AccountFragment.class);
-                break;
-        }
-        previousFragmentClass = selectedFragment.getClass();
-        return loadFragment(selectedFragment);
-    }
-
-    private boolean loadFragment(Fragment fragment) {
-        //switching fragment
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .commit();
-            return true;
-        }
-        return false;
-    }
-
     /**
      * Function that execute the animation between the BIG top bar and the SMALL top bar configuration.
      *
@@ -198,7 +213,6 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
      * @param selectedFragmentClass the new destination fragment. Used to avoid reloading the fragment when the shown fragment button is pressed.
      */
     private void moveTopBar(TopBarConfiguration configuration,Class selectedFragmentClass){
-
         //Do this only in portrait mode
         if( getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && previousFragmentClass != selectedFragmentClass && previousConfiguration != configuration){
             switch (configuration){
@@ -258,4 +272,39 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         SMALL
     }
     
+}
+
+
+
+/**
+ * Adepter specifically created to show the 4 fragment inside the HomeActivity
+ */
+class HomeFragmentAdapter extends FragmentStateAdapter {
+
+    public HomeFragmentAdapter(FragmentActivity fragmentActivity) {
+        super(fragmentActivity);
+    }
+
+    @NonNull
+    @Override
+    public Fragment createFragment(int position) {
+
+        switch (position){
+            case 0:
+                return new HomeFragment();
+            case 1:
+                return new GroupFragment();
+            case 2:
+                return new EventFragment();
+            case 3:
+                return new AccountFragment();
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return 4;
+    }
 }
