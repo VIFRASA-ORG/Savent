@@ -10,7 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vitandreasorino.savent.Utenti.HomeActivity;
@@ -18,6 +21,7 @@ import com.vitandreasorino.savent.Utenti.HomeActivity;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureBoolean;
 import Model.DB.Enti;
@@ -27,6 +31,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
 
     EditText editTextEmailLogin, editTextPasswordLogin;
     EditText editTextRecoveryEmail;
+
+    TextView textPasswordDimenticata;
+    Button buttonAccediLogin;
+
+    ProgressBar progressBar;
 
     //Dialog for the password recovery
     private AlertDialog pswRecoveryDialog = null;
@@ -39,9 +48,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         editTextEmailLogin = (EditText) findViewById(R.id.editTextEmailLogin);
         editTextPasswordLogin = (EditText) findViewById(R.id.editTextPasswordLogin);
 
+        textPasswordDimenticata = findViewById(R.id.textPasswordDimenticata);
+        buttonAccediLogin = findViewById(R.id.buttonAccediLogin);
+        progressBar = findViewById(R.id.progressBar);
+
         editTextEmailLogin.setOnFocusChangeListener(this);
         editTextPasswordLogin.setOnFocusChangeListener(this);
     }
+
+
+    private void toggleInProgressEvent(boolean inProgress){
+        editTextEmailLogin.setEnabled(!inProgress);
+        editTextPasswordLogin.setEnabled(!inProgress);
+        textPasswordDimenticata.setEnabled(!inProgress);
+        buttonAccediLogin.setEnabled(!inProgress);
+
+        if(inProgress) AnimationHelper.fadeIn(progressBar,500);
+        else AnimationHelper.fadeOut(progressBar,500);
+    }
+
+    private void clearAllFocus(){
+        editTextEmailLogin.clearFocus();
+        editTextPasswordLogin.clearFocus();
+    }
+
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
@@ -62,6 +92,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         emailLogin = editTextEmailLogin.getText().toString();
         passwordLogin = editTextPasswordLogin.getText().toString();
 
+        clearAllFocus();
+
         if( validazioneEmail(emailLogin) == false || validazionePassword(passwordLogin) == false || passwordLogin.contains(" ")) {
 
 
@@ -80,6 +112,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
 
         }else{
             backgroundTintEditText();
+            toggleInProgressEvent(true);
+
             AuthHelper.singIn(emailLogin, passwordLogin, new ClosureBoolean() {
                 @Override
                 public void closure(boolean isSuccess) {
@@ -95,6 +129,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
 
     private final void errorDuringLogin(){
         Toast.makeText(getApplicationContext(),getString(R.string.errorLogin),Toast.LENGTH_SHORT).show();
+        toggleInProgressEvent(false);
     }
 
     private final void loginEffettuato(){
@@ -119,6 +154,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
                 Toast.makeText(getApplicationContext(),R.string.accountNotActivated,Toast.LENGTH_SHORT).show();
                 AuthHelper.logOut();
             }
+            toggleInProgressEvent(false);
         });
     }
 
@@ -134,7 +170,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
      * Settaggio dell'underline a tutte le editText nel colore grigio.
      */
     public void backgroundTintEditText() {
-
         editTextEmailLogin.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextPasswordLogin.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
     }

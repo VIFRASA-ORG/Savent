@@ -143,7 +143,7 @@ public class AnimationHelper {
      * @param resId the resource id of the new string.
      * @param color the resources of the new color.
      */
-    public static final void switchTextWithFadeAnimation(TextView textView, @StringRes int resId, @ColorRes Integer color){
+    public static final void switchTextWithFadeAnimation(TextView textView, @StringRes int resId, @ColorRes @Nullable Integer color){
         textView.animate()
             .alpha(0f)
             .setDuration(100)

@@ -97,7 +97,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 else statusLogoSmall.setImageResource(R.drawable.green_status_icon);
 
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoBig,R.drawable.green_status_icon);
-                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeBig,R.string.greenStatusText, Color.GREEN);
+                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeBig,R.string.greenStatusText, null);
                 actualHealtStatus = HealthStatus.GREEN;
             }else if(healthStatus > 33 && healthStatus <= 66 && actualHealtStatus != HealthStatus.YELLOW){
                 //Yellow
@@ -105,7 +105,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 else statusLogoSmall.setImageResource(R.drawable.yellow_status_icon);
 
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoBig,R.drawable.yellow_status_icon);
-                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeBig,R.string.yelloStatusText,Color.YELLOW);
+                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeBig,R.string.yelloStatusText,null);
                 actualHealtStatus = HealthStatus.YELLOW;
             }else if(healthStatus > 66 && healthStatus <= 100 && actualHealtStatus != HealthStatus.RED){
                 //Red
@@ -113,24 +113,24 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 else statusLogoSmall.setImageResource(R.drawable.red_status_icon);
 
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoBig,R.drawable.red_status_icon);
-                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeBig,R.string.redStatusText,Color.RED);
+                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeBig,R.string.redStatusText,null);
                 actualHealtStatus = HealthStatus.RED;
             }
         }else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             if(healthStatus <= 33 && actualHealtStatus != HealthStatus.GREEN) {
                 //Green
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoSmall,R.drawable.green_status_icon);
-                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeSmall,R.string.greenStatusText,Color.GREEN);
+                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeSmall,R.string.greenStatusText,null);
                 actualHealtStatus = HealthStatus.GREEN;
             }else if(healthStatus > 33 && healthStatus <= 66 && actualHealtStatus != HealthStatus.YELLOW){
                 //Yellow
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoSmall,R.drawable.yellow_status_icon);
-                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeSmall,R.string.yelloStatusText,Color.YELLOW);
+                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeSmall,R.string.yelloStatusText,null);
                 actualHealtStatus = HealthStatus.YELLOW;
             }else if(healthStatus > 66 && healthStatus <= 100 && actualHealtStatus != HealthStatus.RED){
                 //Red
                 AnimationHelper.switchImageWithFadeAnimations(statusLogoSmall,R.drawable.red_status_icon);
-                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeSmall,R.string.redStatusText,Color.RED);
+                AnimationHelper.switchTextWithFadeAnimation(textStatusHomeSmall,R.string.redStatusText,null);
                 actualHealtStatus = HealthStatus.RED;
             }
         }
