@@ -1,6 +1,7 @@
 package Helper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -173,6 +174,10 @@ public class AuthHelper {
      * Function used to Log-out
      */
     public static final void logOut(){
-        mAuth.signOut();
+        //removing the token for the notification
+        if(isLoggedIn()){
+            Utenti.setMessagingToken("",null);
+            mAuth.signOut();
+        }
     }
 }
