@@ -161,7 +161,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
 
     private void loggedInAsUser(){
         //Communicating the new notification token to the server
-        Utenti.setMessagingToken(null);
+        Utenti.setMessagingToken(isSucc -> {
+            if (!isSucc){
+                Utenti.createMessagingTokenDocument(null);
+            }
+        });
 
         Toast.makeText(getApplicationContext(),getString(R.string.correctLogin),Toast.LENGTH_SHORT).show();
         Intent schermataHome = new Intent(getApplicationContext(), HomeActivity.class);

@@ -8,9 +8,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import com.vitandreasorino.savent.Utenti.AccountTab.AccountFragment;
 import com.vitandreasorino.savent.Utenti.EventiTab.EventFragment;
 import com.vitandreasorino.savent.Utenti.GruppiTab.GroupFragment;
 import com.vitandreasorino.savent.R;
+import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 
 import Helper.AnimationHelper;
 import Model.DB.Utenti;
@@ -38,10 +42,15 @@ public class HomeActivity extends AppCompatActivity  {
     TextView textStatusHomeBig;
     TextView textStatusHomeSmall;
 
+    Button notificationButton;
+
     Class previousFragmentClass = HomeFragment.class;
     TopBarConfiguration previousConfiguration = TopBarConfiguration.BIG;
 
     ViewPager2 viewPager;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +67,7 @@ public class HomeActivity extends AppCompatActivity  {
         statusLogoBig = findViewById(R.id.logoStatusHomeBig);
         textStatusHomeSmall = findViewById(R.id.textStatusHomeSmall);
         textStatusHomeBig = findViewById(R.id.textStatusHomeBig);
+        notificationButton = findViewById(R.id.buttonNotification);
 
         viewPager = findViewById(R.id.viewPager);
         viewPager.setSaveEnabled(false);
@@ -242,6 +252,11 @@ public class HomeActivity extends AppCompatActivity  {
                     break;
             }
         }
+    }
+
+    public void onClickNotificationButton(View view){
+        Intent schermataNotification = new Intent(getApplicationContext(), NotificationActivity.class);
+        startActivity(schermataNotification);
     }
 
 

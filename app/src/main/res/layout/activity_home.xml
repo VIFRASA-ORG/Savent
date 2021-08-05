@@ -91,7 +91,8 @@
                             android:layout_height="@dimen/icon_status_bar"
                             android:layout_marginRight="20dp"
                             android:background="@drawable/ic_baseline_notifications_24"
-                            android:gravity="top" />
+                            android:gravity="top"
+                            android:onClick="onClickNotificationButton"/>
 
                         <Button
                             android:id="@+id/buttonSetting"

@@ -102,21 +102,23 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         availablePlacesTextView.setText((actualPartecipation >= maxPartecipation) ? "0" : (maxPartecipation-actualPartecipation) + "");
         queueTextView.setText(eventModel.getNumeroPartecipantiInCoda() + "");
 
-        //We have to download the image all over again because the intent allow you to pass just file under the size of 1mb
-        Eventi.downloadEventImage(eventModel.getId(), (ClosureBitmap) result -> {
-            eventModel.setImageBitmap(result);
-            eventLocandinaImageView.setImageBitmap(result);
-        });
+        if(eventModel.getIsImageUploaded()){
+            //We have to download the image all over again because the intent allow you to pass just file under the size of 1mb
+            Eventi.downloadEventImage(eventModel.getId(), (ClosureBitmap) result -> {
+                eventModel.setImageBitmap(result);
+                eventLocandinaImageView.setImageBitmap(result);
+            });
 
-        //Download the url
-        Eventi.downloadEventImageUri(eventModel.getId(), new ClosureResult<Uri>() {
-            @Override
-            public void closure(Uri result) {
-                if(result != null){
-                    eventModel.setImageUri(result);
+            //Download the url
+            Eventi.downloadEventImageUri(eventModel.getId(), new ClosureResult<Uri>() {
+                @Override
+                public void closure(Uri result) {
+                    if(result != null){
+                        eventModel.setImageUri(result);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         //Download the user name of the creator or of the group
         if(!eventModel.getIdUtenteCreatore().isEmpty()){

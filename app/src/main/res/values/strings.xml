@@ -239,4 +239,15 @@
     <string name="stringSaventEnti">Savent Companies</string>
     <string name="textHomeSwabResult">Insert the swab results of your patients. We take care of communicating it to the patient!</string>
     <string name="textHomeCommunities">With our communication network using Bluetooth Low Energy technology, all people who have had contact with your patient in the last 14 days will have a communication of the risk. </string>
+
+    //Notification activity
+    <string name="notificationTitle">Notification</string>
+    <string name="noNotifications">There are no notifications</string>
+
+    //AllNotificationType
+    <string-array name="queueClimbed">
+        <item>Congratulation! You\'ve climbed the queue!</item>
+        <item>You have successfully climbed the queue so you are now joining the event!</item>
+    </string-array>
+
 </resources>

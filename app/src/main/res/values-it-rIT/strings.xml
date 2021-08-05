@@ -243,4 +243,15 @@
     <string name="stringSaventEnti">Savent Enti</string>
     <string name="textHomeSwabResult">Inserisci i risultati dei tamponi dei tuoi pazienti. Ci occupiamo noi di comunicarlo al paziente!</string>
     <string name="textHomeCommunities">Con la nostra rete di comunicazione che utilizza la tecnologia Bluetooth Low Energy, tutte le persone che hanno avuto un contatto con il tuo paziente negli ultimi 14 giorni avranno una comunicazione del rischio.</string>
+
+    //Notification activity
+    <string name="notificationTitle">Notifiche</string>
+    <string name="noNotifications">Non ci sono notifiche</string>
+    
+    //AllNotificationType
+    <string-array name="queueClimbed">
+        <item>Complimenti!\nParteciperai all\'evento </item>
+        <item>Hai scalato con successo la coda, quindi ora potrai partecipare all\'evento!</item>
+    </string-array>
+
 </resources>
