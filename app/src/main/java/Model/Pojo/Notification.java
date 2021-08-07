@@ -1,50 +1,51 @@
 package Model.Pojo;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class Notification {
 
-    private String title;
-    private String description;
-    private Date date;
+    public static final String NOTIFICATION_TYPE = "notificationType";
+    public static final String DATE = "date";
+    public static final String EVENT_NAME = "eventName";
+    public static final String EVENT_ID = "eventId";
+
+
+    private int id;
+    private String title = "";
+    private String description = "";
+    private String notificationType = "";
+    private Calendar date = null;
     private boolean isRead = false;
-    private String idEvento;
-    private String nomeEvento;
+    private String eventId = "";
+    private String eventName = "";
 
 
     public Notification() {}
 
-    public Notification(String name, String title, String description) {
-        this.title = title;
-        this.description = description;
+
+
+    public String getNotificationType() {
+        return notificationType;
     }
 
-    public Notification(String name, String title, String description,Date date) {
-        this.title = title;
-        this.description = description;
-        this.date = date;
+    public void setNotificationType(String notificationType) {
+        this.notificationType = notificationType;
     }
 
-    public Notification(String name, String title, String description,boolean isRead) {
-        this.title = title;
-        this.description = description;
-        this.isRead = isRead;
+    public String getEventId() {
+        return eventId;
     }
 
-    public String getIdEvento() {
-        return idEvento;
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
-    public void setIdEvento(String idEvento) {
-        this.idEvento = idEvento;
+    public String getEventName() {
+        return eventName;
     }
 
-    public String getNomeEvento() {
-        return nomeEvento;
-    }
-
-    public void setNomeEvento(String nomeEvento) {
-        this.nomeEvento = nomeEvento;
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 
     public String getTitle() {
@@ -63,11 +64,11 @@ public class Notification {
         this.description = description;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
     }
 
@@ -77,5 +78,13 @@ public class Notification {
 
     public void setRead(boolean read) {
         isRead = read;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -24,7 +24,7 @@ import com.vitandreasorino.savent.Utenti.HomeActivity;
 import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 
 import Helper.NotificationHelper;
-import Model.Closures.ClosureResult;
+import Helper.SQLiteHelper;
 import Model.DB.Utenti;
 
 public class MessagingService extends FirebaseMessagingService {
@@ -63,7 +63,12 @@ public class MessagingService extends FirebaseMessagingService {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
             Model.Pojo.Notification n = NotificationHelper.getNotificationFromPayload(this,remoteMessage.getData());
-            //todo Save the notification data
+
+            //Insert the notification into the database
+            SQLiteHelper databaseHelper = new SQLiteHelper(this);
+            databaseHelper.insertNewNotification(n);
+
+            //Sending the notification to the user
             sendNotification(n);
         }
     }

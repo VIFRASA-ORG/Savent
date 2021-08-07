@@ -247,10 +247,13 @@
     //Notification activity
     <string name="notificationTitle">Notifiche</string>
     <string name="noNotifications">Non ci sono notifiche</string>
+    <string name="notificationCancellationTitle">Sei sicuro?</string>
+    <string name="notificationCancellationMessage">Sei sicuro di voler cancellare questa notifica?</string>
+    <string name="notificationSuccessfullyCancelled">Notifica cancellata con successo!</string>
     
     //AllNotificationType
     <string-array name="queueClimbed">
-        <item>Complimenti!\nParteciperai all\'evento </item>
+        <item>Parteciperai all\'evento </item>
         <item>Hai scalato con successo la coda, quindi ora potrai partecipare all\'evento!</item>
     </string-array>
 

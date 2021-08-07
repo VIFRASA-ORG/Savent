@@ -243,6 +243,9 @@
     //Notification activity
     <string name="notificationTitle">Notification</string>
     <string name="noNotifications">There are no notifications</string>
+    <string name="notificationCancellationTitle">Are you sure??</string>
+    <string name="notificationCancellationMessage">Are you sure you want to delete this notification?</string>
+    <string name="notificationSuccessfullyCancelled">Notification successfully canceled!</string>
 
     //AllNotificationType
     <string-array name="queueClimbed">

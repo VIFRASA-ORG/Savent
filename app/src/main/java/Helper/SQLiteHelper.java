@@ -5,11 +5,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+
+import com.vitandreasorino.savent.R;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import Model.Pojo.Notification;
 
 
 public class SQLiteHelper extends SQLiteOpenHelper {
@@ -35,6 +41,16 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             public static final String COLUMN_NAME_CODICI = "Codici";
             public static final String COLUMN_NAME_DATA_CONTATTO = "DataContatto";
         }
+
+        /* Inner class che definisce la tabella ContattiAvvenuti */
+        public class Notifiche implements BaseColumns {
+            public static final String TABLE_NAME = "Notifiche";
+            public static final String COLUMN_NAME_NOTIFICATION_TYPE = "NotificationType";
+            public static final String COLUMN_NAME_EVENT_ID = "EventId";
+            public static final String COLUMN_NAME_EVENT_NAME = "EventName";
+            public static final String COLUMN_NAME_DATE = "Date";
+            public static final String COLUMN_NAME_READ = "Read";
+        }
     }
 
     public static final int DISTANCE_TIME_CONTACT = 15;
@@ -51,9 +67,16 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + SaventContract.MieiCodici.TABLE_NAME + "(" + SaventContract.MieiCodici.COLUMN_NAME_CODICI +
                    " TEXT PRIMARY KEY, " + SaventContract.MieiCodici.COLUMN_NAME_DATA_CREAZIONE + " TEXT)");
+
         db.execSQL("CREATE TABLE " + SaventContract.ContattiAvvenuti.TABLE_NAME + "(" + SaventContract.ContattiAvvenuti._ID +
                    " INTEGER PRIMARY KEY AUTOINCREMENT, " + SaventContract.ContattiAvvenuti.COLUMN_NAME_CODICI + " TEXT, " +
                 SaventContract.ContattiAvvenuti.COLUMN_NAME_DATA_CONTATTO +  " TEXT )" );
+
+        db.execSQL("CREATE TABLE " + SaventContract.Notifiche.TABLE_NAME + "(" + SaventContract.Notifiche._ID +
+                " INTEGER PRIMARY KEY AUTOINCREMENT, " + SaventContract.Notifiche.COLUMN_NAME_NOTIFICATION_TYPE + " TEXT, " +
+                SaventContract.Notifiche.COLUMN_NAME_EVENT_ID + " TEXT, " + SaventContract.Notifiche.COLUMN_NAME_EVENT_NAME + " TEXT, " +
+                SaventContract.Notifiche.COLUMN_NAME_DATE + " TEXT, " +
+                SaventContract.Notifiche.COLUMN_NAME_READ + " INTEGER )");
     }
 
 
@@ -62,19 +85,83 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.MieiCodici.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.ContattiAvvenuti.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SaventContract.Notifiche.TABLE_NAME);
         this.onCreate(db);
     }
 
+    /**
+     * Imposta il flag della notifica a vero per identificare che la stessa è stata letta dall'utente.
+     *
+     * @param notificationId l'id della notifica che è stata letta
+     */
+    public void readANotification(int notificationId){
+        SQLiteDatabase databaseSQLite = this.getWritableDatabase();
+        ContentValues data = new ContentValues();
+        data.put(SaventContract.Notifiche.COLUMN_NAME_READ,1);
+        databaseSQLite.update(SaventContract.Notifiche.TABLE_NAME,data,"" + SaventContract.Notifiche._ID + " = " + notificationId,null);
+    }
 
     /**
-     * Permette la trasformazione della data inserita nel pattern, rendendola una stringa.
-     * @param dataCreazione
-     * @return la data convertita in una stringa.
+     * Permette di salvare sul database SQLite una nuova notifica
+     *
+     * @param n l'oggetto della notifica da salvare
      */
-    public String trasformaDataInString(Date dataCreazione){
-        String pattern = "dd-MM-yyyy";
-        DateFormat df = new SimpleDateFormat(pattern);
-        return df.format(dataCreazione);
+    public void insertNewNotification(Notification n){
+        SQLiteDatabase databaseSQLite = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SaventContract.Notifiche.COLUMN_NAME_NOTIFICATION_TYPE, n.getNotificationType());
+        contentValues.put(SaventContract.Notifiche.COLUMN_NAME_EVENT_ID, n.getEventId());
+        contentValues.put(SaventContract.Notifiche.COLUMN_NAME_EVENT_NAME, n.getEventName());
+
+        if(n.getDate() != null) contentValues.put(SaventContract.Notifiche.COLUMN_NAME_DATE, n.getDate().getTimeInMillis());
+        else contentValues.put(SaventContract.Notifiche.COLUMN_NAME_DATE, "");
+
+        contentValues.put(SaventContract.Notifiche.COLUMN_NAME_READ, n.isRead() ? 1 : 0);
+        databaseSQLite.insert(SaventContract.Notifiche.TABLE_NAME, null, contentValues);
+    }
+
+    /**
+     * Permette di cancellare da SQLite una notifica.
+     *
+     * @param notificationId l'id della notifica da cancellare.
+     */
+    public void deleteNotification(int notificationId){
+        SQLiteDatabase databaseSQLite = this.getWritableDatabase();
+        databaseSQLite.delete(SaventContract.Notifiche.TABLE_NAME, SaventContract.Notifiche._ID + " = ?", new String[] {""+notificationId});
+    }
+
+    /**
+     * Ritorna una lista di tutte le notifiche presenti nel database SQLite.
+     *
+     * @param context il contesto di utilizzo
+     * @return una List<Notification> contenente tutte le notifiche presenti
+     */
+    public List<Notification> getAllNotificaton(Context context){
+        SQLiteDatabase databaseSQLite = this.getReadableDatabase();
+        ArrayList<Notification> notifications = new ArrayList<>();
+
+        String query = "SELECT * FROM " + SaventContract.Notifiche.TABLE_NAME + " ORDER BY " + SaventContract.Notifiche.COLUMN_NAME_DATE + " DESC";
+        Cursor cursor = databaseSQLite.rawQuery(query,null);
+
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            Notification n = new Notification();
+            n.setNotificationType(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_NOTIFICATION_TYPE)));
+            n.setEventName(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_EVENT_NAME)));
+            n.setEventId(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_EVENT_ID)));
+            n.setRead(cursor.getInt(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_READ)) == 0 ? false : true);
+            n.setId(cursor.getInt(cursor.getColumnIndexOrThrow(SaventContract.Notifiche._ID)));
+
+            n.setTitle(context.getResources().getStringArray(R.array.queueClimbed)[0] + " \"" +n.getEventName() + "\"!");
+            n.setDescription(context.getResources().getStringArray(R.array.queueClimbed)[1]);
+
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(Long.parseLong(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_DATE))));
+            n.setDate(c);
+
+            notifications.add(n);
+        }
+
+        return notifications;
     }
 
 
