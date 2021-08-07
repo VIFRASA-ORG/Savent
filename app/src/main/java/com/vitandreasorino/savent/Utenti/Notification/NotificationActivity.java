@@ -44,10 +44,16 @@ public class NotificationActivity extends AppCompatActivity implements AdapterVi
         notificationListView = findViewById(R.id.notificationListView);
         notificationListView.setEmptyView(findViewById(R.id.emptyResults));
 
+        //Download of all the notification
         databaseHelper = new SQLiteHelper(this);
         notifications = databaseHelper.getAllNotificaton(this);
 
+        //Setting the alert for the cancellation of a notification
         alertDelete = new  AlertDialog.Builder(this);
+        alertDelete.setTitle(R.string.notificationCancellationTitle);
+        alertDelete.setMessage(R.string.notificationCancellationMessage);
+
+        //Creating the adapter
         adapter = new NotificationAdapter(this, notifications, alertDelete);
         notificationListView.setAdapter(adapter);
         notificationListView.setOnItemClickListener(this);
@@ -55,8 +61,16 @@ public class NotificationActivity extends AppCompatActivity implements AdapterVi
 
     }
 
-
+    /**
+     * Function called when the back button is pressed
+     * @param view
+     */
     public void onBackButtonPressed(View view){
+        /**
+         * If this activity is opened on the pression of the notification,
+         * nothing else is on the activity stack, so we have to create
+         * the HomeActivity
+         **/
         if (fromNotificaton){
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
@@ -122,9 +136,7 @@ class NotificationAdapter extends BaseAdapter{
         ImageView dismissImageView = convertView.findViewById(R.id.dismissImageView);
         ImageView notificationRead = convertView.findViewById(R.id.notificationRead);
 
-        alertDelete.setTitle(R.string.notificationCancellationTitle);
-        alertDelete.setMessage(R.string.notificationCancellationMessage);
-
+        //Adding the on click event to the dismiss button
         dismissImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
