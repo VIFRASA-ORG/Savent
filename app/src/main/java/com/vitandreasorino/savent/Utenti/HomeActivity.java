@@ -8,9 +8,16 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,9 +33,11 @@ import Helper.AnimationHelper;
 import Model.DB.Utenti;
 
 
-public class HomeActivity extends AppCompatActivity  {
+public class HomeActivity extends AppCompatActivity implements SensorEventListener {
 
     HealthStatus actualHealthStatus = HealthStatus.NOT_DEFINED_YET;
+    private SensorManager sensorManager;
+    private Sensor sensorProximity;
 
     Toolbar topBar;
     LinearLayout imageAndStatusContainer;
@@ -44,12 +53,27 @@ public class HomeActivity extends AppCompatActivity  {
     ViewPager2 viewPager;
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, sensorProximity, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         //getting bottom navigation view and attaching the listener
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensorProximity = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
         topBar = (Toolbar) findViewById(R.id.toolbarStatusHome);
         imageAndStatusContainer = (LinearLayout) findViewById(R.id.imageAndStatusLayoutContainer);
@@ -244,8 +268,17 @@ public class HomeActivity extends AppCompatActivity  {
         }
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
 
+        if(event.values[0] == 0) {
+        }
+    }
 
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 
 
     /*
