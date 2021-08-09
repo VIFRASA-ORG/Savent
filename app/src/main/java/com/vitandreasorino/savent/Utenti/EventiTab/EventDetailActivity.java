@@ -2,9 +2,11 @@ package com.vitandreasorino.savent.Utenti.EventiTab;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vitandreasorino.savent.R;
+import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 
 import Helper.AuthHelper;
 import Model.Closures.ClosureBitmap;
@@ -54,6 +57,8 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     GoogleMap map;
 
     PageMode pageMode = PageMode.JOIN_EVENT;
+
+    private boolean fromCreation = false;
     
 
 
@@ -63,9 +68,6 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
 
-        //Deserializing the object from the intent
-        eventModel = (Evento) getIntent().getSerializableExtra("eventObj");
-
         //Inflate all the component
         inflateAll();
 
@@ -73,6 +75,29 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        fromCreation = getIntent().getBooleanExtra("Creation",false);
+
+        //Checking if we are arriving here from the notification
+        boolean fromNotification = getIntent().getBooleanExtra(NotificationActivity.FROM_NOTIFICATION_INTENT,false);
+        if(fromNotification){
+            String eventId = getIntent().getStringExtra("eventId");
+
+            Eventi.getEvent(eventId, evento -> {
+                eventModel = evento;
+                setAllEventData();
+            });
+        }else{
+            //Deserializing the object from the intent
+            eventModel = (Evento) getIntent().getSerializableExtra("eventObj");
+            setAllEventData();
+        }
+
+    }
+
+    /**
+     * Set the listener for the event and download the logged in user info
+     */
+    private void setAllEventData(){
         //Adding the listener for updates
         Eventi.addDocumentListener(eventModel.getId(),this,closureResult -> {
             if(closureResult != null){
@@ -102,21 +127,23 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         availablePlacesTextView.setText((actualPartecipation >= maxPartecipation) ? "0" : (maxPartecipation-actualPartecipation) + "");
         queueTextView.setText(eventModel.getNumeroPartecipantiInCoda() + "");
 
-        //We have to download the image all over again because the intent allow you to pass just file under the size of 1mb
-        Eventi.downloadEventImage(eventModel.getId(), (ClosureBitmap) result -> {
-            eventModel.setImageBitmap(result);
-            eventLocandinaImageView.setImageBitmap(result);
-        });
+        if(eventModel.getIsImageUploaded()){
+            //We have to download the image all over again because the intent allow you to pass just file under the size of 1mb
+            Eventi.downloadEventImage(eventModel.getId(), (ClosureBitmap) result -> {
+                eventModel.setImageBitmap(result);
+                eventLocandinaImageView.setImageBitmap(result);
+            });
 
-        //Download the url
-        Eventi.downloadEventImageUri(eventModel.getId(), new ClosureResult<Uri>() {
-            @Override
-            public void closure(Uri result) {
-                if(result != null){
-                    eventModel.setImageUri(result);
+            //Download the url
+            Eventi.downloadEventImageUri(eventModel.getId(), new ClosureResult<Uri>() {
+                @Override
+                public void closure(Uri result) {
+                    if(result != null){
+                        eventModel.setImageUri(result);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         //Download the user name of the creator or of the group
         if(!eventModel.getIdUtenteCreatore().isEmpty()){
@@ -236,6 +263,13 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
      * @param view
      */
     public void onBackButtonPressed(View view){
+
+        if(fromCreation){
+            Intent i = new Intent("UpdateEvent");
+            i.putExtra("Updated", true);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+        }
+
         super.onBackPressed();
         finish();
     }

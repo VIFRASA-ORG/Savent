@@ -25,6 +25,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.vitandreasorino.savent.R;
+import com.vitandreasorino.savent.Utenti.EventiTab.EventDetailActivity;
+import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -444,18 +446,18 @@ public class NewEvent extends AppCompatActivity {
             e.setLatitudine(valoreLatitudine);
             e.setLongitudine(valoreLongitudine);
 
-            Eventi.addNewEvent(e, closureResult -> {
+            Eventi.addNewEvent(e, eventId -> {
 
-                if(closureResult != null){
+                if(eventId != null){
 
                     if(immagineSelezionata != null) {
-                        Eventi.uploadEventImage(immagineSelezionata, closureResult, closureBool-> {
+                        Eventi.uploadEventImage(immagineSelezionata, eventId, closureBool-> {
                             if(closureBool) {
-                                Toast.makeText(this, getString(R.string.eventoCreato), Toast.LENGTH_LONG).show();
+                                finishCreation(eventId);
                             }
                         });
                     }else{
-                        Toast.makeText(this, getString(R.string.eventoCreato), Toast.LENGTH_LONG).show();
+                        finishCreation(eventId);
                     }
 
                 }
@@ -465,13 +467,28 @@ public class NewEvent extends AppCompatActivity {
 
     }
 
+    /**
+     * Metodo chiamato quando la creazione del nuovo evento è andata a buon fine.
+     * Esegue un intent verso il dettaglio dell'evento.
+     *
+     * @param eventId id dell'evento appena creato.
+     */
+    private void finishCreation(String eventId){
+        Toast.makeText(this, getString(R.string.eventoCreato), Toast.LENGTH_LONG).show();
+        Intent i = new Intent(this, EventDetailActivity.class);
+        i.putExtra(NotificationActivity.FROM_NOTIFICATION_INTENT,true);
+        i.putExtra("eventId",eventId);
+        i.putExtra("Creation", true);
+        startActivity(i);
+        finish();
+    }
+
     private void backgroundTintEditTextCreateEvent() {
         editTextNomeEvento.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextTextMultiLine.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextNuumeroMassimoPartecipanti.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         textViewLatitudine.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         textViewLongitudine.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
-
     }
 
 
