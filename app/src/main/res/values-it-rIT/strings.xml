@@ -237,10 +237,18 @@
     <string name="stringSendResultSwab">Invia risultato tampone</string>
     <string name="stringNoPatientResult">Nessun paziente selezionato!</string>
     <string name="stringStatus">Stato sanitario</string>
-    <string name="stringSwabResult">Esito tampone</string>
+    <string name="stringSwab">Generazione codici tamponi</string>
+    <string name="buttonGenerateCode">Genera codice</string>
+    <string name="stringCreateCode">Codice generato:</string>
+    <string name="stringCodeList">Lista codici:</string>
+    <string name="stringCode">Codice:</string>
     <string name="stringSwabType">Tipo tampone</string>
     <string name="stringResult">Esito</string>
     <string name="stringSaventEnti">Savent Enti</string>
-    <string name="textHomeSwabResult">Inserisci i risultati dei tamponi dei tuoi pazienti. Ci occupiamo noi di comunicarlo al paziente!</string>
-    <string name="textHomeCommunities">Con la nostra rete di comunicazione che utilizza la tecnologia Bluetooth Low Energy, tutte le persone che hanno avuto un contatto con il tuo paziente negli ultimi 14 giorni avranno una comunicazione del rischio.</string>
+    <string name="textHomeSwab1">Dopo aver ottenuto il risultato del tampone di un tuo paziente, hai la possibilità di generare,
+        mediante la nostra applicazione, un codice univoco per permettergli di comunicare l\'esito al sistema.</string>
+    <string name="textHomeSwab2">Comunica al tuo paziente, mediante email o altro, l\'esito del tampone attraverso il codice univoco.</string>
+    <string name="textHomeSwab3">Il tuo paziente potrà segnalare l\'esito del tampone usando il codice univoco da te generato.
+    Questo garantisce il pieno rispetto della privacy, in quanto non vi è correlazione tra l\'esito e il paziente.</string>
+    <string name="textHomeSwab4">Con la nostra rete di comunicazione che utilizza la tecnologia Bluetooth Low Energy, tutte le persone che hanno avuto un contatto con il tuo paziente negli ultimi 14 giorni avranno una comunicazione del rischio.</string>
 </resources>

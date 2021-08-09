@@ -4,11 +4,9 @@
             android:id="@+id/nav_home_ente"
             android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/TabBarHome" />
-
         <item
             android:id="@+id/nav_swab_ente"
-            android:icon="@drawable/ic_baseline_help_center_24"
-            android:title="@string/stringSwabResult"
+            android:icon="@drawable/ic_barcode"
+            android:title="@string/stringSwab"
            />
-
     </menu>
