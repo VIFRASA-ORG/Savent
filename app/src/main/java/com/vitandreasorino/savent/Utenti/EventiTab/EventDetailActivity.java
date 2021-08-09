@@ -2,9 +2,11 @@ package com.vitandreasorino.savent.Utenti.EventiTab;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -55,6 +57,8 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     GoogleMap map;
 
     PageMode pageMode = PageMode.JOIN_EVENT;
+
+    private boolean fromCreation = false;
     
 
 
@@ -70,6 +74,8 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         //Setting-up the mapView
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+
+        fromCreation = getIntent().getBooleanExtra("Creation",false);
 
         //Checking if we are arriving here from the notification
         boolean fromNotification = getIntent().getBooleanExtra(NotificationActivity.FROM_NOTIFICATION_INTENT,false);
@@ -257,6 +263,13 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
      * @param view
      */
     public void onBackButtonPressed(View view){
+
+        if(fromCreation){
+            Intent i = new Intent("UpdateEvent");
+            i.putExtra("Updated", true);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+        }
+
         super.onBackPressed();
         finish();
     }

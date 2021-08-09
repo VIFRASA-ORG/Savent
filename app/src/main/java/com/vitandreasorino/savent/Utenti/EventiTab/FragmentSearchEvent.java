@@ -1,8 +1,10 @@
 package com.vitandreasorino.savent.Utenti.EventiTab;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.vitandreasorino.savent.R;
 
@@ -108,7 +111,31 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
          */
         searchView.setOnQueryTextListener(this);
         eventListView.setOnItemClickListener(this);
+
+        //registrazione del lister per il broadcast
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(br, new IntentFilter("UpdateEvent"));
     }
+
+    /**
+     * Ricevitore di messaggio broadcast per aggiornare la lista
+     * degli eventi quando ne viene creato uno nuovo.
+     */
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        Boolean isUpdated = intent.getBooleanExtra("Updated", false);
+        if(isUpdated){
+            switch (pageVisualizationType){
+                case ALL_EVENTS:
+                    downloadAllEvents();
+                    break;
+                case MY_EVENTS:
+                    downloadMyEvents();
+                    break;
+            }
+        }
+        }
+    };
 
     /**
      * Enable or disable the progress bar or the emptyTextView.

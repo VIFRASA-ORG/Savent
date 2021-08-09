@@ -84,7 +84,7 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         groupListView.setOnItemClickListener(this);
 
         //registrazione del lister per il broadcast
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(br, new IntentFilter("Update"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(br, new IntentFilter("UpdateGroup"));
     }
 
     /**

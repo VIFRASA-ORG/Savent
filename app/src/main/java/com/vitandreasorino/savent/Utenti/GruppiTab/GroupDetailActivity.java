@@ -520,7 +520,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         if(isModified) setResult(RESULT_OK);
 
         if(isCreated){
-            Intent i = new Intent("Update");
+            Intent i = new Intent("UpdateGroup");
             i.putExtra("Updated", true);
             LocalBroadcastManager.getInstance(this).sendBroadcast(i);
         }
