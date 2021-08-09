@@ -18,6 +18,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.vitandreasorino.savent.Utenti.AccountTab.AccountFragment;
 import com.vitandreasorino.savent.Utenti.EventiTab.EventFragment;
 import com.vitandreasorino.savent.Utenti.GruppiTab.GroupFragment;
 import com.vitandreasorino.savent.R;
+import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 
 import Helper.AnimationHelper;
 import Model.DB.Utenti;
@@ -47,10 +49,15 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     TextView textStatusHomeBig;
     TextView textStatusHomeSmall;
 
+    Button notificationButton;
+
     Class previousFragmentClass = HomeFragment.class;
     TopBarConfiguration previousConfiguration = TopBarConfiguration.BIG;
 
     ViewPager2 viewPager;
+
+
+
 
     @Override
     protected void onPause() {
@@ -82,6 +89,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         statusLogoBig = findViewById(R.id.logoStatusHomeBig);
         textStatusHomeSmall = findViewById(R.id.textStatusHomeSmall);
         textStatusHomeBig = findViewById(R.id.textStatusHomeBig);
+        notificationButton = findViewById(R.id.buttonNotification);
 
         viewPager = findViewById(R.id.viewPager);
         viewPager.setSaveEnabled(false);
@@ -274,6 +282,11 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         if(event.values[0] == 0) {
             System.out.println("VICINO");
         }
+    }
+  
+    public void onClickNotificationButton(View view){
+        Intent schermataNotification = new Intent(getApplicationContext(), NotificationActivity.class);
+        startActivity(schermataNotification);
     }
 
     @Override

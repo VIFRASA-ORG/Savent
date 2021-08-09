@@ -21,8 +21,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.vitandreasorino.savent.Utenti.HomeActivity;
+import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 
-import Model.Closures.ClosureResult;
+import Helper.NotificationHelper;
+import Helper.SQLiteHelper;
 import Model.DB.Utenti;
 
 public class MessagingService extends FirebaseMessagingService {
@@ -60,35 +62,27 @@ public class MessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-                //scheduleJob();
-            } else {
-                // Handle message within 10 seconds
-                //handleNow();
-            }
+            Model.Pojo.Notification n = NotificationHelper.getNotificationFromPayload(this,remoteMessage.getData());
 
+            //Insert the notification into the database
+            SQLiteHelper databaseHelper = new SQLiteHelper(this);
+            databaseHelper.insertNewNotification(n);
+
+            //Sending the notification to the user
+            sendNotification(n);
         }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
-        sendNotification(remoteMessage.getData().get("body"));
     }
 
 
     /**
      * Create and show a simple notification containing the received FCM message.
      *
-     * @param messageBody FCM message body received.
+     * @param n FCM message body received.
      */
-    private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, HomeActivity.class);
+    private void sendNotification(Model.Pojo.Notification n) {
+        Intent intent = new Intent(this, NotificationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(NotificationActivity.FROM_NOTIFICATION_INTENT,true);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
@@ -97,8 +91,8 @@ public class MessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.app_icon)
-                        .setContentTitle("Titolo di notifica bastardo")
-                        .setContentText(messageBody)
+                        .setContentTitle(n.getTitle())
+                        .setContentText(n.getDescription())
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setDefaults(Notification.BADGE_ICON_LARGE)

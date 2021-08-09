@@ -141,7 +141,7 @@ public class Partecipazioni extends ResultsConverter {
                     FirestoreHelper.db.runTransaction((Transaction.Function<Void>) transaction -> {
 
                         //Decrement the counter field
-                        if(p.getAccettazione()) transaction.update(eventDocument,"numeroPartecipanti",FieldValue.increment(-1));
+                        if(p.getAccettazione() && !p.getListaAttesa()) transaction.update(eventDocument,"numeroPartecipanti",FieldValue.increment(-1));
                         else transaction.update(eventDocument,"numeroPartecipantiInCoda",FieldValue.increment(-1));
 
                         transaction.delete(partecipationDocument);

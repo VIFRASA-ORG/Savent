@@ -74,7 +74,10 @@ public class Gruppi extends ResultsConverter{
                 if(task.isSuccessful()){
                     if (closureRes != null){
                         Gruppo g = task.getResult().toObject(Gruppo.class);
-                        closureRes.closure(new Pair<>(g.getNome(), (g.getIdAmministratore().equals(AuthHelper.getUserId())) ? true : false ));
+                        if(g != null)
+                            closureRes.closure(new Pair<>(g.getNome(), (g.getIdAmministratore().equals(AuthHelper.getUserId())) ? true : false ));
+                        else
+                            closureRes.closure(null);
                     }
                 }else {
                     if(closureRes != null) closureRes.closure(null);

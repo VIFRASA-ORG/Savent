@@ -21,8 +21,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Savent">
+        <activity android:name=".Utenti.Notification.NotificationActivity"></activity>
         <activity android:name=".Enti.AddSwabTab.SelectPatientActivity" />
-        <activity android:name=".Utenti.EventiTab.EditEvent"></activity>
+        <activity android:name=".Utenti.EventiTab.EditEvent" />
         <activity
             android:name=".Utenti.GruppiTab.CreazioneGruppo.AddContacts"
             android:windowSoftInputMode="adjustNothing" />
@@ -44,27 +45,25 @@
         <activity android:name=".LogSingInActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".Utenti.HomeActivity" />
-        <activity android:name=".Enti.HomeActivityEnte"/>
+        <activity android:name=".Enti.HomeActivityEnte" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
-
-        <!-- [START firebase_service] -->
+            android:value="${MAPS_API_KEY}" /> <!-- [START firebase_service] -->
         <service
             android:name=".MessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-        <!-- [END firebase_service] -->
-
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-        See README(https://goo.gl/l4GJaQ) for more. -->
+        </service> <!-- [END firebase_service] -->
+        <!--
+ Set custom default icon. This is used when no icon is set for incoming notification messages.
+        See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/app_icon" />
