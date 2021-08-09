@@ -1,11 +1,14 @@
 package com.vitandreasorino.savent.Utenti.EventiTab;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -29,9 +32,11 @@ import android.widget.Toast;
 
 import com.vitandreasorino.savent.Utenti.EventiTab.CreazioneEvento.MapActivity;
 import com.vitandreasorino.savent.R;
+import com.vitandreasorino.savent.Utenti.GruppiTab.GroupDetailActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import Helper.AnimationHelper;
@@ -49,9 +54,12 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
 
     String creatoreId;
 
+
     private boolean isModified = false;
 
     ImageView saveSettings;
+
+
     ProgressBar progressBarEvent;
 
     AutoCompleteTextView autoCompleteEdit;
@@ -63,6 +71,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
     ArrayList<String> arrayNomeEdit = new ArrayList<>();
 
     Evento eventModel;
+    Gruppo groupModel;
 
     private Calendar oldDate;
     private Calendar newDate;
@@ -105,6 +114,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
             }
         });
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -332,7 +342,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
 
 
     }
-
+    
 
     private void refreshData(){
 
@@ -850,6 +860,124 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
         }
 
     }
+
+
+    /*
+    Metodo per l'eliminazione di un evento che si è creato o tramite il proprio account o tramite il gruppo.
+     */
+    public void onDeleteEvent(View view) {
+
+        String myId = AuthHelper.getUserId();
+        String idEvent = eventModel.getId();
+        AlertDialog.Builder alertDelete = new  AlertDialog.Builder(EditEvent.this);
+        alertDelete.setTitle(R.string.titleDeleteEvent);
+        alertDelete.setMessage(R.string.msgDeleteEvent);
+
+        /* Se il campo idUtenteCreatore non è vuoto, vuol dire che il creatore dell'evento è un utente. */
+        if(!eventModel.getIdUtenteCreatore().isEmpty()) {
+
+            /* Controlla che l'id dell'utente loggato sia uguale all'id dell'utente creatore */
+            if(AuthHelper.getUserId().equals(eventModel.getIdUtenteCreatore())) {
+
+                // Nel caso di risposta positiva nel dialog
+                alertDelete.setPositiveButton(R.string.confirmPositive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        //Elimina il tuo evento
+                        Eventi.deleteEvent(eventModel.getId(), closureBool -> {
+                            if(closureBool){
+                                Toast.makeText(EditEvent.this, R.string.deleteSuccessEvent, Toast.LENGTH_SHORT).show();
+
+                                Intent i = new Intent();
+                                setResult(RESULT_OK, i);
+                                finish();
+                            }
+                        });
+
+
+                    }
+                });
+
+
+                // Nel caso di risposta negativa nel dialog, stampa solo
+                alertDelete.setNegativeButton(R.string.confirmNegative, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        //tost conferma evento non eliminato!
+                        Toast.makeText(EditEvent.this, R.string.deleteInsuccess, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                alertDelete.create().show();
+
+            }
+        }
+
+
+        /* Se il campo idUGruppoCreatore non è vuoto, vuol dire che il creatore dell'evento è un gruppo. */
+        if(!eventModel.getIdGruppoCreatore().isEmpty()) {
+
+            /* Prendo con il metodo tutti i gruppi nei quali l'utente loggato è amministratore */
+            Gruppi.getAdministrationGroups(closureList -> {
+
+                if (closureList != null) {
+                    /* Creo un iterator per poter iterare la lista di tutti i gruppi in modo tale da poterli
+                    confrontare successivamente */
+                    Iterator<Gruppo> it = closureList.iterator();
+                    while(it.hasNext()) {
+                        Gruppo oggettoGruppo = it.next();
+                        // Controlla che l'id del gruppo corrisponda a quello impostato nella creazione dell'evento
+                        if(oggettoGruppo.getId().equals(eventModel.getIdGruppoCreatore())) {
+
+                            // Nel caso di risposta positiva nel dialog
+                            alertDelete.setPositiveButton(R.string.confirmPositive, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    //Elimina il tuo evento
+                                    Eventi.deleteEvent(eventModel.getId(), closureBool -> {
+                                        if(closureBool){
+                                            Toast.makeText(EditEvent.this, R.string.deleteSuccessEvent, Toast.LENGTH_SHORT).show();
+
+                                            Intent i = new Intent();
+                                            setResult(RESULT_OK, i);
+                                            finish();
+                                        }
+                                    });
+
+
+                                }
+                            });
+
+
+                            // Nel caso di risposta negativa nel dialog, stampa solo
+                            alertDelete.setNegativeButton(R.string.confirmNegative, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    //tost conferma evento non eliminato!
+                                    Toast.makeText(EditEvent.this, R.string.deleteInsuccess, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            alertDelete.create().show();
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+        }
+
+
+    }
+
+
+
+
 
 
 }

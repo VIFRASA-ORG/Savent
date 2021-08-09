@@ -49,8 +49,7 @@
             android:id="@+id/imageViewGroup"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="12dp"
-            android:background="@drawable/group_icon"
+            android:src ="@drawable/group_icon"
             android:scaleType="centerCrop"/>
 
     </androidx.cardview.widget.CardView>

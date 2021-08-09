@@ -15,6 +15,7 @@
         <item name="colorAccent">@color/blueButton</item>
         <item name="colorControlNormal">@color/blue_button_advanced</item>
 
+        <item name="android:soundEffectsEnabled">false</item>
 
     </style>
 

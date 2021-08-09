@@ -449,4 +449,18 @@ public class Eventi extends ResultsConverter {
         StorageHelper.downloadImageUri(finalChildName,closureResult);
     }
 
+
+    /** Delete event.
+     *
+     * @param idEvento   id of the event to delete.
+     * @param closureBool   get called with true if the task is successful, false otherwise.
+     */
+    public static final void deleteEvent(String idEvento, ClosureBoolean closureBool){
+        if(AuthHelper.isLoggedIn()){
+            FirestoreHelper.db.collection(EVENTO_COLLECTION).document(idEvento).delete().addOnCompleteListener(task -> {
+                if (closureBool != null) closureBool.closure(task.isSuccessful());
+            });
+        }
+    }
+
 }

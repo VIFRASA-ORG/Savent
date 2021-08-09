@@ -190,6 +190,12 @@
     <string name="accountCreatore">Io</string>
     <string name="luogoEvento">Inserire il luogo dove si svolgerà l\'evento</string>
     <string name="messaggioDataOraEvento">Inserisci la data e l\'orario dell evento</string>
+    <string name="deleteEvent">Elimina</string>
+    <string name="titleDeleteEvent">Elimina evento</string>
+    <string name="msgDeleteEvent">Sei sicuro di voler eliminare questo evento?</string>
+    <string name="deleteSuccessEvent">Hai eliminato questo evento con successo!</string>
+
+
 
     //Modifica evento
     <string name="modificaEvento">Modifica evento</string>
