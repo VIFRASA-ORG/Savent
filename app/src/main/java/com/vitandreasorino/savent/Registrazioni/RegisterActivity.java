@@ -223,7 +223,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
                     //Check the fiscal code
                     Utenti.isFiscalCodeAlreadyUsed(codiceFiscale, isUsed -> {
-                        Log.i("PORCO",isUsed + "");
                         if(isUsed){
                             editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                             Toast.makeText(this,R.string.fiscalCodeAlreadyTaken,Toast.LENGTH_LONG).show();
@@ -247,6 +246,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
     private void computeRegistrationToServer(Utente user, String email, String psw){
         Utenti.createNewUser(user, email, psw, imageSelected, this, closureBool -> {
             if(closureBool){
+                //Creating the firebase notification token document associated to the logged in user
+                //with the current token.
+                Utenti.createMessagingTokenDocument(null);
+
                 Toast.makeText(this, getString(R.string.registrazioneEffettuataRegister), Toast.LENGTH_LONG).show();
                 Intent schermataHome = new Intent(getApplicationContext(), HomeActivity.class);
                 schermataHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the stack all the previous Activity.

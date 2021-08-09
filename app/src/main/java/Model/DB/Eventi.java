@@ -277,13 +277,40 @@ public class Eventi extends ResultsConverter {
                 if(closureList != null) closureList.closure(null);
                 return;
             }
-            FirestoreHelper.db.collection(EVENTO_COLLECTION).whereIn("idGruppoCreatore",adminGroupIdList).get().addOnCompleteListener(task -> {
-                if(task.isSuccessful()){
-                    if(closureList != null) closureList.closure(convertResults(task,Evento.class));
-                }else{
-                    if(closureList != null) closureList.closure(null);
+
+            if(adminGroupIdList.size() > 10){
+                Collection<Task<?>> taskList = new ArrayList<Task<?>>();
+                int numbersOfChucks = adminGroupIdList.size() / 10;
+
+                //Adding the chunked query to the list
+                for(int i=0; i <= numbersOfChucks; i++){
+                    Task t;
+                    if(i == numbersOfChucks) t = FirestoreHelper.db.collection(EVENTO_COLLECTION).whereIn("idGruppoCreatore",adminGroupIdList.subList(10*i,adminGroupIdList.size())).get();
+                    else t = FirestoreHelper.db.collection(EVENTO_COLLECTION).whereIn("idGruppoCreatore",adminGroupIdList.subList(10*i,10*i+10)).get();
+                    taskList.add(t);
                 }
-            });
+
+                Task combinedTask = Tasks.whenAllComplete(taskList).addOnCompleteListener(task -> {
+                    if(closureList != null){
+                        if(task.isSuccessful()){
+                            List<Evento> finalList = new ArrayList<>();
+                            for(Task<?> t : task.getResult()){
+                                finalList.addAll(convertResults((Task<QuerySnapshot>) t,Evento.class));
+                            }
+                            closureList.closure(finalList);
+                        }else closureList.closure(null);
+                    }
+                });
+
+            }else{
+                FirestoreHelper.db.collection(EVENTO_COLLECTION).whereIn("idGruppoCreatore",adminGroupIdList).get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        if(closureList != null) closureList.closure(convertResults(task,Evento.class));
+                    }else{
+                        if(closureList != null) closureList.closure(null);
+                    }
+                });
+            }
         }
     }
 
@@ -447,6 +474,20 @@ public class Eventi extends ResultsConverter {
 
         String finalChildName = EVENTO_COLLECTION + "/" + idEvento + "/locandina";
         StorageHelper.downloadImageUri(finalChildName,closureResult);
+    }
+
+
+    /** Delete event.
+     *
+     * @param idEvento   id of the event to delete.
+     * @param closureBool   get called with true if the task is successful, false otherwise.
+     */
+    public static final void deleteEvent(String idEvento, ClosureBoolean closureBool){
+        if(AuthHelper.isLoggedIn()){
+            FirestoreHelper.db.collection(EVENTO_COLLECTION).document(idEvento).delete().addOnCompleteListener(task -> {
+                if (closureBool != null) closureBool.closure(task.isSuccessful());
+            });
+        }
     }
 
 }

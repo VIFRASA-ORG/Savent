@@ -25,6 +25,7 @@ import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureBoolean;
 import Model.DB.Enti;
+import Model.DB.Utenti;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnFocusChangeListener {
@@ -159,6 +160,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     private void loggedInAsUser(){
+        //Communicating the new notification token to the server
+        Utenti.setMessagingToken(isSucc -> {
+            if (!isSucc){
+                Utenti.createMessagingTokenDocument(null);
+            }
+        });
+
         Toast.makeText(getApplicationContext(),getString(R.string.correctLogin),Toast.LENGTH_SHORT).show();
         Intent schermataHome = new Intent(getApplicationContext(), HomeActivity.class);
         schermataHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.

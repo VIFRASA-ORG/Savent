@@ -3,6 +3,7 @@ package Model.DB;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,11 +15,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import Helper.AuthHelper;
 import Helper.FirestoreHelper;
@@ -33,6 +37,7 @@ import Model.Pojo.Utente;
 public class Utenti extends ResultsConverter {
 
     private static final String UTENTI_COLLECTION = "Utenti";
+    private static final String MESSAGING_TOKEN_COLLECTION = "MessagingToken";
 
     /**
      * Used to update the information of the user into the updateField method.
@@ -46,6 +51,83 @@ public class Utenti extends ResultsConverter {
     public static final String IS_PROFILE_IMAGE_FIELD = "isProfileImageUploaded";
     public static final String CODICE_FISCALE_FIELD = "codiceFiscale";
 
+    public static final String TOKEN_FIELD = "token";
+
+
+    /**
+     * Method used to get the current firebase messaging token associated to the device.
+     *
+     * @param closureRes invoked with the token string if the task is successful, null otherwise
+     */
+    private static final void getCurrentToken(@Nullable ClosureResult<String> closureRes){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.w("MESSAGING", "Fetching FCM registration token failed", task.getException());
+                if(closureRes != null) closureRes.closure(null);
+            }
+
+            // Get new FCM registration token
+            String token = task.getResult();
+
+            // Log and toast
+            if(closureRes != null) closureRes.closure(token);
+        });
+    }
+
+    /**
+     * Create a new document into "MessagingToken" collection associated to the logged in user.
+     * The new record contains the logged in user id and the messaging token associated to the device.
+     *
+     * @param closureBool invoked with true if the task is successful, false otherwise.
+     */
+    public static final void createMessagingTokenDocument( @Nullable ClosureBoolean closureBool){
+        if(AuthHelper.isLoggedIn()) {
+
+            getCurrentToken( token -> {
+                if (token == null) {
+                    if (closureBool != null) closureBool.closure(false);
+                    return;
+                }
+
+                Map<String, String> data = new HashMap<>();
+                data.put(TOKEN_FIELD, token);
+                FirestoreHelper.db.collection(MESSAGING_TOKEN_COLLECTION).document(AuthHelper.getUserId()).set(data).addOnCompleteListener( task -> {
+                    if(closureBool != null) closureBool.closure((task.isSuccessful()));
+                });
+            });
+        }
+    }
+
+    /**
+     * Send to the server the new messaging token
+     * The new token is associated to the logged in user and is taken directly from the FirebaseMessaging API.
+     *
+     * @param closureBool invoked with true if the task is successful, false otherwise.
+     */
+    public static final void setMessagingToken(@Nullable ClosureBoolean closureBool){
+        if(AuthHelper.isLoggedIn()) {
+            getCurrentToken( token -> {
+                FirestoreHelper.db.collection(MESSAGING_TOKEN_COLLECTION).document(AuthHelper.getUserId()).update(TOKEN_FIELD, token).addOnCompleteListener(task -> {
+                    if (closureBool != null) closureBool.closure(task.isSuccessful());
+                });
+            });
+        }
+    }
+
+    /**
+     * Send to the server the new messaging token
+     * The new token is associated to the logged in user
+     *
+     * @param newToken the new token to communicate to the server
+     * @param closureBool invoked with true if the task is successful, false otherwise.
+     */
+    public static final void setMessagingToken(String newToken, @Nullable ClosureBoolean closureBool){
+        if(AuthHelper.isLoggedIn()) {
+            FirestoreHelper.db.collection(MESSAGING_TOKEN_COLLECTION).document(AuthHelper.getUserId()).update(TOKEN_FIELD, newToken).addOnCompleteListener(task -> {
+                if (closureBool != null) closureBool.closure(task.isSuccessful());
+            });
+        }
+    }
 
     /**
      * Check if the given fiscal code is already used by another account

@@ -190,6 +190,12 @@
     <string name="accountCreatore">Io</string>
     <string name="luogoEvento">Inserire il luogo dove si svolgerà l\'evento</string>
     <string name="messaggioDataOraEvento">Inserisci la data e l\'orario dell evento</string>
+    <string name="deleteEvent">Elimina</string>
+    <string name="titleDeleteEvent">Elimina evento</string>
+    <string name="msgDeleteEvent">Sei sicuro di voler eliminare questo evento?</string>
+    <string name="deleteSuccessEvent">Hai eliminato questo evento con successo!</string>
+
+
 
     //Modifica evento
     <string name="modificaEvento">Modifica evento</string>
@@ -245,10 +251,38 @@
     <string name="stringSwabType">Tipo tampone</string>
     <string name="stringResult">Esito</string>
     <string name="stringSaventEnti">Savent Enti</string>
+
     <string name="textHomeSwab1">Dopo aver ottenuto il risultato del tampone di un tuo paziente, hai la possibilità di generare,
         mediante la nostra applicazione, un codice univoco per permettergli di comunicare l\'esito al sistema.</string>
     <string name="textHomeSwab2">Comunica al tuo paziente, mediante email o altro, l\'esito del tampone attraverso il codice univoco.</string>
     <string name="textHomeSwab3">Il tuo paziente potrà segnalare l\'esito del tampone usando il codice univoco da te generato.
     Questo garantisce il pieno rispetto della privacy, in quanto non vi è correlazione tra l\'esito e il paziente.</string>
     <string name="textHomeSwab4">Con la nostra rete di comunicazione che utilizza la tecnologia Bluetooth Low Energy, tutte le persone che hanno avuto un contatto con il tuo paziente negli ultimi 14 giorni avranno una comunicazione del rischio.</string>
+
+    <string name="textHomeSwabResult">Inserisci i risultati dei tamponi dei tuoi pazienti. Ci occupiamo noi di comunicarlo al paziente!</string>
+    <string name="textHomeCommunities">Con la nostra rete di comunicazione che utilizza la tecnologia Bluetooth Low Energy, tutte le persone che hanno avuto un contatto con il tuo paziente negli ultimi 14 giorni avranno una comunicazione del rischio.</string>
+
+    //Notification activity
+    <string name="notificationTitle">Notifiche</string>
+    <string name="noNotifications">Non ci sono notifiche</string>
+    <string name="notificationCancellationTitle">Sei sicuro?</string>
+    <string name="notificationCancellationMessage">Sei sicuro di voler cancellare questa notifica?</string>
+    <string name="notificationSuccessfullyCancelled">Notifica cancellata con successo!</string>
+    
+    //AllNotificationType
+    <string-array name="queueClimbed">
+        <item>Parteciperai all\'evento </item>
+        <item>Hai scalato con successo la coda, quindi ora potrai partecipare all\'evento!</item>
+    </string-array>
+
+    <string-array name="addedToGroup">
+        <item>Sei stato aggiunto ad un gruppo!</item>
+        <item>Qualcuno ti ha aggiunto al gruppo </item>
+    </string-array>
+
+    <string-array name="eventDeleted">
+        <item>Un evento è stato annullato!</item>
+        <item>è stato cancellato quindi non si terrà più!</item>
+    </string-array>
+
 </resources>
