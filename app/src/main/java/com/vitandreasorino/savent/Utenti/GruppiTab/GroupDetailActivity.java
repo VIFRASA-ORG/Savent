@@ -2,6 +2,7 @@ package com.vitandreasorino.savent.Utenti.GruppiTab;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -46,6 +47,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     private static final int ADD_CONTACTS_RESULT = 11;
 
     private boolean isModified = false;
+    private boolean isCreated = false;
 
     Gruppo groupModel;
     Utente admin;
@@ -79,6 +81,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
         //Deserializing the object from the intent
         groupModel = (Gruppo) getIntent().getSerializableExtra("IdGrouppoLista");
+        isCreated = getIntent().getBooleanExtra("Creato", false);
+
 
         //Inflate all the component
         inflateAll();
@@ -497,6 +501,12 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     @Override
     public void onBackPressed() {
         if(isModified) setResult(RESULT_OK);
+
+        if(isCreated){
+            Intent i = new Intent("Update");
+            i.putExtra("Updated", true);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+        }
 
         super.onBackPressed();
         finish();

@@ -1,7 +1,9 @@
 package com.vitandreasorino.savent.Utenti.GruppiTab;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vitandreasorino.savent.R;
@@ -78,9 +81,25 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
 
          // istanza che permette alla lista dei gruppi di essere cercata con la SearchView
         groupSearchView.setOnQueryTextListener(searchListener);
-
         groupListView.setOnItemClickListener(this);
+
+        //registrazione del lister per il broadcast
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(br, new IntentFilter("Update"));
     }
+
+    /**
+     * Ricevitore di messaggio broadcast per aggiornare la lista
+     * dei gruppi quando viene creato un nuovo gruppo
+     */
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Boolean isUpdated = intent.getBooleanExtra("Updated", false);
+            if(isUpdated){
+                downloadDataList();
+            }
+        }
+    };
 
     private void toggleDownloadingElements(boolean isDownloading){
         if(isDownloading){
@@ -263,6 +282,8 @@ class GroupAdapter extends BaseAdapter implements Filterable {
 
         //imposta l'immagine del gruppo se esiste
         if(gruppo.getImmagineBitmap() != null) img.setImageBitmap(gruppo.getImmagineBitmap());
+        else img.setImageResource(R.drawable.group_icon);
+
         //imposta etichetta Admin se si è amministratori del gruppo
         if(gruppo.getIdAmministratore().equals(AuthHelper.getUserId())) textAdmin.setVisibility(View.VISIBLE);
         else textAdmin.setVisibility(View.INVISIBLE);

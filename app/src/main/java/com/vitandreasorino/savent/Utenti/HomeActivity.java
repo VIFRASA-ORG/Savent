@@ -272,6 +272,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
 
         if(event.values[0] == 0) {
+            System.out.println("VICINO");
         }
     }
 

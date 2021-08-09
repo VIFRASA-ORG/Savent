@@ -218,6 +218,7 @@ public class AddGroup extends AppCompatActivity {
                         Toast.makeText(this,R.string.groupCreated,Toast.LENGTH_LONG).show();
                         Intent i = new Intent(this, GroupDetailActivity.class);
                         i.putExtra("IdGrouppoLista",gruppo);
+                        i.putExtra("Creato", true);
                         startActivity(i);
                         finish();
                     }else{
