@@ -50,11 +50,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             public static final String COLUMN_NAME_EVENT_NAME = "EventName";
             public static final String COLUMN_NAME_DATE = "Date";
             public static final String COLUMN_NAME_READ = "Read";
+
+            public static final String COLUMN_NAME_GROUP_ID = "GroupId";
+            public static final String COLUMN_NAME_GROUP_NAME = "GroupName";
         }
     }
 
     public static final int DISTANCE_TIME_CONTACT = 15;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     /* Costruttore della classe SQLiteHelper */
     public SQLiteHelper(Context context) {
@@ -76,7 +79,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 " INTEGER PRIMARY KEY AUTOINCREMENT, " + SaventContract.Notifiche.COLUMN_NAME_NOTIFICATION_TYPE + " TEXT, " +
                 SaventContract.Notifiche.COLUMN_NAME_EVENT_ID + " TEXT, " + SaventContract.Notifiche.COLUMN_NAME_EVENT_NAME + " TEXT, " +
                 SaventContract.Notifiche.COLUMN_NAME_DATE + " TEXT, " +
-                SaventContract.Notifiche.COLUMN_NAME_READ + " INTEGER )");
+                SaventContract.Notifiche.COLUMN_NAME_READ + " INTEGER," +
+                SaventContract.Notifiche.COLUMN_NAME_GROUP_ID + " TEXT," +
+                SaventContract.Notifiche.COLUMN_NAME_GROUP_NAME + " TEXT )");
     }
 
 
@@ -113,6 +118,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         contentValues.put(SaventContract.Notifiche.COLUMN_NAME_EVENT_ID, n.getEventId());
         contentValues.put(SaventContract.Notifiche.COLUMN_NAME_EVENT_NAME, n.getEventName());
 
+        contentValues.put(SaventContract.Notifiche.COLUMN_NAME_GROUP_ID, n.getGroupId());
+        contentValues.put(SaventContract.Notifiche.COLUMN_NAME_GROUP_NAME, n.getGroupName());
+
         if(n.getDate() != null) contentValues.put(SaventContract.Notifiche.COLUMN_NAME_DATE, n.getDate().getTimeInMillis());
         else contentValues.put(SaventContract.Notifiche.COLUMN_NAME_DATE, "");
 
@@ -148,11 +156,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             n.setNotificationType(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_NOTIFICATION_TYPE)));
             n.setEventName(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_EVENT_NAME)));
             n.setEventId(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_EVENT_ID)));
+            n.setGroupName(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_GROUP_NAME)));
+            n.setGroupId(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_GROUP_ID)));
             n.setRead(cursor.getInt(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_READ)) == 0 ? false : true);
             n.setId(cursor.getInt(cursor.getColumnIndexOrThrow(SaventContract.Notifiche._ID)));
 
-            n.setTitle(context.getResources().getStringArray(R.array.queueClimbed)[0] + " \"" +n.getEventName() + "\"!");
-            n.setDescription(context.getResources().getStringArray(R.array.queueClimbed)[1]);
+            NotificationHelper.setTitleAndDescription(n,context);
 
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(Long.parseLong(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_DATE))));

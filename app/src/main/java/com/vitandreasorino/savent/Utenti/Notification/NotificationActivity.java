@@ -17,9 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.vitandreasorino.savent.R;
 import com.vitandreasorino.savent.Utenti.EventiTab.EventDetailActivity;
+import com.vitandreasorino.savent.Utenti.GruppiTab.GroupDetailActivity;
 import com.vitandreasorino.savent.Utenti.HomeActivity;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import Helper.NotificationHelper;
 import Helper.SQLiteHelper;
 import Model.Pojo.Notification;
 
@@ -82,11 +85,19 @@ public class NotificationActivity extends AppCompatActivity implements AdapterVi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Notification selected = notifications.get(position);
 
-        if(selected.getEventId() != null){
-            Intent i = new Intent(this, EventDetailActivity.class);
-            i.putExtra(FROM_NOTIFICATION_INTENT,true);
-            i.putExtra("eventId",selected.getEventId());
-            startActivity(i);
+        switch (selected.getNotificationType()){
+            case NotificationHelper.QUEUE_CLIMBED_NOTIFICATION:
+                Intent i = new Intent(this, EventDetailActivity.class);
+                i.putExtra(FROM_NOTIFICATION_INTENT,true);
+                i.putExtra("eventId",selected.getEventId());
+                startActivity(i);
+                break;
+            case NotificationHelper.NEW_GROUP_NOTIFICATION:
+                Intent i1 = new Intent(this, GroupDetailActivity.class);
+                i1.putExtra(FROM_NOTIFICATION_INTENT,true);
+                i1.putExtra("groupId",selected.getGroupId());
+                startActivity(i1);
+                break;
         }
 
         if (!selected.isRead()){

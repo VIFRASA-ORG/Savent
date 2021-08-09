@@ -9,6 +9,9 @@ public class Notification {
     public static final String EVENT_NAME = "eventName";
     public static final String EVENT_ID = "eventId";
 
+    public static final String GROUP_NAME = "groupName";
+    public static final String GROUP_ID = "groupId";
+
 
     private int id;
     private String title = "";
@@ -16,8 +19,12 @@ public class Notification {
     private String notificationType = "";
     private Calendar date = null;
     private boolean isRead = false;
+
     private String eventId = "";
     private String eventName = "";
+
+    private String groupId = "";
+    private String groupName = "";
 
 
     public Notification() {}
@@ -86,5 +93,21 @@ public class Notification {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }

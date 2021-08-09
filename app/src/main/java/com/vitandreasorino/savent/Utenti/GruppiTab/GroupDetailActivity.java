@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vitandreasorino.savent.Utenti.GruppiTab.CreazioneGruppo.AddContacts;
 import com.vitandreasorino.savent.R;
+import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,26 +78,23 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_detail);
 
-        //Deserializing the object from the intent
-        groupModel = (Gruppo) getIntent().getSerializableExtra("IdGrouppoLista");
-
         //Inflate all the component
         inflateAll();
 
-        //Inserisci il nome e descrizione del gruppo all'interno della vista
-        nameDetailGroup.setText(groupModel.getNome());
-        descriptionDetailGroup.setText(groupModel.getDescrizione());
+        boolean fromNotification = getIntent().getBooleanExtra(NotificationActivity.FROM_NOTIFICATION_INTENT,false);
+        if(fromNotification){
+            String groupId = getIntent().getStringExtra("groupId");
 
-        //Scarica l'immagine del gruppo dal db
-        if(groupModel.getIsImmagineUploaded()){
-            Gruppi.downloadGroupImage(groupModel.getId(), bitmap -> {
-
-                if(bitmap != null){
-                    imageViewDetailGroup.setImageBitmap(bitmap);
-                    groupModel.setImmagineBitmap(bitmap);
-                }
+            Gruppi.getGroup(groupId, group -> {
+                groupModel = group;
+                continueDownload();
             });
+        }else{
+            //Deserializing the object from the intent
+            groupModel = (Gruppo) getIntent().getSerializableExtra("IdGrouppoLista");
+            continueDownload();
         }
+
 
         /**
          * Metodo attivabile tramite una pressione prolungata sul singolo componente del gruppo.
@@ -155,7 +153,6 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             }
         });
 
-        functionsBasedOnRole();
 
         /**
          * metodo che permette di selezionare la nuova immagine
@@ -182,7 +179,6 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             }
         });
 
-        downloadDataList();
         //settaggio delle informazioni
         nameDetailGroup.addTextChangedListener(textWatcher);
         descriptionDetailGroup.addTextChangedListener(textWatcher);
@@ -193,6 +189,25 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         checkSaveButtonActivation();
 
     }//fine onCreate
+
+    private void continueDownload(){
+        //Inserisci il nome e descrizione del gruppo all'interno della vista
+        nameDetailGroup.setText(groupModel.getNome());
+        descriptionDetailGroup.setText(groupModel.getDescrizione());
+
+        //Scarica l'immagine del gruppo dal db
+        if(groupModel.getIsImmagineUploaded()){
+            Gruppi.downloadGroupImage(groupModel.getId(), bitmap -> {
+
+                if(bitmap != null){
+                    imageViewDetailGroup.setImageBitmap(bitmap);
+                    groupModel.setImmagineBitmap(bitmap);
+                }
+            });
+        }
+        functionsBasedOnRole();
+        downloadDataList();
+    }
 
     /**
      * Metodo che permette di attivare e disattivare le funzioni in base al ruolo di appartenenza

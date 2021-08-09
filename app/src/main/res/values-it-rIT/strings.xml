@@ -257,4 +257,14 @@
         <item>Hai scalato con successo la coda, quindi ora potrai partecipare all\'evento!</item>
     </string-array>
 
+    <string-array name="addedToGroup">
+        <item>Sei stato aggiunto ad un gruppo!</item>
+        <item>Qualcuno ti ha aggiunto al gruppo </item>
+    </string-array>
+
+    <string-array name="eventDeleted">
+        <item>Un evento è stato annullato!</item>
+        <item>è stato cancellato quindi non si terrà più!</item>
+    </string-array>
+
 </resources>
