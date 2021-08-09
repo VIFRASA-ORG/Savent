@@ -8,13 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.vitandreasorino.savent.Enti.AddSwabTab.AddSwabFragment;
+import com.vitandreasorino.savent.Enti.AddSwabTab.GenerateCodeFragment;
 import com.vitandreasorino.savent.R;
 
 public class HomeActivityEnte extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private HomeFragmentEnte homeFragmentEnte = new HomeFragmentEnte();
-    private AddSwabFragment swabFragmentEnte = new AddSwabFragment();
+    private GenerateCodeFragment generateCodeFragmentEnte = new GenerateCodeFragment();
+
     BottomNavigationView bottomNavigationEnte;
     Class previousFragmentClass = null;
 
@@ -41,7 +42,7 @@ public class HomeActivityEnte extends AppCompatActivity implements BottomNavigat
                 selectedFragment = homeFragmentEnte;
                 break;
             case R.id.nav_swab_ente:
-                selectedFragment = swabFragmentEnte;
+                selectedFragment = generateCodeFragmentEnte;
                 break;
 
         }

@@ -19,7 +19,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/fragmentAddSwabLayout"
+                android:id="@+id/fragmentGenerateCodeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -39,14 +39,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-10dp"
                     android:paddingLeft="20dp"
-                    android:text="@string/stringSwabResult" />
+                    android:text="@string/stringSwab" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/ic_box"
+                    android:background="@drawable/ic_box_rounded_top"
                     android:orientation="vertical"
+                    android:weightSum="10"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
@@ -58,39 +59,51 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/textTypeSwab"
-                            android:layout_width="match_parent"
+                        <Button
+                            android:id="@+id/buttonGenerateCode"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="60dp"
-                            android:text="@string/stringSwabType" />
-
-                        <Spinner
-                            android:id="@+id/spinnerSwabType"
-                            android:layout_width="150dp"
-                            android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/white"
-                            android:entries="@array/typeSwab" />
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="5dp"
+                            android:backgroundTint="@color/blueButton"
+                            android:onClick="buttonSelectPatient"
+                            android:text="@string/buttonGenerateCode"
+                            android:textColor="@color/white"
+                            app:cornerRadius="@dimen/radius_button_register" />
 
                         <TextView
                             android:id="@+id/textResultSwab"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginLeft="20dp"
-                            android:layout_marginTop="10dp"
-                            android:text="@string/stringResult" />
+                            android:text="@string/stringCreateCode" />
 
-                        <Spinner
-                            android:id="@+id/spinnerResultSwab"
-                            android:layout_width="150dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/white"
-                            android:entries="@array/resultSwab" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="50dp"
+                            android:layout_marginRight="50dp"
+                            android:orientation="horizontal"
+                            android:weightSum="5">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginBottom="20dp"
+                                android:layout_weight="4.5"></TextView>
+
+                            <ImageView
+                                android:id="@+id/buttonCopyCode"
+                                android:layout_width="0dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="0.3"
+                                android:background="@drawable/ic_baseline_file_copy_24"
+                                android:gravity="top"
+                                android:scaleType="centerCrop" />
+                        </LinearLayout>
+
 
                     </LinearLayout>
 
@@ -100,12 +113,12 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/patientData"
+                            android:id="@+id/CodesData"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
-                            android:layout_marginTop="10dp"
-                            android:text="@string/stringPatient" />
+                            android:layout_marginTop="5dp"
+                            android:text="@string/stringCodeList" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -115,15 +128,15 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_margin="20dp"
+                                android:layout_margin="35dp"
                                 android:gravity="center"
                                 android:orientation="vertical"
-                                android:visibility="visible">
+                                android:visibility="gone">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/stringNoPatientResult"
+                                    android:text="No code found!"
                                     android:textColor="@color/blueButton"
                                     android:textSize="20dp" />
                             </LinearLayout>
@@ -133,12 +146,12 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center"
                                 android:orientation="vertical"
-                                android:visibility="gone">
+                                android:visibility="visible">
 
                                 <ListView
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    tools:listitem="@layout/component_group_list_row" />
+                                    android:layout_height="130dp"
+                                    tools:listitem="@layout/code_list_row" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -147,39 +160,12 @@
                                 android:gravity="top|center"
                                 android:orientation="vertical">
 
-                                <Button
-                                    android:id="@+id/buttonSelectPatient"
-                                    android:onClick="buttonSelectPatient"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:backgroundTint="@color/blueButton"
-                                    android:text="@string/stringSelectPatient"
-                                    android:textColor="@color/white"
-                                    app:cornerRadius="@dimen/radius_button_register" />
                             </LinearLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
 
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="60dp"
-                        android:gravity="top|center"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/buttonSendSwabResult"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom|center"
-                            android:layout_marginTop="20dp"
-                            android:backgroundTint="@color/blueButton"
-                            android:text="@string/stringSendResultSwab"
-                            app:cornerRadius="@dimen/radius_button_register" />
-                    </LinearLayout>
 
                 </LinearLayout>
 
