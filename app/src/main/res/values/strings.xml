@@ -220,42 +220,29 @@
     <string name="passwordRequired">Password required</string>
     <string name="cancelButton">CANCEL</string>
 
-    //String per layout ente
-    <string-array name="typeSwab">
-        <item>Quick</item>
-        <item>Molecular</item>
-        <item>Serological</item>
-    </string-array>
-    <string-array name="resultSwab">
-        <item>Negative</item>
-        <item>Positive</item>
-    </string-array>
-    <string name="stringInsertDate">Insert date</string>
-    <string name="stringPatient">Patient</string>
-    <string name="stringPatients">Patients</string>
-    <string name="stringFilter">Filters</string>
-    <string name="stringSelectPatient">Select patient</string>
-    <string name="stringSendResultSwab">Send swab result</string>
-    <string name="stringNoPatientResult">No patient selected!</string>
-    <string name="stringStatus">Health status</string>
-    <string name="stringSwab">Generate swabs codes</string>
+    //Generazione Codici Ente
     <string name="buttonGenerateCode">Generate code</string>
     <string name="stringCreateCode">Code created:</string>
     <string name="stringCodeList">Codes list:</string>
-    <string name="stringCode">Code:</string>
-    <string name="stringSwabType">Swab type</string>
-    <string name="stringResult">Result</string>
     <string name="stringSaventEnti">Savent Companies</string>
-  
+    <string name="typeOfCodeText">Code relative to a swab resulted:</string>
+    <string name="positiveCodeType">Positive</string>
+    <string name="negativeCodeType">Negative</string>
+    <string name="copyText">Copy</string>
+    <string name="emptyText">No code found!</string>
+    <string name="codeCopiedToClipboard">Code copied to the clipboard!</string>
+    <string name="generationError">An error occurred during the code generation!</string>
+    <string name="usedCodeStatus">Used</string>
+    <string name="unusedCodeStatus">Not Used</string>
+
+    //Home Activity Ente
+    <string name="stringSwab">Generate swabs codes</string>
     <string name = "textHomeSwab1">After obtaining the result of your patient\'s swab, you are given the opportunity,
         to generate a unique code from our application in such a way to allow him to communicate the result to the system.</string>
     <string name = "textHomeSwab2">Communicate to your patient, via email or other, the result of the swab through the unique code.</string>
     <string name = "textHomeSwab3">Your patient will be able to report the result of the swab using the unique code you have generated.
     This guarantees full respect for privacy, as there is no correlation between the swab result and the patient. </string>
     <string name="textHomeSwab4">With our communication network using Bluetooth Low Energy technology, all people who have had contact with your patient in the last 14 days will have a communication of the risk. </string>
-
-    <string name="textHomeSwabResult">Insert the swab results of your patients. We take care of communicating it to the patient!</string>
-    <string name="textHomeCommunities">With our communication network using Bluetooth Low Energy technology, all people who have had contact with your patient in the last 14 days will have a communication of the risk. </string>
 
     //Notification activity
     <string name="notificationTitle">Notification</string>

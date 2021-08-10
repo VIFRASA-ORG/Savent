@@ -22,7 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Savent">
         <activity android:name=".Utenti.Notification.NotificationActivity"></activity>
-        <activity android:name=".Enti.AddSwabTab.SelectPatientActivity" />
         <activity android:name=".Utenti.EventiTab.EditEvent" />
         <activity
             android:name=".Utenti.GruppiTab.CreazioneGruppo.AddContacts"
