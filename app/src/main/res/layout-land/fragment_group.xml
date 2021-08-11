@@ -33,15 +33,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp" />
 
-            <ListView
-                android:id="@+id/groupListView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:visibility="gone"/>
-
-            <LinearLayout
-                android:id="@+id/emptyResults"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/emptyResultsPullToRefresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -70,11 +63,21 @@
                         android:visibility="invisible"/>
 
                 </LinearLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/pullToRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <ListView
+                    android:id="@+id/groupListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:visibility="gone"/>
 
-            </LinearLayout>
-
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>
 
     </LinearLayout>

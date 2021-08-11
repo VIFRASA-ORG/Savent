@@ -11,7 +11,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.vitandreasorino.savent.Enti.AddSwabTab.GenerateCodeFragment;
+import com.vitandreasorino.savent.Enti.GenerateCodeTab.GenerateCodeFragment;
 import com.vitandreasorino.savent.R;
 
 public class HomeActivityEnte extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {

@@ -1,18 +1,16 @@
-package com.vitandreasorino.savent.Enti.AddSwabTab;
+package com.vitandreasorino.savent.Enti.GenerateCodeTab;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -36,10 +34,10 @@ import Model.Pojo.CodiceComunicazioneTampone;
 public class GenerateCodeFragment extends Fragment {
 
     private ListView codeListView;
-    private LinearLayout emptyView;
     private ProgressBar progressBarDownloading;
     private ProgressBar progressBarCodeGeneration;
     private SwipeRefreshLayout pullToRefresh;
+    private SwipeRefreshLayout emptyResultsPullToRefresh;
 
     private TextView emptyText;
 
@@ -70,6 +68,7 @@ public class GenerateCodeFragment extends Fragment {
 
         //setting the action for the Pull-To-Refresh action
         pullToRefresh.setOnRefreshListener(() -> downloadAllCode());
+        emptyResultsPullToRefresh.setOnRefreshListener( () -> downloadAllCode());
 
         downloadAllCode();
 
@@ -129,15 +128,16 @@ public class GenerateCodeFragment extends Fragment {
 
             //Disabling the progress bar inside the SwipeRefreshLayout
             pullToRefresh.setRefreshing(false);
+            emptyResultsPullToRefresh.setRefreshing(false);
         });
     }
 
     private void inflateAll(View view){
         codeListView = view.findViewById(R.id.codeListView);
-        emptyView = view.findViewById(R.id.emptyView);
         progressBarDownloading = view.findViewById(R.id.progressBarDownloading);
         progressBarCodeGeneration = view.findViewById(R.id.progressBarCodeGeneration);
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
+        emptyResultsPullToRefresh = view.findViewById(R.id.emptyResultsPullToRefresh);
         emptyText = view.findViewById(R.id.emptyText);
 
         radioButtonPositive = view.findViewById(R.id.radioButtonPositive);
@@ -146,7 +146,7 @@ public class GenerateCodeFragment extends Fragment {
         editTextCodeGenerated = view.findViewById(R.id.editTextCodeGenerated);
         buttonCopyCode = view.findViewById(R.id.buttonCopyCode);
 
-        codeListView.setEmptyView(emptyView);
+        codeListView.setEmptyView(emptyResultsPullToRefresh);
     }
 }
 

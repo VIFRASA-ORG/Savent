@@ -41,50 +41,53 @@
                 android:layout_marginRight="10dp"
                 android:queryBackground="@null"/>
 
-            <ListView
-                android:id="@+id/groupListView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:scrollbars="vertical"
-                android:visibility="gone"/>
-
-            <LinearLayout
-                android:id="@+id/emptyResults"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/emptyResultsPullToRefresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_gravity="center">
+                    android:gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/emptyTextView"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:gravity="center"
-                        android:text="@string/noItemFound"
-                        android:textSize="25sp"
-                        android:visibility="visible" />
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        android:layout_width="wrap_content"
+                        android:layout_gravity="center">
+
+                        <TextView
+                            android:id="@+id/emptyTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/noItemFound"
+                            android:textSize="25sp"
+                            android:visibility="visible" />
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="invisible"/>
+
+                    </LinearLayout>
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/pullToRefresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ListView
+                        android:id="@+id/groupListView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="invisible"/>
+                        android:paddingTop="10dp"
+                        android:scrollbars="vertical"
+                        android:visibility="gone"/>
 
-                </LinearLayout>
-
-
-
-            </LinearLayout>
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout

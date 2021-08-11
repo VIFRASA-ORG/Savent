@@ -176,27 +176,35 @@
                             android:layout_height="match_parent"
                             android:orientation="vertical">
 
-                            <LinearLayout
-                                android:id="@+id/emptyView"
+                            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                                android:id="@+id/emptyResultsPullToRefresh"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:gravity="center"
                                 android:orientation="vertical"
-                                android:visibility="visible">
+                                android:gravity="center_vertical">
 
-                                <TextView
-                                    android:id="@+id/emptyText"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/emptyText"
-                                    android:textSize="20dp" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:visibility="visible">
 
-                                <ProgressBar
-                                    android:id="@+id/progressBarDownloading"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="gone"/>
-                            </LinearLayout>
+                                    <TextView
+                                        android:id="@+id/emptyText"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/emptyText"
+                                        android:textSize="20dp" />
+
+                                    <ProgressBar
+                                        android:id="@+id/progressBarDownloading"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:visibility="gone"/>
+                                </LinearLayout>
+                            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
                             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                                 android:id="@+id/pullToRefresh"
