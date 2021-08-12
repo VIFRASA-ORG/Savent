@@ -225,6 +225,7 @@
     <string name="stringCreateCode">Code created:</string>
     <string name="stringCodeList">Codes list:</string>
     <string name="stringSaventEnti">Savent Companies</string>
+  
     <string name="typeOfCodeText">Code relative to a swab resulted:</string>
     <string name="positiveCodeType">Positive</string>
     <string name="negativeCodeType">Negative</string>
@@ -266,5 +267,21 @@
         <item>An event was canceled!</item>
         <item>has been canceled so it won\'t be held anymore!</item>
     </string-array>
+
+    //MyEventPartecipations
+    <string name="toolBarPartecipations">Partecipation</string>
+    <string name="dateTimePartecipations">Date Time</string>
+    <string name="partecipationEvent">Participate</string>
+    <string name="queueEvent">Queue</string>
+    <string name="titlePartecipation">Title</string>
+    <string name="descriptionPartecipation">Description</string>
+    <string name="shareNameEventPartecipation">Name</string>
+    <string name="descriptionEventPartecipation">Description</string>
+    <string name="positionEventPartecipation">Position -> </string>
+    <string name="latitudineEventPartecipation">Latitude</string>
+    <string name="longitudineEventPartecipation">Longitude</string>
+    <string name="dataEventPartecipation">Date</string>
+    <string name="titleEventPartecipation">EVENT SAVENT</string>
+
 
 </resources>

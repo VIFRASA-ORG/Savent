@@ -59,8 +59,6 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     PageMode pageMode = PageMode.JOIN_EVENT;
 
     private boolean fromCreation = false;
-    
-
 
 
     @Override
@@ -320,19 +318,27 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         builder.setMessage(R.string.youSureLeavingEvent).show();
     }
 
+    /**
+     * Attraverso il pulsante di condivisione, ci permette di condividere le info dell'evento con applicazioni
+     * esterne come WhatsApp, Telegram ecc
+     * @param view
+     */
     public void onShareButtonClick(View view){
-//        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-//        sharingIntent.setType("text/plain");
-//        String shareBody = "Here is the share content body";
-//        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
-//        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-//        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,       getString(R.string.titleEventPartecipation) + "\n" +
+                getString(R.string.shareNameEventPartecipation) + ": " + eventModel.getNome() + "\n" +
+                getString(R.string.descriptionEventPartecipation) + ": " + eventModel.getDescrizione() + "\n" +
+                getString(R.string.positionEventPartecipation) + "\n" +
+                getString(R.string.latitudineEventPartecipation) + ": " + eventModel.getLatitudine() + "\n" +
+                getString(R.string.longitudineEventPartecipation) + ": " + eventModel.getLongitudine() + "\n" +
+                getString(R.string.dataEventPartecipation) + ": " + eventModel.getDataOra() + "\n");
+
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, "Share to");
+        startActivity(shareIntent);
     }
-
-
-
-
-
 
     /*
 
@@ -347,8 +353,14 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     Partecipazioni.removeMyPartecipationTransaction(eventModel.getId(), closureBool -> {
-                        if(closureBool) Toast.makeText(getApplicationContext(),R.string.eventAbandonedCorrectly, Toast.LENGTH_SHORT).show();
+                        if(closureBool){
+                            Toast.makeText(getApplicationContext(),R.string.eventAbandonedCorrectly, Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent("UpdateListPartecipations");
+                            i.putExtra("UpdatedListPartecipations", true);
+                            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+                        }
                         else Toast.makeText(getApplicationContext(),R.string.errorAbandoningEvent, Toast.LENGTH_SHORT).show();
+
                     });
                     break;
 
@@ -374,12 +386,6 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
             }
         }
     };
-
-
-
-
-
-
 
     /*
 
@@ -444,11 +450,6 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         super.onLowMemory();
         mapView.onLowMemory();
     }
-
-
-
-
-
 
     /*
 
