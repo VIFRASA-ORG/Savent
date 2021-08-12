@@ -13,31 +13,18 @@
         android:gravity="center|top"
         android:orientation="vertical">
 
-        <ScrollView
-            android:id="@+id/scrollViewGenerateCode"
+        <LinearLayout
+            android:id="@+id/fragmentGenerateCodeLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/fragmentGenerateCodeLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="60dp"
-                    android:visibility="invisible" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="70dp">
 
                 <TextView
                     android:id="@+id/textView5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-10dp"
+                    android:layout_marginTop="0dp"
                     android:paddingLeft="20dp"
                     android:text="@string/stringSwab" />
 
@@ -47,7 +34,6 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/ic_box_rounded_top"
                     android:orientation="vertical"
-                    android:weightSum="10"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
@@ -56,28 +42,72 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <Button
-                            android:id="@+id/buttonGenerateCode"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:paddingLeft="20dp"
+                            android:textStyle="bold"
+                            android:text="@string/typeOfCodeText" />
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="15dp"
+                            android:layout_marginTop="5dp">
+
+
+                            <RadioGroup
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/radioButtonPositive"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/positiveCodeType"
+                                    android:checked="true"/>
+
+                                <RadioButton
+                                    android:id="@+id/radioButtonNegative"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/negativeCodeType" />
+
+                            </RadioGroup>
+                        </LinearLayout>
+
+
+                        <Button
+                            android:id="@+id/buttonGenerateCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginRight="30dp"
                             android:backgroundTint="@color/blueButton"
-                            android:onClick="buttonSelectPatient"
+                            android:onClick="generateCode"
                             android:text="@string/buttonGenerateCode"
                             android:textColor="@color/white"
                             app:cornerRadius="@dimen/radius_button_register" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBarCodeGeneration"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center"
+                            android:visibility="invisible"/>
 
                         <TextView
                             android:id="@+id/textResultSwab"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="10dp"
+                            android:paddingLeft="20dp"
                             android:text="@string/stringCreateCode" />
 
                         <LinearLayout
@@ -86,27 +116,45 @@
                             android:layout_marginLeft="30dp"
                             android:layout_marginRight="30dp"
                             android:orientation="horizontal"
-                            android:weightSum="5">
+                            android:weightSum="6">
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginBottom="20dp"
-                                android:layout_weight="4.5"></TextView>
+                            <EditText
+                                android:id="@+id/editTextCodeGenerated"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="4"
+                                android:ems="10"
+                                android:inputType="textPersonName"
+                                android:textColor="@color/black"
+                                android:gravity="center"
+                                android:enabled="false"/>
 
-                            <ImageView
-                                android:id="@+id/buttonCopyCode"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/icon_status_bar"
-                                android:layout_weight="0.5"
-                                android:background="@drawable/ic_baseline_file_copy_24"
-                                android:gravity="top"
-                                android:scaleType="centerCrop" />
+                                android:layout_weight="2"
+                                android:orientation="vertical"
+                                android:layout_gravity="center"
+                                android:gravity="center">
 
+                                <ImageView
+                                    android:id="@+id/buttonCopyCode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/ic_baseline_file_copy_24"
+                                    android:gravity="top"
+                                    android:scaleType="fitCenter" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="@string/copyText"
+                                    android:textSize="8sp" />
+
+                            </LinearLayout>
                         </LinearLayout>
-
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -115,6 +163,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:textStyle="bold"
                             android:id="@+id/CodesData"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -127,43 +176,48 @@
                             android:layout_height="match_parent"
                             android:orientation="vertical">
 
-                            <LinearLayout
+                            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                                android:id="@+id/emptyResultsPullToRefresh"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_margin="100dp"
-                                android:gravity="center"
                                 android:orientation="vertical"
-                                android:visibility="gone">
+                                android:gravity="center_vertical">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="No code found!"
-                                    android:textColor="@color/blueButton"
-                                    android:textSize="20dp" />
-                            </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:visibility="visible">
 
-                            <LinearLayout
+                                    <TextView
+                                        android:id="@+id/emptyText"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/emptyText"
+                                        android:textSize="20dp" />
+
+                                    <ProgressBar
+                                        android:id="@+id/progressBarDownloading"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:visibility="gone"/>
+                                </LinearLayout>
+                            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+                            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                                android:id="@+id/pullToRefresh"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:visibility="visible">
-
+                                android:layout_height="match_parent">
                                 <ListView
                                     android:layout_width="match_parent"
-                                    android:layout_height="300dp"
-                                    tools:listitem="@layout/code_list_row" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="top|center"
-                                android:orientation="vertical">
-
-
-                            </LinearLayout>
+                                    android:layout_height="match_parent"
+                                    tools:listitem="@layout/code_list_row"
+                                    android:id="@+id/codeListView"
+                                    android:visibility="visible"
+                                    android:drawSelectorOnTop="true"/>
+                            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
                         </LinearLayout>
 
@@ -174,8 +228,6 @@
 
             </LinearLayout>
 
-
-        </ScrollView>
     </LinearLayout>
 
 

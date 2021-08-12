@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.vitandreasorino.savent.R;
 
@@ -50,6 +51,9 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
 
     ProgressBar progressBar;
     TextView emptyTextView;
+
+    private SwipeRefreshLayout pullToRefresh;
+    private SwipeRefreshLayout emptyViewPullToRefresh;
 
     //List of event shown in he ListView.
     List<Evento> listaDiEventi = new ArrayList<>();
@@ -90,16 +94,15 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
         progressBar = view.findViewById(R.id.progressBar);
         emptyTextView = view.findViewById(R.id.emptyTextView);
 
-        eventListView.setEmptyView(view.findViewById(R.id.emptyResults));
+        emptyViewPullToRefresh = view.findViewById(R.id.emptyResultsPullToRefresh);
+        pullToRefresh = view.findViewById(R.id.pullToRefresh);
 
-        switch (pageVisualizationType){
-            case ALL_EVENTS:
-                downloadAllEvents();
-                break;
-            case MY_EVENTS:
-                downloadMyEvents();
-                break;
-        }
+        emptyViewPullToRefresh.setOnRefreshListener( () -> downloadAll());
+        pullToRefresh.setOnRefreshListener( () -> downloadAll());
+
+        eventListView.setEmptyView(emptyViewPullToRefresh);
+
+        downloadAll();
 
         adapter = new EventAdapter(this.getContext(),listaDiEventi);
         eventListView.setAdapter(adapter);
@@ -114,6 +117,21 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
 
         //registrazione del lister per il broadcast
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(br, new IntentFilter("UpdateEvent"));
+    }
+
+    private void downloadAll(){
+        searchView.setQuery("",true);
+        searchView.clearFocus();
+        switch (pageVisualizationType){
+            case ALL_EVENTS:
+                downloadAllEvents();
+                break;
+            case MY_EVENTS:
+                downloadMyEvents();
+                break;
+        }
+        pullToRefresh.setRefreshing(false);
+        emptyViewPullToRefresh.setRefreshing(false);
     }
 
     /**
