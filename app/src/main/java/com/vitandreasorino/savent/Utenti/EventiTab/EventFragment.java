@@ -24,7 +24,7 @@ public class EventFragment extends Fragment {
     TabLayout upperTabBar;
     View rootView;
     ViewPager2 pager;
-    Button buttonCreateEvent;
+    Button buttonCreateEvent, buttonMyPartecipations;
 
     @Nullable
     @Override
@@ -37,6 +37,7 @@ public class EventFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         buttonCreateEvent = view.findViewById(R.id.buttonCreaEvento);
+        buttonMyPartecipations = view.findViewById(R.id.buttonMyPartecipations);
         upperTabBar = view.findViewById(R.id.upperTabBar);
         pager = (ViewPager2) view.findViewById(R.id.pagerSearchAndNearbyEvents);
         pager.setSaveEnabled(false);
@@ -77,6 +78,14 @@ public class EventFragment extends Fragment {
         buttonCreateEvent.setOnClickListener(v -> {
             Intent i = new Intent(getActivity(), NewEvent.class);
             startActivity(i);
+        });
+
+        buttonMyPartecipations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), MyEventPartecipations.class);
+                startActivity(i);
+            }
         });
     }
 }

@@ -224,26 +224,6 @@
     <string name="passwordRequired">Password richiesta</string>
     <string name="cancelButton">ANNULLA</string>
 
-    //String per layout ente
-    <string-array name="typeSwab">
-        <item>Rapido</item>
-        <item>Molecolare</item>
-        <item>Sierologico</item>
-    </string-array>
-
-    <string-array name="resultSwab">
-        <item>Negativo</item>
-        <item>Positivo</item>
-    </string-array>
-    <string name="stringPatient">Paziente</string>
-    <string name="stringPatients">Patienti</string>
-    <string name="stringInsertDate">Inserire data</string>
-    <string name="stringFilter">Filtri</string>
-    <string name="stringSelectPatient">Seleziona paziente</string>
-    <string name="stringSendResultSwab">Invia risultato tampone</string>
-    <string name="stringNoPatientResult">Nessun paziente selezionato!</string>
-    <string name="stringStatus">Stato sanitario</string>
-
     //Stringhe per il 'fragment home'
     <string name="stringWelcome">Benvenuto in Savent!</string>
     <string name="textHome1">Abbiamo creato quest\'app con l\'intento di contenere il virus e agevolare la creazione e la condivisione di gruppi ed eventi di vario genere.</string>
@@ -259,24 +239,29 @@
     <string name="textHomeSpecificheTecniche4">Savent segnala agli utenti eventuali incontri ravvicinati con soggetti positivi senza rivelarne l\'identità e la posizione del contatto.</string>
     <string name="textHomeSpecificheTecniche5">Puoi disabilitare la funzionalità di tracciamento direttamente dalle impostazioni oppure passando una mano sulla parte superiore dello schermo.</string>
 
-    //Stringhe per le schermate 'fragment home ente' e 'Genera codice tamponi'
-    <string name="stringSwab">Generazione codici tamponi</string>
+    //Generazione Codici Ente
     <string name="buttonGenerateCode">Genera codice</string>
     <string name="stringCreateCode">Codice generato:</string>
     <string name="stringCodeList">Lista codici:</string>
-    <string name="stringCode">Codice:</string>
-    <string name="stringSwabType">Tipo tampone</string>
-    <string name="stringResult">Esito</string>
     <string name="stringSaventEnti">Savent Enti</string>
+    <string name="typeOfCodeText">Codice relativo ad un tampone risultato:</string>
+    <string name="positiveCodeType">Positivo</string>
+    <string name="negativeCodeType">Negativo</string>
+    <string name="copyText">Copia</string>
+    <string name="emptyText">Nessun codice trovato!</string>
+    <string name="codeCopiedToClipboard">Codice copiato negli appunti!</string>
+    <string name="generationError">Si è verificato un errore durante la generazione del codice!</string>
+    <string name="usedCodeStatus">Utilizzato</string>
+    <string name="unusedCodeStatus">Non Utilizzato</string>
+
+    //Home Activity Ente
+    <string name="stringSwab">Generazione codici tamponi</string>
     <string name="textHomeSwab1">Dopo aver ottenuto il risultato del tampone di un tuo paziente, hai la possibilità di generare,
         mediante la nostra applicazione, un codice univoco per permettergli di comunicare l\'esito al sistema.</string>
     <string name="textHomeSwab2">Comunica al tuo paziente, mediante email o altro, l\'esito del tampone attraverso il codice univoco.</string>
     <string name="textHomeSwab3">Il tuo paziente potrà segnalare l\'esito del tampone usando il codice univoco da te generato.
     Questo garantisce il pieno rispetto della privacy, in quanto non vi è correlazione tra l\'esito e il paziente.</string>
     <string name="textHomeSwab4">Con la nostra rete di comunicazione che utilizza la tecnologia Bluetooth Low Energy, tutte le persone che hanno avuto un contatto con il tuo paziente negli ultimi 14 giorni avranno una comunicazione del rischio.</string>
-
-    <string name="textHomeSwabResult">Inserisci i risultati dei tamponi dei tuoi pazienti. Ci occupiamo noi di comunicarlo al paziente!</string>
-    <string name="textHomeCommunities">Con la nostra rete di comunicazione che utilizza la tecnologia Bluetooth Low Energy, tutte le persone che hanno avuto un contatto con il tuo paziente negli ultimi 14 giorni avranno una comunicazione del rischio.</string>
 
     //Notification activity
     <string name="notificationTitle">Notifiche</string>
@@ -300,5 +285,21 @@
         <item>Un evento è stato annullato!</item>
         <item>è stato cancellato quindi non si terrà più!</item>
     </string-array>
+
+    //MyEventPartecipations
+    <string name="toolBarPartecipations">Partecipazioni</string>
+    <string name="dateTimePartecipations">Data Ora</string>
+    <string name="partecipationEvent">Partecipante</string>
+    <string name="queueEvent">In coda</string>
+    <string name="titlePartecipation">Titolo</string>
+    <string name="descriptionPartecipation">Descrizione</string>
+    <string name="shareNameEventPartecipation">Nome</string>
+    <string name="descriptionEventPartecipation">Descrizione</string>
+    <string name="positionEventPartecipation">Posizione -> </string>
+    <string name="latitudineEventPartecipation">Latitudine</string>
+    <string name="longitudineEventPartecipation">Longitudine</string>
+    <string name="dataEventPartecipation">Data</string>
+    <string name="titleEventPartecipation">EVENTO SAVENT</string>
+
 
 </resources>

@@ -9,6 +9,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 
+import com.vitandreasorino.savent.Enti.HomeActivityEnte;
 import com.vitandreasorino.savent.Utenti.HomeActivity;
 
 import Helper.AuthHelper;
@@ -89,13 +90,35 @@ public class SplashActivity extends AppCompatActivity {
      *
      */
     private void goAhead(){
-        Intent intent;
 
-        if(!AuthHelper.isLoggedIn()) intent = new Intent(this, LogSingInActivity.class);
-        else intent = new Intent(this, HomeActivity.class);
+        //If not logged-in, go to the login activity.
+        if(!AuthHelper.isLoggedIn()){
+            Intent intent = new Intent(this, LogSingInActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else{
+            //If logged-in, check what type of user is logged-in.
+            AuthHelper.getLoggedUserType(closureRes -> {
+                Intent intent;
+                switch (closureRes){
+                    case Utente:
+                        intent = new Intent(this, HomeActivity.class);
+                        break;
+                    case Ente:
+                        intent = new Intent(this, HomeActivityEnte.class);
+                        break;
+                    case None:
+                    default:
+                        intent = new Intent(this, LogSingInActivity.class);
+                        AuthHelper.logOut();
+                        break;
+                }
+                startActivity(intent);
+                finish();
+            });
 
-        startActivity(intent);
-        finish();
+        }
     }
 
 }

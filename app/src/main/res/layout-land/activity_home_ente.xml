@@ -9,7 +9,13 @@
     <FrameLayout
         android:id="@+id/fragment_container_ente"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigationEnte">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
         <Toolbar
             android:id="@+id/toolbarEnte"
@@ -65,8 +71,8 @@
                             android:id="@+id/buttonSetting"
                             android:layout_width="@dimen/icon_status_bar"
                             android:layout_height="@dimen/icon_status_bar"
+                            android:background="@drawable/ic_baseline_settings_24"
                             android:layout_marginRight="20dp"
-                            android:background="@drawable/ic_baseline_account_circle_24"
                             android:gravity="top" />
                     </LinearLayout>
 

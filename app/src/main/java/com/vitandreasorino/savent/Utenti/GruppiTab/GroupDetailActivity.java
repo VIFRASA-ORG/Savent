@@ -135,6 +135,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                                     if(closureBool){
                                         Toast.makeText(GroupDetailActivity.this, R.string.confirmDelete, Toast.LENGTH_LONG).show();
                                         adapter.removeItemFromList(utente);
+                                        groupComponentsOriginal.remove(utente);
+                                        groupComponentsUpdated.remove(utente);
                                         adapter.notifyDataSetChanged();
                                         //aggiorna quanto cancelli un componente dal gruppo
                                         updateIntent();

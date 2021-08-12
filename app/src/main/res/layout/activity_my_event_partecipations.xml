@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Toolbar
+        android:id="@+id/toolbarStatusHome"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_box_status"
+        android:elevation="20dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:contentInsetLeft="0dp"
+        android:contentInsetStart="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetEnd="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:paddingTop="10dp"
+                android:gravity="top|center"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/backButtonEditEvent"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/abc_vector_test"
+                        android:backgroundTint="@color/blueButton"
+                        android:onClick="onBackButtonPressed"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/toolBarPartecipations"
+                        android:textColor="@color/blueButton"
+                        android:textSize="24dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    ></LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </Toolbar>
+
+
+    <LinearLayout
+        android:id="@+id/layoutMyPartecipationEvents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="50dp"
+            android:text="@string/toolBarPartecipations"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_box_rounded_top"
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
+
+            <SearchView
+                android:id="@+id/searchViewMyPartecipationEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/ic_button_shape"
+                android:backgroundTint="@color/white"
+                android:iconifiedByDefault="false"
+                android:queryHint="@string/searchPlaceholder"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:queryBackground="@null"/>
+
+            <ListView
+                android:id="@+id/myPartecipationEventsListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:scrollbars="vertical"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/emptyResults"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/emptyTextViewEvents"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/noItemFound"
+                        android:textSize="25sp"
+                        android:visibility="visible" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBarEvent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
+

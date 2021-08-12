@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.maps.android:android-maps-utils:2.2.3'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies

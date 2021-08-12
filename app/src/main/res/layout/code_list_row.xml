@@ -1,43 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/row"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/codeTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="1dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="1nj92nwdcne0n30nsiowjdn20dcndicje"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCopyCode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TextView>
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <ImageView
+        android:id="@+id/buttonCopyCode"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="top"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_baseline_file_copy_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="24dp"
+        android:layout_height="14dp"
+        android:gravity="center"
+        android:text="@string/copyText"
+        android:textAlignment="center"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/buttonCopyCode"
+        app:layout_constraintStart_toStartOf="@+id/buttonCopyCode"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCopyCode" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
-        android:weightSum="5">
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCopyCode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/codeTextView"
+        android:weightSum="9">
 
         <TextView
+            android:id="@+id/codeTypeTextView"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.5"
-            android:text="@string/stringCode">
-
-        </TextView>
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="Positività" />
 
         <TextView
+            android:id="@+id/dataCreationTextView"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3.2"
-            android:inputType="text"
-            android:text="1234"></TextView>
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="12/12/2021" />
 
-        <ImageView
+        <TextView
+            android:id="@+id/codeUsedTextView"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.3"
-            android:background="@drawable/ic_baseline_file_copy_24"
-            android:scaleType="centerCrop">
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="Used" />
 
-        </ImageView>
 
     </LinearLayout>
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
