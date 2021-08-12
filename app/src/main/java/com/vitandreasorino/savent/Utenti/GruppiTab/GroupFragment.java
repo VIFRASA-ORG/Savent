@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vitandreasorino.savent.R;
@@ -47,6 +48,9 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
     ProgressBar progressBar;
     TextView emptyTextView;
 
+    private SwipeRefreshLayout pullToRefresh;
+    private SwipeRefreshLayout emptyResultspullToRefresh;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,7 +65,13 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         buttonCreateGroup = view.findViewById(R.id.buttonCreateGroup);
         progressBar = view.findViewById(R.id.progressBar);
         emptyTextView = view.findViewById(R.id.emptyTextView);
-        groupListView.setEmptyView(view.findViewById(R.id.emptyResults));
+
+        pullToRefresh = view.findViewById(R.id.pullToRefresh);
+        emptyResultspullToRefresh = view.findViewById(R.id.emptyResultsPullToRefresh);
+        pullToRefresh.setOnRefreshListener( () -> downloadDataList());
+        emptyResultspullToRefresh.setOnRefreshListener( () -> downloadDataList());
+
+        groupListView.setEmptyView(emptyResultspullToRefresh);
 
         downloadDataList();
 
@@ -143,6 +153,11 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
                     adapter.notifyDataSetChanged();
 
                     toggleDownloadingElements(false);
+
+                    emptyResultspullToRefresh.setRefreshing(false);
+                    pullToRefresh.setRefreshing(false);
+                    groupSearchView.setQuery("",true);
+                    groupSearchView.clearFocus();
                 }
             }
         });

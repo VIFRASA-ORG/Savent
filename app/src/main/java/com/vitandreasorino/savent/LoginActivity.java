@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vitandreasorino.savent.Enti.HomeActivityEnte;
 import com.vitandreasorino.savent.Utenti.HomeActivity;
 
 import java.util.regex.Matcher;
@@ -57,7 +58,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         editTextPasswordLogin.setOnFocusChangeListener(this);
     }
 
-
+    /**
+     * Disable or enable the component if a download is going on.
+     * In this case it also shows the progress bar.
+     *
+     * @param inProgress flag indicating whether the download is in progress.
+     */
     private void toggleInProgressEvent(boolean inProgress){
         editTextEmailLogin.setEnabled(!inProgress);
         editTextPasswordLogin.setEnabled(!inProgress);
@@ -68,11 +74,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         else AnimationHelper.fadeOut(progressBar,500);
     }
 
+    /**
+     * Remove the focus from all the components inside the view.
+     */
     private void clearAllFocus(){
         editTextEmailLogin.clearFocus();
         editTextPasswordLogin.clearFocus();
     }
-
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
@@ -81,12 +89,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         }
     }
 
+    /**
+     * Method invoked when the log-in button is pressed
+     *
+     * @param view the caller view.
+     */
     public void eventLoginClick(View view) {
         editTextPasswordLogin.clearFocus();
         editTextEmailLogin.clearFocus();
         controlloInputUtenteLogin();
     }
 
+    /**
+     * Method that run a sanity check on all the field.
+     */
     private void controlloInputUtenteLogin() {
 
         String emailLogin, passwordLogin;
@@ -96,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         clearAllFocus();
 
         if( validazioneEmail(emailLogin) == false || validazionePassword(passwordLogin) == false || passwordLogin.contains(" ")) {
-
+            //The user made some error
 
             if(validazioneEmail(emailLogin) == false) {
                 editTextEmailLogin.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
@@ -112,9 +128,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
             }
 
         }else{
+            //All field are correct
+
             backgroundTintEditText();
             toggleInProgressEvent(true);
 
+            //Trying to log-in using the given credential
             AuthHelper.singIn(emailLogin, passwordLogin, new ClosureBoolean() {
                 @Override
                 public void closure(boolean isSuccess) {
@@ -128,13 +147,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         }
     }
 
+    /**
+     * Method invoked if the login is not successful.
+     */
     private final void errorDuringLogin(){
         Toast.makeText(getApplicationContext(),getString(R.string.errorLogin),Toast.LENGTH_SHORT).show();
         toggleInProgressEvent(false);
     }
 
+    /**
+     * Method invoked if the login is successful.
+     */
     private final void loginEffettuato(){
 
+        //Checking what kind of user is logged in
         AuthHelper.getLoggedUserType(closureRes -> {
             switch (closureRes){
                 case Utente:
@@ -146,11 +172,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         });
     }
 
+    /**
+     * Invoked when an Ente user is logged in.
+     */
     private void loggedInAsEnte(){
+
+        //Checkinf if the Ente account is enabled by the admin.
         Enti.isEnteEnabled(AuthHelper.getUserId(),closureBool ->{
             if(closureBool){
-                //Start the activity for the ente
+                //Going to the Ente Home
                 Log.i("AUTH","Loggato come ente");
+                Intent i = new Intent(this, HomeActivityEnte.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
+                startActivity(i);
+                finish();
             }else{
                 Toast.makeText(getApplicationContext(),R.string.accountNotActivated,Toast.LENGTH_SHORT).show();
                 AuthHelper.logOut();
@@ -159,6 +194,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         });
     }
 
+    /**
+     * Invoked when a normal user is logged in
+     */
     private void loggedInAsUser(){
         //Communicating the new notification token to the server
         Utenti.setMessagingToken(isSucc -> {
@@ -167,6 +205,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
             }
         });
 
+        //Going to the normal user Home
         Toast.makeText(getApplicationContext(),getString(R.string.correctLogin),Toast.LENGTH_SHORT).show();
         Intent schermataHome = new Intent(getApplicationContext(), HomeActivity.class);
         schermataHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
@@ -245,17 +284,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         pswRecoveryDialog.show();
     }
 
+    /**
+     * Method invoked when the send recovery email button from the password recovery dialog.
+     *
+     * @param v the caller view.
+     */
     public void onClickSendRecoveryEmail(View v){
         String value = editTextRecoveryEmail.getText().toString();
         editTextRecoveryEmail.clearFocus();
 
+        //Checking if the given email is a valid email.
         if(value != null && !value.equals("") && validazioneEmail(value)){
             Log.i("LOG",editTextRecoveryEmail.getText().toString());
+
+            //Executing the request to the server to send a psw reset email.
             AuthHelper.sendPswResetEmail(value,closureBool -> {
                 pswRecoveryDialog.dismiss();
                 Toast.makeText(this,R.string.pswRecoveryToast,Toast.LENGTH_LONG).show();
             });
         }else{
+            //If the email is not valid, show an error.
             editTextRecoveryEmail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
         }
     }

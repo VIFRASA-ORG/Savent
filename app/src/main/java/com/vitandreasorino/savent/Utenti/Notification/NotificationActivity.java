@@ -1,6 +1,8 @@
 package com.vitandreasorino.savent.Utenti.Notification;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,6 +37,9 @@ public class NotificationActivity extends AppCompatActivity implements AdapterVi
     boolean fromNotificaton = false;
     SQLiteHelper databaseHelper;
 
+    private SwipeRefreshLayout pullToRefresh;
+    private SwipeRefreshLayout emptyResultsPullToRefresh;
+
     public final static String FROM_NOTIFICATION_INTENT = "FROM_NOTIFICATION";
 
     @Override
@@ -45,16 +50,27 @@ public class NotificationActivity extends AppCompatActivity implements AdapterVi
         fromNotificaton = getIntent().getBooleanExtra(FROM_NOTIFICATION_INTENT,false);
 
         notificationListView = findViewById(R.id.notificationListView);
-        notificationListView.setEmptyView(findViewById(R.id.emptyResults));
+        emptyResultsPullToRefresh = findViewById(R.id.emptyResultsPullToRefresh);
+        pullToRefresh = findViewById(R.id.pullToRefresh);
 
-        //Download of all the notification
-        databaseHelper = new SQLiteHelper(this);
-        notifications = databaseHelper.getAllNotificaton(this);
+        notificationListView.setEmptyView(emptyResultsPullToRefresh);
 
         //Setting the alert for the cancellation of a notification
         alertDelete = new  AlertDialog.Builder(this);
         alertDelete.setTitle(R.string.notificationCancellationTitle);
         alertDelete.setMessage(R.string.notificationCancellationMessage);
+
+        //setting the action for the Pull-To-Refresh action
+        pullToRefresh.setOnRefreshListener(() -> downloadAllNotification());
+        emptyResultsPullToRefresh.setOnRefreshListener( () -> downloadAllNotification());
+
+        downloadAllNotification();
+    }
+
+    private void downloadAllNotification(){
+        //Download of all the notification
+        databaseHelper = new SQLiteHelper(this);
+        notifications = databaseHelper.getAllNotificaton(this);
 
         //Creating the adapter
         adapter = new NotificationAdapter(this, notifications, alertDelete);
@@ -62,6 +78,8 @@ public class NotificationActivity extends AppCompatActivity implements AdapterVi
         notificationListView.setOnItemClickListener(this);
         adapter.notifyDataSetChanged();
 
+        pullToRefresh.setRefreshing(false);
+        emptyResultsPullToRefresh.setRefreshing(false);
     }
 
     /**
