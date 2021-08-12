@@ -285,4 +285,20 @@
         <item>è stato cancellato quindi non si terrà più!</item>
     </string-array>
 
+    //MyEventPartecipations
+    <string name="toolBarPartecipations">Partecipazioni</string>
+    <string name="dateTimePartecipations">Data Ora</string>
+    <string name="partecipationEvent">Partecipante</string>
+    <string name="queueEvent">In coda</string>
+    <string name="titlePartecipation">Titolo</string>
+    <string name="descriptionPartecipation">Descrizione</string>
+    <string name="shareNameEventPartecipation">Nome</string>
+    <string name="descriptionEventPartecipation">Descrizione</string>
+    <string name="positionEventPartecipation">Posizione -> </string>
+    <string name="latitudineEventPartecipation">Latitudine</string>
+    <string name="longitudineEventPartecipation">Longitudine</string>
+    <string name="dataEventPartecipation">Data</string>
+    <string name="titleEventPartecipation">EVENTO SAVENT</string>
+
+
 </resources>

@@ -202,7 +202,8 @@ public class Eventi extends ResultsConverter {
                             for(Task<?> t : task.getResult()){
 
                                 DocumentSnapshot d = (DocumentSnapshot) t.getResult();
-                                finalList.add(d.toObject(Evento.class));
+                                Evento ev = d.toObject(Evento.class);
+                                if(ev != null) finalList.add(ev);
                             }
                             closureList.closure(finalList);
                         }else closureList.closure(null);

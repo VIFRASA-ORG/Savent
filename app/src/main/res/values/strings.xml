@@ -246,7 +246,7 @@
     <string name="stringSwabType">Swab type</string>
     <string name="stringResult">Result</string>
     <string name="stringSaventEnti">Savent Companies</string>
-  
+
     <string name = "textHomeSwab1">After obtaining the result of your patient\'s swab, you are given the opportunity,
         to generate a unique code from our application in such a way to allow him to communicate the result to the system.</string>
     <string name = "textHomeSwab2">Communicate to your patient, via email or other, the result of the swab through the unique code.</string>
@@ -279,5 +279,21 @@
         <item>An event was canceled!</item>
         <item>has been canceled so it won\'t be held anymore!</item>
     </string-array>
+
+    //MyEventPartecipations
+    <string name="toolBarPartecipations">Partecipation</string>
+    <string name="dateTimePartecipations">Date Time</string>
+    <string name="partecipationEvent">Participate</string>
+    <string name="queueEvent">Queue</string>
+    <string name="titlePartecipation">Title</string>
+    <string name="descriptionPartecipation">Description</string>
+    <string name="shareNameEventPartecipation">Name</string>
+    <string name="descriptionEventPartecipation">Description</string>
+    <string name="positionEventPartecipation">Position -> </string>
+    <string name="latitudineEventPartecipation">Latitude</string>
+    <string name="longitudineEventPartecipation">Longitude</string>
+    <string name="dataEventPartecipation">Date</string>
+    <string name="titleEventPartecipation">EVENT SAVENT</string>
+
 
 </resources>
