@@ -95,7 +95,8 @@
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:orientation="vertical"
-            android:paddingTop="70dp">
+            android:paddingTop="70dp"
+            android:paddingBottom="30dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -118,7 +119,8 @@
                         android:layout_height="120dp"
                         android:layout_gravity="center"
                         android:layout_weight="2"
-                        android:src="@drawable/covid_test_esito"/>
+                        android:src="@drawable/covid_esito_test"
+                       />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -227,9 +229,7 @@
                         android:layout_height="100dp"
                         android:layout_gravity="center"
                         android:layout_weight="2"
-                        android:src="@drawable/proximity_sensor"
-
-                        />
+                        android:src="@drawable/proximity_sensor" />
 
                     <TextView
                         android:layout_width="match_parent"

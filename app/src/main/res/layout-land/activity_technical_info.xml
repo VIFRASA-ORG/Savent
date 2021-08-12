@@ -121,7 +121,7 @@
                         android:layout_height="120dp"
                         android:layout_gravity="center"
                         android:layout_weight="2"
-                        android:src="@drawable/covid_test_esito"/>
+                        android:src="@drawable/covid_esito_test"/>
 
                     <TextView
                         android:layout_width="match_parent"
