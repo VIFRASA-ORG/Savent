@@ -21,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Savent">
-        <activity android:name=".Utenti.Notification.NotificationActivity"></activity>
+        <activity android:name=".TechnicalInfoActivity"></activity>
+        <activity android:name=".Utenti.Notification.NotificationActivity" />
         <activity android:name=".Enti.AddSwabTab.SelectPatientActivity" />
         <activity android:name=".Utenti.EventiTab.EditEvent" />
         <activity

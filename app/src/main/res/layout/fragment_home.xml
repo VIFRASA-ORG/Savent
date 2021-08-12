@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -12,76 +13,127 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingTop="@dimen/nav_bar"
-            android:layout_marginTop="@dimen/margin_text_box">
+            android:layout_marginTop="30dp"
+            android:paddingTop="200dp">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Blocco 1"
-                android:layout_marginLeft="@dimen/margin_text_box" />
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/stringWelcome"
+                android:textColor="@color/blueButton"
+                android:textSize="18dp"
+                android:textStyle="italic">
 
-            <TextView
-                android:id="@+id/textBoxOneHome"
-                android:layout_width="match_parent"
-                android:elevation="10dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/ic_box"
-                android:layout_marginLeft="@dimen/margin_box"
-                android:layout_marginRight="@dimen/margin_box"/>
+            </TextView>
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/PrincipalInfo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Blocco 2"
-                android:layout_marginLeft="@dimen/margin_text_box"
-                android:layout_marginTop="@dimen/margin_text_box"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-            <TextView
-                android:id="@+id/textBoxTwoHome"
-                android:layout_width="match_parent"
-                android:elevation="10dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/ic_box"
-                android:layout_marginLeft="@dimen/margin_box"
-                android:layout_marginRight="@dimen/margin_box"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="25dp"
+                    android:background="@drawable/ic_box"
+                    android:elevation="10dp"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:weightSum="5">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Blocco 3"
-                android:layout_marginLeft="@dimen/margin_text_box"
-                android:layout_marginTop="@dimen/margin_text_box"/>
+                    <ImageView
+                        android:id="@+id/imagePeopleEvent"
+                        android:layout_width="130dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:src="@drawable/event_day"/>
 
-            <TextView
-                android:id="@+id/textBoxThreeHome"
-                android:layout_width="match_parent"
-                android:elevation="10dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/ic_box"
-                android:layout_marginLeft="@dimen/margin_box"
-                android:layout_marginRight="@dimen/margin_box"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:text="@string/textHome1"></TextView>
+                </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Blocco 4"
-                android:layout_marginLeft="@dimen/margin_text_box"
-                android:layout_marginTop="@dimen/margin_text_box"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="25dp"
+                    android:background="@drawable/ic_box"
+                    android:elevation="10dp"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:weightSum="5">
 
-            <TextView
-                android:id="@+id/textBoxFourHome"
+                    <ImageView
+                        android:id="@+id/imageViewOrganizeEvent"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:src="@drawable/covid_free"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:text="@string/textHome2"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="25dp"
+                    android:background="@drawable/ic_box"
+                    android:elevation="10dp"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:weightSum="5">
+
+                    <ImageView
+                        android:id="@+id/imageCovidFree"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:src="@drawable/security_data"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:text="@string/textHome3"></TextView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:elevation="10dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/ic_box"
-                android:layout_marginLeft="@dimen/margin_box"
-                android:layout_marginRight="@dimen/margin_box"
-                android:layout_marginBottom="55dp"/>
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/stringTechnicalInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_marginBottom="30dp"
+                    android:text="@string/textInfoFunzioni"
+                    android:textColor="@color/blueButton"
+                    android:textStyle="italic">
+
+                </TextView>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
