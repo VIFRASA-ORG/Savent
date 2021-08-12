@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Toolbar
+        android:id="@+id/toolbarDetailGroup"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_box_status"
+        android:contentInsetStart="0dp"
+        android:contentInsetLeft="0dp"
+        android:contentInsetEnd="0dp"
+        android:contentInsetRight="0dp"
+        android:elevation="20dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="top|center"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:weightSum="5">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/backButtonGroup"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/abc_vector_test"
+                        android:backgroundTint="@color/blueButton"
+                        android:onClick="onBackButtonPressed" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/TechnicalInfoProject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stringTechnicalInfo"
+                        android:textColor="@color/blueButton"
+                        android:textSize="24dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:paddingTop="50dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/TechnicalInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginLeft="60dp"
+                    android:padding="20dp"
+                    android:background="@drawable/ic_box"
+                    android:elevation="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageCovidTest"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:src="@drawable/covid_esito_test"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:text="@string/textHomeSpecificheTecniche1"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginLeft="60dp"
+                    android:padding="20dp"
+                    android:background="@drawable/ic_box"
+                    android:elevation="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/image2"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:src="@drawable/code_security"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:text="@string/textHomeSpecificheTecniche2"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginLeft="60dp"
+                    android:padding="20dp"
+                    android:background="@drawable/ic_box"
+                    android:elevation="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/image3"
+                       android:layout_marginTop="10dp"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:src="@drawable/change_code"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:text="@string/textHomeSpecificheTecniche3"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginLeft="60dp"
+                    android:padding="20dp"
+                    android:background="@drawable/ic_box"
+                    android:elevation="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/image4"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:src="@drawable/covid_alert"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:text="@string/textHomeSpecificheTecniche4"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="50dp"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginLeft="60dp"
+                    android:padding="20dp"
+                    android:background="@drawable/ic_box"
+                    android:elevation="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/image484"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:src="@drawable/proximity_sensor"
+
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="5dp"
+                        android:padding="20dp"
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:text="@string/textHomeSpecificheTecniche5"></TextView>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

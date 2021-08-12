@@ -220,12 +220,25 @@
     <string name="passwordRequired">Password required</string>
     <string name="cancelButton">CANCEL</string>
 
+    //Stringhe per il 'fragment home'
+    <string name="stringWelcome">Welcome to Savent!</string>
+    <string name="textHome1">We have created this app with the intent to contain the virus and facilitate the creation and sharing of groups and events of various kinds.</string>
+    <string name="textHome2">We help make these meetings safe by making it possible for non-contagious people to participate in events to avoid the spread of the virus.</string>
+    <string name="textHome3">Your privacy with us is safe. The information you enter will not be disclosed to third parties and no one will be aware of your personal data
+    when you communicate the result of the swab performed by you.</string>
+    <string name="textInfoFunzioni"><u>Find out how our app works</u></string>
+    <string name="stringTechnicalInfo">How the app works</string>
+    <string name="textHomeSpecificheTecniche1">Healthcare organizations can subscribe to the app and forward to the patient, via email or other, the result of the swab marked with an identification code.</string>
+    <string name="textHomeSpecificheTecniche2">This unique code generated can be used by the user to share their health condition anonymously.</string>
+    <string name="textHomeSpecificheTecniche3">The application keeps track of all your contacts locally, by exchanging identification codes via Bluetooth Low Energy.</string>
+    <string name="textHomeSpecificheTecniche4">Savent notifies users of any close encounters with positive subjects without revealing the identity and location of the contact.</string>
+    <string name="textHomeSpecificheTecniche5">You can disable the tracking feature directly from the settings or by swiping a hand across the top of the screen.</string>
+
     //Generazione Codici Ente
     <string name="buttonGenerateCode">Generate code</string>
     <string name="stringCreateCode">Code created:</string>
     <string name="stringCodeList">Codes list:</string>
     <string name="stringSaventEnti">Savent Companies</string>
-  
     <string name="typeOfCodeText">Code relative to a swab resulted:</string>
     <string name="positiveCodeType">Positive</string>
     <string name="negativeCodeType">Negative</string>
@@ -238,10 +251,9 @@
 
     //Home Activity Ente
     <string name="stringSwab">Generate swabs codes</string>
-    <string name = "textHomeSwab1">After obtaining the result of your patient\'s swab, you are given the opportunity,
-        to generate a unique code from our application in such a way to allow him to communicate the result to the system.</string>
-    <string name = "textHomeSwab2">Communicate to your patient, via email or other, the result of the swab through the unique code.</string>
-    <string name = "textHomeSwab3">Your patient will be able to report the result of the swab using the unique code you have generated.
+    <string name="textHomeSwab1">After obtaining the result of your patient\'s swab, you are given the opportunity,to generate a unique code from our application in such a way to allow him to communicate the result to the system.</string>
+    <string name="textHomeSwab2">Communicate to your patient, via email or other, the result of the swab through the unique code.</string>
+    <string name="textHomeSwab3">Your patient will be able to report the result of the swab using the unique code you have generated.
     This guarantees full respect for privacy, as there is no correlation between the swab result and the patient. </string>
     <string name="textHomeSwab4">With our communication network using Bluetooth Low Energy technology, all people who have had contact with your patient in the last 14 days will have a communication of the risk. </string>
 

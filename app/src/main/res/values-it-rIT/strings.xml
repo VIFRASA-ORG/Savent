@@ -224,6 +224,21 @@
     <string name="passwordRequired">Password richiesta</string>
     <string name="cancelButton">ANNULLA</string>
 
+    //Stringhe per il 'fragment home'
+    <string name="stringWelcome">Benvenuto in Savent!</string>
+    <string name="textHome1">Abbiamo creato quest\'app con l\'intento di contenere il virus e agevolare la creazione e la condivisione di gruppi ed eventi di vario genere.</string>
+    <string name="textHome2">Contribuiamo a rendere sicuri questi incontri rendendo possibile la partecipazione agli eventi solo ai non contagiosi per evitare la diffusione del virus.</string>
+    <string name="textHome3">La tua privacy con noi è al sicuro. Le informazioni da te inserite non saranno rese note a soggetti terzi e nessuno verrà a conoscenza dei tuoi dati personali
+    quando comunicherai l\'esito del tampone da te effettuato.</string>
+    <string name="textInfoFunzioni"><u>Scopri come funziona la nostra app</u></string>
+    <string name="stringTechnicalInfo">Come funziona l\'app</string>
+    <string name="textHomeSpecificheTecniche1">Gli enti appartenti all\'ambiente sanitario possono iscriversi all\'app e inoltrano al paziente,via mail o altro, l\'esito del tampone contrassegnato da un codice identificativo
+       </string>
+    <string name="textHomeSpecificheTecniche2"> Tale codice univoco generato potrà essere usato dall\'utente per condividere la propria condizione di salute in forma anonima.</string>
+    <string name="textHomeSpecificheTecniche3">L\'applicazione tiene traccia in locale di tutti i tuoi contatti, mediante lo scambio di codici identificativi tramite Bluetooth Low Energy.</string>
+    <string name="textHomeSpecificheTecniche4">Savent segnala agli utenti eventuali incontri ravvicinati con soggetti positivi senza rivelarne l\'identità e la posizione del contatto.</string>
+    <string name="textHomeSpecificheTecniche5">Puoi disabilitare la funzionalità di tracciamento direttamente dalle impostazioni oppure passando una mano sulla parte superiore dello schermo.</string>
+
     //Generazione Codici Ente
     <string name="buttonGenerateCode">Genera codice</string>
     <string name="stringCreateCode">Codice generato:</string>
