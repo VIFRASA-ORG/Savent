@@ -112,16 +112,8 @@
                 android:layout_marginRight="10dp"
                 android:queryBackground="@null"/>
 
-            <ListView
-                android:id="@+id/myPartecipationEventsListView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:scrollbars="vertical"
-                android:visibility="gone"/>
-
-            <LinearLayout
-                android:id="@+id/emptyResults"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/emptyResultsPullToRefresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -151,7 +143,22 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/pullToRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/myPartecipationEventsListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:scrollbars="vertical"
+                    android:visibility="gone"/>
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </LinearLayout>
 

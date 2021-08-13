@@ -3,6 +3,7 @@ package com.vitandreasorino.savent.Utenti.EventiTab;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,16 +43,32 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
     ProgressBar progressBarEvent;
     TextView emptyTextViewEvents;
 
+    private SwipeRefreshLayout pullToRefresh;
+    private SwipeRefreshLayout emptyViewPullToRefresh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_event_partecipations);
 
         eventListView = findViewById(R.id.myPartecipationEventsListView);
-        eventListView.setEmptyView(findViewById(R.id.emptyResults));
         eventSearchView = findViewById(R.id.searchViewMyPartecipationEvents);
         progressBarEvent = findViewById(R.id.progressBarEvent);
         emptyTextViewEvents = findViewById(R.id.emptyTextViewEvents);
+
+        emptyViewPullToRefresh = findViewById(R.id.emptyResultsPullToRefresh);
+        pullToRefresh = findViewById(R.id.pullToRefresh);
+        eventListView.setEmptyView(emptyViewPullToRefresh);
+
+        //istanzia l'adapter personalizzato
+        adapter = new EventAdapterPartecipations(this, listaEventi);
+
+        emptyViewPullToRefresh.setOnRefreshListener( () -> downloadDataList());
+        pullToRefresh.setOnRefreshListener( () -> downloadDataList());
+
+        // collegamento dell'adapter alla ListView
+        eventListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         downloadDataList();
 
@@ -88,6 +105,7 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
         }
     }
 
+
     //funzione che permette di caricare gli eventi dove siamo partecipanti o in coda
     private void downloadDataList() {
         toggleDownloadingElements(true);
@@ -113,23 +131,20 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
                     listaEventi = list;
 
                     //istanzia l'adapter personalizzato
-                    adapter = new EventAdapterPartecipations(getApplicationContext(), listaEventi);
+                    adapter.setList(listaEventi);
 
                     // collegamento dell'adapter alla ListView
                     eventListView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
                     toggleDownloadingElements(false);
+                    pullToRefresh.setRefreshing(false);
+                    emptyViewPullToRefresh.setRefreshing(false);
                 }
             }
         });
 
-        //istanzia l'adapter personalizzato
-        adapter = new EventAdapterPartecipations(getApplicationContext(), listaEventi);
 
-        // collegamento dell'adapter alla ListView
-        eventListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
 
     }
 
@@ -168,21 +183,9 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
             i.putExtra("eventObj", listaEventiFiltrata.get(position));
         }
         startActivity(i);
-      //  startActivityForResult(i, 125);
-
     }
-/*
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK){
-            if(requestCode == 125){
-                downloadDataList();
-            }
-        }
-    }
-*/
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -208,6 +211,12 @@ class EventAdapterPartecipations extends BaseAdapter implements Filterable {
         this.events=events;
         this.context=context;
         this.filteredData = events;
+    }
+
+    public void setList(List<Evento> events){
+        this.events = events;
+        this.filteredData = events;
+        notifyDataSetChanged();
     }
 
     public List<Evento> getFilteredData(){
