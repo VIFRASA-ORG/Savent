@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vitandreasorino.savent.CommunicationSwabActivity;
 import com.vitandreasorino.savent.Utenti.AccountTab.AccountFragment;
 import com.vitandreasorino.savent.Utenti.EventiTab.EventFragment;
 import com.vitandreasorino.savent.Utenti.GruppiTab.GroupFragment;
@@ -292,6 +293,11 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    public void daCancellare(View view) {
+        Intent i = new Intent(this, CommunicationSwabActivity.class);
+        startActivity(i);
     }
 
 

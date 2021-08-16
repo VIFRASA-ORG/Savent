@@ -1,14 +1,22 @@
 package Model.DB;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import Helper.AuthHelper;
 import Helper.FirestoreHelper;
+import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
 import Model.Pojo.CodiceComunicazioneTampone;
 import Model.Pojo.Evento;
+import Model.Pojo.Gruppo;
 
 public class CodiciComunicazioneTampone extends ResultsConverter {
 
@@ -60,5 +68,40 @@ public class CodiciComunicazioneTampone extends ResultsConverter {
             }
         });
     }
+
+
+    /** Return a list of all code communication swab on Firestore.
+     *
+     * @param closureList ClosureList of CodiceComunicazioneTampone type.
+     */
+    public static final void getAllCode(ClosureList<CodiceComunicazioneTampone> closureList){
+        FirestoreHelper.db.collection(CODICI_COMUNICAZIONE_TAMPONE_COLLECTION).get().addOnCompleteListener(task -> {
+            if(closureList != null){
+                if(task.isSuccessful()){
+                    closureList.closure(convertResults(task,CodiceComunicazioneTampone.class));
+                }else closureList.closure(null);
+            }
+        });
+    }
+
+
+    /** Update the information about used swab.
+     *
+     * @param codeCommunicationSwabId the id of the code communication swab
+     * @param closureBool get called with true if the task is successful, false otherwise.
+     * @param firstField the name of the first field to update
+     * @param firstValue tha new value of the first field
+     */
+    public static final void updateFields(String codeCommunicationSwabId, ClosureBoolean closureBool, String firstField, Object firstValue){
+        FirestoreHelper.db.collection(CODICI_COMUNICAZIONE_TAMPONE_COLLECTION).document(codeCommunicationSwabId).update(firstField,firstValue).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(closureBool != null) closureBool.closure(task.isSuccessful());
+            }
+        });
+    }
+
+
+
 
 }

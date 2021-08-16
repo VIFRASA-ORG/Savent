@@ -15,9 +15,13 @@ import Helper.FirestoreHelper;
 import Helper.StorageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
+import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
 import Model.Pojo.Ente;
+import Model.Pojo.Gruppo;
 import Model.Pojo.Utente;
+
+import static Model.DB.ResultsConverter.convertResults;
 
 public class Enti {
 
@@ -264,4 +268,18 @@ public class Enti {
         StorageHelper.downloadImage(finalChildName,closureBitmap);
     }
 
+
+    /** Return a list of all enti on Firestore.
+     *
+     * @param closureList ClosureList of enti type.
+     */
+    public static final void getAllEnti(ClosureList<Ente> closureList){
+        FirestoreHelper.db.collection(ENTI_COLLECTION).get().addOnCompleteListener(task -> {
+            if(closureList != null){
+                if(task.isSuccessful()){
+                    closureList.closure(convertResults(task,Ente.class));
+                }else closureList.closure(null);
+            }
+        });
+    }
 }
