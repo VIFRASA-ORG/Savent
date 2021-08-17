@@ -85,14 +85,57 @@
                         android:paddingRight="10dp"
                         android:orientation="horizontal">
 
-                        <Button
-                            android:id="@+id/buttonNotification"
+                        <FrameLayout
+                            android:id="@+id/layoutButton"
                             android:layout_width="@dimen/icon_status_bar"
                             android:layout_height="@dimen/icon_status_bar"
                             android:layout_marginRight="20dp"
-                            android:background="@drawable/ic_baseline_notifications_24"
                             android:gravity="top"
-                            android:onClick="onClickNotificationButton"/>
+                            android:clickable="true"
+                            android:onClick="onClickNotificationButton">
+
+                            <Button
+                                android:id="@+id/buttonNotification"
+                                android:layout_width="@dimen/icon_status_bar"
+                                android:layout_height="@dimen/icon_status_bar"
+                                android:layout_marginRight="20dp"
+                                android:background="@drawable/ic_baseline_notifications_24"
+                                android:gravity="top"
+                                android:clickable="false"/>
+
+                            <FrameLayout
+                                android:id="@+id/frameLayoutNotificationNumber"
+                                android:layout_width="17dp"
+                                android:layout_height="17dp"
+                                android:layout_gravity="end|bottom"
+                                android:elevation="3dp"
+                                android:clickable="false">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/ic_notification_unread"
+                                    android:elevation="1dp"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/textViewNotificationNumber"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="1"
+                                    android:autoSizeTextType="uniform"
+                                    android:autoSizeMinTextSize="1sp"
+                                    android:autoSizeMaxTextSize="100sp"
+                                    android:autoSizeStepGranularity="2sp"
+                                    android:textSize="10sp"
+                                    android:textColor="@color/white"
+                                    android:elevation="2dp"
+                                    />
+
+                            </FrameLayout>
+
+                        </FrameLayout>
 
                         <Button
                             android:id="@+id/buttonSetting"

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.provider.BaseColumns;
 
 import com.vitandreasorino.savent.R;
@@ -92,6 +93,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.ContattiAvvenuti.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.Notifiche.TABLE_NAME);
         this.onCreate(db);
+    }
+
+    /**
+     * Esegue la query per avere il numero di notifiche non lette
+     *
+     * @return il numero di notifiche non lette
+     */
+    public int getNumberOfUnreadNotification() {
+        SQLiteDatabase databaseSQLite = this.getReadableDatabase();
+        String sql = "SELECT COUNT(*) FROM " + SaventContract.Notifiche.TABLE_NAME + " WHERE " + SaventContract.Notifiche.COLUMN_NAME_READ + "= 0" ;
+        SQLiteStatement statement = databaseSQLite.compileStatement(sql);
+        int count = (int) statement.simpleQueryForLong();
+        return count;
     }
 
     /**

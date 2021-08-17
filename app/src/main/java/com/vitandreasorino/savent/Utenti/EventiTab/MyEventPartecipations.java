@@ -77,14 +77,14 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
         eventListView.setOnItemClickListener(this);
 
         //registrazione del lister per il broadcast
-        LocalBroadcastManager.getInstance(this).registerReceiver(br, new IntentFilter("UpdateListPartecipations"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(updatedListPartecipationsBoradcast, new IntentFilter("UpdateListPartecipations"));
     }
 
     /**
      * Ricevitore di messaggio broadcast per aggiornare la lista
      * degli eventi quando ne viene creato uno nuovo.
      */
-    private BroadcastReceiver br = new BroadcastReceiver() {
+    private BroadcastReceiver updatedListPartecipationsBoradcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Boolean isUpdatedList = intent.getBooleanExtra("UpdatedListPartecipations", false);

@@ -1,15 +1,19 @@
 package com.vitandreasorino.savent.Utenti;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -19,6 +23,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +37,7 @@ import com.vitandreasorino.savent.R;
 import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 
 import Helper.AnimationHelper;
+import Helper.SQLiteHelper;
 import Model.DB.Utenti;
 
 
@@ -48,6 +54,10 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     ImageView statusLogoBig;
     TextView textStatusHomeBig;
     TextView textStatusHomeSmall;
+
+    FrameLayout frameLayoutNotificationNumber;
+    TextView textViewNotificationNumber;
+    private static final int FROM_NOTIFICATION_RESULT = 10;
 
     Button notificationButton;
 
@@ -90,6 +100,13 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         textStatusHomeSmall = findViewById(R.id.textStatusHomeSmall);
         textStatusHomeBig = findViewById(R.id.textStatusHomeBig);
         notificationButton = findViewById(R.id.buttonNotification);
+
+        frameLayoutNotificationNumber = findViewById(R.id.frameLayoutNotificationNumber);
+        textViewNotificationNumber = findViewById(R.id.textViewNotificationNumber);
+        setNotificationNumber();
+
+        //registrazione del lister per il broadcast
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateNoficiationNumber, new IntentFilter("UpdateNotification"));
 
         viewPager = findViewById(R.id.viewPager);
         viewPager.setSaveEnabled(false);
@@ -159,6 +176,33 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         Utenti.addDocumentListener(this, newUser -> {
             setHealthStatusInView(newUser.getStatusSanitario());
         });
+    }
+
+    /**
+     * Ricevitore di messaggio broadcast per aggiornare il numero
+     * di notifiche quando se ne riceve un altra
+     */
+    private BroadcastReceiver updateNoficiationNumber = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setNotificationNumber();
+        }
+    };
+
+    /**
+     * Scarica il numero di notifiche presenti nel database
+     * e le visualizza sull'icona delle notifiche.
+     */
+    private void setNotificationNumber(){
+        SQLiteHelper database = new SQLiteHelper(this);
+        int i = database.getNumberOfUnreadNotification();
+
+        if (i == 0){
+            frameLayoutNotificationNumber.setVisibility(View.INVISIBLE);
+        }else{
+            frameLayoutNotificationNumber.setVisibility(View.VISIBLE);
+            textViewNotificationNumber.setText(""+i);
+        }
     }
 
     @Override
@@ -286,7 +330,16 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
   
     public void onClickNotificationButton(View view){
         Intent schermataNotification = new Intent(getApplicationContext(), NotificationActivity.class);
-        startActivity(schermataNotification);
+        startActivityForResult(schermataNotification,FROM_NOTIFICATION_RESULT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == FROM_NOTIFICATION_RESULT){
+            setNotificationNumber();
+        }
     }
 
     @Override
