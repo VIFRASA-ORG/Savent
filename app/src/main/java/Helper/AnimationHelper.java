@@ -6,27 +6,15 @@ import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-
-import com.vitandreasorino.savent.R;
-
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 /**
  * Class used to perform some basic animation to Views.
@@ -91,6 +79,28 @@ public class AnimationHelper {
                     view.setVisibility(View.INVISIBLE);
                 }
             });
+    }
+
+    /**
+     * Perform a fadeOut animation of the view given as parameter
+     * The final visibility status of the given view is View.GONE
+     *
+     * @param view the view to be animated
+     * @param duration the duration of the animation
+     */
+    public static final void fadeOutWithGone(View view, int duration){
+        view.setAlpha(1f);
+        view.setVisibility(View.VISIBLE);
+
+        view.animate().alpha(0f)
+                .setDuration(duration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        view.setVisibility(View.GONE);
+                    }
+                });
     }
 
     /**

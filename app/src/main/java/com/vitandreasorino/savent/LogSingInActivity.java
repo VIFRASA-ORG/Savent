@@ -1,6 +1,7 @@
 package com.vitandreasorino.savent;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,13 +20,11 @@ public class LogSingInActivity extends AppCompatActivity {
 
 
     public void onLoginClick(View view) {
-
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }
 
     public void onRegisterClick(View view) {
-
         Intent schermataRegistrazione = new Intent(this, RegisterActivity.class);
         startActivity(schermataRegistrazione);
     }

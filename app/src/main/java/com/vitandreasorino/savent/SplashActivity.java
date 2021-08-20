@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.vitandreasorino.savent.Enti.HomeActivityEnte;
+import com.vitandreasorino.savent.Utenti.BluetoothLEServices.GattServerCrawlerService;
+import com.vitandreasorino.savent.Utenti.BluetoothLEServices.GattServerService;
 import com.vitandreasorino.savent.Utenti.HomeActivity;
 
 import Helper.AuthHelper;
@@ -104,6 +106,11 @@ public class SplashActivity extends AppCompatActivity {
                 switch (closureRes){
                     case Utente:
                         intent = new Intent(this, HomeActivity.class);
+
+                        //Starting the Gatt Server service
+                        startService(new Intent(getBaseContext(), GattServerService.class));
+                        startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
+
                         break;
                     case Ente:
                         intent = new Intent(this, HomeActivityEnte.class);

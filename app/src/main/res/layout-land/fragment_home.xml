@@ -28,6 +28,132 @@
             </TextView>
 
             <LinearLayout
+                android:id="@+id/errorsBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="25dp"
+                android:background="@drawable/ic_box"
+                android:elevation="10dp"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/bluetoothDisabledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <ImageView
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_bluetooth"/>
+
+                    <LinearLayout
+                        android:layout_weight="8"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal|center_vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:paddingTop="5dp"
+                            android:textStyle="bold"
+                            android:text="@string/bluetoothDisabled"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:paddingTop="5dp"
+                            android:textStyle="italic"
+                            android:text="@string/bluetoothDisabledMessage"/>
+
+                        <Button
+                            android:id="@+id/enableBluetoothButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="@string/enableBluetoothButton"
+                            android:textSize="8sp"
+                            android:layout_marginTop="7dp"
+                            android:layout_marginBottom="7dp"
+                            android:background="@drawable/ic_button_shape" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/errorsBoxSpace"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightGray" />
+
+                <LinearLayout
+                    android:id="@+id/locationPermissionNotGivenBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <ImageView
+                            android:layout_weight="2"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_mylocation"/>
+
+                        <LinearLayout
+                            android:layout_weight="8"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:paddingTop="5dp"
+                                android:textStyle="bold"
+                                android:text="@string/locationPermissionNotGranted"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:paddingTop="5dp"
+                                android:textStyle="italic"
+                                android:text="@string/locationPermissionNotGrantedMessage"/>
+
+                            <Button
+                                android:id="@+id/givePermissionButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:text="@string/askLocationPermissionButton"
+                                android:textSize="8sp"
+                                android:layout_marginTop="7dp"
+                                android:layout_marginBottom="7dp"
+                                android:background="@drawable/ic_button_shape"
+                                android:layout_gravity="center"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/PrincipalInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

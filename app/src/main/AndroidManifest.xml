@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.vitandreasorino.savent">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -68,6 +71,15 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/app_icon" />
+
+        <!-- [Bluetooth GATT Server service] -->
+        <service android:name=".Utenti.BluetoothLEServices.GattServerService"
+            android:enabled="true"
+            android:stopWithTask="false"/>
+        <service android:name=".Utenti.BluetoothLEServices.GattServerCrawlerService"
+            android:enabled="true"
+            android:stopWithTask="false"/>
+
     </application>
 
 </manifest>
