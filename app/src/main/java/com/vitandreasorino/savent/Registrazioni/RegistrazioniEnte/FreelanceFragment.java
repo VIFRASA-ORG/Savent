@@ -277,7 +277,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
                 * */
 
                 //LogOut
-                AuthHelper.logOut();
+                AuthHelper.logOut(getContext());
                 Toast.makeText(getActivity(),R.string.enteCreated,Toast.LENGTH_LONG).show();
 
                 //Go back to the first page
@@ -287,7 +287,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
                 getActivity().finish();
             }else{
                 Toast.makeText(getActivity(), getString(R.string.registrazioneErrore), Toast.LENGTH_LONG).show();
-                AuthHelper.logOut();
+                AuthHelper.logOut(getContext());
                 enableAllComponents();
             }
         });

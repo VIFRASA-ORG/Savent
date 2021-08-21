@@ -257,7 +257,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
                 finish();
             }else{
                 Toast.makeText(this, getString(R.string.registrazioneErrore), Toast.LENGTH_LONG).show();
-                AuthHelper.logOut();
+                AuthHelper.logOut(getApplicationContext());
                 enableAllComponents();
             }
         });

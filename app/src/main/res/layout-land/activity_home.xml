@@ -109,6 +109,7 @@
                             android:layout_width="@dimen/icon_status_bar"
                             android:layout_height="@dimen/icon_status_bar"
                             android:layout_marginRight="20dp"
+                            android:onClick="onClickSettingsButton"
                             android:background="@drawable/ic_baseline_settings_24"
                             android:gravity="top" />
                     </LinearLayout>

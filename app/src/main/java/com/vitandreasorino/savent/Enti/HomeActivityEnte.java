@@ -1,7 +1,12 @@
 package com.vitandreasorino.savent.Enti;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +17,10 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vitandreasorino.savent.Enti.GenerateCodeTab.GenerateCodeFragment;
+import com.vitandreasorino.savent.LogSingInActivity;
 import com.vitandreasorino.savent.R;
+import Helper.AuthHelper;
+
 
 public class HomeActivityEnte extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -71,6 +79,33 @@ public class HomeActivityEnte extends AppCompatActivity implements BottomNavigat
         return false;
     }
 
+    public void onClickLogoutEnte(View view) {
+        //Creo un alertDialog per confermare il logout dall'home ente
+        AlertDialog.Builder alertLogout = new AlertDialog.Builder(HomeActivityEnte.this);
+        alertLogout.setTitle(R.string.stringConfirmLogout);
+        alertLogout.setMessage(R.string.stringDialogLogout);
+
+        // Nel caso di risposta positiva nel dialog
+        alertLogout.setPositiveButton(R.string.confirmPositive, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Effettuo il logout richiamando l'apposito metodo
+                AuthHelper.logOutEnte();
+                Toast.makeText(HomeActivityEnte.this, R.string.stringLogoutDone, Toast.LENGTH_SHORT).show();
+
+                //Ritorna alla schermata iniziale
+                Intent intentLogin = new Intent(HomeActivityEnte.this, LogSingInActivity.class);
+                intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
+                startActivity(intentLogin);
+
+            }
+        });
+        // Nel caso di risposta negativa nel dialog
+        alertLogout.setNegativeButton(R.string.confirmNegative, null);
+        //mostra il dialog
+        alertLogout.show();
+
+    }
 }
 
 

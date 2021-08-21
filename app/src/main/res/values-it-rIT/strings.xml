@@ -301,5 +301,19 @@
     <string name="dataEventPartecipation">Data</string>
     <string name="titleEventPartecipation">EVENTO SAVENT</string>
 
+    //Stringhe Settings
+    <string name="titleSettings">Impostazioni</string>
+    <string name="titleGeneral">Generale</string>
+    <string name="titleLoadingData">Caricamento dati</string>
+    <string name="buttonLogout">Esci</string>
+    <string name="stringTrackData">Tracciamento Bluetooth Low Energy</string>
+    <string name="stringProximitySensor">Sensore di prossimità</string>
+    <string name="stringInsertSwabResult">Inserisci esito tampone</string>
+
+    //Stringhe logout
+    <string name="stringLogoutDone">Logout effettuato correttamente!</string>
+    <string name="stringLogoutFailed">Logout annullato!</string>
+    <string name="stringConfirmLogout">Conferma logout</string>
+    <string name="stringDialogLogout">Sei sicuro di voler uscire?</string>
 
 </resources>
