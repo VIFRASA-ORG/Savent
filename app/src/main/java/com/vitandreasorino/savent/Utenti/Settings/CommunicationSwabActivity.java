@@ -1,21 +1,18 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.Utenti.Settings;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.*;
 
-import com.vitandreasorino.savent.Utenti.GruppiTab.GroupDetailActivity;
+import com.vitandreasorino.savent.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,7 +24,6 @@ import Model.Closures.ClosureBoolean;
 import Model.DB.CodiciComunicazioneTampone;
 import Model.DB.CodiciIdentificativi;
 import Model.DB.Enti;
-import Model.DB.Gruppi;
 import Model.DB.Utenti;
 import Model.Pojo.CodiceComunicazioneTampone;
 import Model.Pojo.CodiceIdentificativo;

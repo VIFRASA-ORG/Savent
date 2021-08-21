@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent;
+package com.vitandreasorino.savent.Utenti.Settings;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import com.vitandreasorino.savent.LogSingInActivity;
+import com.vitandreasorino.savent.R;
 
 import Helper.AuthHelper;
 import Helper.SharedPreferencesHelper;
@@ -92,9 +95,13 @@ public class SettingsActivity extends AppCompatActivity{
         });
     }
 
+    public void comunicationSwabOnClick(View view) {
+        Intent i = new Intent(this, CommunicationSwabActivity.class);
+        startActivity(i);
+    }
+
     public void onBackButtonPressed(View view) {
         super.onBackPressed();
         finish();
     }
-
 }
