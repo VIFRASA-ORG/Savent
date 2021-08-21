@@ -81,6 +81,10 @@ public class GattServerService extends Service {
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothStateReceiver, filter);
 
+        //Registering the two broadcast receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(killProcess, new IntentFilter("killGattServerService"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateCharacteristicValue, new IntentFilter("updateGattCharacteristicValue"));
+
         //Invoking the method to perform all checks before starting the server
         tryToStartServer();
     }
@@ -100,10 +104,6 @@ public class GattServerService extends Service {
             //if the device supports the multiple advertisement.
             if (checkBluetoothService()){
                 startServer(lastTek);
-
-                //Registering the two broadcast receiver
-                LocalBroadcastManager.getInstance(this).registerReceiver(killProcess, new IntentFilter("killGattServerService"));
-                LocalBroadcastManager.getInstance(this).registerReceiver(updateCharacteristicValue, new IntentFilter("updateGattCharacteristicValue"));
             }
         }
     }
@@ -273,5 +273,12 @@ public class GattServerService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(killProcess);
+        unregisterReceiver(updateCharacteristicValue);
     }
 }

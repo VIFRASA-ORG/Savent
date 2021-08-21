@@ -80,7 +80,7 @@ public class GattServerCrawlerService extends Service {
     private BroadcastReceiver fineLocationGrantedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            isLocationPermissionGranted = BluetoothLEHelper.isFineLocationGranted(getApplicationContext());;
+            isLocationPermissionGranted = BluetoothLEHelper.isFineLocationGranted(getApplicationContext());
             startBleScan();
         }
     };
@@ -236,12 +236,7 @@ public class GattServerCrawlerService extends Service {
                     handlerThread.start();
 
                     Handler handler = new Handler(handlerThread.getLooper());
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            gatt.writeCharacteristic(characteristicReceive);
-                        }
-                    }, 500);
+                    handler.postDelayed(() -> gatt.writeCharacteristic(characteristicReceive), 500);
                 }
             }
         }
@@ -283,5 +278,11 @@ public class GattServerCrawlerService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(fineLocationGrantedReceiver);
     }
 }
