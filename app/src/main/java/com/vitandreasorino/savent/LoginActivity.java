@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vitandreasorino.savent.Enti.HomeActivityEnte;
+
+import Model.LogDebug;
 import Services.BluetoothLEServices.GattServerCrawlerService;
 import Services.BluetoothLEServices.GattServerService;
 import com.vitandreasorino.savent.Utenti.HomeActivity;
@@ -210,9 +212,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
 
         //Generating the first Temporary exposure key
         TemporaryExposureKeys.generateNewTEK(this, newTek -> {
-            //Starting the gatt server only after the first tek is generated
-            startService(new Intent(getBaseContext(), GattServerService.class));
-            startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
+
+            try {
+                //Starting the gatt server only after the first tek is generated
+                startService(new Intent(getBaseContext(), GattServerService.class));
+                startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
+            }catch (IllegalArgumentException e){
+                Log.w(LogDebug.GAT_ERROR, "Failed to restart Ble Service (process is idle).");
+            }catch (IllegalStateException e){
+                Log.w(LogDebug.GAT_ERROR, "Failed to restart Ble Service (app is in background, foregroundAllowed == false).");
+            }
         });
 
         //Going to the normal user Home

@@ -12,6 +12,7 @@ public class LogDebug {
     public static final String GAT_SERVER_LOG = "GAT_SERVER";
 
     //GATT Crawler or client
+    public static final String GAT_ERROR = "GAT_ERROR";
     public static final String GAT_CRAWLER_SCAN_RESULT = "GAT_SCAN_RESULT";
     public static final String GAT_CRAWLER_CONN_RESULT = "GAT_CRAWLER_CONN_RESULT";
     public static final String GAT_CRAWLER_SERVI_FOUND = "GAT_CRAWLER_SERVI_FOUND";

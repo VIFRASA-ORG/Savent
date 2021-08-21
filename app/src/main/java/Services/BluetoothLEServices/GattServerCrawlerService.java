@@ -283,6 +283,11 @@ public class GattServerCrawlerService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(fineLocationGrantedReceiver);
+
+        try{
+            unregisterReceiver(fineLocationGrantedReceiver);
+        }catch(IllegalArgumentException e){
+            Log.i("GAT_SERVER_LOG","Error unregistering the receiver.");
+        }
     }
 }
