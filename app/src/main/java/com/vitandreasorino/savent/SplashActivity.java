@@ -118,7 +118,7 @@ public class SplashActivity extends AppCompatActivity {
                     case None:
                     default:
                         intent = new Intent(this, LogSingInActivity.class);
-                        AuthHelper.logOut();
+                        AuthHelper.logOut(getApplicationContext());
                         break;
                 }
                 startActivity(intent);

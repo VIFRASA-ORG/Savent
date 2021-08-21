@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import Model.Pojo.Notification;
+import Model.Pojo.CodiceIdentificativo;
 
 
 public class SQLiteHelper extends SQLiteOpenHelper {
@@ -80,11 +81,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 SaventContract.Notifiche.COLUMN_NAME_GROUP_NAME + " TEXT )");
     }
 
-
-    /* Drop delle tabelle */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + SaventContract.TemporaryExposureKeys.TABLE_NAME);
+        dropDatabase();
+        this.onCreate(db);
+    }
+
+    /**
+     * funzione per eseguire il drop delle tabelle
+     */
+    public void dropDatabase(){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("DROP TABLE IF EXISTS " + SaventContract.MieiCodici.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.ContattiAvvenuti.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.Notifiche.TABLE_NAME);
         this.onCreate(db);
@@ -269,6 +278,33 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         Cursor cursore = databaseSQLite.rawQuery(queryControlloContatti,null);
         return  cursore.getCount();
+    }
+
+    /**
+     * Lettura dei Miei Codici presenti nel database locale "Savent.db"
+     * @return arrayMieiCodici, contenente tutti i codici presenti nella tabella "MieiCodici"
+     */
+    public ArrayList<CodiceIdentificativo> letturaMieiCodici() {
+        ArrayList<CodiceIdentificativo> arrayMieiCodici = new ArrayList<CodiceIdentificativo>();
+        SQLiteDatabase databaseSQLite = this.getReadableDatabase();
+        String queryLettura = "SELECT " + SaventContract.MieiCodici.COLUMN_NAME_CODICI + " FROM " + SaventContract.MieiCodici.TABLE_NAME;
+        Cursor cursore = databaseSQLite.rawQuery(queryLettura,null);
+
+        /* Controllo se il cursore è posizionato alla prima tupla di quelle ritornate */
+        if (cursore.moveToFirst()) {
+
+            /* Settiamo la data del codice del tampone da comunicare azzerrandone millisecondi, secondi, minuti e ore */
+            do {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                arrayMieiCodici.add(new CodiceIdentificativo(cursore.getString(0), cal.getTime()));
+
+            } while (cursore.moveToNext());
+        }
+        return arrayMieiCodici;
     }
 
 

@@ -309,5 +309,45 @@
     <string name="locationPermissionDeniedToast">Location permission denied!</string>
     <string name="locationPermissionGrantedToast">Location permission granted!</string>
 
+    //CommunicationSwabActivity
+    <string name="validitaCodice">Invalid code!</string>
+    <string name="statusPositivo">Positive</string>
+    <string name="statusNegativo">Negative</string>
+    <string name="codiceUtilizzato">Code already used!</string>
+    <string name="risultatoTampone">Swab result</string>
+    <string name="spiegazione">Exposition</string>
+    <string name="spiegazioneDescrizione">Enter the unique code provided by the institution to communicate your health condition anonymously.</string>
+    <string name="comunicazioneCodice">Communication code</string>
+    <string name="buttonComunicazione">VIEW RESULT SWAB</string>
+    <string name="buttonRealCommunication">COMMUNICATE CODE</string>
+    <string name="dettaglioTampone">Swab detail</string>
+    <string name="esitoTampone">Swab Result: </string>
+    <string name="dataTampone">Date execution: </string>
+    <string name="enteRilascio">Released by: </string>
+    <string name="comunicaCodiceTitolo">Report code</string>
+    <string name="comunicazioneEsitoDescrizione">Are you sure you want to report the swab result to the system?</string>
+    <string name="siAlert">Yes</string>
+    <string name="noAlert">No</string>
+    <string name="codiceUsato">Code already used!</string>
+    <string name="positivita">Positivity communicated!</string>
+    <string name="negativita">Negativity communicated!</string>
+    <string name="errore">Error!</string>
+    <string name="comunicazioneAvvenuta">Communication successful!</string>
+    <string name="comunicazioneFallita">An error occurred during communication!</string>
+
+    //Stringhe Settings
+    <string name="titleSettings">Settings</string>
+    <string name="titleGeneral">General</string>
+    <string name="titleLoadingData">Loading data</string>
+    <string name="buttonLogout">Logout</string>
+    <string name="stringTrackData">Track Bluetooth Low Energy</string>
+    <string name="stringProximitySensor">Proximity sensor</string>
+    <string name="stringInsertSwabResult">Insert swab result</string>
+
+    //Stringhe logout
+    <string name="stringLogoutDone">Logout successfully!</string>
+    <string name="stringLogoutFailed">Logout canceled!</string>
+    <string name="stringConfirmLogout">Confirm logout</string>
+    <string name="stringDialogLogout">Are you sure you want to logout?</string>
 
 </resources>

@@ -315,4 +315,45 @@
     <string name="locationPermissionDeniedToast">Permessi non confermati!</string>
     <string name="locationPermissionGrantedToast">Permessi confermati!</string>
 
+    //CommunicationSwabActivity
+    <string name="validitaCodice">Codice non valido!</string>
+    <string name="statusPositivo">Positivo</string>
+    <string name="statusNegativo">Negativo</string>
+    <string name="codiceUtilizzato">Codice già utilizzato!</string>
+    <string name="risultatoTampone">Esito tampone</string>
+    <string name="spiegazione">Spiegazione</string>
+    <string name="spiegazioneDescrizione">Inserisci il codice univoco fornito dall\'ente per comunicare la tua condizione di salute in forma anonima.</string>
+    <string name="comunicazioneCodice">Comunicazione codice</string>
+    <string name="buttonComunicazione">VISUALIZZA ESITO</string>
+    <string name="buttonRealCommunication">COMUNICA CODICE</string>
+    <string name="dettaglioTampone">Dettaglio tampone</string>
+    <string name="esitoTampone">Esito tampone: </string>
+    <string name="dataTampone">Data effettuazione: </string>
+    <string name="enteRilascio">Rilasciato da: </string>
+    <string name="comunicaCodiceTitolo">Comunica codice</string>
+    <string name="comunicazioneEsitoDescrizione">Sei sicuro di voler comunicare l\'esito del tampone al sistema?</string>
+    <string name="siAlert">Si</string>
+    <string name="noAlert">No</string>
+    <string name="codiceUsato">Codice già usato!</string>
+    <string name="positivita">Positività comunicata!</string>
+    <string name="negativita">Negatività comunicata!</string>
+    <string name="errore">Errore!</string>
+    <string name="comunicazioneAvvenuta">Comunicazione avvenuta con successo!</string>
+    <string name="comunicazioneFallita">Si è verificato un errore durante la comunicazione!</string>
+
+    //Stringhe Settings
+    <string name="titleSettings">Impostazioni</string>
+    <string name="titleGeneral">Generale</string>
+    <string name="titleLoadingData">Caricamento dati</string>
+    <string name="buttonLogout">Esci</string>
+    <string name="stringTrackData">Tracciamento Bluetooth Low Energy</string>
+    <string name="stringProximitySensor">Sensore di prossimità</string>
+    <string name="stringInsertSwabResult">Inserisci esito tampone</string>
+
+    //Stringhe logout
+    <string name="stringLogoutDone">Logout effettuato correttamente!</string>
+    <string name="stringLogoutFailed">Logout annullato!</string>
+    <string name="stringConfirmLogout">Conferma logout</string>
+    <string name="stringDialogLogout">Sei sicuro di voler uscire?</string>
+
 </resources>

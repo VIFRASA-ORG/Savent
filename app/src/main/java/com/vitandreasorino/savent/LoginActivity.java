@@ -191,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
                 finish();
             }else{
                 Toast.makeText(getApplicationContext(),R.string.accountNotActivated,Toast.LENGTH_SHORT).show();
-                AuthHelper.logOut();
+                AuthHelper.logOutEnte();
             }
             toggleInProgressEvent(false);
         });

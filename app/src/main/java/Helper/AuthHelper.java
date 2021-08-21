@@ -1,12 +1,7 @@
 package Helper;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import android.content.Context;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -173,11 +168,25 @@ public class AuthHelper {
     /**
      * Function used to Log-out
      */
-    public static final void logOut(){
+    public static final void logOut(Context context){
         //removing the token for the notification
         if(isLoggedIn()){
             Utenti.setMessagingToken("",null);
             mAuth.signOut();
+
+            //effettua il drop
+            SQLiteHelper dbDrop = new SQLiteHelper(context);
+            dbDrop.dropDatabase();
+
+            //Resetta shared preferences
+            SharedPreferencesHelper.resetSharedPreferences(context);
         }
+    }
+
+    /**
+     * Function for Log-out ente
+     */
+    public static final void logOutEnte(){
+        mAuth.signOut();
     }
 }

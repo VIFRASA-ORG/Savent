@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,14 +27,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vitandreasorino.savent.Utenti.Settings.SettingsActivity;
 import com.vitandreasorino.savent.Utenti.AccountTab.AccountFragment;
 import com.vitandreasorino.savent.Utenti.EventiTab.EventFragment;
 import com.vitandreasorino.savent.Utenti.GruppiTab.GroupFragment;
 import com.vitandreasorino.savent.R;
 import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
-
 import Helper.AnimationHelper;
 import Helper.SQLiteHelper;
 import Model.DB.Utenti;
@@ -60,12 +58,12 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     private static final int FROM_NOTIFICATION_RESULT = 10;
 
     Button notificationButton;
+    Button buttonSetting;
 
     Class previousFragmentClass = HomeFragment.class;
     TopBarConfiguration previousConfiguration = TopBarConfiguration.BIG;
 
     ViewPager2 viewPager;
-
 
 
 
@@ -100,6 +98,10 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         textStatusHomeSmall = findViewById(R.id.textStatusHomeSmall);
         textStatusHomeBig = findViewById(R.id.textStatusHomeBig);
         notificationButton = findViewById(R.id.buttonNotification);
+        buttonSetting = findViewById(R.id.buttonSetting);
+
+        //registrazione del lister per il broadcast
+        LocalBroadcastManager.getInstance(this).registerReceiver(br, new IntentFilter("updateStatusHealth"));
 
         frameLayoutNotificationNumber = findViewById(R.id.frameLayoutNotificationNumber);
         textViewNotificationNumber = findViewById(R.id.textViewNotificationNumber);
@@ -204,6 +206,29 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
             textViewNotificationNumber.setText(""+i);
         }
     }
+
+    /* Metodo per settare lo status sanitario dell'utente loggato */
+    private void setHealthStatus() {
+        Utenti.addDocumentListener(this, newUser -> {
+            setHealthStatusInView(newUser.getStatusSanitario());
+        });
+    }
+
+
+    /**
+     * Ricevitore di messaggio broadcast per aggiornare lo status
+     * sanitario dell'utente loggato una volta che comunica l'esito del
+     * tampone
+     */
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Boolean isUpdatedStatus = intent.getBooleanExtra("updatedStatusHealth", false);
+            if(isUpdatedStatus){
+                setHealthStatus();
+            }
+        }
+    };
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -327,7 +352,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
             System.out.println("VICINO");
         }
     }
-  
+
     public void onClickNotificationButton(View view){
         Intent schermataNotification = new Intent(getApplicationContext(), NotificationActivity.class);
         startActivityForResult(schermataNotification,FROM_NOTIFICATION_RESULT);
@@ -340,6 +365,11 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         if(requestCode == FROM_NOTIFICATION_RESULT){
             setNotificationNumber();
         }
+    }
+
+    public void onClickSettingsButton(View view){
+        Intent schermataSettings = new Intent(getApplicationContext(), SettingsActivity.class);
+        startActivity(schermataSettings);
     }
 
     @Override
@@ -355,7 +385,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
      */
 
     /**
-     * Used to explicit the usr interface status based on the user Health status.
+     * Used to explicit the user interface status based on the user Health status.
      */
     private enum HealthStatus{
         GREEN,
