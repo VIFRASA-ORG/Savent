@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Utenti.HomeActivity">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/fragment_container_ente"
@@ -68,10 +67,11 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/buttonSetting"
-                            android:layout_width="@dimen/icon_status_bar"
-                            android:layout_height="@dimen/icon_status_bar"
-                            android:background="@drawable/ic_baseline_settings_24"
+                            android:id="@+id/buttonLogoutEnte"
+                            android:onClick="onClickLogoutEnte"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:background="@drawable/ic_baseline_logout_24"
                             android:layout_marginRight="20dp"
                             android:gravity="top" />
                     </LinearLayout>

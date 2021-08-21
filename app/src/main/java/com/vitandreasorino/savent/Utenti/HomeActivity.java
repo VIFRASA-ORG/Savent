@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vitandreasorino.savent.CommunicationSwabActivity;
+import com.vitandreasorino.savent.SettingsActivity;
 import com.vitandreasorino.savent.Utenti.AccountTab.AccountFragment;
 import com.vitandreasorino.savent.Utenti.EventiTab.EventFragment;
 import com.vitandreasorino.savent.Utenti.GruppiTab.GroupFragment;
@@ -315,6 +316,11 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     public void onClickNotificationButton(View view){
         Intent schermataNotification = new Intent(getApplicationContext(), NotificationActivity.class);
         startActivity(schermataNotification);
+    }
+
+    public void onClickSettingsButton(View view){
+        Intent schermataSettings = new Intent(getApplicationContext(), SettingsActivity.class);
+        startActivity(schermataSettings);
     }
 
     @Override

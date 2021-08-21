@@ -22,6 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Savent">
         <activity android:name=".CommunicationSwabActivity"></activity>
+        <activity android:name=".SettingsActivity"></activity>
         <activity android:name=".TechnicalInfoActivity" />
         <activity android:name=".Utenti.EventiTab.MyEventPartecipations" />
         <activity android:name=".Utenti.Notification.NotificationActivity" />

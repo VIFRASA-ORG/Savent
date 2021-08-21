@@ -321,16 +321,19 @@
     <string name="comunicazioneAvvenuta">Communication successful!</string>
     <string name="comunicazioneFallita">An error occurred during communication!</string>
 
+    //Stringhe Settings
+    <string name="titleSettings">Settings</string>
+    <string name="titleGeneral">General</string>
+    <string name="titleLoadingData">Loading data</string>
+    <string name="buttonLogout">Logout</string>
+    <string name="stringTrackData">Track Bluetooth Low Energy</string>
+    <string name="stringProximitySensor">Proximity sensor</string>
+    <string name="stringInsertSwabResult">Insert swab result</string>
 
-
-
-
-
-
-
-
-
-
-
+    //Stringhe logout
+    <string name="stringLogoutDone">Logout successfully!</string>
+    <string name="stringLogoutFailed">Logout canceled!</string>
+    <string name="stringConfirmLogout">Confirm logout</string>
+    <string name="stringDialogLogout">Are you sure you want to logout?</string>
 
 </resources>
