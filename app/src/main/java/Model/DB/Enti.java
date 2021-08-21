@@ -17,6 +17,7 @@ import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
+import Model.Pojo.CodiceComunicazioneTampone;
 import Model.Pojo.Ente;
 import Model.Pojo.Gruppo;
 import Model.Pojo.Utente;
@@ -62,6 +63,8 @@ public class Enti {
             }
         });
     }
+
+
 
     /** Create a new account for the Libero professionista.
      *
@@ -282,4 +285,24 @@ public class Enti {
             }
         });
     }
+
+
+    /**
+     * Ritorna l'ente corrispondente all'id inserito
+     * @param idEnte id dell'ente da ricercare
+     * @param closureResult invocata quando il task è stato eseguito con successo per convertire nell'oggetto Ente, altrimenti ritorna null
+     */
+    public static final void getEnte(String idEnte, ClosureResult<Ente> closureResult ){
+        FirestoreHelper.db.collection(ENTI_COLLECTION).document(idEnte).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                if (closureResult != null) closureResult.closure(task.getResult().toObject(Ente.class));
+            }else{
+                if (closureResult != null) closureResult.closure(null);
+            }
+        });
+    }
+
+
+
+
 }

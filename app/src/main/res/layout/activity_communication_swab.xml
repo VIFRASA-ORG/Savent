@@ -58,7 +58,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Esito tampone"
+                        android:text="@string/risultatoTampone"
                         android:textColor="@color/blueButton"
                         android:textSize="24dp" />
                 </LinearLayout>
@@ -76,23 +76,74 @@
 
     </Toolbar>
 
-    <ScrollView
+
+
+    <LinearLayout
+        android:id="@+id/layoutCommunicationSwab"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progressBarCommSwab"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/spiegazione" />
 
         <LinearLayout
-            android:id="@+id/layoutMyPartecipationEvents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/ic_box"
+            android:elevation="10dp"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:weightSum="5">
+
+            <ImageView
+                android:id="@+id/imageInformationCodeCommunication"
+                android:layout_width="130dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:src="@drawable/code_security"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="@string/spiegazioneDescrizione">
+            </TextView>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="@string/comunicazioneCodice"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="50dp"
-            android:orientation="vertical">
+            android:layout_marginTop="5dp"
+            android:background="@drawable/ic_box_rounded_top"
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:text="Spiegazione" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,43 +151,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
-                android:layout_marginBottom="25dp"
-                android:background="@drawable/ic_box"
-                android:elevation="10dp"
-                android:orientation="vertical"
-                android:padding="20dp"
-                android:weightSum="5">
-
-                <ImageView
-                    android:id="@+id/imageInformationCodeCommunication"
-                    android:layout_width="130dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="2"
-                    android:src="@drawable/code_security"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingTop="5dp"
-                    android:text="Inserisci il codice univoco fornito dall'ente per comunicare la tua condizione di salute in forma anonima."></TextView>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Comunicazione codice" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginBottom="25dp"
-                android:background="@drawable/ic_box"
                 android:elevation="10dp"
                 android:orientation="vertical"
                 android:padding="20dp"
@@ -152,16 +166,44 @@
                     android:singleLine="true"
                     app:backgroundTint="@color/gray" />
 
-                <Button
-                    android:id="@+id/buttonCommunicationSwab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/blueButton"
-                    android:text="COMUNICA CODICE"
-                    android:textColor="@color/white"
-                    app:cornerRadius="@dimen/radius_button_register"
-                    android:onClick="onClickCommunicationSwab"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/buttonCommunicationSwab"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/blue_button_communication_swab"
+                        android:text="@string/buttonComunicazione"
+                        android:textColor="@color/white"
+                        app:cornerRadius="@dimen/radius_button_register"
+                        android:onClick="onClickViewSwab"
+                        android:enabled="false"
+                        android:layout_weight="3"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5">
+                    </TextView>
+
+                    <Button
+                        android:id="@+id/buttonRealCommunicationSwab"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/blue_button_communication_swab"
+                        android:text="@string/buttonRealCommunication"
+                        android:textColor="@color/white"
+                        app:cornerRadius="@dimen/radius_button_register"
+                        android:onClick="onClickCommunicationSwab"
+                        android:enabled="false"
+                        android:layout_weight="3"/>
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -170,24 +212,23 @@
                 android:id="@+id/textViewDettaglioTampone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="Dettaglio tampone"
-                android:visibility="gone"/>
+                android:text="@string/dettaglioTampone"
+                android:visibility="visible"/>
 
             <LinearLayout
                 android:id="@+id/boxDettaglioTampone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
-                android:layout_marginBottom="25dp"
-                android:background="@drawable/ic_box"
+
                 android:elevation="10dp"
                 android:orientation="vertical"
                 android:padding="20dp"
                 android:weightSum="5"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -198,8 +239,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:layout_weight="3.2"
-                        android:text="Esito tampone: ">
+                        android:layout_weight="4"
+                        android:text="@string/esitoTampone">
                     </TextView>
 
                     <TextView
@@ -208,7 +249,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_weight="6.8"
+                        android:layout_weight="6"
                         android:visibility="gone">
                     </TextView>
 
@@ -225,7 +266,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:layout_weight="4"
-                        android:text="Data effettuazione: ">
+                        android:text="@string/dataTampone">
                     </TextView>
 
                     <TextView
@@ -250,8 +291,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:layout_weight="2.8"
-                        android:text="Rilasciato da: ">
+                        android:layout_weight="4"
+                        android:text="@string/enteRilascio">
                     </TextView>
 
                     <TextView
@@ -260,7 +301,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_weight="7.2"
+                        android:layout_weight="6"
                         android:visibility="gone">
                     </TextView>
 
@@ -274,8 +315,7 @@
 
         </LinearLayout>
 
-
-    </ScrollView>
+    </LinearLayout>
 
 
 

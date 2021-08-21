@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,12 +14,10 @@ import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
 import Model.Pojo.CodiceComunicazioneTampone;
-import Model.Pojo.Evento;
-import Model.Pojo.Gruppo;
 
 public class CodiciComunicazioneTampone extends ResultsConverter {
 
-    private static final String CODICI_COMUNICAZIONE_TAMPONE_COLLECTION = "CodiciComunicazioneTampone";
+    public static final String CODICI_COMUNICAZIONE_TAMPONE_COLLECTION = "CodiciComunicazioneTampone";
 
 
     /**
@@ -83,6 +80,24 @@ public class CodiciComunicazioneTampone extends ResultsConverter {
             }
         });
     }
+
+
+    /**
+     * Ritorna un oggetto CodiceComunicazioneTampone da Firestore
+     * @param codice passaggio dell'id del CodiceComunicazioneTampone
+     * @param closureResult in caso di successo ritorna un oggetto CodiceComunicazioneTampone, altrimenti null.
+     */
+    public static final void getCode(String codice, ClosureResult<CodiceComunicazioneTampone> closureResult ){
+        FirestoreHelper.db.collection(CODICI_COMUNICAZIONE_TAMPONE_COLLECTION).document(codice).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                if (closureResult != null) closureResult.closure(task.getResult().toObject(CodiceComunicazioneTampone.class));
+            }else{
+                if (closureResult != null) closureResult.closure(null);
+            }
+        });
+    }
+
+
 
 
     /** Update the information about used swab.

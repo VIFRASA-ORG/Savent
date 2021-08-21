@@ -36,7 +36,7 @@ import Model.Pojo.Utente;
 
 public class Utenti extends ResultsConverter {
 
-    private static final String UTENTI_COLLECTION = "Utenti";
+    public static final String UTENTI_COLLECTION = "Utenti";
     private static final String MESSAGING_TOKEN_COLLECTION = "MessagingToken";
 
     /**
