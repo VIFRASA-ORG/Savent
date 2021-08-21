@@ -84,10 +84,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 SaventContract.Notifiche.COLUMN_NAME_GROUP_NAME + " TEXT )");
     }
 
-
-    /* Drop delle tabelle */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        dropDatabase();
+        this.onCreate(db);
+    }
+
+    /**
+     * funzione per eseguire il drop delle tabelle
+     */
+    public void dropDatabase(){
+        SQLiteDatabase db = this.getWritableDatabase();
+
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.MieiCodici.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.ContattiAvvenuti.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.Notifiche.TABLE_NAME);
