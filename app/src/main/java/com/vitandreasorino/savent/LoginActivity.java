@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vitandreasorino.savent.Enti.HomeActivityEnte;
+import com.vitandreasorino.savent.Utenti.BluetoothLEServices.GattServerCrawlerService;
+import com.vitandreasorino.savent.Utenti.BluetoothLEServices.GattServerService;
 import com.vitandreasorino.savent.Utenti.HomeActivity;
 
 import java.util.regex.Matcher;
@@ -26,6 +28,7 @@ import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureBoolean;
 import Model.DB.Enti;
+import Model.DB.TemporaryExposureKeys;
 import Model.DB.Utenti;
 
 
@@ -203,6 +206,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
             if (!isSucc){
                 Utenti.createMessagingTokenDocument(null);
             }
+        });
+
+        //Generating the first Temporary exposure key
+        TemporaryExposureKeys.generateNewTEK(this, newTek -> {
+            //Starting the gatt server only after the first tek is generated
+            startService(new Intent(getBaseContext(), GattServerService.class));
+            startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
         });
 
         //Going to the normal user Home

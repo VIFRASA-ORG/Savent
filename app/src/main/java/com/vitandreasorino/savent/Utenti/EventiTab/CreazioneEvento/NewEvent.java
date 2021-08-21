@@ -77,25 +77,6 @@ public class NewEvent extends AppCompatActivity {
     Context context = this;
 
 
-    private void setAdapter(){
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.options_item, arrayNome);
-        try{
-            autoComplete.setText(arrayAdapter.getItem(0).toString(), false);
-        }catch(IndexOutOfBoundsException e){
-            e.printStackTrace();
-        }
-        autoComplete.setAdapter(arrayAdapter);
-        autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String item = arrayId.get(position);
-                idAccountCreatore = item;
-
-            }
-        });
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +118,6 @@ public class NewEvent extends AppCompatActivity {
 
 
         imageViewEvent = (ImageView) findViewById(R.id.imageViewEvent);
-
 
         textViewLatitudine = (TextView) findViewById(R.id.textViewLatitudine);
         textViewLongitudine = (TextView) findViewById(R.id.textViewLongitudine);
@@ -183,9 +163,7 @@ public class NewEvent extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) { }
 
             /*
             Metodo che permette di indicare la percentuale inserita dall'utente nella seekBar
@@ -193,7 +171,6 @@ public class NewEvent extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 textViewContatoreStatus.setText(""+ i +"%");
-
             }
         });
 
@@ -207,25 +184,17 @@ public class NewEvent extends AppCompatActivity {
 
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.DAY_OF_MONTH, 1);
-
                 Calendar cal1 = (Calendar) cal.clone();
-
                 if(dataInserita != null) {
                     cal.setTimeInMillis(dataInserita.getTime());
                 }
-
 
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
-
-                DatePickerDialog dialog = new DatePickerDialog(NewEvent.this,
-                        dateSetListener, year, month, day);
-
-
+                DatePickerDialog dialog = new DatePickerDialog(NewEvent.this, dateSetListener, year, month, day);
                 dialog.getDatePicker().setMinDate(cal1.getTime().getTime());
-
                 dialog.show();
             }
         });
@@ -248,8 +217,6 @@ public class NewEvent extends AppCompatActivity {
                 giorno = dayOfMonth;
 
                 dataInserita = calendario.getTime();
-
-
                 displayDate.setText(date);
 
             }
@@ -277,6 +244,24 @@ public class NewEvent extends AppCompatActivity {
 
     }
 
+    private void setAdapter(){
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.options_item, arrayNome);
+        try{
+            autoComplete.setText(arrayAdapter.getItem(0).toString(), false);
+        }catch(IndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
+        autoComplete.setAdapter(arrayAdapter);
+        autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = arrayId.get(position);
+                idAccountCreatore = item;
+
+            }
+        });
+    }
 
     public void onMap(View view) {
 

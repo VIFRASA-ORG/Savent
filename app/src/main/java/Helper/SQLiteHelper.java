@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.provider.BaseColumns;
 
 import java.util.ArrayList;
@@ -24,11 +25,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         public static final String DATABASE_NAME = "Savent.db";
 
-        /* Inner class che definisce la tabella MieiCodici */
-        public class MieiCodici implements BaseColumns {
-            public static final String TABLE_NAME = "MieiCodici";
-            public static final String COLUMN_NAME_CODICI = "Codici";
-            public static final String COLUMN_NAME_DATA_CREAZIONE = "DataCreazione";
+        /* Inner class che definisce la tabella TemporaryExposureKeys */
+        public class TemporaryExposureKeys implements BaseColumns {
+            public static final String TABLE_NAME = "TemporaryExposureKeys";
+            public static final String COLUMN_NAME_CODICI = "Key";
+            public static final String COLUMN_NAME_DATA_CREAZIONE = "generationTime";
         }
 
         /* Inner class che definisce la tabella ContattiAvvenuti */
@@ -53,7 +54,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public static final int DISTANCE_TIME_CONTACT = 15;
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
 
     /* Costruttore della classe SQLiteHelper */
     public SQLiteHelper(Context context) {
@@ -64,8 +65,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     /* Creazione delle due tabelle MieiCodici, ContattiAvvenuti */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + SaventContract.MieiCodici.TABLE_NAME + "(" + SaventContract.MieiCodici.COLUMN_NAME_CODICI +
-                   " TEXT PRIMARY KEY, " + SaventContract.MieiCodici.COLUMN_NAME_DATA_CREAZIONE + " TEXT)");
+        db.execSQL("CREATE TABLE " + SaventContract.TemporaryExposureKeys.TABLE_NAME + "(" + SaventContract.TemporaryExposureKeys.COLUMN_NAME_CODICI +
+                   " TEXT PRIMARY KEY, " + SaventContract.TemporaryExposureKeys.COLUMN_NAME_DATA_CREAZIONE + " TEXT)");
 
         db.execSQL("CREATE TABLE " + SaventContract.ContattiAvvenuti.TABLE_NAME + "(" + SaventContract.ContattiAvvenuti._ID +
                    " INTEGER PRIMARY KEY AUTOINCREMENT, " + SaventContract.ContattiAvvenuti.COLUMN_NAME_CODICI + " TEXT, " +
@@ -96,6 +97,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.ContattiAvvenuti.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SaventContract.Notifiche.TABLE_NAME);
         this.onCreate(db);
+    }
+
+    /**
+     * Esegue la query per avere il numero di notifiche non lette
+     *
+     * @return il numero di notifiche non lette
+     */
+    public int getNumberOfUnreadNotification() {
+        SQLiteDatabase databaseSQLite = this.getReadableDatabase();
+        String sql = "SELECT COUNT(*) FROM " + SaventContract.Notifiche.TABLE_NAME + " WHERE " + SaventContract.Notifiche.COLUMN_NAME_READ + "= 0" ;
+        SQLiteStatement statement = databaseSQLite.compileStatement(sql);
+        int count = (int) statement.simpleQueryForLong();
+        return count;
     }
 
     /**
@@ -177,20 +191,34 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return notifications;
     }
 
+    /**
+     * Ritorna l'ultima Temporary Exposure Key memorizzata all'interno della tabella TemporaryExposureKeys
+     *
+     * @return l'ultima TEK se esiste, null altrimenti.
+     */
+    public String getLastTek(){
+        SQLiteDatabase databaseSQLite = this.getReadableDatabase();
+
+        String query = "SELECT * FROM " + SaventContract.TemporaryExposureKeys.TABLE_NAME + " ORDER BY " + SaventContract.TemporaryExposureKeys.COLUMN_NAME_DATA_CREAZIONE + " LIMIT 1" ;
+        Cursor cursor = databaseSQLite.rawQuery(query,null);
+
+        if(cursor.moveToFirst()){
+            return cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.TemporaryExposureKeys.COLUMN_NAME_CODICI));
+        }else return null;
+    }
 
     /**
      * Inserimento dei campi nella tabella MieiCodici
      * @param codice
      * @param dataCreazione
      */
-    public void insertMieiCodici(String codice, Calendar dataCreazione) {
+    public void insertNewTek(String codice, Calendar dataCreazione) {
         SQLiteDatabase databaseSQLite = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SaventContract.MieiCodici.COLUMN_NAME_CODICI, codice);
-        contentValues.put(SaventContract.MieiCodici.COLUMN_NAME_DATA_CREAZIONE, dataCreazione.getTimeInMillis());
-        databaseSQLite.insert(SaventContract.MieiCodici.TABLE_NAME, null, contentValues);
+        contentValues.put(SaventContract.TemporaryExposureKeys.COLUMN_NAME_CODICI, codice);
+        contentValues.put(SaventContract.TemporaryExposureKeys.COLUMN_NAME_DATA_CREAZIONE, dataCreazione.getTimeInMillis());
+        databaseSQLite.insert(SaventContract.TemporaryExposureKeys.TABLE_NAME, null, contentValues);
     }
-
 
     /**
      * Inserimento dei campi nella tabella ContattiAvvenuti
@@ -209,12 +237,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     /**
      * Cancellazione delle tuple ogni 15 giorni dalla tabella MieiCodici
      */
-    public void deleteExpiredMyCode() {
+    public void deleteExpiredTek() {
         SQLiteDatabase databaseSQLite = this.getWritableDatabase();
         Calendar currentTime = Calendar.getInstance();
         // sottrae alla data corrente 15 giorni, in modo tale da usare questo oggetto currentTime all'interno della query
         currentTime.add(Calendar.DAY_OF_MONTH, -DISTANCE_TIME_CONTACT);
-        databaseSQLite.delete(SaventContract.MieiCodici.TABLE_NAME, SaventContract.MieiCodici.COLUMN_NAME_DATA_CREAZIONE + " < ?", new String[] {"" + currentTime.getTimeInMillis()});
+        databaseSQLite.delete(SaventContract.TemporaryExposureKeys.TABLE_NAME, SaventContract.TemporaryExposureKeys.COLUMN_NAME_DATA_CREAZIONE + " < ?", new String[] {"" + currentTime.getTimeInMillis()});
     }
 
     /**

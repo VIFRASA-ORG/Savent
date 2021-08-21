@@ -295,6 +295,20 @@
     <string name="dataEventPartecipation">Date</string>
     <string name="titleEventPartecipation">EVENT SAVENT</string>
 
+    //User home activity - bluetooth and location box and popUp
+    <string name="bluetoothDisabled">The bluetooth is disabled!</string>
+    <string name="bluetoothDisabledMessage">Enable the bluetooth to enable the tracking feature!</string>
+    <string name="enableBluetoothButton">Enable bluetooth</string>
+    <string name="bluetoothNotEnabledToast">Bluetooth not enabled!</string>
+    <string name="bluetoothEnabledToast">Bluetooth enabled!</string>
+    <string name="bluetoothNotSupported">This device doesn\'t support Bluetooth!</string>
+
+    <string name="locationPermissionNotGranted">The location permission is not granted!</string>
+    <string name="locationPermissionNotGrantedMessage">Give the location permission to eneble the tracking feature and to use the location into the maps. </string>
+    <string name="askLocationPermissionButton">Give permission</string>
+    <string name="locationPermissionDeniedToast">Location permission denied!</string>
+    <string name="locationPermissionGrantedToast">Location permission granted!</string>
+
     //CommunicationSwabActivity
     <string name="validitaCodice">Invalid code!</string>
     <string name="statusPositivo">Positive</string>

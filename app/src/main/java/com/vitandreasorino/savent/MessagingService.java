@@ -9,18 +9,13 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.vitandreasorino.savent.Utenti.HomeActivity;
 import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 
 import Helper.NotificationHelper;
@@ -67,6 +62,10 @@ public class MessagingService extends FirebaseMessagingService {
             //Insert the notification into the database
             SQLiteHelper databaseHelper = new SQLiteHelper(this);
             databaseHelper.insertNewNotification(n);
+
+            //Sending the broadcast message to update the notification number
+            Intent broadcast = new Intent("UpdateNotification");
+            LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
 
             //Sending the notification to the user
             sendNotification(n);
