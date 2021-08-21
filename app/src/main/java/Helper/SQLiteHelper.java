@@ -6,16 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-import com.vitandreasorino.savent.R;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import Model.Pojo.Notification;
+import Model.Pojo.CodiceIdentificativo;
 
 
 public class SQLiteHelper extends SQLiteOpenHelper {
@@ -254,6 +250,33 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         Cursor cursore = databaseSQLite.rawQuery(queryControlloContatti,null);
         return  cursore.getCount();
+    }
+
+    /**
+     * Lettura dei Miei Codici presenti nel database locale "Savent.db"
+     * @return arrayMieiCodici, contenente tutti i codici presenti nella tabella "MieiCodici"
+     */
+    public ArrayList<CodiceIdentificativo> letturaMieiCodici() {
+        ArrayList<CodiceIdentificativo> arrayMieiCodici = new ArrayList<CodiceIdentificativo>();
+        SQLiteDatabase databaseSQLite = this.getReadableDatabase();
+        String queryLettura = "SELECT " + SaventContract.MieiCodici.COLUMN_NAME_CODICI + " FROM " + SaventContract.MieiCodici.TABLE_NAME;
+        Cursor cursore = databaseSQLite.rawQuery(queryLettura,null);
+
+        /* Controllo se il cursore è posizionato alla prima tupla di quelle ritornate */
+        if (cursore.moveToFirst()) {
+
+            /* Settiamo la data del codice del tampone da comunicare azzerrandone millisecondi, secondi, minuti e ore */
+            do {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                arrayMieiCodici.add(new CodiceIdentificativo(cursore.getString(0), cal.getTime()));
+
+            } while (cursore.moveToNext());
+        }
+        return arrayMieiCodici;
     }
 
 
