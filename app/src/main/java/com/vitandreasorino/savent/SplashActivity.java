@@ -10,8 +10,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.vitandreasorino.savent.Enti.HomeActivityEnte;
-import com.vitandreasorino.savent.Utenti.BluetoothLEServices.GattServerCrawlerService;
-import com.vitandreasorino.savent.Utenti.BluetoothLEServices.GattServerService;
+import Services.BluetoothLEServices.GattServerCrawlerService;
+import Services.BluetoothLEServices.GattServerService;
 import com.vitandreasorino.savent.Utenti.HomeActivity;
 
 import Helper.AuthHelper;

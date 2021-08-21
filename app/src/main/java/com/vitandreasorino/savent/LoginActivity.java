@@ -17,8 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vitandreasorino.savent.Enti.HomeActivityEnte;
-import com.vitandreasorino.savent.Utenti.BluetoothLEServices.GattServerCrawlerService;
-import com.vitandreasorino.savent.Utenti.BluetoothLEServices.GattServerService;
+import Services.BluetoothLEServices.GattServerCrawlerService;
+import Services.BluetoothLEServices.GattServerService;
 import com.vitandreasorino.savent.Utenti.HomeActivity;
 
 import java.util.regex.Matcher;

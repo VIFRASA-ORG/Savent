@@ -19,7 +19,7 @@ import java.util.Calendar;
 
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
-import Helper.SQLiteHelper;
+import Helper.LocalStorage.SQLiteHelper;
 import Model.Closures.ClosureBoolean;
 import Model.DB.CodiciComunicazioneTampone;
 import Model.DB.CodiciIdentificativi;

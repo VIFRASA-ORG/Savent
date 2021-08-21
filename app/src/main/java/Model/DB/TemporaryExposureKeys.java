@@ -6,8 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-import Helper.FirestoreHelper;
-import Helper.SQLiteHelper;
+import Helper.FirebaseStorage.FirestoreHelper;
+import Helper.LocalStorage.SQLiteHelper;
 import Model.Closures.ClosureResult;
 
 

@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent.Utenti.BluetoothLEServices;
+package Services.BluetoothLEServices;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -29,7 +29,7 @@ import java.util.Calendar;
 import java.util.UUID;
 
 import Helper.BluetoothLEHelper;
-import Helper.SQLiteHelper;
+import Helper.LocalStorage.SQLiteHelper;
 import Model.LogDebug;
 
 /**

@@ -1,8 +1,6 @@
 package Model.DB;
 import android.app.Activity;
 import android.net.Uri;
-import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,10 +22,10 @@ import java.util.Collections;
 import java.util.List;
 
 import Helper.AuthHelper;
-import Helper.FirestoreHelper;
+import Helper.FirebaseStorage.FirestoreHelper;
 import Helper.Maps.LocationBoundaries;
 import Helper.Maps.MapsHelper;
-import Helper.StorageHelper;
+import Helper.FirebaseStorage.StorageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;

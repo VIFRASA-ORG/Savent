@@ -1,4 +1,4 @@
-package com.vitandreasorino.savent;
+package Services;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,10 +16,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.vitandreasorino.savent.R;
 import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 
 import Helper.NotificationHelper;
-import Helper.SQLiteHelper;
+import Helper.LocalStorage.SQLiteHelper;
 import Model.DB.Utenti;
 
 public class MessagingService extends FirebaseMessagingService {

@@ -1,4 +1,4 @@
-package Helper;
+package Helper.FirebaseStorage;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 

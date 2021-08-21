@@ -1,4 +1,4 @@
-package Helper;
+package Helper.LocalStorage;
 
 import android.content.Context;
 import android.content.SharedPreferences;

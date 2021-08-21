@@ -5,7 +5,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import Helper.NotificationHelper;
-import Helper.SQLiteHelper;
+import Helper.LocalStorage.SQLiteHelper;
 import Model.Pojo.Notification;
 
 public class NotificationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {

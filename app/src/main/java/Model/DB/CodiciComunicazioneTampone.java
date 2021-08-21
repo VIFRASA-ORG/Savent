@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import Helper.AuthHelper;
-import Helper.FirestoreHelper;
+import Helper.FirebaseStorage.FirestoreHelper;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;

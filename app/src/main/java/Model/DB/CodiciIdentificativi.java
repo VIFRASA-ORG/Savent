@@ -15,7 +15,7 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 
 import Helper.AuthHelper;
-import Helper.FirestoreHelper;
+import Helper.FirebaseStorage.FirestoreHelper;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureResult;
 import Model.Pojo.CodiceComunicazioneTampone;

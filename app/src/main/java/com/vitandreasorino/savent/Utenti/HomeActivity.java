@@ -35,7 +35,7 @@ import com.vitandreasorino.savent.Utenti.GruppiTab.GroupFragment;
 import com.vitandreasorino.savent.R;
 import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 import Helper.AnimationHelper;
-import Helper.SQLiteHelper;
+import Helper.LocalStorage.SQLiteHelper;
 import Model.DB.Utenti;
 
 

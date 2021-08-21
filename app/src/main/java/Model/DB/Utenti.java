@@ -11,9 +11,6 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -25,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import Helper.AuthHelper;
-import Helper.FirestoreHelper;
-import Helper.StorageHelper;
+import Helper.FirebaseStorage.FirestoreHelper;
+import Helper.FirebaseStorage.StorageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;

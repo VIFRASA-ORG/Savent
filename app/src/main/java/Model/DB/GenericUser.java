@@ -9,7 +9,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
-import Helper.FirestoreHelper;
+import Helper.FirebaseStorage.FirestoreHelper;
 import Model.Closures.ClosureBoolean;
 import Model.Pojo.Ente;
 import Model.Pojo.Utente;

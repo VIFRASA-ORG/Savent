@@ -1,26 +1,15 @@
 package Model.DB;
 
 import android.net.Uri;
-import android.net.wifi.aware.DiscoverySession;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import Helper.AuthHelper;
-import Helper.FirestoreHelper;
-import Helper.StorageHelper;
+import Helper.FirebaseStorage.FirestoreHelper;
+import Helper.FirebaseStorage.StorageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
-import Model.Pojo.CodiceComunicazioneTampone;
 import Model.Pojo.Ente;
-import Model.Pojo.Gruppo;
-import Model.Pojo.Utente;
 
 import static Model.DB.ResultsConverter.convertResults;
 

@@ -1,36 +1,23 @@
 package Model.DB;
 
 import android.net.Uri;
-import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import Helper.AuthHelper;
-import Helper.FirestoreHelper;
-import Helper.StorageHelper;
+import Helper.FirebaseStorage.FirestoreHelper;
+import Helper.FirebaseStorage.StorageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
-import Model.Pojo.Evento;
 import Model.Pojo.Gruppo;
-import Model.Pojo.Utente;
 
 public class Gruppi extends ResultsConverter{
 

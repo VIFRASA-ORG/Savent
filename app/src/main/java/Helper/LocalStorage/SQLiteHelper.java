@@ -1,4 +1,4 @@
-package Helper;
+package Helper.LocalStorage;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import Helper.NotificationHelper;
 import Model.Pojo.Notification;
 import Model.Pojo.CodiceIdentificativo;
 
@@ -28,7 +29,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         /* Inner class che definisce la tabella TemporaryExposureKeys */
         public class TemporaryExposureKeys implements BaseColumns {
             public static final String TABLE_NAME = "TemporaryExposureKeys";
-            public static final String COLUMN_NAME_CODICI = "Key";
+            public static final String COLUMN_NAME_CODICI = "Tek";
             public static final String COLUMN_NAME_DATA_CREAZIONE = "generationTime";
         }
 

@@ -15,7 +15,7 @@ import com.vitandreasorino.savent.LogSingInActivity;
 import com.vitandreasorino.savent.R;
 
 import Helper.AuthHelper;
-import Helper.SharedPreferencesHelper;
+import Helper.LocalStorage.SharedPreferencesHelper;
 
 public class SettingsActivity extends AppCompatActivity{
 
