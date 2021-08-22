@@ -18,11 +18,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/app_icon"
+        android:roundIcon="@mipmap/app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Savent">
+
         <activity android:name=".Utenti.Settings.CommunicationSwabActivity"></activity>
         <activity android:name=".Utenti.Settings.SettingsActivity"></activity>
         <activity android:name=".TechnicalInfoActivity" />
@@ -71,7 +72,7 @@
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/app_icon" />
+            android:resource="@drawable/app_icon_no_back" />
 
         <!-- [Bluetooth GATT Server service] -->
         <service android:name="Services.BluetoothLEServices.GattServerService"
