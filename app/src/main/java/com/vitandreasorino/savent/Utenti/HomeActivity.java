@@ -84,6 +84,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, sensorProximity, SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
     @Override
@@ -185,6 +186,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         Utenti.addDocumentListener(this, newUser -> {
             setHealthStatusInView(newUser.getStatusSanitario());
         });
+
     }
 
     /**
@@ -354,35 +356,35 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
         // Visualizzazione popup in caso in cui lo switch del sensore di prossima è settato true dalle impostazioni
-        if(SharedPreferencesHelper.getProximitySensorPreference(this)) {
-            if(SharedPreferencesHelper.getBluetoothPreference(this)) {
-                if(event.values[0] == 0  && flag == true) {
-                    AlertDialog.Builder alertSensorProximity = new AlertDialog.Builder(this);
-                    LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
-                    View view = layoutInflaterAndroid.inflate(R.layout.disable_tracking_dialog, null);
-                    alertSensorProximity.setView(view);
-                    serviceDialog = alertSensorProximity.create();
-                    serviceDialog.show();
-                    flag = false;
-                }
-            }else{
-                if(event.values[0] == 0 && flag == true) {
-                    AlertDialog.Builder alertSensorProximity = new AlertDialog.Builder(this);
-                    LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
-                    View view = layoutInflaterAndroid.inflate(R.layout.activate_tracking_dialog, null);
-                    alertSensorProximity.setView(view);
-                    serviceDialog = alertSensorProximity.create();
-                    serviceDialog.show();
-                    flag = false;
-                }
+        //se le 2 preferenze nel setting sono attivate allora popup di disattivazione
+        if(SharedPreferencesHelper.getProximitySensorPreference(this) && SharedPreferencesHelper.getBluetoothPreference(this)) {
+            if( event.values[0] == 0.0 && flag == true) {
+                lanchedPopUp(R.layout.disable_tracking_dialog);
+                SharedPreferencesHelper.setBluetoothPreference(false,this);
+                flag = false;
+           }
+
+        }
+        //altrimenti se la preferenza di bluetooth non è attiva nel setting allora popup di attivazione
+        if(SharedPreferencesHelper.getProximitySensorPreference(this) && SharedPreferencesHelper.getBluetoothPreference(this) == false) {
+            if(event.values[0] == 0.0 && flag == true) {
+                lanchedPopUp(R.layout.activate_tracking_dialog);
+                SharedPreferencesHelper.setBluetoothPreference(true,this);
+                flag = false;
             }
         }
-
-
     }
 
+    //implementazione popUp personalizzato
+    private void lanchedPopUp(int dialog) {
+        AlertDialog.Builder alertSensorProximity = new AlertDialog.Builder(this);
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+        View view = layoutInflaterAndroid.inflate(dialog, null);
+        alertSensorProximity.setView(view);
+        serviceDialog = alertSensorProximity.create();
+        serviceDialog.show();
+    }
 
     public void disable(View view) {
         flag = true;
