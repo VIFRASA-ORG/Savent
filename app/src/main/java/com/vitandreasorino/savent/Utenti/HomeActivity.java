@@ -9,6 +9,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -36,10 +39,13 @@ import com.vitandreasorino.savent.R;
 import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 import Helper.AnimationHelper;
 import Helper.LocalStorage.SQLiteHelper;
+import Helper.LocalStorage.SharedPreferencesHelper;
 import Model.DB.Utenti;
 
 
 public class HomeActivity extends AppCompatActivity implements SensorEventListener {
+
+    public boolean flag = true;
 
     HealthStatus actualHealthStatus = HealthStatus.NOT_DEFINED_YET;
     private SensorManager sensorManager;
@@ -65,7 +71,8 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
     ViewPager2 viewPager;
 
-
+    //Dialog for the activate\disable dialog service
+    private AlertDialog serviceDialog = null;
 
     @Override
     protected void onPause() {
@@ -348,10 +355,45 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        if(event.values[0] == 0) {
-            System.out.println("VICINO");
+        // Visualizzazione popup in caso in cui lo switch del sensore di prossima è settato true dalle impostazioni
+        if(SharedPreferencesHelper.getProximitySensorPreference(this)) {
+            if(SharedPreferencesHelper.getBluetoothPreference(this)) {
+                if(event.values[0] == 0  && flag == true) {
+                    AlertDialog.Builder alertSensorProximity = new AlertDialog.Builder(this);
+                    LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+                    View view = layoutInflaterAndroid.inflate(R.layout.disable_tracking_dialog, null);
+                    alertSensorProximity.setView(view);
+                    serviceDialog = alertSensorProximity.create();
+                    serviceDialog.show();
+                    flag = false;
+                }
+            }else{
+                if(event.values[0] == 0 && flag == true) {
+                    AlertDialog.Builder alertSensorProximity = new AlertDialog.Builder(this);
+                    LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+                    View view = layoutInflaterAndroid.inflate(R.layout.activate_tracking_dialog, null);
+                    alertSensorProximity.setView(view);
+                    serviceDialog = alertSensorProximity.create();
+                    serviceDialog.show();
+                    flag = false;
+                }
+            }
         }
+
+
     }
+
+
+    public void disable(View view) {
+        flag = true;
+        serviceDialog.dismiss();
+    }
+
+    public void active(View view) {
+        flag = true;
+        serviceDialog.dismiss();
+    }
+
 
     public void onClickNotificationButton(View view){
         Intent schermataNotification = new Intent(getApplicationContext(), NotificationActivity.class);
@@ -376,6 +418,8 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+
 
 
     /*
