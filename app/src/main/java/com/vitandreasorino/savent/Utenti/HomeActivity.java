@@ -41,6 +41,8 @@ import Helper.AnimationHelper;
 import Helper.LocalStorage.SQLiteHelper;
 import Helper.LocalStorage.SharedPreferencesHelper;
 import Model.DB.Utenti;
+import Services.BluetoothLEServices.GattServerCrawlerService;
+import Services.BluetoothLEServices.GattServerService;
 
 
 public class HomeActivity extends AppCompatActivity implements SensorEventListener {
@@ -354,22 +356,47 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    /**
+     * Metodo che legge le preferenze impostate nel setting, e gestisce l'abilitazione e la disattivazione dei servizi di tracciamento in base al
+     * passaggio della mano sul sensore di prossimità.
+     * La variabile di flag ci serve per entrare una sola volta nel blocco ad ogni passaggio di mano.
+     * @param event
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Visualizzazione popup in caso in cui lo switch del sensore di prossima è settato true dalle impostazioni
-        //se le 2 preferenze nel setting sono attivate allora popup di disattivazione
+
+        //Se la preferenza di proximity sensor e di Ble sono attive, allora disattiva i servizi di tracciamento del BLe
         if(SharedPreferencesHelper.getProximitySensorPreference(this) && SharedPreferencesHelper.getBluetoothPreference(this)) {
-            if( event.values[0] == 0.0 && flag == true) {
+
+            //si attiva nel caso l'utente ha passato la mano sul sensore
+            if(event.values[0] == 0.0 && flag == true) {
+
+                //lancio del popUp e invio dei msg di broadcast per killare i processi dei servizi di BLE
                 lanchedPopUp(R.layout.disable_tracking_dialog);
+                Intent i = new Intent("killGattServerService");
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+                Intent j = new Intent("killGattServerServiceCrawler");
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(j);
+
+                //disattivo la preferenza di BLE una volta killato i suoi processi e flag di disattivazione entrata nel blocco
                 SharedPreferencesHelper.setBluetoothPreference(false,this);
                 flag = false;
            }
 
         }
-        //altrimenti se la preferenza di bluetooth non è attiva nel setting allora popup di attivazione
+
+        //Se invece la preferenza di proximity sensor è attiva ma quella di Ble no, allora attiva i servizi di tracciamento del BLe
         if(SharedPreferencesHelper.getProximitySensorPreference(this) && SharedPreferencesHelper.getBluetoothPreference(this) == false) {
+
+            //si attiva nel caso l'utente ha passato la mano sul sensore
             if(event.values[0] == 0.0 && flag == true) {
+
+                //lancio del popUp, avvio dei servizi
                 lanchedPopUp(R.layout.activate_tracking_dialog);
+                startService(new Intent(getBaseContext(), GattServerService.class));
+                startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
+
+                //attivo la preferenza di BLE una volta avviato i servizi e imposto il flag di disattivazione entrata nel blocco
                 SharedPreferencesHelper.setBluetoothPreference(true,this);
                 flag = false;
             }
@@ -382,20 +409,21 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
         View view = layoutInflaterAndroid.inflate(dialog, null);
         alertSensorProximity.setView(view);
+        alertSensorProximity.setCancelable(false);
         serviceDialog = alertSensorProximity.create();
         serviceDialog.show();
+
     }
 
-    public void disable(View view) {
+    /**
+     * click del button ok all'interno del popUp personalizzato
+     * riporta il flag a true per rientrare nel blocco e procede con la chiusura del popUp
+     * @param view
+     */
+    public void onConfermePopUp(View view) {
         flag = true;
         serviceDialog.dismiss();
     }
-
-    public void active(View view) {
-        flag = true;
-        serviceDialog.dismiss();
-    }
-
 
     public void onClickNotificationButton(View view){
         Intent schermataNotification = new Intent(getApplicationContext(), NotificationActivity.class);
