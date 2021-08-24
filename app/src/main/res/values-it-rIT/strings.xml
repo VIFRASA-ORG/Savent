@@ -286,6 +286,11 @@
         <item>è stato cancellato quindi non si terrà più!</item>
     </string-array>
 
+    <string-array name="contactRisk">
+        <item>Attenzione!</item>
+        <item>Sei stato a contatto con delle persone positive!\nControlla il tuo stato sanitario, se risulti a rischio sarebbe meglio rimanera a casa ed effettuare un tampone!</item>
+    </string-array>
+
     //MyEventPartecipations
     <string name="toolBarPartecipations">Partecipazioni</string>
     <string name="dateTimePartecipations">Data Ora</string>

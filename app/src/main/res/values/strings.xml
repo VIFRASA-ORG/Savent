@@ -280,6 +280,12 @@
         <item>has been canceled so it won\'t be held anymore!</item>
     </string-array>
 
+    <string-array name="contactRisk">
+        <item>Warning!</item>
+        <item>You have been in contact with positive people!\nCheck your health status, if you are at risk it would be better to stay at home and take a swab!</item>
+    </string-array>
+
+
     //MyEventPartecipations
     <string name="toolBarPartecipations">Partecipation</string>
     <string name="dateTimePartecipations">Date Time</string>

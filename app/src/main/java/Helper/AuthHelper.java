@@ -12,6 +12,7 @@ import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureResult;
 import Model.DB.Enti;
 import Model.DB.Utenti;
+import Services.DailyJob.DailyJobReceiver;
 
 
 /**
@@ -182,6 +183,9 @@ public class AuthHelper {
 
             //Resetta shared preferences
             SharedPreferencesHelper.resetSharedPreferences(context);
+
+            //Rimozione del daily task
+            DailyJobReceiver.removeDailyTask(context);
         }
     }
 

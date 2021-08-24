@@ -4,23 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import Helper.AuthHelper;
 import Helper.FirebaseStorage.FirestoreHelper;
 import Helper.FirebaseStorage.StorageHelper;
@@ -30,6 +27,8 @@ import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
 import Model.Pojo.ContactModel;
 import Model.Pojo.Utente;
+
+
 
 public class Utenti extends ResultsConverter {
 
@@ -50,6 +49,31 @@ public class Utenti extends ResultsConverter {
 
     public static final String TOKEN_FIELD = "token";
 
+
+    /**
+     * Method that sum the given offset to the logged in user health status.
+     * If the sum is > 100, the health status is setted to 100.
+     *
+     * @param offset the value to sum to the logged in user health status.
+     * @param closureBoolean invoked with true if the task is successful, false otherwise.
+     */
+    public static final void sumValueToHealthStatus(int offset, ClosureBoolean closureBoolean){
+        if(AuthHelper.isLoggedIn()) {
+            FirestoreHelper.db.runTransaction(transaction -> {
+                DocumentSnapshot document = transaction.get(FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()));
+                Utente utente = document.toObject(Utente.class);
+
+                int actualHealt = utente.getStatusSanitario();
+                int newHealthValue = (actualHealt + offset < 100) ? actualHealt + offset : 100;
+
+                transaction.update(FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()), "statusSanitario", newHealthValue);
+
+                return null;
+            }).addOnCompleteListener( task -> {
+                if(closureBoolean != null) closureBoolean.closure(task.isSuccessful());
+            });
+        }
+    }
 
     /**
      * Method used to get the current firebase messaging token associated to the device.

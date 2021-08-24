@@ -284,6 +284,7 @@ public class GattServerCrawlerService extends Service {
     public void onDestroy() {
         try{
             unregisterReceiver(fineLocationGrantedReceiver);
+            unregisterReceiver(bluetoothStateReceiver);
         }catch(IllegalArgumentException e){
             Log.i("GAT_SERVER_LOG","Error unregistering the receiver.");
         }
