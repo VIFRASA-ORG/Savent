@@ -27,7 +27,7 @@
                     android:layout_height="142dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    app:srcCompat="@drawable/app_icon" />
+                    app:srcCompat="@drawable/app_icon_no_back" />
             </LinearLayout>
 
             <TextView

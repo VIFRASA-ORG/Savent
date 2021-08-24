@@ -6,6 +6,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -128,6 +130,7 @@ public class NotificationActivity extends AppCompatActivity implements AdapterVi
 
 class NotificationAdapter extends BaseAdapter{
 
+    GradientDrawable contactRiskGradientBackground = new GradientDrawable();
     private List<Notification> notifications;
     private Context context;
     private AlertDialog.Builder alertDelete;
@@ -136,6 +139,12 @@ class NotificationAdapter extends BaseAdapter{
         this.notifications = notifications;
         this.context=context;
         this.alertDelete = alertDelete;
+
+        contactRiskGradientBackground.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+        contactRiskGradientBackground.setColors( new int[] { Color.argb(150,255,0,0),Color.argb(255,255,204,204) });
+        contactRiskGradientBackground.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+        contactRiskGradientBackground.setGradientRadius(500.0f);
+        contactRiskGradientBackground.setGradientCenter(0.5f, 0.5f);
     }
 
     @Override
@@ -165,22 +174,19 @@ class NotificationAdapter extends BaseAdapter{
         ImageView notificationRead = convertView.findViewById(R.id.notificationRead);
 
         //Adding the on click event to the dismiss button
-        dismissImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Showing a dialog with the confirmation
-                alertDelete.setPositiveButton(R.string.confirmPositive, (dialog, which) -> {
-                    SQLiteHelper db = new SQLiteHelper(context);
-                    db.deleteNotification(n.getId());
-                    notifications.remove(position);
-                    notifyDataSetChanged();
+        dismissImageView.setOnClickListener(v -> {
+            //Showing a dialog with the confirmation
+            alertDelete.setPositiveButton(R.string.confirmPositive, (dialog, which) -> {
+                SQLiteHelper db = new SQLiteHelper(context);
+                db.deleteNotification(n.getId());
+                notifications.remove(position);
+                notifyDataSetChanged();
 
-                    Toast.makeText(context,R.string.notificationSuccessfullyCancelled , Toast.LENGTH_SHORT).show();
-                });
+                Toast.makeText(context,R.string.notificationSuccessfullyCancelled , Toast.LENGTH_SHORT).show();
+            });
 
-                alertDelete.setNegativeButton(R.string.confirmNegative, null);
-                alertDelete.show();
-            }
+            alertDelete.setNegativeButton(R.string.confirmNegative, null);
+            alertDelete.show();
         });
 
         titolo.setText(n.getTitle());
@@ -191,6 +197,9 @@ class NotificationAdapter extends BaseAdapter{
 
         if(n.isRead()) notificationRead.setVisibility(View.INVISIBLE);
         else notificationRead.setVisibility(View.VISIBLE);
+
+        if(n.getNotificationType().equals(NotificationHelper.CONTACT_RISK_NOTIFICATION) ) convertView.setBackground(contactRiskGradientBackground);
+        else convertView.setBackgroundColor(Color.TRANSPARENT);
 
         return convertView;
     }

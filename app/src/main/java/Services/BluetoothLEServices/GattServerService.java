@@ -277,8 +277,14 @@ public class GattServerService extends Service {
 
     @Override
     public void onDestroy() {
+        try{
+            unregisterReceiver(killProcess);
+            unregisterReceiver(updateCharacteristicValue);
+            unregisterReceiver(bluetoothStateReceiver);
+        } catch (IllegalArgumentException e){
+            Log.i("GAT_SERVER_LOG","Error unregistering the receiver.");
+        }
+
         super.onDestroy();
-        unregisterReceiver(killProcess);
-        unregisterReceiver(updateCharacteristicValue);
     }
 }

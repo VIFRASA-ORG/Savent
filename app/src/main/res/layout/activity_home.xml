@@ -161,9 +161,8 @@
 
                         <ImageView
                             android:id="@+id/logoStatusHomeBig"
-                            android:layout_width="130dp"
-                            android:layout_height="130dp"
-                            android:layout_marginRight="5dp" />
+                            android:layout_width="150dp"
+                            android:layout_height="150dp" />
 
 
                         <TextView

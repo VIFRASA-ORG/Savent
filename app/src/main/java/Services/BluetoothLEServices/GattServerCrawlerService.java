@@ -16,6 +16,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -46,6 +47,7 @@ public class GattServerCrawlerService extends Service {
 
     boolean isLocationPermissionGranted = false;
     boolean isBluetoothEnabled = false;
+    boolean isGeolocationEnabled = false;
 
     //Defining the scan settings
     ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
@@ -59,12 +61,16 @@ public class GattServerCrawlerService extends Service {
         bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
 
-        isLocationPermissionGranted = BluetoothLEHelper.isFineLocationGranted(this);
-        isBluetoothEnabled = BluetoothLEHelper.isBluetoothEnabled();
+        setFlags();
 
         //Set a filter to only receive bluetooth state changed events.
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothStateReceiver, filter);
+
+        //Add a receiver for the GPS state event
+        IntentFilter filter1 = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
+        filter1.addAction(Intent.ACTION_PROVIDER_CHANGED);
+        registerReceiver(geolocationStateChangeReceiver, filter1);
 
         //Broadcast to manage the location granted event
         LocalBroadcastManager.getInstance(this).registerReceiver(fineLocationGrantedReceiver, new IntentFilter("fineLocationGranted"));
@@ -73,6 +79,27 @@ public class GattServerCrawlerService extends Service {
     }
 
 
+    /**
+     * Set all the permission and enable flag needed to run the crawler.
+     */
+    private void setFlags(){
+        isLocationPermissionGranted = BluetoothLEHelper.isFineLocationGranted(this);
+        isBluetoothEnabled = BluetoothLEHelper.isBluetoothEnabled();
+        isGeolocationEnabled = BluetoothLEHelper.isGpsEnabled(this);
+    }
+
+    /**
+     * Broadcast receiver to run the crawler after the geolocation is enabled.
+     */
+    private final BroadcastReceiver geolocationStateChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(BluetoothLEHelper.isGpsEnabled(getApplicationContext())){
+                setFlags();
+                startBleScan();
+            }
+        }
+    };
 
     /**
      * Broadcast receiver to run the crawler after the file location permission granted
@@ -80,6 +107,7 @@ public class GattServerCrawlerService extends Service {
     private BroadcastReceiver fineLocationGrantedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            setFlags();
             isLocationPermissionGranted = BluetoothLEHelper.isFineLocationGranted(getApplicationContext());
             startBleScan();
         }
@@ -95,9 +123,9 @@ public class GattServerCrawlerService extends Service {
 
             if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 final int bluetoothState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                setFlags();
                 switch (bluetoothState) {
                     case BluetoothAdapter.STATE_ON:
-                        isBluetoothEnabled = true;
                         startBleScan();
                         break;
                     case BluetoothAdapter.STATE_OFF:
@@ -115,7 +143,7 @@ public class GattServerCrawlerService extends Service {
      * The bluetooth must be enabled and the FineLocationPermission must granted.
      */
     private void startBleScan(){
-        if(isLocationPermissionGranted && isBluetoothEnabled) {
+        if(isLocationPermissionGranted && isBluetoothEnabled && isGeolocationEnabled) {
             //Perform scan
             BluetoothLeScanner bleScanner = bluetoothAdapter.getBluetoothLeScanner();
             bleScanner.startScan(null, settings, scanCallback);
@@ -282,7 +310,14 @@ public class GattServerCrawlerService extends Service {
 
     @Override
     public void onDestroy() {
+        try{
+            unregisterReceiver(fineLocationGrantedReceiver);
+            unregisterReceiver(bluetoothStateReceiver);
+            unregisterReceiver(geolocationStateChangeReceiver);
+        }catch(IllegalArgumentException e){
+            Log.i("GAT_SERVER_LOG","Error unregistering the receiver.");
+        }
+
         super.onDestroy();
-        unregisterReceiver(fineLocationGrantedReceiver);
     }
 }
