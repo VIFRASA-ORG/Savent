@@ -49,9 +49,10 @@ public class GattServerCrawlerService extends Service {
     boolean isBluetoothEnabled = false;
     boolean isGeolocationEnabled = false;
 
+    BluetoothLeScanner bleScanner = null;
+
     //Defining the scan settings
     ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
-
 
 
     @Override
@@ -74,9 +75,22 @@ public class GattServerCrawlerService extends Service {
 
         //Broadcast to manage the location granted event
         LocalBroadcastManager.getInstance(this).registerReceiver(fineLocationGrantedReceiver, new IntentFilter("fineLocationGranted"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(killProcessGatt, new IntentFilter("killGattServerServiceCrawler"));
 
         startBleScan();
     }
+
+    /**
+     * Broadcast receiver to kill the service
+     */
+    private BroadcastReceiver killProcessGatt = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LogDebug.GAT_SERVER_LOG, "Killing the server.");
+            if(bleScanner != null) bleScanner.stopScan(scanCallback);
+            stopSelf();
+        }
+    };
 
 
     /**
@@ -145,7 +159,7 @@ public class GattServerCrawlerService extends Service {
     private void startBleScan(){
         if(isLocationPermissionGranted && isBluetoothEnabled && isGeolocationEnabled) {
             //Perform scan
-            BluetoothLeScanner bleScanner = bluetoothAdapter.getBluetoothLeScanner();
+            bleScanner = bluetoothAdapter.getBluetoothLeScanner();
             bleScanner.startScan(null, settings, scanCallback);
         }
     }

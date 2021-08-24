@@ -202,7 +202,7 @@ public class GattServerService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(LogDebug.GAT_SERVER_LOG, "Killing the service.");
-            bluetoothGattServer.close();
+            if(bluetoothGattServer != null) bluetoothGattServer.close();
             stopSelf();
         }
     };
@@ -217,8 +217,6 @@ public class GattServerService extends Service {
             bluetoothGattServer.getService(UUID.fromString(BluetoothLEHelper.UUID_SERVICE)).getCharacteristic(characteristic_send_UUID).setValue(newValue);
         }
     };
-
-
 
     /**
      * Callback method used to deliver advertising operation status.

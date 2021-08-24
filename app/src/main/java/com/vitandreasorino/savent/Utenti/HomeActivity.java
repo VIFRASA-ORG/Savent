@@ -9,6 +9,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -36,10 +39,15 @@ import com.vitandreasorino.savent.R;
 import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 import Helper.AnimationHelper;
 import Helper.LocalStorage.SQLiteHelper;
+import Helper.LocalStorage.SharedPreferencesHelper;
 import Model.DB.Utenti;
+import Services.BluetoothLEServices.GattServerCrawlerService;
+import Services.BluetoothLEServices.GattServerService;
 
 
 public class HomeActivity extends AppCompatActivity implements SensorEventListener {
+
+    public boolean flag = true;
 
     HealthStatus actualHealthStatus = HealthStatus.NOT_DEFINED_YET;
     private SensorManager sensorManager;
@@ -65,7 +73,8 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
     ViewPager2 viewPager;
 
-
+    //Dialog for the activate\disable dialog service
+    private AlertDialog serviceDialog = null;
 
     @Override
     protected void onPause() {
@@ -77,6 +86,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, sensorProximity, SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
     @Override
@@ -178,6 +188,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         Utenti.addDocumentListener(this, newUser -> {
             setHealthStatusInView(newUser.getStatusSanitario());
         });
+
     }
 
     /**
@@ -345,12 +356,73 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    /**
+     * Metodo che legge le preferenze impostate nel setting, e gestisce l'abilitazione e la disattivazione dei servizi di tracciamento in base al
+     * passaggio della mano sul sensore di prossimità.
+     * La variabile di flag ci serve per entrare una sola volta nel blocco ad ogni passaggio di mano.
+     * @param event
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        if(event.values[0] == 0) {
-            System.out.println("VICINO");
+        //Se la preferenza di proximity sensor e di Ble sono attive, allora disattiva i servizi di tracciamento del BLe
+        if(SharedPreferencesHelper.getProximitySensorPreference(this) && SharedPreferencesHelper.getBluetoothPreference(this)) {
+
+            //si attiva nel caso l'utente ha passato la mano sul sensore
+            if(event.values[0] == 0.0 && flag == true) {
+
+                //lancio del popUp e invio dei msg di broadcast per killare i processi dei servizi di BLE
+                lanchedPopUp(R.layout.disable_tracking_dialog);
+                Intent i = new Intent("killGattServerService");
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+                Intent j = new Intent("killGattServerServiceCrawler");
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(j);
+
+                //disattivo la preferenza di BLE una volta killato i suoi processi e flag di disattivazione entrata nel blocco
+                SharedPreferencesHelper.setBluetoothPreference(false,this);
+                flag = false;
+           }
+
         }
+
+        //Se invece la preferenza di proximity sensor è attiva ma quella di Ble no, allora attiva i servizi di tracciamento del BLe
+        if(SharedPreferencesHelper.getProximitySensorPreference(this) && SharedPreferencesHelper.getBluetoothPreference(this) == false) {
+
+            //si attiva nel caso l'utente ha passato la mano sul sensore
+            if(event.values[0] == 0.0 && flag == true) {
+
+                //lancio del popUp, avvio dei servizi
+                lanchedPopUp(R.layout.activate_tracking_dialog);
+                startService(new Intent(getBaseContext(), GattServerService.class));
+                startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
+
+                //attivo la preferenza di BLE una volta avviato i servizi e imposto il flag di disattivazione entrata nel blocco
+                SharedPreferencesHelper.setBluetoothPreference(true,this);
+                flag = false;
+            }
+        }
+    }
+
+    //implementazione popUp personalizzato
+    private void lanchedPopUp(int dialog) {
+        AlertDialog.Builder alertSensorProximity = new AlertDialog.Builder(this);
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+        View view = layoutInflaterAndroid.inflate(dialog, null);
+        alertSensorProximity.setView(view);
+        alertSensorProximity.setCancelable(false);
+        serviceDialog = alertSensorProximity.create();
+        serviceDialog.show();
+
+    }
+
+    /**
+     * click del button ok all'interno del popUp personalizzato
+     * riporta il flag a true per rientrare nel blocco e procede con la chiusura del popUp
+     * @param view
+     */
+    public void onConfermePopUp(View view) {
+        flag = true;
+        serviceDialog.dismiss();
     }
 
     public void onClickNotificationButton(View view){
@@ -376,6 +448,8 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+
 
 
     /*
