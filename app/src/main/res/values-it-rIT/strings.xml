@@ -356,4 +356,8 @@
     <string name="stringConfirmLogout">Conferma logout</string>
     <string name="stringDialogLogout">Sei sicuro di voler uscire?</string>
 
+    //Pop-Up HomeActivity
+    <string name="disattivazioneTracciamento">La funzionalità di tracciamento è stata <b>disabilitata</b> con successo!</string>
+    <string name="attivazioneTracciamento">La funzionalità di tracciamento è stata <b>abilitata</b> con successo!</string>
+
 </resources>
