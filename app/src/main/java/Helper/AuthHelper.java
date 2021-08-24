@@ -1,6 +1,10 @@
 package Helper;
 
 import android.content.Context;
+import android.content.Intent;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -12,6 +16,8 @@ import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureResult;
 import Model.DB.Enti;
 import Model.DB.Utenti;
+import Services.BluetoothLEServices.GattServerCrawlerService;
+import Services.BluetoothLEServices.GattServerService;
 import Services.DailyJob.DailyJobReceiver;
 
 
@@ -186,6 +192,10 @@ public class AuthHelper {
 
             //Rimozione del daily task
             DailyJobReceiver.removeDailyTask(context);
+
+            //Stop del gatt server e crawler
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(GattServerService.STOP_GATT_SERVER));
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(GattServerCrawlerService.STOP_GATT_CRAWLER));
         }
     }
 

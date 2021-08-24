@@ -42,6 +42,12 @@ import Model.LogDebug;
  */
 public class GattServerCrawlerService extends Service {
 
+    public static final String RESTART_GATT_CRAWLER = "restartGattCrawler";
+    public static final String STOP_GATT_CRAWLER = "stopGattCrawler";
+    public static final String FINE_LOCATION_GRANTED = "fineLocationGranted";
+
+    public static boolean isRunning = false;
+
     private BluetoothManager bluetoothManager;
     private BluetoothAdapter bluetoothAdapter;
 
@@ -59,6 +65,8 @@ public class GattServerCrawlerService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        isRunning = true;
+
         bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
 
@@ -74,21 +82,33 @@ public class GattServerCrawlerService extends Service {
         registerReceiver(geolocationStateChangeReceiver, filter1);
 
         //Broadcast to manage the location granted event
-        LocalBroadcastManager.getInstance(this).registerReceiver(fineLocationGrantedReceiver, new IntentFilter("fineLocationGranted"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(killProcessGatt, new IntentFilter("killGattServerServiceCrawler"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(fineLocationGrantedReceiver, new IntentFilter(FINE_LOCATION_GRANTED));
+        LocalBroadcastManager.getInstance(this).registerReceiver(stopGattCrawlerReceiver, new IntentFilter(STOP_GATT_CRAWLER));
+        LocalBroadcastManager.getInstance(this).registerReceiver(restartGattCrawlerReceiver, new IntentFilter(RESTART_GATT_CRAWLER));
 
         startBleScan();
     }
 
     /**
-     * Broadcast receiver to kill the service
+     * Broadcast receiver to restart the crawler.
      */
-    private BroadcastReceiver killProcessGatt = new BroadcastReceiver() {
+    private BroadcastReceiver restartGattCrawlerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogDebug.GAT_SERVER_LOG, "Killing the server.");
+            Log.d(LogDebug.GAT_SERVER_LOG, "Restarting the gatt crawler.");
+            setFlags();
+            startBleScan();
+        }
+    };
+
+    /**
+     * Broadcast receiver to stop the crawler.
+     */
+    private BroadcastReceiver stopGattCrawlerReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LogDebug.GAT_SERVER_LOG, "Stopping the gatt crawler.");
             if(bleScanner != null) bleScanner.stopScan(scanCallback);
-            stopSelf();
         }
     };
 
@@ -159,7 +179,7 @@ public class GattServerCrawlerService extends Service {
     private void startBleScan(){
         if(isLocationPermissionGranted && isBluetoothEnabled && isGeolocationEnabled) {
             //Perform scan
-            bleScanner = bluetoothAdapter.getBluetoothLeScanner();
+            if(bleScanner == null) bleScanner = bluetoothAdapter.getBluetoothLeScanner();
             bleScanner.startScan(null, settings, scanCallback);
         }
     }
@@ -328,10 +348,14 @@ public class GattServerCrawlerService extends Service {
             unregisterReceiver(fineLocationGrantedReceiver);
             unregisterReceiver(bluetoothStateReceiver);
             unregisterReceiver(geolocationStateChangeReceiver);
+            unregisterReceiver(stopGattCrawlerReceiver);
+            unregisterReceiver(restartGattCrawlerReceiver);
         }catch(IllegalArgumentException e){
             Log.i("GAT_SERVER_LOG","Error unregistering the receiver.");
         }
 
         super.onDestroy();
+
+        isRunning = false;
     }
 }

@@ -1,6 +1,7 @@
 package com.vitandreasorino.savent.Utenti.Settings;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +17,8 @@ import com.vitandreasorino.savent.R;
 
 import Helper.AuthHelper;
 import Helper.LocalStorage.SharedPreferencesHelper;
+import Services.BluetoothLEServices.GattServerCrawlerService;
+import Services.BluetoothLEServices.GattServerService;
 
 public class SettingsActivity extends AppCompatActivity{
 
@@ -32,65 +35,67 @@ public class SettingsActivity extends AppCompatActivity{
         switchBluetooth = (Switch) findViewById(R.id.switchBluetooth);
         switchProximitySensor = (Switch) findViewById(R.id.switchSensor);
 
-        buttonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alertLogout = new AlertDialog.Builder(SettingsActivity.this);
-                alertLogout.setTitle(R.string.stringConfirmLogout);
-                alertLogout.setMessage(R.string.stringDialogLogout);
+        buttonLogout.setOnClickListener(v -> {
+            AlertDialog.Builder alertLogout = new AlertDialog.Builder(SettingsActivity.this);
+            alertLogout.setTitle(R.string.stringConfirmLogout);
+            alertLogout.setMessage(R.string.stringDialogLogout);
 
-                // Nel caso di risposta positiva nel dialog
-                alertLogout.setPositiveButton(R.string.confirmPositive, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Effettua il logout e comunica che l'operazione è andata a buon fine
-                        AuthHelper.logOut(getApplicationContext());
-                        //Gestire le shared preference nello shared preferences helper e fare il reset nell'auth helper
-                        //Richiama qui il metodo per la gestione delle preferenze dopo la sua creazione
+            // Nel caso di risposta positiva nel dialog
+            alertLogout.setPositiveButton(R.string.confirmPositive, (dialog, which) -> {
+                //Effettua il logout e comunica che l'operazione è andata a buon fine
+                AuthHelper.logOut(getApplicationContext());
+                //Gestire le shared preference nello shared preferences helper e fare il reset nell'auth helper
+                //Richiama qui il metodo per la gestione delle preferenze dopo la sua creazione
 
-                        Toast.makeText(SettingsActivity.this, R.string.stringLogoutDone, Toast.LENGTH_SHORT).show();
-                        //Ritorna alla schermata iniziale
-                        Intent intentLogin = new Intent(SettingsActivity.this, LogSingInActivity.class);
-                        intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
-                        startActivity(intentLogin);
-                    }
-                });
+                Toast.makeText(SettingsActivity.this, R.string.stringLogoutDone, Toast.LENGTH_SHORT).show();
+                //Ritorna alla schermata iniziale
+                Intent intentLogin = new Intent(SettingsActivity.this, LogSingInActivity.class);
+                intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
+                startActivity(intentLogin);
+            });
 
-                // Nel caso di risposta negativa nel dialog
-                alertLogout.setNegativeButton(R.string.confirmNegative, null);
-                //mostra il dialog
-                alertLogout.show();
+            // Nel caso di risposta negativa nel dialog
+            alertLogout.setNegativeButton(R.string.confirmNegative, null);
+            //mostra il dialog
+            alertLogout.show();
 
-            }
         });
 
         //Imposta come valore di default delle due shared preferences "true"
         switchBluetooth.setChecked(SharedPreferencesHelper.getBluetoothPreference(getApplicationContext()));
         switchProximitySensor.setChecked(SharedPreferencesHelper.getProximitySensorPreference(getApplicationContext()));
 
-        switchBluetooth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (switchBluetooth.isChecked()) {
-                   SharedPreferencesHelper.setBluetoothPreference(true, getApplicationContext());
-                   switchBluetooth.setChecked(true);
-                } else {
-                    SharedPreferencesHelper.setBluetoothPreference(false, getApplicationContext());
-                    switchBluetooth.setChecked(false);
+        switchBluetooth.setOnClickListener(v -> {
+            if (switchBluetooth.isChecked()) {
+               SharedPreferencesHelper.setBluetoothPreference(true, getApplicationContext());
+                if(GattServerService.isRunning){
+                    //Inviare broadcast
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerService.RESTART_GATT_SERVER));
+                }else{
+                    startService(new Intent(getBaseContext(), GattServerService.class));
                 }
+
+                if(GattServerCrawlerService.isRunning){
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerCrawlerService.RESTART_GATT_CRAWLER));
+                }else{
+                    startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
+                }
+               switchBluetooth.setChecked(true);
+            } else {
+                SharedPreferencesHelper.setBluetoothPreference(false, getApplicationContext());
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerService.STOP_GATT_SERVER));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerCrawlerService.STOP_GATT_CRAWLER));
+                switchBluetooth.setChecked(false);
             }
         });
 
-        switchProximitySensor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (switchProximitySensor.isChecked()) {
-                    SharedPreferencesHelper.setProximitySensorPreference(true, getApplicationContext());
-                    switchProximitySensor.setChecked(true);
-                } else {
-                    SharedPreferencesHelper.setProximitySensorPreference(false, getApplicationContext());
-                    switchProximitySensor.setChecked(false);
-                }
+        switchProximitySensor.setOnClickListener(v -> {
+            if (switchProximitySensor.isChecked()) {
+                SharedPreferencesHelper.setProximitySensorPreference(true, getApplicationContext());
+                switchProximitySensor.setChecked(true);
+            } else {
+                SharedPreferencesHelper.setProximitySensorPreference(false, getApplicationContext());
+                switchProximitySensor.setChecked(false);
             }
         });
     }

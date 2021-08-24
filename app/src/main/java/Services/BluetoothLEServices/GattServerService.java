@@ -44,9 +44,16 @@ import Model.LogDebug;
  */
 public class GattServerService extends Service {
 
+    public static final String RESTART_GATT_SERVER = "restartGattServer";
+    public static final String STOP_GATT_SERVER = "stopGattServer";
+    public static final String UPDATE_GATT_CHARACTERISTIC = "updateGattCharacteristicValue";
+
+    public static boolean isRunning = false;
+
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothManager mBluetoothManager;
     private BluetoothGattServer bluetoothGattServer;
+    private BluetoothLeAdvertiser bluetoothLeAdvertiser = null;
 
     //Creating all the UUID from the UUID string
     private UUID serviceUUID = UUID.fromString(BluetoothLEHelper.UUID_SERVICE);
@@ -77,13 +84,16 @@ public class GattServerService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        isRunning = true;
+
         //Set a filter to only receive bluetooth state changed events.
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothStateReceiver, filter);
 
         //Registering the two broadcast receiver
-        LocalBroadcastManager.getInstance(this).registerReceiver(killProcess, new IntentFilter("killGattServerService"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(updateCharacteristicValue, new IntentFilter("updateGattCharacteristicValue"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(restartServer, new IntentFilter(RESTART_GATT_SERVER));
+        LocalBroadcastManager.getInstance(this).registerReceiver(stopServer, new IntentFilter(STOP_GATT_SERVER));
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateCharacteristicValue, new IntentFilter(UPDATE_GATT_CHARACTERISTIC));
 
         //Invoking the method to perform all checks before starting the server
         tryToStartServer();
@@ -119,8 +129,11 @@ public class GattServerService extends Service {
         Log.d(LogDebug.GAT_SERVER_LOG, "CHARAC SEND: " + characteristic_send_UUID.toString());
         Log.d(LogDebug.GAT_SERVER_LOG, "CHARAC RECEIVE: " + characteristic_receive_UUID.toString());
 
-        BluetoothLeAdvertiser bluetoothLeAdvertiser = mBluetoothAdapter.getBluetoothLeAdvertiser();
-        bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, scanResponseData, callback);
+        if(bluetoothLeAdvertiser == null){
+            bluetoothLeAdvertiser = mBluetoothAdapter.getBluetoothLeAdvertiser();
+            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, scanResponseData, callback);
+        }
+
         bluetoothGattServer = mBluetoothManager.openGattServer(this.getApplicationContext(), gattServerCallback);
         BluetoothGattService service = new BluetoothGattService(serviceUUID, BluetoothGattService.SERVICE_TYPE_PRIMARY);
 
@@ -196,14 +209,27 @@ public class GattServerService extends Service {
     };
 
     /**
-     * Broadcast receiver to kill the service
+     * Broadcast receiver to restart the gatt server;
      */
-    private BroadcastReceiver killProcess = new BroadcastReceiver() {
+    private BroadcastReceiver restartServer = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LogDebug.GAT_SERVER_LOG, "Killing the service.");
-            if(bluetoothGattServer != null) bluetoothGattServer.close();
-            stopSelf();
+            Log.d(LogDebug.GAT_SERVER_LOG, "Restarting the server.");
+            tryToStartServer();
+        }
+    };
+
+    /**
+     * Broadcast receiver to stop the gatt server.
+     */
+    private BroadcastReceiver stopServer = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LogDebug.GAT_SERVER_LOG, "Stopping the server.");
+            if(bluetoothGattServer != null){
+                bluetoothGattServer.close();
+                bluetoothGattServer.clearServices();
+            }
         }
     };
 
@@ -276,7 +302,8 @@ public class GattServerService extends Service {
     @Override
     public void onDestroy() {
         try{
-            unregisterReceiver(killProcess);
+            unregisterReceiver(stopServer);
+            unregisterReceiver(restartServer);
             unregisterReceiver(updateCharacteristicValue);
             unregisterReceiver(bluetoothStateReceiver);
         } catch (IllegalArgumentException e){
@@ -284,5 +311,6 @@ public class GattServerService extends Service {
         }
 
         super.onDestroy();
+        isRunning = false;
     }
 }

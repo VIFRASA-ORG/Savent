@@ -15,7 +15,7 @@ public class SharedPreferencesHelper {
     private static final String BLUETOOTH_PREF = "BluetoothInfo";
     private static final String PROXIMITY_SENSOR_PREF = "SensorInfo";
 
-    private static final String LAST_SERVER_POSITIVE_TEK_UPDATE_TIME = "SensorInfo";
+    private static final String LAST_SERVER_POSITIVE_TEK_UPDATE_TIME = "LAST_SERVER_POSITIVE_TEK_UPDATE_TIME";
 
 
 

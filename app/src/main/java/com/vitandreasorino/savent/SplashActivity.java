@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.vitandreasorino.savent.Enti.HomeActivityEnte;
 
+import Helper.LocalStorage.SharedPreferencesHelper;
 import Model.LogDebug;
 import Services.BluetoothLEServices.GattServerCrawlerService;
 import Services.BluetoothLEServices.GattServerService;
@@ -109,14 +110,16 @@ public class SplashActivity extends AppCompatActivity {
                     case Utente:
                         intent = new Intent(this, HomeActivity.class);
 
-                        try {
-                            //Starting the gatt server only after the first tek is generated
-                            startService(new Intent(getBaseContext(), GattServerService.class));
-                            startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
-                        }catch (IllegalArgumentException e){
-                            Log.w(LogDebug.GAT_ERROR, "Failed to restart Ble Service (process is idle).");
-                        }catch (IllegalStateException e){
-                            Log.w(LogDebug.GAT_ERROR, "Failed to restart Ble Service (app is in background, foregroundAllowed == false).");
+                        if(SharedPreferencesHelper.getBluetoothPreference(this)){
+                            try {
+                                //Starting the gatt server only after the first tek is generated
+                                startService(new Intent(getBaseContext(), GattServerService.class));
+                                startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
+                            }catch (IllegalArgumentException e){
+                                Log.w(LogDebug.GAT_ERROR, "Failed to restart Ble Service (process is idle).");
+                            }catch (IllegalStateException e){
+                                Log.w(LogDebug.GAT_ERROR, "Failed to restart Ble Service (app is in background, foregroundAllowed == false).");
+                            }
                         }
                         break;
                     case Ente:

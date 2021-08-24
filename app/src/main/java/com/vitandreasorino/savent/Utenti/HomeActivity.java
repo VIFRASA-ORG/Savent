@@ -373,15 +373,13 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
                 //lancio del popUp e invio dei msg di broadcast per killare i processi dei servizi di BLE
                 lanchedPopUp(R.layout.disable_tracking_dialog);
-                Intent i = new Intent("killGattServerService");
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
-                Intent j = new Intent("killGattServerServiceCrawler");
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(j);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerService.STOP_GATT_SERVER));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerCrawlerService.STOP_GATT_CRAWLER));
 
                 //disattivo la preferenza di BLE una volta killato i suoi processi e flag di disattivazione entrata nel blocco
                 SharedPreferencesHelper.setBluetoothPreference(false,this);
                 flag = false;
-           }
+            }
 
         }
 
@@ -391,10 +389,21 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
             //si attiva nel caso l'utente ha passato la mano sul sensore
             if(event.values[0] == 0.0 && flag == true) {
 
+                if(GattServerService.isRunning){
+                    //Inviare broadcast
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerService.RESTART_GATT_SERVER));
+                }else{
+                    startService(new Intent(getBaseContext(), GattServerService.class));
+                }
+
+                if(GattServerCrawlerService.isRunning){
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerCrawlerService.RESTART_GATT_CRAWLER));
+                }else{
+                    startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
+                }
+
                 //lancio del popUp, avvio dei servizi
                 lanchedPopUp(R.layout.activate_tracking_dialog);
-                startService(new Intent(getBaseContext(), GattServerService.class));
-                startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
 
                 //attivo la preferenza di BLE una volta avviato i servizi e imposto il flag di disattivazione entrata nel blocco
                 SharedPreferencesHelper.setBluetoothPreference(true,this);
