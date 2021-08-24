@@ -315,6 +315,10 @@
     <string name="locationPermissionDeniedToast">Location permission denied!</string>
     <string name="locationPermissionGrantedToast">Location permission granted!</string>
 
+    <string name="geolocationDisabled">Geolocation is disabled!</string>
+    <string name="geolocationDisabledMessage">Enable the geolocation to enable the tracking feature!</string>
+    <string name="enableGeolocationButton">Enable geolocation</string>
+
     //CommunicationSwabActivity
     <string name="validitaCodice">Invalid code!</string>
     <string name="statusPositivo">Positive</string>

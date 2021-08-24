@@ -320,6 +320,15 @@
     <string name="locationPermissionDeniedToast">Permessi non confermati!</string>
     <string name="locationPermissionGrantedToast">Permessi confermati!</string>
 
+    <string name="geolocationDisabled">La geolocalizzazione è disabilitata!</string>
+    <string name="geolocationDisabledMessage">Abilita la geolocalizzazione per abilitare la funzionalità di tracciamento!</string>
+    <string name="enableGeolocationButton">Abilita la geolocalizzazione</string>
+<!--    <string name="bluetoothNotEnabledToast">Bluetooth non attivato!</string>-->
+<!--    <string name="bluetoothEnabledToast">Bluetooth attivato!</string>-->
+<!--    <string name="bluetoothNotSupported">Questo dispositivo non supporta il bluetooth!</string>-->
+
+
+
     //CommunicationSwabActivity
     <string name="validitaCodice">Codice non valido!</string>
     <string name="statusPositivo">Positivo</string>
