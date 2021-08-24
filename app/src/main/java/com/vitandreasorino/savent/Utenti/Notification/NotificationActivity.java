@@ -130,7 +130,6 @@ public class NotificationActivity extends AppCompatActivity implements AdapterVi
 
 class NotificationAdapter extends BaseAdapter{
 
-    GradientDrawable contactRiskGradientBackground = new GradientDrawable();
     private List<Notification> notifications;
     private Context context;
     private AlertDialog.Builder alertDelete;
@@ -139,12 +138,6 @@ class NotificationAdapter extends BaseAdapter{
         this.notifications = notifications;
         this.context=context;
         this.alertDelete = alertDelete;
-
-        contactRiskGradientBackground.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
-        contactRiskGradientBackground.setColors( new int[] { Color.argb(150,255,0,0),Color.argb(255,255,204,204) });
-        contactRiskGradientBackground.setGradientType(GradientDrawable.RADIAL_GRADIENT);
-        contactRiskGradientBackground.setGradientRadius(500.0f);
-        contactRiskGradientBackground.setGradientCenter(0.5f, 0.5f);
     }
 
     @Override
@@ -198,7 +191,7 @@ class NotificationAdapter extends BaseAdapter{
         if(n.isRead()) notificationRead.setVisibility(View.INVISIBLE);
         else notificationRead.setVisibility(View.VISIBLE);
 
-        if(n.getNotificationType().equals(NotificationHelper.CONTACT_RISK_NOTIFICATION) ) convertView.setBackground(contactRiskGradientBackground);
+        if(n.getNotificationType().equals(NotificationHelper.CONTACT_RISK_NOTIFICATION) ) convertView.setBackgroundColor(Color.argb(255,255,204,204));
         else convertView.setBackgroundColor(Color.TRANSPARENT);
 
         return convertView;

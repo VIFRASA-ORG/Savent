@@ -29,7 +29,7 @@ public class SharedPreferencesHelper {
      */
     public static void setLastPositiveTekUpdateTime(Context context, Date date){
         SharedPreferences.Editor editor = context.getSharedPreferences(LAST_SERVER_POSITIVE_TEK_UPDATE_TIME, context.MODE_PRIVATE).edit();
-        editor.putLong("value", Calendar.getInstance().getTimeInMillis());
+        editor.putLong("value",date.getTime());
         editor.apply();
     }
 
