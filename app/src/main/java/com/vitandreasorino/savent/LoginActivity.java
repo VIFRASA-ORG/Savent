@@ -15,23 +15,20 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.vitandreasorino.savent.Enti.HomeActivityEnte;
-
 import Model.LogDebug;
 import Services.BluetoothLEServices.GattServerCrawlerService;
 import Services.BluetoothLEServices.GattServerService;
 import com.vitandreasorino.savent.Utenti.HomeActivity;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureBoolean;
 import Model.DB.Enti;
 import Model.DB.TemporaryExposureKeys;
 import Model.DB.Utenti;
+import Services.DailyJob.DailyJobReceiver;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnFocusChangeListener {
@@ -223,6 +220,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
                 Log.w(LogDebug.GAT_ERROR, "Failed to restart Ble Service (app is in background, foregroundAllowed == false).");
             }
         });
+
+        //Scheduling the daily task
+        DailyJobReceiver.scheduleDailyTask(this);
 
         //Going to the normal user Home
         Toast.makeText(getApplicationContext(),getString(R.string.correctLogin),Toast.LENGTH_SHORT).show();

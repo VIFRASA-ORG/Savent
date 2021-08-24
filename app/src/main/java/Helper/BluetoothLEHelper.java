@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 
 import androidx.core.app.ActivityCompat;
 
@@ -42,5 +43,16 @@ public class BluetoothLEHelper {
     public static final boolean isFineLocationGranted(Context context){
         if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) return false;
         else return true;
+    }
+
+    /**
+     * Check if the gelocation is enebled.
+     *
+     * @param context the activity context.
+     * @return true if the geolocation is enabled, false otherwise.
+     */
+    public static final boolean isGpsEnabled(Context context){
+        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE );
+        return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 }

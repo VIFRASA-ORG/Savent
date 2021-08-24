@@ -22,11 +22,11 @@ import Helper.AuthHelper;
 import Helper.LocalStorage.SQLiteHelper;
 import Model.Closures.ClosureBoolean;
 import Model.DB.CodiciComunicazioneTampone;
-import Model.DB.CodiciIdentificativi;
 import Model.DB.Enti;
+import Model.DB.TemporaryExposureKeys;
 import Model.DB.Utenti;
 import Model.Pojo.CodiceComunicazioneTampone;
-import Model.Pojo.CodiceIdentificativo;
+import Model.Pojo.TemporaryExposureKey;
 
 public class CommunicationSwabActivity extends AppCompatActivity {
 
@@ -218,15 +218,15 @@ public class CommunicationSwabActivity extends AppCompatActivity {
                         SQLiteHelper helper = new SQLiteHelper(getApplicationContext());
 
                         // Assegnazione di tutti i codici presenti sul database locale (SQLite) dell'utente loggato
-                        // inseriti in un arrayList di tipo CodiceIdentificativo.
-                        ArrayList<CodiceIdentificativo> listaCodici = helper.letturaMieiCodici();
+                        // inseriti in un arrayList di tipo TemporaryExposureKey.
+                        ArrayList<TemporaryExposureKey> listaCodici = helper.letturaMieiCodici();
 
                         // si disabilitano tutti i pulsanti e l'editText con relativa progressBar
                         changeComponentStatus(false);
                         AnimationHelper.fadeIn(progressBar, 1000);
 
                         // Inserimento dei codici positivi presenti nell'arrayList tramite una transizione per inserirli su Firestore
-                        CodiciIdentificativi.communicatePositiveCodeTransaction(codiceEditText, listaCodici, isSuccess -> {
+                        TemporaryExposureKeys.communicatePositiveTekTransaction(codiceEditText, listaCodici, isSuccess -> {
                             if(isSuccess) {
                                 alertConfirm.setTitle(getString(R.string.positivita));
                                 alertConfirm.setMessage(getString(R.string.comunicazioneAvvenuta));
@@ -252,7 +252,7 @@ public class CommunicationSwabActivity extends AppCompatActivity {
                         // si disabilitano tutti i pulsanti e l'editText con relativa progressBar
                         changeComponentStatus(false);
                         AnimationHelper.fadeIn(progressBar, 1000);
-                        CodiciIdentificativi.communicateNegativeCodeTransaction(codiceEditText, isSuccess -> {
+                        TemporaryExposureKeys.communicateNegativeTekTransaction(codiceEditText, isSuccess -> {
                             if(isSuccess) {
                                 alertConfirm.setTitle(getString(R.string.negativita));
                                 alertConfirm.setMessage(getString(R.string.comunicazioneAvvenuta));

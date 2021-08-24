@@ -18,4 +18,8 @@ public class LogDebug {
     public static final String GAT_CRAWLER_SERVI_FOUND = "GAT_CRAWLER_SERVI_FOUND";
     public static final String GAT_CRAWLER_CHARAC_READ = "GAT_CRAWLER_CHARAC_READ";
     public static final String GAT_CRAWLER_CHARA_WRITE = "GAT_CRAWLER_CHARA_WRITE";
+
+    //Daily Job
+    public static final String DAILY_JOB = "DAILY_JOB";
+    public static final String DAILY_JOB_POS_TEK_DOWNL = "POSITIVE_TEK_DOWNLOAD";
 }

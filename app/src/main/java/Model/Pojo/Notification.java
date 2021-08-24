@@ -27,7 +27,9 @@ public class Notification {
     private String groupName = "";
 
 
-    public Notification() {}
+    public Notification() {
+        date = Calendar.getInstance();
+    }
 
 
 
