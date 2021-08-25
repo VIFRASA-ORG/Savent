@@ -230,7 +230,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             buttonAddUserToGroup.setEnabled(true);
             buttonAddUserToGroup.setVisibility(View.VISIBLE);
         } else {
-
+            descriptionDetailGroup.setBackground(null);
+            nameDetailGroup.setBackground(null);
             leaveGroup.setEnabled(true);
             leaveGroup.setVisibility(View.VISIBLE);
             nameDetailGroup.setEnabled(false);

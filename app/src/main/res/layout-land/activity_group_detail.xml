@@ -113,182 +113,191 @@
             android:gravity="center_vertical">
 
 
-            <LinearLayout
-                android:id="@+id/linearLayout2"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="25dp"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/nav_bar_land">
 
                 <LinearLayout
+                    android:id="@+id/linearLayout2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="10"
-                    android:layout_marginTop="10dp">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="25dp"
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3">
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:gravity="center">
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_gravity="center"
-                            android:outlineAmbientShadowColor="@color/black"
-                            app:cardCornerRadius="50dp"
-                            tools:ignore="UnknownId">
-
-                            <ImageView
-                                android:id="@+id/imageViewDetailGroup"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/group_icon"
-                                android:scaleType="centerCrop" />
-
-                            <View
-                                android:id="@+id/viewEditGroupPhoto"
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:layout_gravity="bottom"
-                                android:background="#CCFFFFFF" />
-
-                            <TextView
-                                android:id="@+id/textEditGroupPhoto"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="12sp"
-                                android:layout_gravity="bottom"
-                                android:layout_marginBottom="10dp"
-                                android:gravity="center"
-                                android:onClick="onClickPhoto"
-                                android:text="@string/ModificaImmagineProfilo"
-                                android:textColor="#0000FF" />
-
-                        </androidx.cardview.widget.CardView>
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="center|top">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10"
+                        android:layout_marginTop="10dp">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <Button
-                                android:id="@+id/leavegroupButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:textSize="6dp"
-                                android:gravity="center"
-                                android:textColor="@color/white"
-                                android:backgroundTint="@color/red"
-                                app:cornerRadius="@dimen/radius_button_register"
-                                android:text="@string/leaveGroup"
-                                android:onClick="onLeaveGroup"
-                                android:visibility="gone"/>
-
-                            <Button
-                                android:id="@+id/deleteGroupButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:textSize="6dp"
-                                android:gravity="center"
-                                android:textColor="@color/white"
-                                android:backgroundTint="@color/red"
-                                app:cornerRadius="@dimen/radius_button_register"
-                                android:text="@string/deleteGroup"
-                                android:onClick="onDeleteGroup"
-                                android:visibility="gone"/>
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3">
 
                         </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:gravity="center">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_gravity="center"
+                                android:outlineAmbientShadowColor="@color/black"
+                                app:cardCornerRadius="50dp"
+                                tools:ignore="UnknownId">
+
+                                <ImageView
+                                    android:id="@+id/imageViewDetailGroup"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/group_icon"
+                                    android:scaleType="centerCrop" />
+
+                                <View
+                                    android:id="@+id/viewEditGroupPhoto"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="#CCFFFFFF" />
+
+                                <TextView
+                                    android:id="@+id/textEditGroupPhoto"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:layout_gravity="bottom"
+                                    android:layout_marginBottom="10dp"
+                                    android:gravity="center"
+                                    android:onClick="onClickPhoto"
+                                    android:text="@string/ModificaImmagineProfilo"
+                                    android:textColor="#0000FF" />
+
+                            </androidx.cardview.widget.CardView>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center|top">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <Button
+                                    android:id="@+id/leavegroupButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="40dp"
+                                    android:textSize="6dp"
+                                    android:gravity="center"
+                                    android:textColor="@color/white"
+                                    android:backgroundTint="@color/red"
+                                    app:cornerRadius="@dimen/radius_button_register"
+                                    android:text="@string/leaveGroup"
+                                    android:onClick="onLeaveGroup"
+                                    android:visibility="gone"/>
+
+                                <Button
+                                    android:id="@+id/deleteGroupButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="40dp"
+                                    android:textSize="6dp"
+                                    android:gravity="center"
+                                    android:textColor="@color/white"
+                                    android:backgroundTint="@color/red"
+                                    app:cornerRadius="@dimen/radius_button_register"
+                                    android:text="@string/deleteGroup"
+                                    android:onClick="onDeleteGroup"
+                                    android:visibility="gone"/>
+
+                            </LinearLayout>
+                        </LinearLayout>
+
                     </LinearLayout>
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="30dp">
-
-                    <TextView
-                        android:id="@+id/nameGroup"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="50dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/textNameGroup"
-                        android:textColor="#050505"
-                        android:textSize="18sp" />
+                        android:orientation="vertical"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="30dp">
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/nameGroup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="50dp"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/textNameGroup"
+                            android:textColor="#050505"
+                            android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/nameDetailGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="1dp"
-                    android:ems="10"
-                    android:enabled="true"
-                    android:gravity="center"
-                    android:hint="@string/nameGroup"
-                    android:inputType="textPersonName"
-                    android:singleLine="true"
-                    android:textColor="#050505"/>
+                    </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="30dp">
-
-                    <TextView
-                        android:id="@+id/descriptionTextGroup"
+                    <EditText
+                        android:id="@+id/nameDetailGroup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/textDescriptionGroup"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="1dp"
+                        android:ems="10"
+                        android:enabled="true"
+                        android:gravity="center"
+                        android:hint="@string/nameGroup"
+                        android:inputType="textMultiLine"
+                        android:singleLine="false"
+                        android:textColor="#050505"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="30dp">
+
+                        <TextView
+                            android:id="@+id/descriptionTextGroup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/textDescriptionGroup"
+                            android:textColor="#050505"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/descriptionContentTextViewGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="1dp"
+                        android:ems="10"
+                        android:enabled="true"
+                        android:gravity="center"
+                        android:hint="@string/editDescriptionGroup"
+                        android:inputType="textMultiLine"
+                        android:singleLine="false"
                         android:textColor="#050505"
-                        android:textSize="18sp" />
+                        android:maxLines="100"/>
 
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/descriptionContentTextViewGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="1dp"
-                    android:ems="10"
-                    android:enabled="true"
-                    android:gravity="center"
-                    android:hint="@string/editDescriptionGroup"
-                    android:inputType="textPersonName"
-                    android:singleLine="true"
-                    android:textColor="#050505"
-                    android:maxLines="100"/>
+            </ScrollView>
 
-            </LinearLayout>
+
 
         </LinearLayout>
 

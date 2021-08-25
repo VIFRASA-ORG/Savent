@@ -27,11 +27,13 @@
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="10">
 
             <Button
                 android:id="@+id/buttonCreaEvento"
-                android:layout_width="@dimen/button_width"
+                android:layout_width="0dp"
+                android:layout_weight="4.5"
                 android:layout_height="@dimen/button_height"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_marginRight="3dp"
@@ -42,7 +44,8 @@
 
             <Button
                 android:id="@+id/buttonMyPartecipations"
-                android:layout_width="@dimen/button_width"
+                android:layout_width="0dp"
+                android:layout_weight="4.5"
                 android:layout_height="@dimen/button_height"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_marginLeft="3dp"

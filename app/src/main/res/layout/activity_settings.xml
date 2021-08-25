@@ -103,6 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
+                    android:textColor="@color/blueButton"
                     android:text="@string/titleLoadingData"
                     android:textSize="18dp" />
             </LinearLayout>
@@ -130,7 +131,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="4.5"
                         android:text="@string/stringInsertSwabResult"
-                        android:textColor="@color/blueButton"
                         android:textSize="18dp"></TextView>
 
                     <ImageView
@@ -155,6 +155,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="15dp"
                     android:text="@string/titleGeneral"
+                    android:textColor="@color/blueButton"
                     android:textSize="18dp" />
             </LinearLayout>
 
@@ -180,7 +181,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
                         android:text="@string/stringTrackData"
-                        android:textColor="@color/blueButton"
                         android:textSize="18dp"></TextView>
 
                     <Switch
@@ -220,7 +220,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
                         android:text="@string/stringProximitySensor"
-                        android:textColor="@color/blueButton"
                         android:textSize="18dp"></TextView>
 
                     <Switch

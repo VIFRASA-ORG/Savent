@@ -237,8 +237,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:ems="10"
-                    android:inputType="textPersonName"
-                    android:singleLine="true"
+                    android:inputType="textMultiLine"
                     app:backgroundTint="@color/gray" />
 
                 <LinearLayout
