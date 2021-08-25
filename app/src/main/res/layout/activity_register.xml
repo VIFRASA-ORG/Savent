@@ -48,13 +48,11 @@
 
                     <TextView
                         android:id="@+id/textViewRegistrazioneEnte"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/text_register_ente"
-                        android:textAlignment="center"
                         android:gravity="center"
-                        android:layout_marginRight="@dimen/margin_size"
-                        android:layout_marginTop="@dimen/margin_size"
+                        android:layout_gravity="center_vertical"
                         android:textColor="@color/blueButton"
                         android:textSize="@dimen/dimension_text_register_ente"
                         android:onClick="onClickRegisterEnte"/>

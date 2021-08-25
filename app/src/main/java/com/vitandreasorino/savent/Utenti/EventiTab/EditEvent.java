@@ -559,8 +559,6 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
                 listOfUpdates.add(Eventi.UTENTE_CREATORE_FIELD);
                 listOfUpdates.add("");
             }
-
-
         }
 
 
@@ -568,7 +566,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
         if(listOfUpdates.size() == 0) {
             //Check if we need to upload the image
             if(immagineSelezionataEdit != null){
-                Utenti.uploadUserImage(immagineSelezionataEdit,this,closureBool -> {
+                Eventi.uploadEventImage(immagineSelezionataEdit,eventModel.getId(), closureBool -> {
                     if(closureBool){
                         enableAllComponent();
                         saveSettings.setEnabled(false);
