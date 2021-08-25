@@ -122,8 +122,9 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         int maxPartecipation = eventModel.getNumeroMassimoPartecipanti();
         int actualPartecipation = eventModel.getNumeroPartecipanti();
 
-        availablePlacesTextView.setText((actualPartecipation >= maxPartecipation) ? "0" : (maxPartecipation-actualPartecipation) + "");
-        queueTextView.setText(eventModel.getNumeroPartecipantiInCoda() + "");
+        int quant = maxPartecipation-actualPartecipation;
+        availablePlacesTextView.setText(getResources().getQuantityString(R.plurals.availablePlaces,quant,quant));
+        queueTextView.setText(getResources().getQuantityString(R.plurals.queuePlaces,eventModel.getNumeroPartecipantiInCoda(),eventModel.getNumeroPartecipantiInCoda()));
 
         if(eventModel.getIsImageUploaded()){
             //We have to download the image all over again because the intent allow you to pass just file under the size of 1mb

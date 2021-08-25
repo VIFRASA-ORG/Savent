@@ -64,14 +64,24 @@
     <string name="eventPageTitle">Evento</string>
     <string name="eventDescription">Descrizione</string>
     <string name="eventLocation">Posizione</string>
-    <string name="availablePlaces">Posti disponibili:</string>
-    <string name="queuePlaces">Persone in lista di attesa:</string>
+    <string name="availablePlaces">Disponibilità:</string>
+    <string name="queuePlaces">Lista di attesa:</string>
     <string name="eventOwner">Creato da:</string>
     <string name="joinEvent">Partecipa all\'evento</string>
     <string name="eventOwnerLabel">Prop.</string>
     <string name="events">Eventi</string>
     <string name="leaveEvent">Abbandona evento</string>
     <string name="myPartecipations">Partecipazioni</string>
+
+    <plurals name="availablePlaces">
+        <item quantity="one">%d posto</item>
+        <item quantity="other">%d posti</item>
+    </plurals>
+
+    <plurals name="queuePlaces">
+        <item quantity="one">%d persona</item>
+        <item quantity="other">%d persone</item>
+    </plurals>
 
     <string name="queueMessage">Sei in coda.\nAppena qualcuno rinuncia a partecipare,\n la coda scalerà in ordine di prenotazione.</string>
     <string name="participationMessage">La tua partecipazione è stata accettata!</string>
@@ -323,11 +333,6 @@
     <string name="geolocationDisabled">La geolocalizzazione è disabilitata!</string>
     <string name="geolocationDisabledMessage">Abilita la geolocalizzazione per abilitare la funzionalità di tracciamento!</string>
     <string name="enableGeolocationButton">Abilita la geolocalizzazione</string>
-<!--    <string name="bluetoothNotEnabledToast">Bluetooth non attivato!</string>-->
-<!--    <string name="bluetoothEnabledToast">Bluetooth attivato!</string>-->
-<!--    <string name="bluetoothNotSupported">Questo dispositivo non supporta il bluetooth!</string>-->
-
-
 
     //CommunicationSwabActivity
     <string name="validitaCodice">Codice non valido!</string>

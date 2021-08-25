@@ -63,14 +63,24 @@
     <string name="eventPageTitle">Event</string>
     <string name="eventDescription">Description</string>
     <string name="eventLocation">Location</string>
-    <string name="availablePlaces">Places Available:</string>
-    <string name="queuePlaces">People on the waiting list:</string>
+    <string name="availablePlaces">Availability:</string>
+    <string name="queuePlaces">Wwaiting list:</string>
     <string name="eventOwner">Created by:</string>
     <string name="joinEvent">Join the event</string>
     <string name="eventOwnerLabel">Owner</string>
     <string name="events">Events</string>
     <string name="leaveEvent">Leave event</string>
     <string name="myPartecipations">Participations</string>
+
+    <plurals name="availablePlaces">
+        <item quantity="one">%d place</item>
+        <item quantity="other">%d places</item>
+    </plurals>
+
+    <plurals name="queuePlaces">
+        <item quantity="one">%d person</item>
+        <item quantity="other">%d peoples</item>
+    </plurals>
 
     <string name="queueMessage">You are queueing up.\nAs soon as someone leaves the event,\n the queue will go up in order of booking.</string>
     <string name="participationMessage">Your participation has been accepted!</string>
