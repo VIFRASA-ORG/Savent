@@ -239,7 +239,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:layout_weight="4"
+                        android:layout_weight="5"
                         android:text="@string/esitoTampone">
                     </TextView>
 
@@ -249,7 +249,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_weight="6"
+                        android:layout_weight="5"
                         android:visibility="gone">
                     </TextView>
 
@@ -265,7 +265,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:layout_weight="4"
+                        android:layout_weight="5"
                         android:text="@string/dataTampone">
                     </TextView>
 
@@ -275,7 +275,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_weight="6"
+                        android:layout_weight="5"
                         android:visibility="gone">
                     </TextView>
 
@@ -291,7 +291,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:layout_weight="4"
+                        android:layout_weight="5"
                         android:text="@string/enteRilascio">
                     </TextView>
 
@@ -301,7 +301,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_weight="6"
+                        android:layout_weight="5"
                         android:visibility="gone">
                     </TextView>
 

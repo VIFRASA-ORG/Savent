@@ -147,7 +147,7 @@ public class GattServerService extends Service {
         service.addCharacteristic(characteristicReceive);
 
         //Adding the final service to the Gatt Server.
-        bluetoothGattServer.addService(service);
+        if(bluetoothGattServer != null) bluetoothGattServer.addService(service);
     }
 
     /**
