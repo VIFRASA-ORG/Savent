@@ -60,7 +60,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" /> <!-- [START firebase_service] -->
+            android:value="@string/google_api_key" /> <!-- [START firebase_service] -->
         <service
             android:name="Services.MessagingService"
             android:exported="false">
