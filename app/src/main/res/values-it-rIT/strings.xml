@@ -344,12 +344,12 @@
     <string name="spiegazioneDescrizione">Inserisci il codice univoco fornito dall\'ente per comunicare la tua condizione di salute in forma anonima.</string>
     <string name="comunicazioneCodice">Comunicazione codice</string>
     <string name="buttonComunicazione">VISUALIZZA ESITO</string>
-    <string name="buttonRealCommunication">COMUNICA CODICE</string>
+    <string name="buttonRealCommunication">COMUNICA ESITO</string>
     <string name="dettaglioTampone">Dettaglio tampone</string>
     <string name="esitoTampone">Esito tampone: </string>
     <string name="dataTampone">Data effettuazione: </string>
     <string name="enteRilascio">Rilasciato da: </string>
-    <string name="comunicaCodiceTitolo">Comunica codice</string>
+    <string name="comunicaCodiceTitolo">Comunica esito</string>
     <string name="comunicazioneEsitoDescrizione">Sei sicuro di voler comunicare l\'esito del tampone al sistema?</string>
     <string name="siAlert">Si</string>
     <string name="noAlert">No</string>
