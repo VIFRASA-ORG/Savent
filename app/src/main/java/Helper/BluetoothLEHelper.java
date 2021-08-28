@@ -52,6 +52,7 @@ public class BluetoothLEHelper {
      * @return true if the geolocation is enabled, false otherwise.
      */
     public static final boolean isGpsEnabled(Context context){
+        if(context == null) return false;
         LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE );
         return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
