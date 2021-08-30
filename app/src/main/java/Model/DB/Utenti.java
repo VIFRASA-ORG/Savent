@@ -25,7 +25,7 @@ import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
-import Model.Pojo.ContactModel;
+import Model.Pojo.Contact;
 import Model.Pojo.Utente;
 
 
@@ -197,12 +197,12 @@ public class Utenti extends ResultsConverter {
      * @param contactsList the list of contact to search on the database
      * @param closureList the list of users found.
      */
-    public static final void searchContactsInPhoneBooks(List<ContactModel> contactsList, ClosureList<Utente> closureList){
+    public static final void searchContactsInPhoneBooks(List<Contact> contactsList, ClosureList<Utente> closureList){
         if(AuthHelper.isLoggedIn()){
             List<String> contactsPhone = new ArrayList<>();
 
             //Exrapolating the phone number, the search is based on that.
-            for (ContactModel c : contactsList) contactsPhone.add(c.getNumber());
+            for (Contact c : contactsList) contactsPhone.add(c.getNumber());
 
             //The in query support only a list of maximum 10 elements
             //Dividing the list in chucks of length 10

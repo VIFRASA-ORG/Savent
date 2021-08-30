@@ -4,7 +4,14 @@ import com.google.firebase.firestore.DocumentId;
 import java.util.Date;
 
 /**
- * Pojo class used to manage the TEK abstraction.
+ * Classe POJO (Plain Old Java Object), classe ordinaria
+ * utilizzata per rappresentare l'entità TEK o Temporary Exposure Key.
+ *
+ * Gli oggetti di questa classe sono codici generati in maniera random dal server Firebase
+ * i cui id rappresentano un dispositivo in maniera univoca nel sistema.
+ *
+ * L'id viene memorizzato nelle tabelle TemporaryExposureKeys, ContattiAvvenuti.COLUMN_NAME_CODICI nel database SQLite locale
+ * e nelle Collections TemporaryExposureKeys e Positivi su Firebase.
  */
 public class TemporaryExposureKey {
 
@@ -12,15 +19,24 @@ public class TemporaryExposureKey {
     private String id;
     private Date data;
 
+
+
+    /**
+     * COSTRUTTORI
+     */
     public TemporaryExposureKey() { }
 
-    // COSTRUTTORI DELLA CLASSE CODICEIDENTIFICATIVO
     public TemporaryExposureKey(String id, Date data) {
         this.id = id;
         this.data = data;
     }
 
-    // GETTERS AND SETTERS
+
+
+    /**
+     * GETTER E SETTER
+     */
+
     public String getId() {
         return id;
     }

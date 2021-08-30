@@ -10,17 +10,20 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Classe POJO (Plain Old Java Object), classe ordinaria
+ * utilizzata per rappresentare l'entità Evento.
+ *
+ * Implementa Serializable per permettere il passaggio di un oggetto tra intent espliciti.
+ * È stato reso "imageBitmap" transient per evitare di dover utilizzare Parcelable al posto di Serializable.
+ * In questa maniera l'immagine bitmap non viene serializzata e quindi passata tra gli intent espliciti.
+ *
+ * Implementa Comparable per poter ordinare delle liste di oggetti di classe Evento.
+ */
 public class Evento implements Serializable, Comparable<Evento> {
 
     @DocumentId
     private String id;
-
-    @Exclude
-    private transient Bitmap imageBitmap;
-
-    @Exclude
-    private transient Uri imageUri;
-    private boolean isImageUploaded;
 
     private String nome;
     private String descrizione;
@@ -34,7 +37,18 @@ public class Evento implements Serializable, Comparable<Evento> {
     private int numeroPartecipanti;
     private int numeroPartecipantiInCoda;
 
-    // COSTRUTTORI DELLA CLASSE EVENTO
+    @Exclude
+    private transient Bitmap imageBitmap;
+
+    @Exclude
+    private transient Uri imageUri;
+    private boolean isImageUploaded;
+
+
+
+    /**
+     * COSTRUTTORI
+     */
     public Evento() {
         nome = "";
         descrizione = "";
@@ -50,20 +64,6 @@ public class Evento implements Serializable, Comparable<Evento> {
         isImageUploaded = false;
     }
 
-    /**
-     * Constructor for an event made by a normal user
-     *
-     * @param id
-     * @param nome
-     * @param descrizione
-     * @param longitudine
-     * @param latitudine
-     * @param dataOra
-     * @param idUtenteCreatore
-     * @param sogliaAccettazioneStatus
-     * @param numeroMassimoPartecipanti
-     * @param numeroPartecipanti
-     */
     public Evento(String id, String nome, String descrizione, double longitudine, double latitudine, Date dataOra, String idUtenteCreatore,
                   int sogliaAccettazioneStatus, int numeroMassimoPartecipanti, int numeroPartecipanti,int numeroPartecipantiInCoda, boolean isImageUploaded) {
         this.id = id;
@@ -81,7 +81,11 @@ public class Evento implements Serializable, Comparable<Evento> {
     }
 
 
-    // GETTER E SETTER
+
+    /**
+     * GETTER E SETTER
+     */
+
     public String getId() {
         return id;
     }
@@ -170,16 +174,6 @@ public class Evento implements Serializable, Comparable<Evento> {
         this.numeroPartecipanti = numeroPartecipanti;
     }
 
-    @Exclude
-    public Bitmap getImageBitmap() {
-        return imageBitmap;
-    }
-
-    @Exclude
-    public void setImageBitmap(Bitmap imageBitmap) {
-        this.imageBitmap = imageBitmap;
-    }
-
     public boolean getIsImageUploaded() {
         return isImageUploaded;
     }
@@ -188,39 +182,29 @@ public class Evento implements Serializable, Comparable<Evento> {
         isImageUploaded = imageUploaded;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Evento evento = (Evento) o;
-        return Objects.equals(id, evento.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Exclude
-    /**
-     * Return the event data and time formatted as following:
-     * dd/MM/yyyy HH:mm
-     *
-     * @return a string with the formatted data
-     */
-    public String getNeutralData(){
-        if(dataOra == null) return null;
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        return sdf.format(dataOra);
-    }
-
     public int getNumeroPartecipantiInCoda() {
         return numeroPartecipantiInCoda;
     }
 
     public void setNumeroPartecipantiInCoda(int numeroPartecipantiInCoda) {
         this.numeroPartecipantiInCoda = numeroPartecipantiInCoda;
+    }
+
+
+
+    /**
+     * GETTER E SETTER ESCLUSI SU FIREBASE IN QUANTO
+     * MEMORIZZATI DIVERSAMENTE DI UNA SEMPLICE SCRITTURA.
+     */
+
+    @Exclude
+    public Bitmap getImageBitmap() {
+        return imageBitmap;
+    }
+
+    @Exclude
+    public void setImageBitmap(Bitmap imageBitmap) {
+        this.imageBitmap = imageBitmap;
     }
 
     @Exclude
@@ -233,6 +217,60 @@ public class Evento implements Serializable, Comparable<Evento> {
         this.imageUri = imageUri;
     }
 
+
+
+    /**
+     * METODI DI SUPPORTO
+     */
+
+    /**
+     * Formatta la data di svolgimento dell'evento  nel tipo "dd/MM/yyyy HH:mm".
+     *
+     * @return una stringa con la data formattata come sopra definito, null se la data di nascita non esiste.
+     */
+    @Exclude
+    public String getNeutralData(){
+        if(dataOra == null) return null;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(dataOra);
+    }
+
+    /**
+     * Implementazione del metodo equals per definire l'ugualianza tra due oggetti di classe Ente.
+     * Due oggetti sono uguali se i loro id sono gli stessi.
+     *
+     * @param o oggetto con cui fare il confronto.
+     * @return true se sono uguali, false altrimenti.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Evento evento = (Evento) o;
+        return Objects.equals(id, evento.id);
+    }
+
+    /**
+     * Calcola l'ash dell'oggetto.
+     * L'hash è calcolato solamento sul campo id.
+     *
+     * @return l'hash dell'id dell'oggetto.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    /**
+     * Implementazione del metodo compareTo per definire la politica di confronto
+     * tra due oggetti di classe evento per poter ordinare delle liste.
+     *
+     * Il confronto avviene solo sull'attributo "nome".
+     *
+     * @param o oggetto con cui comparare.
+     * @return comparazione lessicografica tra i nomi dei due eventi.
+     */
     @Override
     public int compareTo(Evento o) {
         return this.nome.compareTo(o.nome);

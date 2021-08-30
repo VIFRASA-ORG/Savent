@@ -2,17 +2,33 @@ package Model.Pojo;
 
 import java.util.Calendar;
 
+/**
+ * Classe POJO (Plain Old Java Object), classe ordinaria
+ * utilizzata per rappresentare l'entita Notification.
+ *
+ * Esistono 4 tipi differenti di Notification definite all'interno della classe Helper NotificationHelper.
+ * Ognuna di esse richiede differenti attributi presenti in questa classe.
+ * Quelli non utili per quel determinato tipo di Notification vengono lasciati vuoti.
+ *
+ * Questi oggetti vengono anche memorizzati all'interno del database SQLite locale.
+ *
+ */
 public class Notification {
 
+    /**
+     * Costanti utilizzate per estrarre i dati da dentro il payload della notifica.
+     *
+     * Il valore contenuto dentro la costante è la chiave usata nel payload
+     * ricevuto nell notifica.
+     */
     public static final String NOTIFICATION_TYPE = "notificationType";
     public static final String DATE = "date";
     public static final String EVENT_NAME = "eventName";
     public static final String EVENT_ID = "eventId";
-
     public static final String GROUP_NAME = "groupName";
     public static final String GROUP_ID = "groupId";
 
-
+    //Attributi comuni
     private int id;
     private String title = "";
     private String description = "";
@@ -20,18 +36,29 @@ public class Notification {
     private Calendar date = null;
     private boolean isRead = false;
 
+    //Attributi per notifiche relative eventi
     private String eventId = "";
     private String eventName = "";
 
+    //Attributi per notifiche relative a gruppi
     private String groupId = "";
     private String groupName = "";
 
+
+
+    /**
+     * COSTRUTTORI
+     */
 
     public Notification() {
         date = Calendar.getInstance();
     }
 
 
+
+    /**
+     * GETTER E SETTER
+     */
 
     public String getNotificationType() {
         return notificationType;

@@ -1,20 +1,23 @@
 package Model.Pojo;
 
 import android.net.Uri;
-
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 
+/**
+ * Classe POJO (Plain Old Java Object), classe ordinaria
+ * utilizzata per rappresentare l'entità Ente.
+ *
+ * L'Ente è un altro tipo di utente dell'applicazione con permessi e funzionalità
+ * totalmente diverse dall'utente.
+ *
+ * Esistono due tipi di enti: Ditta o libero professionista.
+ * I due tipi di Enti fanno uso di attributi diversi, i restanti vengono lasciati vuoti.
+ */
 public class Ente {
 
     @DocumentId
     private String id;
-
-    @Exclude
-    private Uri certificatoPIVA;
-
-    @Exclude
-    private Uri visuraCamerale;
 
     private String partitaIva;
     private String nomeDitta;
@@ -31,8 +34,18 @@ public class Ente {
     private boolean isCertificatoPIVAUploaded;
     private boolean isVisuraCameraleUploaded;
 
+    @Exclude
+    private Uri certificatoPIVA;
 
-    // COSTRUTTORI DELLA CLASSE ENTE
+    @Exclude
+    private Uri visuraCamerale;
+
+
+
+    /**
+     * COSTRUTTORI
+     */
+
     public Ente() {
         isCertificatoPIVAUploaded = false;
         isVisuraCameraleUploaded = false;
@@ -40,6 +53,7 @@ public class Ente {
         visuraCamerale = null;
     }
 
+    //Costruttore Ente: Libero professionista
     public Ente(String nomeLP, String cognomeLP, String codiceFiscaleLP, String residenzaLP, String numeroIscrizioneAlboLP, String numeroTelefono,String partitaIva, Uri certificatoPIVA, boolean abilitazione) {
         this.nomeLP = nomeLP;
         this.cognomeLP = cognomeLP;
@@ -56,6 +70,7 @@ public class Ente {
         this.visuraCamerale = null;
     }
 
+    //Costruttore Ente: Ditta
     public Ente(String id, String partitaIva, Uri certificatoPIVA, Uri visuraCamerale, String nomeDitta, String domicilioFiscaleDitta,
                 String numeroTelefono, boolean abilitazione) {
         this.id = id;
@@ -72,7 +87,12 @@ public class Ente {
         this.visuraCamerale = null;
     }
 
-    // GETTER E SETTER
+
+
+    /**
+     * GETTER E SETTER
+     */
+
     public String getId() {
         return id;
     }
@@ -87,22 +107,6 @@ public class Ente {
 
     public void setPartitaIva(String partitaIva) {
         this.partitaIva = partitaIva;
-    }
-
-    @Exclude public Uri getCertificatoPIVA() {
-        return certificatoPIVA;
-    }
-
-    @Exclude public void setCertificatoPIVA(Uri certificatoPIVA) {
-        this.certificatoPIVA = certificatoPIVA;
-    }
-
-    @Exclude public Uri getVisuraCamerale() {
-        return visuraCamerale;
-    }
-
-    @Exclude public void setVisuraCamerale(Uri visuraCamerale) {
-        this.visuraCamerale = visuraCamerale;
     }
 
     public String getNomeDitta() {
@@ -199,5 +203,28 @@ public class Ente {
 
     public void setSedeDitta(String sedeDitta) {
         this.sedeDitta = sedeDitta;
+    }
+
+
+
+    /**
+     * GETTER E SETTER ESCLUSI SU FIREBASE IN QUANTO
+     * MEMORIZZATI DIVERSAMENTE DI UNA SEMPLICE SCRITTURA.
+     */
+
+    @Exclude public Uri getCertificatoPIVA() {
+        return certificatoPIVA;
+    }
+
+    @Exclude public void setCertificatoPIVA(Uri certificatoPIVA) {
+        this.certificatoPIVA = certificatoPIVA;
+    }
+
+    @Exclude public Uri getVisuraCamerale() {
+        return visuraCamerale;
+    }
+
+    @Exclude public void setVisuraCamerale(Uri visuraCamerale) {
+        this.visuraCamerale = visuraCamerale;
     }
 }

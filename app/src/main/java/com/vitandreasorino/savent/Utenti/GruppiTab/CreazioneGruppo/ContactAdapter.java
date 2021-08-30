@@ -18,17 +18,17 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Pojo.ContactModel;
+import Model.Pojo.Contact;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable{
 
-    private List<ContactModel> contactListFiltered;
-    private List<ContactModel> contactListAll;
+    private List<Contact> contactListFiltered;
+    private List<Contact> contactListAll;
     private Activity activity;
-    private List<ContactModel> checkedContactList = new ArrayList<>();
+    private List<Contact> checkedContactList = new ArrayList<>();
 
 
-    public ContactAdapter(Activity activity, ArrayList<ContactModel> arrayList) {
+    public ContactAdapter(Activity activity, ArrayList<Contact> arrayList) {
         this.contactListFiltered = arrayList;
         this.contactListAll = arrayList;
         this.activity = activity;
@@ -36,7 +36,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public List<ContactModel> getCheckedContacts(){
+    public List<Contact> getCheckedContacts(){
         return checkedContactList;
     }
 
@@ -52,7 +52,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        ContactModel model = contactListFiltered.get(position);
+        Contact model = contactListFiltered.get(position);
 
         holder.tvName.setText(model.getName());
         holder.tvNumber.setText(model.getNumber());
@@ -87,10 +87,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         protected FilterResults performFiltering(CharSequence constraint) {
             String filterString = constraint.toString().toLowerCase();
             FilterResults results = new FilterResults();
-            final List<ContactModel> list = contactListAll;
+            final List<Contact> list = contactListAll;
             int count = list.size();
-            final ArrayList<ContactModel> nlist = new ArrayList<ContactModel>(count);
-            ContactModel filterableContact;
+            final ArrayList<Contact> nlist = new ArrayList<Contact>(count);
+            Contact filterableContact;
 
             for (int i = 0; i < count; i++) {
                 filterableContact = list.get(i);
@@ -108,7 +108,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults filterResults) {
-            contactListFiltered = (ArrayList<ContactModel>) filterResults.values;
+            contactListFiltered = (ArrayList<Contact>) filterResults.values;
             notifyDataSetChanged();
         }
     };

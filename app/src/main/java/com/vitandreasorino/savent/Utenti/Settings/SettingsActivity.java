@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -68,23 +67,23 @@ public class SettingsActivity extends AppCompatActivity{
         switchBluetooth.setOnClickListener(v -> {
             if (switchBluetooth.isChecked()) {
                SharedPreferencesHelper.setBluetoothPreference(true, getApplicationContext());
-                if(GattServerService.isRunning){
+                if(GattServerService.isServiceRunning){
                     //Inviare broadcast
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerService.RESTART_GATT_SERVER));
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerService.RESTART_GATT_SERVER_INTENT));
                 }else{
                     startService(new Intent(getBaseContext(), GattServerService.class));
                 }
 
-                if(GattServerCrawlerService.isRunning){
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerCrawlerService.RESTART_GATT_CRAWLER));
+                if(GattServerCrawlerService.isServiceRunning){
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerCrawlerService.RESTART_GATT_CRAWLER_INTENT));
                 }else{
                     startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
                 }
                switchBluetooth.setChecked(true);
             } else {
                 SharedPreferencesHelper.setBluetoothPreference(false, getApplicationContext());
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerService.STOP_GATT_SERVER));
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerCrawlerService.STOP_GATT_CRAWLER));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerService.STOP_GATT_SERVER_INTENT));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerCrawlerService.STOP_GATT_CRAWLER_INTENT));
                 switchBluetooth.setChecked(false);
             }
         });

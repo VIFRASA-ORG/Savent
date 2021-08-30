@@ -1,9 +1,9 @@
 package Model;
 
+/**
+ * Classe in cui sono definiti tutti i tag utilizzati nei Log a scopo di debug.
+ */
 public class LogDebug {
-
-    public static final String FIREBASE_IMAGE_UPLOAD = "Firebase-Image-Upload";
-    public static final String FIREBASE_IMAGE_DOWNLOAD = "Firebase-Image-Download";
 
     //MAPS
     public static final String MAPS_LOCATION_PERMISSION = "Maps-Location-Permission";
@@ -22,4 +22,7 @@ public class LogDebug {
     //Daily Job
     public static final String DAILY_JOB = "DAILY_JOB";
     public static final String DAILY_JOB_POS_TEK_DOWNL = "POSITIVE_TEK_DOWNLOAD";
+
+    //Firebase Notification
+    public static final String FIREBASE_NOTIFICATION = "FIREBASE_MESSAGING";
 }

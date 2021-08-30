@@ -62,7 +62,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key" /> <!-- [START firebase_service] -->
         <service
-            android:name="Services.MessagingService"
+            android:name="Services.NotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
