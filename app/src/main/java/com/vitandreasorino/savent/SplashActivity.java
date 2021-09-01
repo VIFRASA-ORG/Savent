@@ -19,7 +19,9 @@ import com.vitandreasorino.savent.Utenti.HomeActivity;
 
 import Helper.AuthHelper;
 
-
+/**
+ * Gestisce la schermata iniziale dove si mostrerà il logo dell'app per un tempo limitato
+ */
 public class SplashActivity extends AppCompatActivity {
 
     private static final String TAG_LOG = SplashActivity.class.getName();
@@ -32,8 +34,8 @@ public class SplashActivity extends AppCompatActivity {
     private static final int GO_AHEAD_WHAT = 1;
 
     /**
-     * mStartTime: variabile che rappresenta l'istante della prima visualizzazione
-     * mIsDone: variabile che indica l'informazione relativa al fatto che il passaggio all'attività seguente sia già stata realizzata.
+     * mStartTime: rappresenta l'istante della prima visualizzazione
+     * mIsDone: rappresenta l'informazione relativa al fatto che il passaggio all'attività seguente sia già stata realizzata.
      */
     private long mStartTime;
     private boolean mIsDone;
@@ -73,15 +75,15 @@ public class SplashActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
+    /**
+     * uptimeMillis(): metodo statico della classe SystemClock, fa riferimento al tempo attuale
+     * obtainMessage(): metodo che crea un messaggio attraverso GO_AHEAD_WHAT
+     * GO_AHEAD_WHAT: costante di tipo int che caratterizza il tipo di messaggio e quindi l'operazione
+     * sendMessageAtTime: metodo che invia un messaggio in un preciso istante
+     */
     @Override
     protected void onStart() {
         super.onStart();
-        /**
-         * uptimeMillis(): metodo statico della classe SystemClock, fa riferimento al tempo attuale
-         * obtainMessage(): metodo che creaa un messaggio attraverso GO_AHEAD_WHAT
-         * GO_AHEAD_WHAT: costante di tipo int che caratterizza il tipo di messaggio e quindi l'operazione
-         * sendMessageAtTime: metodo che invia un messaggio in un preciso istante
-         */
         mStartTime = SystemClock.uptimeMillis();
         final Message goAheadMessage = mHandler.obtainMessage(GO_AHEAD_WHAT);
         mHandler.sendMessageAtTime(goAheadMessage, mStartTime + MAX_WAIT_INTERVAL);
@@ -90,29 +92,30 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     /**
-     * goAhead(): metodo per passare all'attivivò successiva
-     * finish(): elimina l'attività dallo stack in modo tale da non poter ritornare alla schermate precedente con il tasto back.
-     *
+     * metodo che consente di passare all'attività successiva
      */
     private void goAhead(){
 
-        //If not logged-in, go to the login activity.
+        //Se non sei loggato, vai all'attività di login.
         if(!AuthHelper.isLoggedIn()){
             Intent intent = new Intent(this, LogSingInActivity.class);
             startActivity(intent);
             finish();
         }
         else{
-            //If logged-in, check what type of user is logged-in.
+
+            //Se hai effettuato l'accesso, controlla che tipo di utente ha effettuato l'accesso tra: utente e ente
             AuthHelper.getLoggedUserType(closureRes -> {
                 Intent intent;
+
                 switch (closureRes){
                     case Utente:
                         intent = new Intent(this, HomeActivity.class);
 
+                        //nel caso la preferenza del Bluetooth LE è attiva..
                         if(SharedPreferencesHelper.getBluetoothPreference(this)){
                             try {
-                                //Starting the gatt server only after the first tek is generated
+                                //..Avvio del server gatt solo dopo che è stato generato il primo tek
                                 startService(new Intent(getBaseContext(), GattServerService.class));
                                 startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
                             }catch (IllegalArgumentException e){

@@ -43,6 +43,10 @@ import Model.DB.Utenti;
 import Model.Pojo.Gruppo;
 import Model.Pojo.Utente;
 
+/**
+ * Activity inerente alla gestione del dettaglio del singolo gruppo. Permette la visualizzazione dei dati del singolo gruppo, e dei componenti che partecipano.
+ * Inoltre, permette la modifica e l'eliminazione di tutti i dati inerenti a tale gruppo.
+ */
 public class GroupDetailActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, View.OnFocusChangeListener{
 
     private static final int ADD_CONTACTS_RESULT = 11;
@@ -50,6 +54,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     private boolean isModified = false;
     private boolean isCreated = false;
 
+    //Model che contiene tutte le informazioni mostrate nell'interfaccia
     Gruppo groupModel;
     Utente admin;
 
@@ -80,11 +85,12 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_detail);
 
-        //Deserializing the object from the intent
+        //Deserializzazione dell'oggetto per l'intent
         groupModel = (Gruppo) getIntent().getSerializableExtra("IdGrouppoLista");
+
         isCreated = getIntent().getBooleanExtra("Creato", false);
 
-        //Inflate all the component
+        //riferimenti a tutti i componenti dell'interfaccia
         inflateAll();
 
         boolean fromNotification = getIntent().getBooleanExtra(NotificationActivity.FROM_NOTIFICATION_INTENT,false);
@@ -96,14 +102,14 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                 continueDownload();
             });
         }else{
-            //Deserializing the object from the intent
+            //Deserializzazione dell'oggetto per l'intent
             groupModel = (Gruppo) getIntent().getSerializableExtra("IdGrouppoLista");
             continueDownload();
         }
 
 
         /**
-         * Metodo attivabile tramite una pressione prolungata sul singolo componente del gruppo.
+         * Metodo attivabile tramite una pressione prolungata sul singolo componente del gruppo per eliminarlo.
          */
         componentListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -171,8 +177,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                 Intent imageProfile = new Intent();
                 imageProfile.setType("image/*");
                 imageProfile.setAction(Intent.ACTION_GET_CONTENT);
-                // pass the constant to compare it
-                // with the returned requestCode
+
+                //passa la costante per confrontarla con il requestCode restituito
                 startActivityForResult(Intent.createChooser(imageProfile, "Select Picture"), 200);
             }
         });
@@ -197,6 +203,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         checkSaveButtonActivation();
 
     }//fine onCreate
+
 
     private void continueDownload(){
         //Inserisci il nome e descrizione del gruppo all'interno della vista
@@ -253,7 +260,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     }
 
     /**
-     * metodo che permette di visualizzare la lista seè piena o di non visualizzarla se è vuota
+     * metodo che entra in azione durante il caricamento degli elementi della lista
      * @param isDownloading
      */
     private void toggleDownloadingElements(boolean isDownloading){
@@ -266,8 +273,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         }
     }
 
-    /**
-     * metodo che carica le info da db è nel momento di caricamento visualizza la progressbar
+    /*Metodo che permette di scaricare e visualizzare i componenti dei gruppi salvati sul database, con successivo
+     * metodo che che controlla se ad ogni gruppo sono associate le rispettive immagini del profilo abbinate
      */
     private void downloadDataList() {
         toggleDownloadingElements(true);
@@ -277,7 +284,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         componentListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        //Scarica lista componenti con rispettiva immagine del profilo associata
+        //Scarica la lista dei componenti con la rispettiva immagine del profilo associata mediante l'id
         if(!groupModel.getIdComponenti().isEmpty()){
 
             for(String id : groupModel.getIdComponenti()){
@@ -325,6 +332,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         }
     }
 
+
     /**
      * Eseguire la query per aggiornare le nuove informazioni sul server.
      */
@@ -344,12 +352,14 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             listOfUpdates.add(descriptionDetailGroup.getText().toString());
         }
 
-        //cariamento componenti
+        //cariamento componenti con rimozione di tutti i relativi componenti che non sono contenuti nella raccolta originale.
         ArrayList<Utente> copy = new ArrayList<>(groupComponentsOriginal);
         copy.retainAll(groupComponentsUpdated);
 
+        //controllo se le dimensioni delle due liste sono diverse per apportare gli aggiornamenti
         if(groupComponentsOriginal.size() != groupComponentsUpdated.size() || copy.size() != groupComponentsOriginal.size() ){
-            //modifiche
+
+            //aggiornamento dei componenti
             ArrayList<String> componentsId = new ArrayList<>();
             for(Utente u : groupComponentsUpdated) componentsId.add(u.getId());
 
@@ -366,6 +376,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                         buttonSaveDataGroup.setEnabled(false);
                         newSelectedImage = null;
                         isModified = true;
+
                         //toast relativo alla sola immagine del grouppo
                         Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                     }else{
@@ -383,7 +394,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
             return;
         };
 
-        //Inserisci i primi due come primi parametri
+        //Inserisci i primi due campi come primi parametri
         String firstField = (String) listOfUpdates.get(0);
         Object firstValue = listOfUpdates.get(1);
         if(listOfUpdates.size() > 2){
@@ -404,7 +415,6 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                             buttonSaveDataGroup.setEnabled(false);
                             newSelectedImage = null;
                             isModified = true;
-                            //tost quando si carica l'immagine
                             Toast.makeText(this,R.string.informationUploaded,Toast.LENGTH_SHORT).show();
                         }else{
                             enableAllComponent();
@@ -434,6 +444,10 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         groupModel.setDescrizione(descriptionDetailGroup.getText().toString());
     }
 
+
+    /**
+     * attivazione di tutti i componenti con eventuale progressbar
+     */
     private void enableAllComponent() {
         nameDetailGroup.setEnabled(true);
         descriptionDetailGroup.setEnabled(true);
@@ -442,9 +456,10 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         AnimationHelper.fadeOut(progressBar,1000);
     }
 
+
     /**
-     * Check all the new information entered in the nome, cognome  fields.
-     * @return true if all the new values are of the correct pattern, false otherwise.
+     * Controllare tutte le nuove informazioni inserite nei campi.
+     * @return true se tutti i nuovi valori sono del modello corretto, false altrimenti.
      */
     private boolean checkAllNewValues(){
         boolean flag = true;
@@ -453,6 +468,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         nome = nameDetailGroup.getText().toString();
         descrizione = descriptionDetailGroup.getText().toString();
 
+        // se i campi di nome o descrixione sono vuoti imposta il colore rosso per indicare l'errore, altrimenti lascialo nel colore di default
         if(nome.isEmpty() || descrizione.isEmpty()){
 
             if(nome.isEmpty()) {
@@ -475,6 +491,9 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     }
 
 
+    /**
+     * disabilita tutti componenti che possono essere modificabili
+     */
     private void disableAllComponent(){
         nameDetailGroup.setEnabled(false);
         descriptionDetailGroup.setEnabled(false);
@@ -484,19 +503,17 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     }
 
     /**
-     * Remove the focus from all the components and reset the background color.
+     * Rimuovi lo stato attivo da tutti i componenti e reimposta il colore di sfondo di default
      */
     private void clearAllFocusAndColor(){
-
         nameDetailGroup.clearFocus();
         descriptionDetailGroup.clearFocus();
         nameDetailGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         descriptionDetailGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
-
     }
 
     /**
-     * Method used to get all the interface reference from the xml file
+     * Metodo utilizzato per ottenere tutti i riferimenti dell'interfaccia dal file xml
      */
     private void inflateAll() {
         nameDetailGroup = findViewById(R.id.nameDetailGroup);
@@ -512,12 +529,15 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         viewEditGroupPhoto = findViewById(R.id.viewEditGroupPhoto);
         buttonAddUserToGroup = findViewById(R.id.buttonAddUserToGroup);
         textAddUserToGroup = findViewById(R.id.textAddUserToGroup);
-
         progressBarPage = findViewById(R.id.progressBar);
         emptyTextView = findViewById(R.id.emptyTextView);
         componentListView.setEmptyView(findViewById(R.id.emptyResults));
     }
 
+    /**
+     * pulsante "back" che permette di tornare all'activity precedente.
+     * Tale pulsante ritorna anche dei risultati alla schermata precedente e dei messaggi di broadcast locale per aggiornare i gruppi
+     */
     @Override
     public void onBackPressed() {
         if(isModified) setResult(RESULT_OK);
@@ -532,6 +552,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         finish();
     }
 
+
     /**
      * Evento tramite Click che permette di tornare indietro con eventauale aggiornamento
      * @param view
@@ -540,19 +561,23 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         onBackPressed();
     }
 
+
     /**
-     * tasto che permette all'admin di cancellare il gruppo da lui creato
+     * pulsante che permette all'admin di cancellare totalmente il gruppo da lui creato
      * @param view
      */
     public void onDeleteGroup(View view) {
+
         String myId = AuthHelper.getUserId();
         String idGroup = groupModel.getId();
+
+        //creazione del dialog di "elimina gruppo" con eventuale messaggio
         AlertDialog.Builder alertDelete = new  AlertDialog.Builder(GroupDetailActivity.this);
         alertDelete.setTitle(R.string.titleDeleteGroup);
         alertDelete.setMessage(R.string.msgDeleteGroup);
 
         /**
-         * Se si è admin del gruppo allora posso visualizzare il dialog per poter eliminare tale gruppo
+         * Se si è admin del gruppo allora si può visualizzare il dialog per poter eliminare tale gruppo creato
          */
         if(AuthHelper.getUserId().equals(groupModel.getIdAmministratore())){
             alertDelete.setPositiveButton(R.string.confirmPositive, new DialogInterface.OnClickListener() {
@@ -564,6 +589,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                         if(closureBool){
                             Toast.makeText(GroupDetailActivity.this, R.string.deleteSuccess, Toast.LENGTH_SHORT).show();
 
+                            //una volta che si è confermato l'eliminazione del gruppo allora ritorna alla schermata precedente di "groupFragment" e
+                            // riporta il requestCode e l'intent per eliminare il gruppo dalla lista dei gruppi
                             Intent i = new Intent();
                             setResult(RESULT_OK, i);
                             finish();
@@ -580,7 +607,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    //tost conferma gruppo non eliminato!
+                    //messaggio che il gruppo non è stato eliminato
                     Toast.makeText(GroupDetailActivity.this, R.string.deleteInsuccess, Toast.LENGTH_SHORT).show();
                 }
             });
@@ -590,13 +617,17 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
     }
 
+
     /**
-     * Buttone che permette all'utente di abbandonare il gruppo dove è iscritto
+     * Pulsante che permette all'utente del gruppo di abbandonare il gruppo dove è iscritto
      * @param view
      */
     public void onLeaveGroup(View view) {
+
         String myId = AuthHelper.getUserId();
         String idGroup = groupModel.getId();
+
+        //Creazione del dialog con il rispettivo titolo e messaggio della funzionalità e della scelta da adottare
         AlertDialog.Builder alertLeave = new  AlertDialog.Builder(GroupDetailActivity.this);
         alertLeave.setTitle(R.string.titleLeaveGroup);
         alertLeave.setMessage(R.string.msgLeaveGroup);
@@ -618,6 +649,8 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                             //tost che conferma abbandono avvenuto con successo!
                             Toast.makeText(GroupDetailActivity.this, R.string.leaveSuccess, Toast.LENGTH_LONG).show();
 
+                            //una volta che si è confermato l'abbandono allora ritorna alla schermata precedente di "groupFragment" e riporta il
+                            //requestCode per eliminare il gruppo dalla lista dei gruppi
                             Intent i = new Intent();
                             setResult(RESULT_OK, i);
                             finish();
@@ -627,12 +660,12 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
                 }
             });
 
-            //Nel caso di risposta negativa nel dialog, stampa solo
+            //Nel caso di risposta negativa nel dialog
             alertLeave.setNegativeButton(R.string.confirmNegative, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    //tost conferma utente non eliminato!
+                    //mostra messaggio
                     Toast.makeText(GroupDetailActivity.this, R.string.leaveInSuccess, Toast.LENGTH_SHORT).show();
                 }
             });
@@ -641,13 +674,11 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         }
     }//fine onLeave
 
-    /*
 
-        OVERRIDE OF THE METHODs IN THE SearchView.OnQueryTextListener INTERFACE
-        force the adapter to filter the ListView item based on the query in the Search bar.
-
+    /**
+     * OVERRIDE DEI METODI NELL'INTERFACCIA SearchView.OnQueryTextListener
+     * Forza l'adapter a filtrare l'elemento della ListView in base alla query inserita nella barra di ricerca.
      */
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         adapter.getFilter().filter(query);
@@ -659,8 +690,11 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         adapter.getFilter().filter(newText);
         return true;
     }
+
+
     /**
-     * Enable or disable the button to save the changes only if there are some changes in the account info.
+     * Metodo che abilita il pulsante "Salva" solo se ci sono alcuni attributi che sono diversi dai precedenti, cioè se ci sono state
+     * delle modifiche delle informazioni sull'account.
      */
     private void checkSaveButtonActivation(){
         if(groupModel == null) return;
@@ -668,6 +702,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         ArrayList<Utente> copy = new ArrayList<>(groupComponentsOriginal);
         copy.retainAll(groupComponentsUpdated);
 
+        //Se il dato precedente è diverso a quello modificato, il tasto si attiverà, altrimenti resterà disattivato
         if(!nameDetailGroup.getText().toString().equals(groupModel.getNome()) || !descriptionDetailGroup.getText().toString().equals(groupModel.getDescrizione()) ||
             newSelectedImage != null || groupComponentsOriginal.size() != groupComponentsUpdated.size() || copy.size() != groupComponentsOriginal.size() ){
             buttonSaveDataGroup.setEnabled(true);
@@ -677,21 +712,28 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
     }
 
+
+    /**
+     * metodo che verrà invocato quando un'attività restituirà un risultato
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 200) {
-
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
+            // confronta il resultCode con la costante SELECT_PICTURE
             if (resultCode == RESULT_OK) {
-                // Get the url of the image from data
+                // Ottieni l'URL dell'immagine dai dati e controllala se non è vuota
                 Uri selectedImageUri = data.getData();
+
                 if (null != selectedImageUri) {
-                    // update the preview image in the layout
+                    // aggiorna l'immagine di anteprima nel layout
                     imageViewDetailGroup.setImageURI(selectedImageUri);
                     newSelectedImage = selectedImageUri;
+                    //attiva il pulsante "Save"
                     checkSaveButtonActivation();
                 }
             }
@@ -725,7 +767,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
 
     /**
-     * Used to check if the user is writing some new information that are different from the one on the server
+     * Utilizzato per verificare se l'utente sta scrivendo delle nuove informazioni che sono diverse da quelle sul server
      */
     TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -733,6 +775,7 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //chiama la funzionalità di controllo tali nuove informazioni
             checkSaveButtonActivation();
         }
 
@@ -740,6 +783,15 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         public void afterTextChanged(Editable s) { }
     };
 
+
+    /**
+     * Metodo che permette di visualizzare un stato differente degli attributi "nome" e "descrizione" del gruppo, quando sono in fase di modifica.
+     * Se tale nome è in fase di modifica allora tale colore associato passerà da blu al grigio, fino quando tale modifica di tale campo
+     * non verrà salvato.
+     * Il metodo viene chiamato dal onFocusChangeListener, che viene associato al nome e alla descrizione del dettaglio gruppo.
+     * @param v: vista dello stato.
+     * @param hasFocus: impostazione del nuovo focus di stato della vista.
+     */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(hasFocus){
@@ -748,6 +800,11 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
     }
 
 
+    /**
+     * pulsante che permette aprire una nuova schermata che ci consentirà di aggiungere i componenti al gruppo, nel caso tali componenti
+     * sono contentuti nella rubrica
+     * @param view
+     */
     public void buttonAddUserToGroup(View view) {
 
         //Toast.makeText(GroupDetailActivity.this, "Creare evento", Toast.LENGTH_LONG).show();
@@ -756,4 +813,4 @@ public class GroupDetailActivity extends AppCompatActivity implements SearchView
         startActivityForResult(i,ADD_CONTACTS_RESULT);
     }
 
-}//fine classe GroupDetailActivity
+}
