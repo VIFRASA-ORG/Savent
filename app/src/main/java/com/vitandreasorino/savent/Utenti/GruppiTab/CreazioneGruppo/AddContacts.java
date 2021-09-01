@@ -28,9 +28,9 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Pojo.Contact;
-import Model.DB.Utenti;
-import Model.Pojo.Utente;
+import Model.POJO.Contact;
+import Model.DAO.Utenti;
+import Model.POJO.Utente;
 
 
 public class AddContacts extends AppCompatActivity implements SearchView.OnQueryTextListener {

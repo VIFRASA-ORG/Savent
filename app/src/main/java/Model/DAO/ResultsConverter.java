@@ -1,15 +1,14 @@
-package Model.DB;
+package Model.DAO;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract class used by all the DB class.
- * Contains the method convertResult to convert all the result to a specific type.
+ * Classe astratta che deve essere implementata da tutte le classi DAO
+ * per convertire direttamente i risultati dei task nella relativa classe POJO.
  */
 public abstract class ResultsConverter {
 

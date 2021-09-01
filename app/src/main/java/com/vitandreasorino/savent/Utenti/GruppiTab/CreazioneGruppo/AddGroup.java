@@ -30,11 +30,11 @@ import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Helper.ImageHelper;
 import Model.Closures.ClosureResult;
-import Model.Pojo.Contact;
-import Model.DB.Gruppi;
-import Model.DB.Utenti;
-import Model.Pojo.Gruppo;
-import Model.Pojo.Utente;
+import Model.POJO.Contact;
+import Model.DAO.Gruppi;
+import Model.DAO.Utenti;
+import Model.POJO.Gruppo;
+import Model.POJO.Utente;
 
 public class AddGroup extends AppCompatActivity {
 

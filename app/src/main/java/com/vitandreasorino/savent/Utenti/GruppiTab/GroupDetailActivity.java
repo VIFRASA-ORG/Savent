@@ -37,11 +37,11 @@ import java.util.List;
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureResult;
-import Model.DB.Gruppi;
-import Model.DB.Utenti;
+import Model.DAO.Gruppi;
+import Model.DAO.Utenti;
 
-import Model.Pojo.Gruppo;
-import Model.Pojo.Utente;
+import Model.POJO.Gruppo;
+import Model.POJO.Utente;
 
 public class GroupDetailActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, View.OnFocusChangeListener{
 

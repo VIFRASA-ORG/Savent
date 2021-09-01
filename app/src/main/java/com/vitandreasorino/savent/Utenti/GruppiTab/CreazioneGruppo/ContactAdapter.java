@@ -18,7 +18,7 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Pojo.Contact;
+import Model.POJO.Contact;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements Filterable{
 

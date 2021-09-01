@@ -1,6 +1,5 @@
 package com.vitandreasorino.savent.Utenti.EventiTab;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,7 +31,6 @@ import android.widget.Toast;
 
 import com.vitandreasorino.savent.Utenti.EventiTab.CreazioneEvento.MapActivity;
 import com.vitandreasorino.savent.R;
-import com.vitandreasorino.savent.Utenti.GruppiTab.GroupDetailActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,11 +42,11 @@ import Helper.AuthHelper;
 import Helper.ImageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureResult;
-import Model.DB.Eventi;
-import Model.DB.Gruppi;
-import Model.DB.Utenti;
-import Model.Pojo.Evento;
-import Model.Pojo.Gruppo;
+import Model.DAO.Eventi;
+import Model.DAO.Gruppi;
+import Model.DAO.Utenti;
+import Model.POJO.Evento;
+import Model.POJO.Gruppo;
 
 public class EditEvent extends AppCompatActivity implements View.OnFocusChangeListener {
 

@@ -1,4 +1,4 @@
-package Model.Pojo;
+package Model.POJO;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;

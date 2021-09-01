@@ -39,7 +39,7 @@ import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 import Helper.AnimationHelper;
 import Helper.LocalStorage.SQLiteHelper;
 import Helper.LocalStorage.SharedPreferencesHelper;
-import Model.DB.Utenti;
+import Model.DAO.Utenti;
 import Services.BluetoothLEServices.GattServerCrawlerService;
 import Services.BluetoothLEServices.GattServerService;
 

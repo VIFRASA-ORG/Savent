@@ -1,6 +1,5 @@
 package com.vitandreasorino.savent.Utenti.EventiTab;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -29,9 +28,9 @@ import java.util.*;
 import Helper.AnimationHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureList;
-import Model.DB.Eventi;
-import Model.DB.Partecipazioni;
-import Model.Pojo.Evento;
+import Model.DAO.Eventi;
+import Model.DAO.Partecipazioni;
+import Model.POJO.Evento;
 
 
 public class MyEventPartecipations extends AppCompatActivity implements AdapterView.OnItemClickListener{

@@ -1,7 +1,6 @@
-package Model.DB;
+package Model.DAO;
 
 import android.app.Activity;
-import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -25,18 +24,29 @@ import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
-import Model.Pojo.Contact;
-import Model.Pojo.Utente;
+import Model.POJO.Contact;
+import Model.POJO.Utente;
 
-
-
+/**
+ * Classe DAO (Data Access Object) che fornisce tutti i metodi
+ * per ritrovare informazioni o dati riguardanti gli Utenti
+ * memorizzati su firestore.
+ *
+ * Molti valori di ritorno fanno uso appunto della relativa classe POJO Utente.
+ *
+ * Implementa la classe astratta ResulConverter per permettere una immediata conversione
+ * dei result provenienti dai task di Firebase in oggetti di classe Utente.
+ */
 public class Utenti extends ResultsConverter {
 
+    /**
+     * NOMI DELLE COLLECTION SU FIREBASE
+     */
     public static final String UTENTI_COLLECTION = "Utenti";
     private static final String MESSAGING_TOKEN_COLLECTION = "MessagingToken";
 
     /**
-     * Used to update the information of the user into the updateField method.
+     * CONSTANTI CHE INDICANO I NOMI DEI CAMPI SU FIREBASE
      */
     public static final String NOME_FIELD = "nome";
     public static final String COGNOME_FIELD = "cognome";
@@ -51,11 +61,10 @@ public class Utenti extends ResultsConverter {
 
 
     /**
-     * Method that sum the given offset to the logged in user health status.
-     * If the sum is > 100, the health status is setted to 100.
+     * Metodo che permette di sommare il valore passato come parametro allo status sanitario corrente dell'utente loggato.
      *
-     * @param offset the value to sum to the logged in user health status.
-     * @param closureBoolean invoked with true if the task is successful, false otherwise.
+     * @param offset valore da sommare.
+     * @param closureBoolean invocato con true se il task va a buon fine, false altrimenti.
      */
     public static final void sumValueToHealthStatus(int offset, ClosureBoolean closureBoolean){
         if(AuthHelper.isLoggedIn()) {
@@ -76,9 +85,10 @@ public class Utenti extends ResultsConverter {
     }
 
     /**
-     * Method used to get the current firebase messaging token associated to the device.
+     * Metodod che ritorna il Firebase messagin token associato con questo device
+     * diretamente con le API di Firebase Messaging.
      *
-     * @param closureRes invoked with the token string if the task is successful, null otherwise
+     * @param closureRes invocato con true se il task va a buon fine, false altrimenti.
      */
     private static final void getCurrentToken(@Nullable ClosureResult<String> closureRes){
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
@@ -96,10 +106,10 @@ public class Utenti extends ResultsConverter {
     }
 
     /**
-     * Create a new document into "MessagingToken" collection associated to the logged in user.
-     * The new record contains the logged in user id and the messaging token associated to the device.
+     * Metodo che crea un nuovo documento nella tabella "MessaginToken" con id l'id dell'utente appena registrato.
+     * All'interno del nuovo documento viene impostato il token di notifiche relativo a questo device.
      *
-     * @param closureBool invoked with true if the task is successful, false otherwise.
+     * @param closureBool invocato con true se il task va a buon fine, false altrimenti.
      */
     public static final void createMessagingTokenDocument( @Nullable ClosureBoolean closureBool){
         if(AuthHelper.isLoggedIn()) {
@@ -120,10 +130,12 @@ public class Utenti extends ResultsConverter {
     }
 
     /**
-     * Send to the server the new messaging token
-     * The new token is associated to the logged in user and is taken directly from the FirebaseMessaging API.
+     * Metodo che aggiorna il valore del Token delle notifiche relativo all'utente loggato.
+     * Il token verra caricato nella tabella MessagingToken/idUtente/token
      *
-     * @param closureBool invoked with true if the task is successful, false otherwise.
+     * Il token viene preso direttamente dalle API FirebaseNotification.
+     *
+     * @param closureBool invocato con true se il task va a buon fine, false altrimenti.
      */
     public static final void setMessagingToken(@Nullable ClosureBoolean closureBool){
         if(AuthHelper.isLoggedIn()) {
@@ -136,11 +148,11 @@ public class Utenti extends ResultsConverter {
     }
 
     /**
-     * Send to the server the new messaging token
-     * The new token is associated to the logged in user
+     * Metodo che aggiorna il valore del Token delle notifiche relativo all'utente loggato.
+     * Il token verra caricato nella tabella MessagingToken/idUtente/token
      *
-     * @param newToken the new token to communicate to the server
-     * @param closureBool invoked with true if the task is successful, false otherwise.
+     * @param newToken il nuovo token da caricare
+     * @param closureBool invocato con true se il task va a buon fine, false altrimenti.
      */
     public static final void setMessagingToken(String newToken, @Nullable ClosureBoolean closureBool){
         if(AuthHelper.isLoggedIn()) {
@@ -151,10 +163,10 @@ public class Utenti extends ResultsConverter {
     }
 
     /**
-     * Check if the given fiscal code is already used by another account
+     * Metodo che controlla se il codice fiscale passato come parametro è stato gia utilizzato.
      *
-     * @param fiscalCode fiscal code of the user to search for.
-     * @param closureBool invoked with true if the fiscal code is already used, false otherwise.
+     * @param fiscalCode codice fiscale da controllare.
+     * @param closureBool invocato con true se il codice viene trovato, false altrimenti.
      */
     public static final void isFiscalCodeAlreadyUsed(String fiscalCode, @Nullable ClosureBoolean closureBool){
         FirestoreHelper.db.collection(UTENTI_COLLECTION).whereEqualTo(CODICE_FISCALE_FIELD,fiscalCode.toUpperCase()).get().addOnCompleteListener(task -> {
@@ -169,10 +181,10 @@ public class Utenti extends ResultsConverter {
     }
 
     /**
-     * Add a listener to all the updates from the server to the logged user.
+     * Metodo che aggiunge un lister sul documento Utente dell'utente loggato.
      *
-     * @param activity the context of the owner activity
-     * @param closureResult user that will be invoked every time an update is found. it will give the user object if found, null otherwise.
+     * @param activity il contesto dell'apllicazione o dell'activity.
+     * @param closureResult invocato con il nuovo oggetto aggiornato tutte le volte che si verifica un aggiornamento, null altrimenti.
      */
     public static final void addDocumentListener( Activity activity, ClosureResult<Utente> closureResult){
         if(AuthHelper.isLoggedIn()){
@@ -192,25 +204,26 @@ public class Utenti extends ResultsConverter {
     }
 
     /**
-     * Search a list of contacts taken, from the phone contact list, among all the users on the firestore.
+     * Metodo che permette di cercare una lista di contatti, generalmente presi dalla rubrica, all'interno
+     * del database di Firebase per controllare quali di loro sono correttamente registrati all'applicazione.
      *
-     * @param contactsList the list of contact to search on the database
-     * @param closureList the list of users found.
+     * @param contactsList lista di contatti da ricercare su Firebase.
+     * @param closureList invocato con una lista di utenti trovati.
      */
     public static final void searchContactsInPhoneBooks(List<Contact> contactsList, ClosureList<Utente> closureList){
         if(AuthHelper.isLoggedIn()){
             List<String> contactsPhone = new ArrayList<>();
 
-            //Exrapolating the phone number, the search is based on that.
+            //Estrapolo il numero di telefono in quanto serve per la ricerca.
             for (Contact c : contactsList) contactsPhone.add(c.getNumber());
 
-            //The in query support only a list of maximum 10 elements
-            //Dividing the list in chucks of length 10
+            //La query IN supporta una lista di massimo 10 elementi
+            //Quindi bisogna dividere la lista di numeri di telefono in chuck di lunghezza massima 10
             if(contactsPhone.size() > 10){
                 Collection<Task<?>> taskList = new ArrayList<Task<?>>();
                 int numbersOfChucks = contactsPhone.size() / 10;
 
-                //Adding the chunked query to the list
+                //Aggiungo la query del singolo chuck alla lista di task
                 for(int i=0; i <= numbersOfChucks; i++){
                     Task t;
                     if(i == numbersOfChucks) t = FirestoreHelper.db.collection(UTENTI_COLLECTION).whereIn(NUMERO_TELEFONO_FIELD,contactsPhone.subList(10*i,contactsPhone.size())).get();
@@ -243,13 +256,14 @@ public class Utenti extends ResultsConverter {
 
     }
 
-    /** Update the information of the user.
+    /**
+     * Metodo che permette di modificare uno o più campi dell'utente con id passato come parametro.
      *
-     * @param userId the id of the user
-     * @param closureBool get called with true if the task is successful, false otherwise.
-     * @param firstField the name of the first field to update
-     * @param firstValue tha new value of the first field
-     * @param otherFieldAndValues an array of object with other field and values.
+     * @param userId id dell'utente di cui si vole cambiare i valori.
+     * @param closureBool invocato con true se l'esecuzione va a buon fine, false altrimenti.
+     * @param firstField il nome del primo campo da aggiornare
+     * @param firstValue nuovo valore da inserire nel primo campo sopra citato.
+     * @param otherFieldAndValues array di oggetti con altri campi e valori da sostituire.
      */
     public static final void updateFields(String userId,ClosureBoolean closureBool, String firstField, Object firstValue, Object... otherFieldAndValues ){
         FirestoreHelper.db.collection(UTENTI_COLLECTION).document(userId).update(firstField,firstValue,otherFieldAndValues).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -260,10 +274,11 @@ public class Utenti extends ResultsConverter {
         });
     }
 
-    /** Return the Utente object with the given id
+    /**
+     * Metodo che restituisce l'oggetto dell'utente con l'id passato come parametro.
      *
-     * @param idUtente id of the user
-     * @param closureRes get called with the object if the task is successful, null otherwise.
+     * @param idUtente id dell'utente da cercare.
+     * @param closureRes invocato con l'oggetto dell'utene se trovato, null altrimenti.
      */
     public static final void getUser(String idUtente, ClosureResult<Utente> closureRes){
         if(AuthHelper.isLoggedIn()){
@@ -278,11 +293,10 @@ public class Utenti extends ResultsConverter {
     }
 
     /**
-     * Return the name and surname of the user with the specified id.
-     * The return value is formatted as follow: name + " " + surname.
+     * Metodo che ritorna il nome e il cognome dell'utente con l'id passato come parametro.
      *
-     * @param idUtente id of the user whose name you want to know
-     * @param closureRes  get called with the value if the task is successful, null otherwise.
+     * @param idUtente id dell'utente di cui si vuole avere nome e cognome.
+     * @param closureRes invocato con una stringa cosi formattata: name + " " + surname.
      */
     public static final void getNameSurnameOfUser(String idUtente, ClosureResult<String> closureRes){
         if(AuthHelper.isLoggedIn()){
@@ -298,10 +312,12 @@ public class Utenti extends ResultsConverter {
         }
     }
 
-    /** Return the user object with the specified phone number.
+    /**
+     * Metodo che restituisce l'istanza dell'utente avente come numero
+     * di telefono quello passato come parametro, se esiste.
      *
-     * @param phoneNumber   Phone number of the user to search for.
-     * @param closureRes    get called with the Utente object if the task is successful, null otherwise.
+     * @param phoneNumber numero di telefono dell'utente da cercare.
+     * @param closureRes invocato con l'oggetto dll'utente se viene trovato un match, null altrimenti.
      */
     public static final void searchUserByPhoneNumber(String phoneNumber, ClosureResult<Utente> closureRes){
         if(AuthHelper.isLoggedIn()){
@@ -321,10 +337,12 @@ public class Utenti extends ResultsConverter {
         }
     }
 
-    /** Check if the given Utente id is a valid id.
+    /**
+     * Metodo che controlla se l'id dato come paramentro è effettivamente
+     * l'id di un utente su Firestore presente nella tabella Utenti.
      *
-     * @param idUtente id ti check.
-     * @param closureBool   get called with true if the id is a valid Utente id, false otherwise.
+     * @param idUtente id dell'utente da controllare.
+     * @param closureBool invocato con true se l'id è valido, false altrimenti.
      */
     public static final void isValidUser(String idUtente, ClosureBoolean closureBool){
         FirestoreHelper.db.collection(UTENTI_COLLECTION).document(idUtente).get().addOnCompleteListener(task -> {
@@ -336,46 +354,50 @@ public class Utenti extends ResultsConverter {
         });
     }
 
-    /** Create a new account to the user.
+    /**
+     * Metodo che crea un nuovo utente su Firebase.
      *
-     * @param user  the Utente object to upload.
-     * @param email the user email used to log-in
-     * @param psw   the user psw used to log-in.
-     * @param profileImageUri   The user's profile image.
-     * @param closureBool   get called with true if the task is successful, false otherwise.
+     * @param user oggetto Utente con tutte le informazioni dell'utente.
+     * @param email email con cui l'utente effettua il login.
+     * @param psw password di accesso.
+     * @param profileImageUri uri dell'immagine del profilo.
+     * @param closureBool  invocato con true se l'upload va a buon fine, false altrimenti.
      */
-    public static final void createNewUser(Utente user, String email, String psw, Uri profileImageUri, Context context, ClosureBoolean closureBool){
-        //First thing first: create the new user as account
+    public static final void createNewUser(Utente user, String email, String psw, Uri profileImageUri, ClosureBoolean closureBool){
+        //Per prima cosa creamo l'account per l'autenticazione
         AuthHelper.createNewAccount(email, psw, result -> {
             if (result == null){
                 if(closureBool != null) closureBool.closure(false);
                 return;
             }
-
-            //If the account creation is successful, we need to login
+            //Se la creazione dell'account va a buon fine, effettuiamo il login.
             AuthHelper.singIn(email, psw, isSuccess -> {
                 if(!isSuccess){
                     if(closureBool != null) closureBool.closure(false);
                     return;
                 }
 
-                updateUserInformation(user, profileImageUri, context, closureBool);
+                //Carichiamo tutte le informazioni dell'utente su Firebase.
+                updateUserInformation(user, profileImageUri, closureBool);
             });
         });
     }
 
-    /** Upload all the user information into Firestore. The user must be logged-in.
+    /**
+     * Metodo che permette di caricare tutte le informazioni di un nuovo utente su Firestore.
+     * L'utente deve essere loggato.
+     * Effettua anche il caricamento dell'immagine del profilo su Firestore Storage.
      *
-     * @param user the Utente object to upload.
-     * @param profileImageUri   The profile image of the user.
-     * @param closureBool   get called with true if the task is successful, false otherwise.
+     * @param user oggetto Utente contenente tutte le informazioni.
+     * @param profileImageUri uri dell'immagine del profilo.
+     * @param closureBool  invocato con true se l'upload va a buon fine, false altrimenti.
      */
-    public static final void updateUserInformation(Utente user, Uri profileImageUri, Context context, ClosureBoolean closureBool){
+    public static final void updateUserInformation(Utente user, Uri profileImageUri, ClosureBoolean closureBool){
         if (AuthHelper.isLoggedIn()){
             FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()).set(user).addOnCompleteListener(task -> {
                 if(task.isSuccessful()) {
                     if (profileImageUri != null) {
-                        uploadUserImage(profileImageUri, context, isSuccess -> {
+                        uploadUserImage(profileImageUri, isSuccess -> {
                             if (isSuccess){
                                 FirestoreHelper.db.collection(UTENTI_COLLECTION).document(AuthHelper.getUserId()).update("isProfileImageUploaded",true).addOnCompleteListener(task1 -> {
                                     if(closureBool!= null) closureBool.closure(task1.isSuccessful());
@@ -392,16 +414,17 @@ public class Utenti extends ResultsConverter {
         }
     }
 
-    /** Upload the user image to the Firestore Storage. It is placed inside a directory named after the user id.
-     * It is replaced if already present.
-     * The image is placed inside the following path: Utenti/\idUtente\/immagineProfilo
+    /**
+     * Metodo che permette di caricare l'immagine del profilo dell'utente loggato su Firestore Storage.
+     * L'immagine viene salvata in una directory chiamata con lo stesso id dell'utente
+     * e viene sostituita se gia esistente.
      *
-     * User must be logged-in.
+     * L'immagine viene messa nella seguente direcotry: Utenti/\idUtente\/immagineProfilo
      *
-     * @param file file to upload.
-     * @param closureBool   get called with true if the task is successful, false otherwise.
+     * @param file uri dell'immagine da caricare.
+     * @param closureBool invocato con true se l'upload va a buon fine, false altrimenti.
      */
-    public static final void uploadUserImage(Uri file, Context context, ClosureBoolean closureBool){
+    public static final void uploadUserImage(Uri file, ClosureBoolean closureBool){
         if (!AuthHelper.isLoggedIn()){
             if (closureBool != null) closureBool.closure(false);
             return;
@@ -417,11 +440,12 @@ public class Utenti extends ResultsConverter {
         });
     }
 
-    /** Download the user image from Firebase Storage.
+    /**
+     * Metodo che permette di scaricare l'immagine di profilo dell'utente loggato da Firebase Storage.
      *
-     * User must be logged-in.
+     * L'immagine deve esistere altrimenti non è garantito il corretto funzionamento.
      *
-     * @param closureBitmap get called with the Bitmap if the task is successful, null otherwise.
+     * @param closureBitmap invocato con una bitmap e se il download va a buon fine, null altrimenti.
      */
     public static final void downloadUserImage(ClosureBitmap closureBitmap){
         if (!AuthHelper.isLoggedIn()){
@@ -433,6 +457,15 @@ public class Utenti extends ResultsConverter {
         StorageHelper.downloadImage(finalChildName,closureBitmap);
     }
 
+    /**
+     * Metodo che permette di scaricare l'immagine di profilo dell'utente con
+     * l'id passato come parametro da Firebase Storage.
+     *
+     * L'immagine deve esistere altrimenti non è garantito il corretto funzionamento.
+     *
+     * @param userId id dell'utente di cui si vuole scaricare l'immagine del profilo
+     * @param closureBitmap invocato con una bitmap e se il download va a buon fine, null altrimenti.
+     */
     public static final void downloadUserImage(String userId, ClosureBitmap closureBitmap){
         if (!AuthHelper.isLoggedIn()){
             if (closureBitmap != null) closureBitmap.closure(null);
@@ -442,12 +475,13 @@ public class Utenti extends ResultsConverter {
         String finalChildName = UTENTI_COLLECTION + "/" + userId + "/immagineProfilo";
         StorageHelper.downloadImage(finalChildName,closureBitmap);
     }
-  
-    /** Download the user image from Firebase Storage.
+
+    /**
+     * Metodo che permette di scaricare l'immagine di profilo dell'utente loggato da Firebase Storage.
      *
-     * User must be logged-in.
+     * L'immagine deve esistere altrimenti non è garantito il corretto funzionamento.
      *
-     * @param closureResult get called with the Bitmap if the task is successful, null otherwise.
+     * @param closureResult invocato con un temp file nella chache se il download va a buon fine, null altrimenti.
      */
     public static final void downloadUserImage(ClosureResult<File> closureResult){
         if (!AuthHelper.isLoggedIn()){
@@ -459,11 +493,14 @@ public class Utenti extends ResultsConverter {
         StorageHelper.downloadImage(finalChildName,closureResult);
     }
 
-    /** Download the user image from Firebase Storage.
+    /**
+     * Metodo che permette di scaricare l'immagine di profilo dell'utente con
+     * l'id passato come parametro da Firebase Storage.
      *
-     * User must be logged-in.
+     * L'immagine deve esistere altrimenti non è garantito il corretto funzionamento.
      *
-     * @param closureResult get called with the Bitmap if the task is successful, null otherwise.
+     * @param userId id dell'utente di cui si vuole scaricare l'immagine del profilo
+     * @param closureResult invocato con un temp file nella chache se il download va a buon fine, null altrimenti.
      */
     public static final void downloadUserImage(String userId,ClosureResult<File> closureResult){
         if (!AuthHelper.isLoggedIn()){

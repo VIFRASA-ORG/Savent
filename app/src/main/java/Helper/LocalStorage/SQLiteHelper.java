@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import Helper.NotificationHelper;
-import Model.Pojo.Notification;
-import Model.Pojo.TemporaryExposureKey;
+import Model.POJO.Notification;
+import Model.POJO.TemporaryExposureKey;
 
 
 /**

@@ -1,4 +1,4 @@
-package Model.Pojo;
+package Model.POJO;
 
 import android.net.Uri;
 import com.google.firebase.firestore.DocumentId;

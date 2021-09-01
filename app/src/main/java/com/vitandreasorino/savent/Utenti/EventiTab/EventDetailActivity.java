@@ -28,12 +28,12 @@ import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 import Helper.AuthHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureResult;
-import Model.DB.Eventi;
-import Model.DB.Gruppi;
-import Model.DB.Partecipazioni;
-import Model.DB.Utenti;
-import Model.Pojo.Evento;
-import Model.Pojo.Utente;
+import Model.DAO.Eventi;
+import Model.DAO.Gruppi;
+import Model.DAO.Partecipazioni;
+import Model.DAO.Utenti;
+import Model.POJO.Evento;
+import Model.POJO.Utente;
 
 public class EventDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 

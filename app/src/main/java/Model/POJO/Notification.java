@@ -1,4 +1,4 @@
-package Model.Pojo;
+package Model.POJO;
 
 import java.util.Calendar;
 

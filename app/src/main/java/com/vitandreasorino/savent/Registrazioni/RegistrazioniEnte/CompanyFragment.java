@@ -26,9 +26,9 @@ import java.util.regex.Pattern;
 
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
-import Model.DB.Enti;
-import Model.DB.GenericUser;
-import Model.Pojo.Ente;
+import Model.DAO.Enti;
+import Model.DAO.GenericUser;
+import Model.POJO.Ente;
 
 
 public class CompanyFragment extends Fragment implements View.OnFocusChangeListener {

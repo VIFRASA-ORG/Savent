@@ -18,7 +18,7 @@ import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 import java.util.Calendar;
 import java.util.Map;
 import Helper.LocalStorage.SQLiteHelper;
-import Model.Pojo.Notification;
+import Model.POJO.Notification;
 
 
 /**
@@ -103,7 +103,7 @@ public class NotificationHelper {
      *
      * @param n FCM message body received.
      */
-    public static void sendNotification(Context context, Model.Pojo.Notification n, @Nullable Integer icon, long id) {
+    public static void sendNotification(Context context, Model.POJO.Notification n, @Nullable Integer icon, long id) {
         Intent intent = new Intent(context, NotificationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(NotificationActivity.FROM_NOTIFICATION_INTENT,true);

@@ -34,11 +34,11 @@ import java.util.Date;
 
 import Helper.AuthHelper;
 import Helper.ImageHelper;
-import Model.DB.Eventi;
-import Model.DB.Gruppi;
-import Model.DB.Utenti;
-import Model.Pojo.Evento;
-import Model.Pojo.Gruppo;
+import Model.DAO.Eventi;
+import Model.DAO.Gruppi;
+import Model.DAO.Utenti;
+import Model.POJO.Evento;
+import Model.POJO.Gruppo;
 
 public class NewEvent extends AppCompatActivity {
 

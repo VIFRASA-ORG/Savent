@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import Helper.NotificationHelper;
-import Model.DB.Utenti;
+import Model.DAO.Utenti;
 import Model.LogDebug;
 
 
@@ -46,7 +46,7 @@ public class NotificationService extends FirebaseMessagingService {
             Log.d(LogDebug.FIREBASE_NOTIFICATION, "Message data payload: " + remoteMessage.getData());
 
             //Creazione di un oggetto di calsse Notification con le carateristiche presenti nel payload ricevuto
-            Model.Pojo.Notification n = NotificationHelper.getNotificationFromPayload(this,remoteMessage.getData());
+            Model.POJO.Notification n = NotificationHelper.getNotificationFromPayload(this,remoteMessage.getData());
 
             /**
              * Salvataggio della notifica all'interno del database SQLite con

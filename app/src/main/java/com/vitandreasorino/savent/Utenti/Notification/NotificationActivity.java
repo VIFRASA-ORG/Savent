@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +26,7 @@ import java.util.List;
 
 import Helper.NotificationHelper;
 import Helper.LocalStorage.SQLiteHelper;
-import Model.Pojo.Notification;
+import Model.POJO.Notification;
 
 public class NotificationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 

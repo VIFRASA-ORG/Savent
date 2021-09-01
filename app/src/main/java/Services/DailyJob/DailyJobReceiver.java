@@ -14,10 +14,10 @@ import Helper.AuthHelper;
 import Helper.LocalStorage.SQLiteHelper;
 import Helper.LocalStorage.SharedPreferencesHelper;
 import Helper.NotificationHelper;
-import Model.DB.TemporaryExposureKeys;
-import Model.DB.Utenti;
+import Model.DAO.TemporaryExposureKeys;
+import Model.DAO.Utenti;
 import Model.LogDebug;
-import Model.Pojo.Notification;
+import Model.POJO.Notification;
 
 
 /**

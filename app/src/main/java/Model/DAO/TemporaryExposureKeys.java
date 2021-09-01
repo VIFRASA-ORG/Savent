@@ -1,4 +1,4 @@
-package Model.DB;
+package Model.DAO;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -19,26 +19,43 @@ import Helper.LocalStorage.SQLiteHelper;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
-import Model.Pojo.CodiceComunicazioneTampone;
-import Model.Pojo.TemporaryExposureKey;
+import Model.POJO.CodiceComunicazioneTampone;
+import Model.POJO.TemporaryExposureKey;
 
-
-
+/**
+ * Classe DAO (Data Access Object) che fornisce tutti i metodi
+ * per ritrovare informazioni o dati riguardanti i TEK
+ * memorizzati su firestore sia nella collection "TemporaryExposureKeys" che "Positivi"
+ * contententi rispetivamente tutti i TEK generati e tutti i TEK di utenti positivi.
+ *
+ * Molti valori di ritorno fanno uso appunto della relativa classe POJO TemporaryExposureKey.
+ *
+ * Implementa la classe astratta ResulConverter per permettere una immediata conversione
+ * dei result provenienti dai task di Firebase in oggetti di classe TemporaryExposureKey.
+ */
 public class TemporaryExposureKeys extends ResultsConverter{
 
+    /**
+     * NOMI DELLE COLLECTION SU FIREBASE
+     * La prima indica la tabella che genera i nuovi TEK
+     * La seconda indica la tabella dove vengono messi i TEK di utenti positivi.
+     */
     private static final String TEK_GENERATION_COLLECTION = "TemporaryExposureKeys";
     private static final String POSITIVI_COLLECTION = "Positivi";
 
+    /**
+     * COSTANTI
+     */
     public static final int DANGER_CONTACT_THRESHOLD = 20;
     public static final int DANGER_CONTACT_SINGLE_VALUE = 5;
 
 
     /**
-     * Method used to let generate to the firebase server, a new TEK for the current device.
-     * The new TEK is also saved into the TemporaryExposureKeys local SQLite table.
+     * Metodo che lascia creare un nuovo TEK per il device corrente al server Firebase.
+     * Il nuovo TEK viene poi salvato nella tabella TemporaryExposureKey del database locale SQLite.
      *
-     * @param context the activity context.
-     * @param closureRes closure invoked with the new TEK if the task is successful, null otherwise.
+     * @param context contesto dell'activity.
+     * @param closureRes invocato con la stringa contenente il nuovo TEK se il task va a buon fine, null altrimenti.
      */
     public final static void generateNewTEK(Context context, ClosureResult<String> closureRes){
         TemporaryExposureKey t = new TemporaryExposureKey();
@@ -64,6 +81,7 @@ public class TemporaryExposureKeys extends ResultsConverter{
      * Metodo che effettua le seguenti transaction, controllo dell'utilizzo di un tampone, inserimento dello status sanitario inerente
      * al tampone e inserimento in caso di positività di tutti i codici generati in locale.
      * (In caso una delle seguenti transaction non va a buon fine, tutte le altre transaction termineranno la loro esecuzione)
+     *
      * @param codiceComunicazioneTampone stringa contenente il codice identificativo del tampone
      * @param codici arrayList contenente tutti i codici dell'utente che è risultato positivo da inserire all'interno di Firestore
      * @param closureBoolean
@@ -108,6 +126,7 @@ public class TemporaryExposureKeys extends ResultsConverter{
     /**
      * Metodo che effettua le seguenti transaction, controllo dell'utilizzo di un tampone, inserimento dello status sanitario inerente al tampone.
      * (In caso una delle seguenti transaction non va a buon fine, tutte le altre transaction termineranno la loro esecuzione)
+     *
      * @param codiceComunicazioneTampone stringa contenente il codice identificativo del tampone
      * @param closureBoolean
      */
@@ -148,6 +167,7 @@ public class TemporaryExposureKeys extends ResultsConverter{
 
     /**
      * Metodo per l'inserimento dei codici positivi dell'utente loggato su Firestore
+     *
      * @param p oggetto della classe TemporaryExposureKey
      * @param closureResult in caso di successo ritorna la stringa contenente l'id, altrimenti null.
      */

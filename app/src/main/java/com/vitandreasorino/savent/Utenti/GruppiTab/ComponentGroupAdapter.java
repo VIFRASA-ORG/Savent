@@ -15,7 +15,7 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Pojo.Utente;
+import Model.POJO.Utente;
 
 public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
 

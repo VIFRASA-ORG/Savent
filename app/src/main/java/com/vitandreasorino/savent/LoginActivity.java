@@ -25,9 +25,9 @@ import java.util.regex.Pattern;
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureBoolean;
-import Model.DB.Enti;
-import Model.DB.TemporaryExposureKeys;
-import Model.DB.Utenti;
+import Model.DAO.Enti;
+import Model.DAO.TemporaryExposureKeys;
+import Model.DAO.Utenti;
 import Services.DailyJob.DailyJobReceiver;
 
 

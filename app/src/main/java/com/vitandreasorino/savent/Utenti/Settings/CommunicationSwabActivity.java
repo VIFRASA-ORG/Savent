@@ -21,12 +21,12 @@ import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Helper.LocalStorage.SQLiteHelper;
 import Model.Closures.ClosureBoolean;
-import Model.DB.CodiciComunicazioneTampone;
-import Model.DB.Enti;
-import Model.DB.TemporaryExposureKeys;
-import Model.DB.Utenti;
-import Model.Pojo.CodiceComunicazioneTampone;
-import Model.Pojo.TemporaryExposureKey;
+import Model.DAO.CodiciComunicazioneTampone;
+import Model.DAO.Enti;
+import Model.DAO.TemporaryExposureKeys;
+import Model.DAO.Utenti;
+import Model.POJO.CodiceComunicazioneTampone;
+import Model.POJO.TemporaryExposureKey;
 
 public class CommunicationSwabActivity extends AppCompatActivity {
 
