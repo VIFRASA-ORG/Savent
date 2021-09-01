@@ -42,10 +42,10 @@ public class EventFragment extends Fragment {
         pager = (ViewPager2) view.findViewById(R.id.pagerSearchAndNearbyEvents);
         pager.setSaveEnabled(false);
 
-        //Setting the custom made adapter
+        //Impostazione dell'adattatore personalizzato
         pager.setAdapter(new CollectionAdapter(this));
 
-        //Attaching the layout mediator
+        //Attacco il mediatore di layout
         new TabLayoutMediator(upperTabBar, pager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
@@ -63,13 +63,13 @@ public class EventFragment extends Fragment {
             }
         }).attach();
 
-        //Handling the on page change event in such a way to disable the scroll left gesture when the map fragment in shown
+        //Gestire l'evento di cambio pagina in modo tale da disabilitare il gesto di scorrimento a sinistra quando viene mostrato il frammento di mappa
         pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
 
-                //disabling the gesture in the map view and re-enabling it in the list view.
+                //disabilitazione del gesto nella visualizzazione mappa e riabilitazione nella visualizzazione elenco.
                 if(position == 0 || position == 1) pager.setUserInputEnabled(true);
                 else if (position == 2) pager.setUserInputEnabled(false);
             }
@@ -91,7 +91,7 @@ public class EventFragment extends Fragment {
 }
 
 /**
- * Adepter specifically created to show the two fragment inside the Event Fragment
+ * Adapter creato appositamente per mostrare i due frammenti all'interno del Frammento Evento
  */
 class CollectionAdapter extends FragmentStateAdapter{
 
