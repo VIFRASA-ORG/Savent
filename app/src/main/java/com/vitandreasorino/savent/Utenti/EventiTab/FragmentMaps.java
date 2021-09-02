@@ -53,13 +53,14 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
     private boolean isLocationGranted = false;
     Location lastKnownLocation = null;
 
-    //The default location is in Rome
+    //La locazione di default è a Roma
     LatLng defaultLocation = new LatLng(41.9027835,12.4963655);
     FusedLocationProviderClient fusedLocationProviderClient;
 
-    //List of all the marker actually rendered in the map
+    //Elenco di tutti i marker effettivamente resi nella mappa
     List<Marker> markerList = new ArrayList<>();
-    //List of all the event actually rendered in the map
+
+    //Elenco di tutti gli eventi effettivamente nella mappa
     List<Evento> eventList = new ArrayList<>();
 
     private final int MAP_CAMERA_ZOOM = 10;
@@ -77,7 +78,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Setting up the event for the button used to search in the zone
+        //Impostazione dell'evento per il pulsante utilizzato per la ricerca nella zona
         searchButtonLinearLayout = view.findViewById(R.id.searchInThisZoneLinearLayout);
         buttonMyPosition = view.findViewById(R.id.buttonMyPosition);
         buttonMyPosition.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +100,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
     }
 
     /**
-     * Ask for the location permission, if not already granted.
+     * Richiedi il permesso di localizzazione, se non già concesso.
      */
     private void getLocationPermission(){
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
@@ -109,6 +110,13 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
         }
     }
 
+
+    /**
+     * Controllo che il permesso di ACCESS_FINE_LOCATION sia garantito
+     * @param requestCode codice di richiesta per controllare se il permesso è stato concesso
+     * @param permissions permessi da controllare
+     * @param grantResults 0 se il permesso è GRANTED, -1 se il permesso è DENIED.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -124,17 +132,16 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
     }
 
     /**
-     * On click event for the "searchButtonLinearLayout" button.
-     *
+     * On click event per il bottone "searchButtonLinearLayout"
      * @param view
      */
     public void searchInThisZoneOnClick(View view){
 
-        //Get the visible region on the map, that is the rectangular portion of the map shown to the user
+        //Ottieni la regione visibile sulla mappa, ovvero la porzione rettangolare della mappa mostrata all'utente
         VisibleRegion r = map.getProjection().getVisibleRegion();
         removeAllMarker();
 
-        //Downloading the new event present in the actual visible region.
+        //Download del nuovo evento presente nell'attuale regione visibile.
         Eventi.getEventInRegion(r, closureList ->{
             for(Evento e : closureList){
                 markerList.add(map.addMarker(new MarkerOptions()
@@ -144,13 +151,13 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
                 eventList.add(e);
             }
 
-            //fading out the button after updating the marker
+            //dissolvenza(fadeOut) del pulsante dopo l'aggiornamento del marker
             AnimationHelper.fadeOut(searchButtonLinearLayout,500);
         });
     }
 
     /**
-     * Remove all the marker in the map.
+     * Rimozione di tutti i marker presenti sulla mappa.
      */
     private void removeAllMarker(){
         for(Marker m : markerList){
@@ -161,12 +168,12 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
     }
 
     /**
-     * Show on the map, all events present in a radius specified as a parameter starting from a point on the map
-     * @param refLocation starting point on the map
-     * @param radius radius of the area
+     * Mostra sulla mappa tutti gli eventi presenti in un raggio specificato come parametro a partire da un punto sulla mappa
+     * @param refLocation punto di partenza sulla mappa
+     * @param radius raggio dell'area
      */
     private void showAllNearbyEvents(LatLng refLocation, int radius){
-        //Downloading all the nearby event
+        //Download di tutti gli eventi nelle vicinanze
         Eventi.getNearbyEvent(refLocation,radius, closureList -> {
             for(Evento e : closureList){
                 markerList.add(map.addMarker(new MarkerOptions()
@@ -179,7 +186,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
     }
 
     /**
-     * Move the map camera to the default location
+     * Sposta la fotocamera della mappa nella posizione predefinita
      */
     private void moveToDefaultLocation(){
         map.animateCamera(CameraUpdateFactory
@@ -187,13 +194,13 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
     }
 
     /**
-     * Method that try to get the device location and, if it is found,
-     * it moves the map camera over.
+     * Metodo che cerca di ottenere la posizione del dispositivo e, se lo trova,
+     * sposta la telecamera della mappa.
      */
     private void getDeviceLocation(){
         /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
+         * Ottieni la posizione migliore e più recente del dispositivo, che può essere nulla in rari
+         * casi quando una posizione non è disponibile.
          */
         try {
             if (isLocationGranted) {
@@ -202,7 +209,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
+                            // Imposta la posizione della fotocamera sulla mappa sulla posizione corrente del dispositivo.
                             lastKnownLocation = task.getResult();
                             if (lastKnownLocation != null) {
                                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(
@@ -213,20 +220,20 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
 
                             }
                         } else {
-                            //If the task is not successful, move the camera to the defualt location.
+                            //Se l'attività non ha esito positivo, sposta la telecamera nella posizione predefinita.
                             moveToDefaultLocation();
 
-                            //Download all the event in the nearby of the default location.
+                            //Scarica tutti gli eventi nelle vicinanze della posizione predefinita.
                             showAllNearbyEvents(defaultLocation,MAP_NEARBY_RADIUS);
                             map.getUiSettings().setMyLocationButtonEnabled(true);
                         }
                     }
                 });
             }else{
-                //If the task is not successful, move the camera to the defualt location.
+                //Se l'attività non ha esito positivo, sposta la telecamera nella posizione predefinita.
                 moveToDefaultLocation();
 
-                //Download all the event in the nearby of the default location.
+                //Scarica tutti gli eventi nelle vicinanze della posizione predefinita.
                 showAllNearbyEvents(defaultLocation,MAP_NEARBY_RADIUS);
                 map.getUiSettings().setMyLocationButtonEnabled(true);
             }
@@ -236,7 +243,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
     }
 
     /**
-     * Update the map ui component with the new parameter
+     * Aggiorna il componente dell'interfaccia utente della mappa con il nuovo parametro
      */
     @SuppressLint({"LongLogTag", "MissingPermission"})
     private void updateLocationUi(){
@@ -261,11 +268,8 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
 
 
     /*
-
-        OVERRIDE OF SOME METHOD IN THE OnMapReadyCallback INTERFACE
-
-     */
-
+        OVERRIDE DI ALCUNI METODI NELL'INTERFACCIA OnMapReadyCallback
+    */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
@@ -305,15 +309,13 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
 
 
 
-    /*
-
-        OVERRIDE OF THE METHOD IN THE OnCameraIdleListener INTERFACE
-        It is triggered when the camera stop moving
-
+     /*
+        OVERRIDE DEL METODO NELL'INTERFACCIA OnCameraIdleListener
+        Si attiva quando la telecamera smette di muoversi
      */
 
     /**
-     * Show the searchInThisArea button when the camera stop moving.
+     * Mostra il pulsante searchInThisArea quando la telecamera si ferma.
      */
     @Override
     public void onCameraIdle() {
@@ -324,13 +326,10 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback, Google
 
 
 
-    /*
-
-        OVERRIDE OF THE METHOD IN THE OnInfoWindowClickListener INTERFACE
-        It is triggered when you click on the InfoWindow of a a marker
-
+     /*
+        OVERRIDE DEL METODO NELL'INTERFACCIA OnInfoWindowClickListener
+        Viene attivato quando si fa clic sulla finestra Info di un marker
      */
-
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
         int pos = markerList.indexOf(marker);
