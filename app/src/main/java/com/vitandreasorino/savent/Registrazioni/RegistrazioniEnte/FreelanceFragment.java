@@ -50,7 +50,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //Definizione e inizializzazione del fragment
         View view = inflater.inflate(R.layout.fragment_freelance, container, false);
 
         buttonCertificatoPartitaIvaFreelance = (Button) view.findViewById(R.id.buttonCertificatoPartitaIvaFreelance);
@@ -78,8 +78,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
                 imagePartitaIvaFreelance.setType("image/*");
                 imagePartitaIvaFreelance.setAction(Intent.ACTION_GET_CONTENT);
 
-                // pass the constant to compare it
-                // with the returned requestCode
+                //Si passa la costante per il confronto con il requestCode ritornato
                 startActivityForResult(Intent.createChooser(imagePartitaIvaFreelance, "Select Picture"), 200);
             }
         });
@@ -105,8 +104,8 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
     }
 
     /**
-     * Add to all the component in the view the focus change listener
-     * to reset the background when an error occur
+     * Si aggiunge a tutti i componenti nella vista il listener di cambio focus
+     * per ripristinare lo sfondo quando si verifica un errore
      */
     private void setAllFocusChanged(){
         editTextPartitaIvaFreelance.setOnFocusChangeListener(this);
@@ -122,7 +121,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
     }
 
     /**
-     * Remove the focus from all the components.
+     * Si rimuovono i focus da tutti i componenti
      */
     private void removeAllFocus(){
         editTextPartitaIvaFreelance.clearFocus();
@@ -137,6 +136,11 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
         editTextConfermaPasswordFreelance.clearFocus();
     }
 
+    /**
+     * Metodo chiamato quando lo stato di attivazione di una vista è cambiato.
+     * @param v : la vista il cui stato è cambiato.
+     * @param hasFocus : Il nuovo stato di messa a fuoco del v.
+     */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(hasFocus){
@@ -144,7 +148,9 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
         }
     }
 
-
+    /**
+     * Si controllano i dati inseriti in input per la registrazione del libero professionista
+     */
     private void controlloInputUtenteRegistrazioneFreelance() {
 
         String numeroPartitaIva, nomeFreelance, cognomeFreelance, codiceFiscaleFreelance, residenzaFreelance,
@@ -171,68 +177,91 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
 
 
             if(validazionePartitaIva(numeroPartitaIva) == false) {
+                //Se la partita iva inserita è errata, il color state list cambia colore e diventa rosso
                 editTextPartitaIvaFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se la partita iva inserita è corretta, il color state list rimane grigio
                 editTextPartitaIvaFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneNomeFreelance(nomeFreelance) == false) {
+                //Se il nome del libero professionista inserito è errato, il color state list cambia colore e diventa rosso
                 editTextNomeFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se il nome del libero professionista inserito è corretto, il color state list rimane grigio
                 editTextNomeFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneCognomeFreelance(cognomeFreelance) == false) {
+                //Se il cognome del libero professionista inserito è errato, il color state list cambia colore e diventa rosso
                 editTextCognomeFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se il cognome del libero professionista inserito è corretto, il color state list rimane grigio
                 editTextCognomeFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneCodiceFiscale(codiceFiscaleFreelance) == false) {
+                //Se il cf inserito è errato, il color state list cambia colore e diventa rosso
                 editTextCodiceFiscaleFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se  il cf inserito è corretto, il color state list rimane grigio
                 editTextCodiceFiscaleFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneResidenzaFreelance(residenzaFreelance) == false) {
+                //Se la residenza inserita è errata, il color state list cambia colore e diventa rosso
                 editTextResidenzaFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se la residenza inserita è corretta, il color state list rimane grigio
                 editTextResidenzaFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneNumeroIscrizioneAlbo(numeroIscrizioneAlbo) == false) {
+                //Se il numero di iscrizione all'albo inserito è errato, il color state list cambia colore e diventa rosso
                 editTextNumeroIscrizioneAlboFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se il numero di iscrizione all'albo inserito è corretto, il color state list rimane grigio
                 editTextNumeroIscrizioneAlboFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneTelefonoFreelance(telefonoFreelance) == false) {
+                //Se il numero di telefono inserito è errato, il color state list cambia colore e diventa rosso
                 editTextTelefonoFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se il numero di telefono inserito è corretto, il color state list rimane grigio
                 editTextTelefonoFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneEmailFreelance(emailFreelance) == false) {
+                //Se l'email inserita è errata, il color state list cambia colore e diventa rosso
                 editTextEmailFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se  l'email inserita è corretta, il color state list rimane grigio
                 editTextEmailFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
+            //Dopo si controlla la password inserita se è corretta e se non contiene spazi
             if(validazionePasswordFreelance(passwordFreelance) == false || passwordFreelance.contains(" ") ) {
+                //Se la password inserita è errata segna il color state list cambia colore e diventa rosso
                 editTextPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 editTextConfermaPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                //Comunica i caratteri da inserire per una password corretta
                 Toast.makeText(getActivity(), getString(R.string.passwordErrataRegister), Toast.LENGTH_LONG).show();
                 return;
             }else if(!passwordFreelance.equals(confermaPasswordFreelance )){
+                //Si segna il color state list di rosso se si sbaglia a reinserire la conferma della password
                 editTextPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 editTextConfermaPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                //Comunica all'utente che le due password non corrispondono
                 Toast.makeText(getActivity(), getString(R.string.passwordsNotMatching), Toast.LENGTH_LONG).show();
                 return;
             }else{
+                //altrimenti si segna il color state list di grigio se la password e la riconferma della sua password sono corrette
                 editTextPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
                 editTextConfermaPasswordFreelance.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
+            //Se il certificato per la partita iva non è stato selezionato comunica all'utente che deve inserirlo
             if(pathCertificatoPartitaIva == null) {
                 textViewLabelCaricamento.setVisibility(View.INVISIBLE);
                 Toast.makeText(getActivity(),R.string.errorPIVA,Toast.LENGTH_LONG).show();
@@ -253,7 +282,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
             e.setNumeroIscrizioneAlboLP(numeroIscrizioneAlbo);
             e.setCertificatoPIVA(pathCertificatoPartitaIva);
 
-            //Check if the phone number is already taken
+            //Verifica se il numero di telefono inserito è già stato inserito nel database
             GenericUser.isPhoneNumberAlreadyTaken(telefonoFreelance,closureBool -> {
                 if(!closureBool){
                     e.setNumeroTelefono(telefonoFreelance);
@@ -268,24 +297,30 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
         }
     }
 
-
+    /**
+     * Si passano e si caricano i dati inseriti sul server
+     * @param ente : si riferisce all'ente in questione
+     * @param email : stringa che indica l'email di questo nuovo ente
+     * @param password : stringa che indica la password di questo nuovo ente
+     */
     private void computeRegistrationToServer(Ente ente, String email, String password){
         Enti.createNewEnteLiberoProfessionista(ente,email,password,closureBool ->{
             if(closureBool){
-                /*  If the Ente creation is successful, execute the logout from the account because
-                *   it has to be enabled from the service provider after having verified all the information.
-                * */
+                //Se la creazione dell'ente va a buon fine, esegui il logout dall'account perché
+                //deve essere abilitato dal fornitore del servizio dopo aver verificato tutte le informazioni
 
-                //LogOut
                 AuthHelper.logOut(getContext());
+                //Viene comunicato all'utente che la creazione dell'ente (libero professionista) è andata a buon fine
                 Toast.makeText(getActivity(),R.string.enteCreated,Toast.LENGTH_LONG).show();
 
-                //Go back to the first page
+                //Ritorna alla pagina principale del login/Sign In activity
                 Intent firstPage = new Intent(getActivity(), LogSingInActivity.class);
-                firstPage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the stack all the previous Activity.
+                //Si rimuovono dallo stack tutte le precedenti attività
+                firstPage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(firstPage);
                 getActivity().finish();
             }else{
+                //altrimenti si comunica che la registrazione dell'ente(libero professionista) è fallita
                 Toast.makeText(getActivity(), getString(R.string.registrazioneErrore), Toast.LENGTH_LONG).show();
                 AuthHelper.logOut(getContext());
                 enableAllComponents();
@@ -293,6 +328,9 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
         });
     }
 
+    /**
+     * Si disabilitano tutte le componenti presenti nel layout
+     */
     private void disableAllComponents(){
         editTextPartitaIvaFreelance.setEnabled(false);
         editTextNomeFreelance.setEnabled(false);
@@ -311,6 +349,9 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
         AnimationHelper.fadeIn(progressBar,1000);
     }
 
+    /**
+     * Si abilitano tutte le componenti presenti nel layout
+     */
     private void enableAllComponents(){
         editTextPartitaIvaFreelance.setEnabled(true);
         editTextNomeFreelance.setEnabled(true);
@@ -353,7 +394,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
 
 
     /**
-     * Controllo che il numero di partita Iva rispetti le seguenti caratteristiche:
+     * Controlla che il numero di partita Iva rispetti le seguenti caratteristiche:
      * lunghezza di 11, consentiti solo caratteri numerici.
      * @param numeroPartitaIva stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
@@ -373,7 +414,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
 
 
     /**
-     * Controllo che il nome in input rispetti le seguenti caratteristiche:
+     * Controlla che il nome in input rispetti le seguenti caratteristiche:
      * stringa non vuota, lunghezza compresa tra 3 e 15 caratteri,
      * solo caratteri letterali, stringa priva di spazi.
      * @param controlloNomeFreelance stringa da controllare
@@ -394,7 +435,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
 
 
     /**
-     * Controllo che il cognome in input rispetti le seguenti caratteristiche:
+     * Controlla che il cognome in input rispetti le seguenti caratteristiche:
      * stringa non vuota, lunghezza compresa tra 3 e 15 caratteri,
      * solo caratteri letterali, stringa priva di spazi.
      * @param controlloCognomeFreelance stringa da controllare
@@ -435,7 +476,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
 
 
     /**
-     * Controllo che la residenza dell'azienda sia formattata correttamente
+     * Controlla che la residenza dell'azienda sia formattata correttamente
      * Va inserito prima il numero civico e poi successivamente la via
      * @param controlloResidenzaFreelance stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
@@ -455,7 +496,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
 
 
     /**
-     * Controllo che il numero di iscrizione all'albo rispetti le seguenti caratteristiche:
+     * Controlla che il numero di iscrizione all'albo rispetti le seguenti caratteristiche:
      * lunghezza compresa tra 1 e 8, consentiti solo caratteri numerici
      * @param controlloNumeroIscrizioneAlbo stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
@@ -475,7 +516,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
 
 
     /**
-     * Controllo che il numero di telefono rispetti le seguenti caratteristiche:
+     * Controlla che il numero di telefono rispetti le seguenti caratteristiche:
      * lunghezza compresa tra 9 e 11, consentiti solo caratteri numerici
      * @param controlloTelefono stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
@@ -495,7 +536,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
 
 
     /**
-     * Controllo che l'email in input rispetti la forma standard delle email.
+     * Controlla che l'email in input rispetti la forma standard delle email.
      * @param controlloEmail stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
      */
@@ -519,7 +560,7 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
 
 
     /**
-     * Controllo che la password in input rispetti le seguenti caratteristiche:
+     * Controlla che la password in input rispetti le seguenti caratteristiche:
      * contenta un carattere maiuscolo, contenga un carattere minuscolo e contenga
      * un carattere numerico e essa deve essere di lunghezza compresa tra 8 e 20 caratteri.
      * @param controlloPassword stringa da controllare
@@ -538,19 +579,25 @@ public class FreelanceFragment extends Fragment implements View.OnFocusChangeLis
         return matchTrovato;
     }
 
+    /**
+     * Metodo che serve per la definizione delle attività rispetto alle scelte relative alla modifica dell'immagine profilo dell'azienda.
+     * @param requestCode :codice di richiesta intero originariamente fornito a startActivityForResult(),
+     * che consente di identificare da chi proviene questo risultato
+     * @param resultCode :codice risultato intero restituito dall'attività figlia tramite il suo setResult().
+     * @param data :un intento che può restituire i dati della modifica al chiamante.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
 
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
+            //Si confronta il resultCode con la costante SELECT_PICTURE
             if (requestCode == 200) {
-                // Get the url of the image from data
+                //Si ottiene l'url dell'immagine del profilo dell'ente dai dati
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
-                    // update the preview image in the layout
+                    //Si modifica l'anteprima dell'immagine nel layout
                     pathCertificatoPartitaIva = selectedImageUri;
                     textViewLabelCaricamento.setVisibility(View.VISIBLE);
                 }else{

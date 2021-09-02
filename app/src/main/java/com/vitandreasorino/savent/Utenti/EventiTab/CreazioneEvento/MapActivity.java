@@ -36,7 +36,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapView = (MapView) findViewById(R.id.mapViewEvent);
         mapView.onCreate(savedInstanceState);
 
-
+        // ritorna un istanza di GoogleMap attraverso un callback.
         mapView.getMapAsync(this);
 
 
@@ -66,11 +66,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapView.onLowMemory();
     }
 
+
+    /**
+     * Metodo da utilizzare quando la mappa è pronta per essere utilizzata
+     * @param googleMap
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
         map = googleMap;
 
+        // Ottenimento dei dati primitivi mediante intent utili nel caso in cui la mappa sia stata
+        // precedentemente aperta e sia stato già inserito il marker, in questo modo riaprendola
+        // verrà salvato il marker selezionato in precedenza sulla mappa.
         isNotNull = getIntent().getBooleanExtra("isNotNull", false);
         latitudine = getIntent().getDoubleExtra("latitudine",0);
         longitudine = getIntent().getDoubleExtra("longitudine",0);
@@ -79,6 +87,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         marker.position(oggetto);
         map.clear();
 
+        // Controlla che non sia stato aggiunto un marker precedentemente, altrimenti
+        // fa inserire all'utente.
         if(isNotNull) {
             map.addMarker(marker);
         }
@@ -117,6 +127,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
+    /**
+     * Metodo per passare le cordinate inerenti alla latitudine e longitudine
+     * inserite all'interno della mappa, e successivamente chiude "MapActivity.java"
+     * @param view
+     */
     public void onLocation(View view) {
 
         Intent intent = new Intent();

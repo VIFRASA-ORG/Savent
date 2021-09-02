@@ -38,7 +38,10 @@ import Model.POJO.Gruppo;
 
 import static android.app.Activity.RESULT_OK;
 
-
+/**
+ * Activity inerente alla lista di tutti i gruppi a cui partecipi o sei admin.
+ * Permette la visualizzazione, ricerca e la creazione del gruppo.
+ */
 public class GroupFragment extends Fragment implements AdapterView.OnItemClickListener {
     List<Gruppo> listaGruppi = new ArrayList<>();
     ListView groupListView;
@@ -75,14 +78,11 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
 
         downloadDataList();
 
-        /**
-         * metodo che richiama la successiva classe abbinata allo scopo di creare un nuovo gruppo
-         * cliccando il tasto CreaGruppo
-         */
+
+        //pulsante che permette di creare un nuovo gruppo
         buttonCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent AddGroup = new Intent(getActivity(), com.vitandreasorino.savent.Utenti.GruppiTab.CreazioneGruppo.AddGroup.class);
                 startActivity(AddGroup);
             }
@@ -111,6 +111,10 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         }
     };
 
+    /**
+     * metodo che permette di rendere visibili la lista se è piena con relativo caricamento della progress bar, altrimenti lasciala invisibile.
+     * @param isDownloading
+     */
     private void toggleDownloadingElements(boolean isDownloading){
         if(isDownloading){
             AnimationHelper.fadeIn(progressBar,0);
@@ -121,13 +125,14 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         }
     }
 
-    /*Metodo che permette la visualizzazione dei gruppi salvati sul database, con successivo
+    /*Metodo che permette di scaricare e visualizzare i gruppi salvati sul database, con successivo
      * metodo che che controlla se ad ogni gruppo sono associate le rispettive immagini di profilo
      * abbinate
      */
     private void downloadDataList(){
         toggleDownloadingElements(true);
 
+        //lettura di tutti i gruppi dal db
         Gruppi.getAllMyGroups(new ClosureList<Gruppo>() {
             @Override
             public void closure(List<Gruppo> list) {
@@ -142,13 +147,13 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
                             });
                         }
                     }
-                    /* salvataggio della rispettiva lista letta dal database*/
+                    //salvataggio della rispettiva lista letta dal database
                     listaGruppi = list;
 
                     //istanzia l'adapter personalizzato
                     adapter = new GroupAdapter(getContext(), listaGruppi);
 
-                    // collegamento dell'adapter alla ListView
+                    // collegamento dell'adapter alla ListView dei gruppi
                     groupListView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
@@ -170,6 +175,10 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
 
     }
 
+    /**
+     * OVERRIDE DEI METODI NELL'INTERFACCIA SearchView.OnQueryTextListener
+     * Forza l'adapter a filtrare l'elemento della ListView in base alla query inserita nella barra di ricerca.
+     */
     SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
@@ -184,6 +193,15 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
         }
     };
 
+    /**
+     * Metodo che permette di cliccare un singolo gruppo dalla lista dei gruppi.
+     * Tale funzione ci permetterà di entrare nel dettaglio del singolo gruppo, anche attraverso la lista filtrata data dalla SearchView
+     * che ci permette di visualizzare la lista dei gruppi filtrata
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -202,6 +220,12 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
 
     }
 
+    /**
+     * metodo per aggiornare tutte le info dei gruppi mediante il GroupDetail
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -215,7 +239,7 @@ public class GroupFragment extends Fragment implements AdapterView.OnItemClickLi
 }
 
 /**
- * CastomAdapter creato per implementare la listaGruppi
+ * GroupAdapter creato per implementare la listaGruppi
  */
 class GroupAdapter extends BaseAdapter implements Filterable {
 
@@ -224,7 +248,7 @@ class GroupAdapter extends BaseAdapter implements Filterable {
     private Context context=null;
     ItemFilter mFilter = new ItemFilter();
 
-    //Costruttori
+    //Costruttore
     public GroupAdapter(Context context,List<Gruppo> groups) {
         this.groups=groups;
         this.context=context;
@@ -312,14 +336,11 @@ class GroupAdapter extends BaseAdapter implements Filterable {
         return mFilter;
     }
 
-
+    /**
+     * Gestisce le operazioni per il filtraggio della SearchView
+     */
     private class ItemFilter extends Filter{
 
-        /**
-         * Metodo utilizzato per eseguire l'operazione di filtraggio.
-         * @param constraint
-         * @return
-         */
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
@@ -331,9 +352,9 @@ class GroupAdapter extends BaseAdapter implements Filterable {
 
             Gruppo filterable;
 
+            //permette di leggere dalla lista dei gruppi solo i nomi per poter ricercarli attraverso la SearchView
             for (int i = 0; i < count; i++) {
                 filterable = list.get(i);
-                //permette di leggere dalla lista dei gruppi solo i nomi per poter ricercarli attraverso la SearchView
                 if (filterable.getNome().toLowerCase().contains(filterString)) {
                     nlist.add(filterable);
                 }
@@ -345,6 +366,12 @@ class GroupAdapter extends BaseAdapter implements Filterable {
             return results;
         }
 
+
+        /**
+         * stampa i risultati del filtro
+         * @param constraint
+         * @param results
+         */
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredData = (ArrayList<Gruppo>) results.values;

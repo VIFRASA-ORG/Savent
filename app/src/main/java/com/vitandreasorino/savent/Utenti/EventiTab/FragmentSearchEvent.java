@@ -55,15 +55,15 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     private SwipeRefreshLayout pullToRefresh;
     private SwipeRefreshLayout emptyViewPullToRefresh;
 
-    //List of event shown in he ListView.
+    //Elenco degli eventi mostrato in ListView.
     List<Evento> listaDiEventi = new ArrayList<>();
 
-    //Used to store the names of creator group in case the event is created by a group
-    //The key is the groupId, the value is the name of the group
+    //Utilizzato per memorizzare i nomi del gruppo di creatori nel caso in cui l'evento venga creato da un gruppo
+    //La chiave è il groupId, il valore è il nome del gruppo
     Map<String,String> groupsName = new HashMap<>();
     Map<String,Boolean> isAdminMap = new HashMap<>();
 
-    //Default visualization
+    //Visualizzazione predefinita
     SearchEventType pageVisualizationType = SearchEventType.ALL_EVENTS;
 
 
@@ -76,9 +76,9 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     }
 
     /**
-     * Constructor used to specify the visualization type.
+     * Costruttore per specificare il tipo di visualizzazione
      *
-     * @param mode the visualization type.
+     * @param mode il tipo di visualizzazione.
      */
     public FragmentSearchEvent(SearchEventType mode) {
         pageVisualizationType = mode;
@@ -109,8 +109,8 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
         adapter.notifyDataSetChanged();
 
         /**
-         * Setting the listener for the filterable search
-         * and for the click on the item in the list.
+         * Impostazione del listener per la ricerca filtrabile
+         * e per il click sulla voce della lista.
          */
         searchView.setOnQueryTextListener(this);
         eventListView.setOnItemClickListener(this);
@@ -156,9 +156,9 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     };
 
     /**
-     * Enable or disable the progress bar or the emptyTextView.
+     * Abilita o disabilita la barra di avanzamento o il emptyTextView.
      *
-     * @param isDownloading the flag indicating if the download is still going or not
+     * @param isDownloading il flag che indica se il download è ancora in corso o meno
      */
     private void toggleDownloadingElements(boolean isDownloading){
         if(isDownloading){
@@ -171,17 +171,17 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     }
 
     /**
-     * Method to download all the event in firebase in case the type of visualization is SearchEventType.ALL_EVENTS
+     * Metodo per scaricare tutti gli eventi in firebase nel caso in cui il tipo di visualizzazione sia SearchEventType.ALL_EVENTS
      */
     private void downloadAllEvents(){
         toggleDownloadingElements(true);
 
-        //Download all the event present in the firestore database
+        //Scarica tutti gli eventi presenti nel database firestore
         Eventi.getAllEvent(list -> {
             if(list != null){
 
                 for(Evento e : list){
-                    //download the image
+                    //Scarica l'immagine
                     if(e.getIsImageUploaded() == true){
                         Eventi.downloadEventImage(e.getId(),(ClosureBitmap) bitmap -> {
                             e.setImageBitmap(bitmap);
@@ -191,7 +191,7 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
                 }
                 listaDiEventi = list;
 
-                //Setting up the custom made adapter for the ListView.
+                //Configurazione dell'adattatore personalizzato per ListView.
                 adapter = new EventAdapter(getContext(),listaDiEventi);
                 eventListView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
@@ -202,17 +202,17 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     }
 
     /**
-     * Method to download all the event in firebase in case the type of visualization is SearchEventType.MY_EVENTS
+     * Metodo per scaricare tutti gli eventi in firebase nel caso in cui il tipo di visualizzazione sia SearchEventType.MY_EVENTS
      */
     private void downloadMyEvents(){
         toggleDownloadingElements(true);
 
-        //Download all the event present in the firestore database
+        //Scarica tutti gli eventi presenti nel database firestore
         Eventi.getAllMyEvents(list -> {
             if(list != null){
 
                 for(Evento e : list){
-                    //download the image
+                    //Scarica l'immagine
                     if(e.getIsImageUploaded() == true){
                         Eventi.downloadEventImage(e.getId(),(ClosureBitmap) bitmap -> {
                             e.setImageBitmap(bitmap);
@@ -220,7 +220,7 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
                         });
                     }
 
-                    //download the group name if the creator of the event is a group
+                    //scarica il nome del gruppo se il creatore dell'evento è un gruppo
                     if(!e.getIdGruppoCreatore().isEmpty()){
                         Gruppi.getGroupName(e.getIdGruppoCreatore(), pair -> {
                             if(pair != null){
@@ -234,7 +234,7 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
 
                 listaDiEventi = list;
 
-                //Setting up the custom made adapter for the ListView.
+                //Configurazione dell'adattatore personalizzato per ListView.
                 adapter = new EventAdapter(getContext(),listaDiEventi,groupsName);
                 eventListView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
@@ -246,9 +246,7 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
 
 
     /*
-
-        OVERRIDE OF THE METHOD IN THE AdapterView.OnItemClickListener INTERFACE
-
+        OVERRIDE DEL METODO NELL'INTERFACCIA AdapterView.OnItemClickListener
      */
 
     @Override
@@ -278,7 +276,7 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
                     }
                 }
             }else{
-                //Means that the creator of the event is the logged in user
+                //Significa che l'autore dell'evento è l'utente che ha effettuato l'accesso
                 Intent i = new Intent(getContext(), EditEvent.class);
                 i.putExtra("eventObj",selectedEvent);
                 startActivityForResult(i,EDIT_EVENT_ACTIVITY_RESULT);
@@ -308,10 +306,8 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
     }
 
     /*
-
-        OVERRIDE OF THE METHODs IN THE SearchView.OnQueryTextListener INTERFACE
-        force the adapter to filter the ListView item based on the query in the Search bar.
-
+        OVERRIDE DEI METODI NELL'INTERFACCIA SearchView.OnQueryTextListener
+        forzare l'adattatore a filtrare l'elemento ListView in base alla query nella barra di ricerca.
      */
 
     @Override
@@ -329,7 +325,7 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
 
 
     /**
-     * Enum used to determine the type of visualization to use for this instance.
+     * Enum utilizzato per determinare il tipo di visualizzazione da utilizzare per questa istanza.
      */
     enum SearchEventType{
         ALL_EVENTS,
@@ -339,26 +335,26 @@ public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemC
 
 
 /**
- * Adepter specifically created to sets the data in the ListView.
- * Also used to filter the data.
+ * Adapter creato appositamente per impostare i dati in ListView.
+ * Utilizzato anche per filtrare i dati.
  */
 class EventAdapter extends BaseAdapter implements Filterable {
 
-    //Entire list of events present in the ListView.
+    //Intero elenco di eventi presenti in ListView.
     private List<Evento> events=null;
     Map<String,String> groupsName = new HashMap<>();
 
-    //List of events shown after a search.
+    //Elenco degli eventi visualizzati dopo una ricerca.
     private List<Evento>filteredData = null;
 
     private Context context=null;
     ItemFilter mFilter = new ItemFilter();
 
     /**
-     * Constructor
+     * Costruttore
      *
-     * @param context the reference context
-     * @param events list of event to show in the ListView.
+     * @param context il contest di riferimento
+     * @param events lista degli eventi da mostrare nella listView
      */
     public EventAdapter(Context context,List<Evento> events,Map<String,String> groupsName)
     {
@@ -369,10 +365,10 @@ class EventAdapter extends BaseAdapter implements Filterable {
     }
 
     /**
-     * Constructor
+     * Costruttore
      *
-     * @param context the reference context
-     * @param events list of event to show in the ListView.
+     * @param context il contesto di riferimento
+     * @param events lista degli eventi da mostrare nella listView
      */
     public EventAdapter(Context context,List<Evento> events)
     {
@@ -382,7 +378,7 @@ class EventAdapter extends BaseAdapter implements Filterable {
     }
 
     /**
-     * Return the list of the event shown in the ListView after a search.
+     * Ritorna la lista degli eventi da mostrare nella listView dopo una ricerca
      * @return
      */
     List<Evento> getFilteredData(){
@@ -391,9 +387,7 @@ class EventAdapter extends BaseAdapter implements Filterable {
 
 
     /*
-
-        OVERRIDE OF SOME METHODS IN THE BaseAdapter ABSTRACT CLASS
-
+        OVERRIDE DI ALCUNI METODI NELLA CLASSE ASTRATTA BaseAdapter
      */
 
     @Override
@@ -420,7 +414,7 @@ class EventAdapter extends BaseAdapter implements Filterable {
         if (v==null) v= LayoutInflater.from(context).inflate(R.layout.event_list_row, null);
 
 
-        //Definition of the visualization logic.
+        //Definizione della logica di visualizzazione.
         Evento e=(Evento) getItem(position);
         TextView titolo = v.findViewById(R.id.textViewTitolo);
         TextView desc = v.findViewById(R.id.textViewDescrizione);
@@ -436,7 +430,8 @@ class EventAdapter extends BaseAdapter implements Filterable {
         else img.setImageResource(R.drawable.event_placeholder_icon);
 
         if(!e.getIdUtenteCreatore().isEmpty()){
-            //Showing the label "owner" in case the logged in user is the creator of this event
+
+            //Mostra l'etichetta "proprietario" nel caso in cui l'utente che ha effettuato l'accesso sia l'autore di questo evento
             if(!AuthHelper.getUserId().equals(e.getIdUtenteCreatore())){
                 owner.setVisibility(View.INVISIBLE);
                 groupCreator.setVisibility(View.INVISIBLE);
@@ -445,8 +440,9 @@ class EventAdapter extends BaseAdapter implements Filterable {
                 groupCreator.setVisibility(View.INVISIBLE);
             }
         }else if(!e.getIdGruppoCreatore().isEmpty()){
-            //Hiding the label "owner" and showing the creator name label if the event is
-            //being create by a group in which the user is a member.
+
+            //Nasconde l'etichetta "proprietario" e mostrare l'etichetta del nome del creatore se l'evento è
+            //stato creato da un gruppo di cui l'utente è membro.
             if(groupsName.containsKey(e.getIdGruppoCreatore())){
                 owner.setVisibility(View.INVISIBLE);
                 groupCreator.setVisibility(View.VISIBLE);
@@ -462,9 +458,7 @@ class EventAdapter extends BaseAdapter implements Filterable {
 
 
     /*
-
-        OVERRIDE OF THE METHOD IN THE Filterable INTERFACE
-
+        OVERRIDE DEL METODO NELL'INTERFACCIA Filterable
      */
 
     @Override
@@ -474,7 +468,7 @@ class EventAdapter extends BaseAdapter implements Filterable {
 
 
     /**
-     * Inner class to define a custom filter.
+     * Classe interna per definire un filtro personalizzato.
      */
     private class ItemFilter extends Filter{
 
@@ -490,7 +484,7 @@ class EventAdapter extends BaseAdapter implements Filterable {
             for (int i = 0; i < count; i++) {
                 filterableEvent = list.get(i);
 
-                //Logic of confront
+                //Logica di confronto
                 if(filterableEvent.getNome().toLowerCase().contains(filterString) || filterableEvent.getDescrizione().contains(filterString)){
                     nlist.add(filterableEvent);
                 }

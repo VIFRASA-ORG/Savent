@@ -30,7 +30,10 @@ import Model.DAO.TemporaryExposureKeys;
 import Model.DAO.Utenti;
 import Services.DailyJob.DailyJobReceiver;
 
-
+/**
+ * Activity inerente alla gestione del login. Permette la visualizzazione e l'inserimento dei dati per effettuare l'accesso oppure
+ * di richiedere il recupero della nuova password.
+ */
 public class LoginActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
     EditText editTextEmailLogin, editTextPasswordLogin;
@@ -41,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
 
     ProgressBar progressBar;
 
-    //Dialog for the password recovery
+    //Dialog per il recupero della password
     private AlertDialog pswRecoveryDialog = null;
 
     @Override
@@ -49,9 +52,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //riferimenti xml
         editTextEmailLogin = (EditText) findViewById(R.id.editTextEmailLogin);
         editTextPasswordLogin = (EditText) findViewById(R.id.editTextPasswordLogin);
-
         textPasswordDimenticata = findViewById(R.id.textPasswordDimenticata);
         buttonAccediLogin = findViewById(R.id.buttonAccediLogin);
         progressBar = findViewById(R.id.progressBar);
@@ -60,11 +63,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         editTextPasswordLogin.setOnFocusChangeListener(this);
     }
 
+
     /**
-     * Disable or enable the component if a download is going on.
-     * In this case it also shows the progress bar.
-     *
-     * @param inProgress flag indicating whether the download is in progress.
+     * Disabilita o abilita il componente se è in corso un download.
+     * In questo caso mostra anche la barra di avanzamento.
+     * @param inProgress flag che indica se il download è in corso.
      */
     private void toggleInProgressEvent(boolean inProgress){
         editTextEmailLogin.setEnabled(!inProgress);
@@ -77,13 +80,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     /**
-     * Remove the focus from all the components inside the view.
+     * Rimuovere il focus da tutti i componenti all'interno della vista.
      */
     private void clearAllFocus(){
         editTextEmailLogin.clearFocus();
         editTextPasswordLogin.clearFocus();
     }
 
+    /**
+     * Metodo che permette di visualizzare un focus differente degli attributi "email" e "password", quando sono in fase di modifica\scrittura.
+     * Se tali campi sono in fase di modifica\scrittura allora tale colore associato passerà da blu al grigio, fino quando gli verrà tolto il focus
+     * di tale campo.
+     * Il metodo viene chiamato dal onFocusChangeListener, che viene associato all'email e alla password.
+     * @param v: vista del focus.
+     * @param hasFocus: impostazione del nuovo focus di stato della vista.
+     */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(hasFocus){
@@ -92,9 +103,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     /**
-     * Method invoked when the log-in button is pressed
-     *
-     * @param view the caller view.
+     * Metodo richiamato quando viene premuto il pulsante di accesso (login)
+     * @param view
      */
     public void eventLoginClick(View view) {
         editTextPasswordLogin.clearFocus();
@@ -103,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     /**
-     * Method that run a sanity check on all the field.
+     * Metodo che esegue un controllo di integrità sui campi.
      */
     private void controlloInputUtenteLogin() {
 
@@ -113,29 +123,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
 
         clearAllFocus();
 
+        //Controllo per verificare se l'utente ha commesso errori nell'inserrimento dati, con l'attribuzione del colore rosso
         if( validazioneEmail(emailLogin) == false || validazionePassword(passwordLogin) == false || passwordLogin.contains(" ")) {
-            //The user made some error
 
+            //controllo l'email inserita nel campo...
             if(validazioneEmail(emailLogin) == false) {
                 editTextEmailLogin.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else{
                 editTextEmailLogin.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
+            //controllo della password inserita nel campo...
             if(validazionePassword(passwordLogin) == false || passwordLogin.contains(" ")) {
                 editTextPasswordLogin.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 Toast.makeText(this, getString(R.string.passwordErrataRegister), Toast.LENGTH_LONG).show();
             }else{
                 editTextPasswordLogin.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
-
-        }else{
-            //All field are correct
+        }else{ //Se tutti i campi sono corretti..
 
             backgroundTintEditText();
             toggleInProgressEvent(true);
 
-            //Trying to log-in using the given credential
+            //Cercando di accedere utilizzando le credenziali fornite
             AuthHelper.singIn(emailLogin, passwordLogin, new ClosureBoolean() {
                 @Override
                 public void closure(boolean isSuccess) {
@@ -150,7 +160,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     /**
-     * Method invoked if the login is not successful.
+     * Metodo richiamato nel caso l'accesso non ha avuto esito positivo.
      */
     private final void errorDuringLogin(){
         Toast.makeText(getApplicationContext(),getString(R.string.errorLogin),Toast.LENGTH_SHORT).show();
@@ -158,11 +168,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     /**
-     * Method invoked if the login is successful.
+     * Metodo richiamato se l'accesso ha avuto esito positivo.
      */
     private final void loginEffettuato(){
 
-        //Checking what kind of user is logged in
+        //Controllo che tipo di utente ha effettuato l'accesso
         AuthHelper.getLoggedUserType(closureRes -> {
             switch (closureRes){
                 case Utente:
@@ -174,18 +184,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         });
     }
 
+
     /**
-     * Invoked when an Ente user is logged in.
+     * Richiamato quando un utente è loggato come Ente.
      */
     private void loggedInAsEnte(){
 
-        //Checkinf if the Ente account is enabled by the admin.
+        //Controlla se l'account Ente è abilitato dall'amministratore.
         Enti.isEnteEnabled(AuthHelper.getUserId(),closureBool ->{
             if(closureBool){
-                //Going to the Ente Home
+                //Vai all'home ente
                 Log.i("AUTH","Loggato come ente");
                 Intent i = new Intent(this, HomeActivityEnte.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Rimozione dal task di tutte le activity precedenti
                 startActivity(i);
                 finish();
             }else{
@@ -197,21 +208,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     /**
-     * Invoked when a normal user is logged in
+     * Richiamato quando un utente normale è loggato
      */
     private void loggedInAsUser(){
-        //Communicating the new notification token to the server
+        //Comunicazione del nuovo token di notifica al server
         Utenti.setMessagingToken(isSucc -> {
             if (!isSucc){
                 Utenti.createMessagingTokenDocument(null);
             }
         });
 
-        //Generating the first Temporary exposure key
+        //Generazione della prima Tek
         TemporaryExposureKeys.generateNewTEK(this, newTek -> {
 
             try {
-                //Starting the gatt server only after the first tek is generated
+                //Avvio del server gatt solo dopo che è stato generato il primo tek
                 startService(new Intent(getBaseContext(), GattServerService.class));
                 startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
             }catch (IllegalArgumentException e){
@@ -221,10 +232,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
             }
         });
 
-        //Scheduling the daily task
+        //Pianificazione dell'attività quotidiana
         DailyJobReceiver.scheduleDailyTask(this);
 
-        //Going to the normal user Home
+        //Vai all'home utente normale
         Toast.makeText(getApplicationContext(),getString(R.string.correctLogin),Toast.LENGTH_SHORT).show();
         Intent schermataHome = new Intent(getApplicationContext(), HomeActivity.class);
         schermataHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
@@ -286,8 +297,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     /**
-     * On click event for the password recovery
-     * It shows the password recovery dialog
+     * Evento su clic per il recupero della password
+     * Mostra la finestra di dialog per il recupero della password
      * @param v
      */
     public void onClickPasswordForgot(View v){
@@ -304,25 +315,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     /**
-     * Method invoked when the send recovery email button from the password recovery dialog.
-     *
-     * @param v the caller view.
+     * Metodo invocato quando il pulsante invia un'e-mail di recupero dalla finestra del dialog per il recupero della password.
+     * @param v la vista del chiamante.
      */
     public void onClickSendRecoveryEmail(View v){
         String value = editTextRecoveryEmail.getText().toString();
         editTextRecoveryEmail.clearFocus();
 
-        //Checking if the given email is a valid email.
+        //Controllo se l'e-mail fornita è un'e-mail valida.
         if(value != null && !value.equals("") && validazioneEmail(value)){
             Log.i("LOG",editTextRecoveryEmail.getText().toString());
 
-            //Executing the request to the server to send a psw reset email.
+            //Esecuzione della richiesta al server di inviare un'e-mail di ripristino psw.
             AuthHelper.sendPswResetEmail(value,closureBool -> {
                 pswRecoveryDialog.dismiss();
                 Toast.makeText(this,R.string.pswRecoveryToast,Toast.LENGTH_LONG).show();
             });
         }else{
-            //If the email is not valid, show an error.
+            //Se l'e-mail non è valida, mostra un errore.
             editTextRecoveryEmail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
         }
     }

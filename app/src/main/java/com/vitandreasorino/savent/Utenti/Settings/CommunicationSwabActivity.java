@@ -63,7 +63,7 @@ public class CommunicationSwabActivity extends AppCompatActivity {
 
 
     /**
-     * Used to check if the user is writing some new information that are different from the one on the server
+     * Utilizzato per verificare se l'utente sta scrivendo nuove informazioni diverse da quelle sul server
      */
     TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -78,6 +78,9 @@ public class CommunicationSwabActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) { }
     };
 
+    /**
+     * Metodo per cambiare lo stato di attivazione dei bottoni "Visualizza risultato" e "Comunica tampone"
+     */
     private void checkSaveButtonActivation() {
         if(editTextCodeCommunicationSwab.getText().toString().contains(" ") || editTextCodeCommunicationSwab.getText().length() == 0 ) {
             buttonCommunicationSwab.setEnabled(false);
@@ -246,7 +249,6 @@ public class CommunicationSwabActivity extends AppCompatActivity {
                                 alertConfirm.show();
                             }
                         });
-                        // Aggiornamento dello stato sanitario nella HomeActivity (logo,textView)
                     }else{
 
                         // si disabilitano tutti i pulsanti e l'editText con relativa progressBar
@@ -272,7 +274,6 @@ public class CommunicationSwabActivity extends AppCompatActivity {
                                 AnimationHelper.fadeOut(progressBar, 1000);
                             }
                         });
-                        // Aggiornamento dello stato sanitario nella HomeActivity (logo,textView)
 
                     }
                 }
@@ -308,7 +309,7 @@ public class CommunicationSwabActivity extends AppCompatActivity {
 
 
     /**
-     * Update status sanitario
+     * Aggiornamento status sanitario
      */
     private void updateStatus() {
         Intent i = new Intent("updateStatusHealth");

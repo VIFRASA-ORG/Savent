@@ -27,6 +27,7 @@ import Helper.AuthHelper;
 
 public class ChangeCredentialAccountActivity extends AppCompatActivity implements TextWatcher, View.OnFocusChangeListener {
 
+    //Definizione di un nuovo tipo di enum per la tipologia di dato da resettare
     enum ChangeType{
         EMAIL,
         PASSWORD,
@@ -56,7 +57,7 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
         editTextNewPassword.setOnFocusChangeListener(this);
         editTextConfirmPassword.setOnFocusChangeListener(this);
 
-        //Setting the current email
+        //Definizione dell' email corrente
         oldEmail = AuthHelper.getUserLoggedEmail();
         editTextEmail.setText(oldEmail);
 
@@ -64,6 +65,11 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
 
     }
 
+    /**
+     * Metodo chiamato quando lo stato di attivazione di una vista è cambiato.
+     * @param v : la vista il cui stato è cambiato.
+     * @param hasFocus : Il nuovo stato di messa a fuoco del v.
+     */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(hasFocus){
@@ -72,18 +78,16 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
     }
 
     /**
-     * Enable or disable all the component relative to the email change
-     *
-     * @param enabled true to enable the components, false to disable them
+     * Si abilitano/disabilitano tutti i componenti relativi al cambio dell'email
+     * @param enabled true, per abilitare tutti i componenti, false per disabilitarli
      */
     private void toggleEmail(boolean enabled){
         editTextEmail.setEnabled(enabled);
     }
 
     /**
-     * Enable or disable all the component relative to the password change
-     *
-     * @param enabled true to enable the components, false to disable them
+     * Si abilitano/disabilitano tutti i componenti relativi al cambio della password
+     * @param enabled true, per abilitare tutti i componenti, false per disabilitarli
      */
     private void togglePasswordFields(boolean enabled){
         editTextConfirmPassword.setEnabled(enabled);
@@ -92,14 +96,16 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
     }
 
     /**
-     * Enable or disable the button to save all the changes.
-     *
-     * @param enabled true to enable the component, false to disable it
+     * Si abilita/disabilita il button per il salavataggio delle modifiche relative ai nuovi dati cambiati
+     * @param enabled true, per abilitare tutti i componenti, false per disabilitarli
      */
     private void toggleButtonSaveChanges(boolean enabled){
         buttonSaveChanges.setEnabled(enabled);
     }
 
+    /**
+     * Si procede con la dichiarazione e inizializzazione di tutti i componenti
+     */
     private void inflateAll(){
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextOldPassword = findViewById(R.id.editTextOldPassword);
@@ -115,13 +121,17 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
         progressBar = findViewById(R.id.progressBar);
     }
 
+    /**
+     * Metodo per tornare alla schermata precedente
+     * @param view : la vista che precede quella presente
+     */
     public void onBackButtonPressed(View view){
         super.onBackPressed();
         finish();
     }
 
     /**
-     * Used to dynamically select which type of change the user wants to make.
+     *Si provvede a salvare dinamicamente il tipo di modifica che l'utente desidera apportare.
      */
     private void checkSaveButtonActivation(){
 
@@ -167,9 +177,8 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
     }
 
     /**
-     * On click of the saveChanges button.
-     *
-     * @param view the button.
+     * Metodo che definisce le attività che susseguono il clic del pulsante SaveChanges.
+     * @param view : il button.
      */
     public void onClickSaveChanges(View view){
         switch (changeType){
@@ -186,16 +195,18 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
                     return;
                 }
 
-                //You have to reautenticate to do this kind of operation.
-                //Let's open an alert dialog
+                //Occorre ri-autenticarsi per fare questa tipologia di operazione.
+                //Viene aperta una finestra di dialogo.
                 final AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 final EditText input = new EditText(this);
                 input.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 input.setInputType(InputType.TYPE_CLASS_TEXT| InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 input.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-                alert.setView(input);    //edit text added to alert
-                alert.setTitle(getString(R.string.passwordRequired));   //title setted
+                //modifica il testo della finestra di dialogo
+                alert.setView(input);
+                //modifica il titolo della finestra di dialogo
+                alert.setTitle(getString(R.string.passwordRequired));
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         confirmPasswordForEmail(input.getText().toString());
@@ -222,7 +233,7 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
                 newPsw = editTextNewPassword.getText().toString();
                 confirmNewPsw = editTextConfirmPassword.getText().toString();
 
-                //Check all the password fields
+                //Verifica tutti i caratteri della password
                 if(!validazionePassword(newPsw) || oldPsw.isEmpty() || confirmNewPsw.isEmpty() || !newPsw.equals(confirmNewPsw)){
 
                     if(oldPsw.isEmpty()) editTextOldPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
@@ -243,13 +254,13 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
                     return;
                 }
 
-                //All the password fields are correct
+                //Se tutti i caratteri della password sono corretti
                 asyncEventInProgress(true);
 
-                //ReAuthenticate to change the password
+                //Ci si ri-autentica per cambiare la passwrod
                 AuthHelper.reAuthenticate(AuthHelper.getUserLoggedEmail(),oldPsw,closureBool ->{
                     if(closureBool){
-                        //Password correct
+                        //Si inserisce la nuova password corretta
                         AuthHelper.updatePsw(newPsw, closureBool1 -> {
                             if (closureBool1) {
                                 Toast.makeText(this, R.string.passwordChangeSuccess, Toast.LENGTH_LONG).show();
@@ -262,7 +273,7 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
                             }
                         });
                     }else{
-                        //Password incorrect
+                        //Se la password non è corretta
                         Toast.makeText(this,R.string.oldPasswordError,Toast.LENGTH_LONG).show();
                         asyncEventInProgress(false);
                     }
@@ -272,7 +283,7 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
     }
 
     /**
-     * Reset all the string inside all the psw fields
+     * Vengono resettate tutte le stringhe contenute nei campi della password
      */
     private void clearAllPswText(){
         editTextOldPassword.setText("");
@@ -281,16 +292,16 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
     }
 
     /**
-     * Invoked when the user enters the confirmation password in the dialog
+     *Richiamato quando l'utente inserisce la password di conferma nella finestra di dialogo
      *
-     * @param password the password written by the user in the dialog.
+     * @param password :password scritta dall'utente nella finestra di dialogo
      */
     private void confirmPasswordForEmail(String password){
         asyncEventInProgress(true);
 
         AuthHelper.reAuthenticate(AuthHelper.getUserLoggedEmail(),password,closureBool ->{
             if(closureBool){
-                //Password correct
+                //Se la password è corretta
                 AuthHelper.updateEmail(editTextEmail.getText().toString(), cloosureBool1 -> {
                     if (cloosureBool1) {
                         Toast.makeText(this, R.string.emailChangeSuccess, Toast.LENGTH_LONG).show();
@@ -303,7 +314,7 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
                     }
                 });
             }else{
-                //Password incorrect
+                //Se la password è errata
                 Toast.makeText(this,R.string.wrongPassword,Toast.LENGTH_LONG).show();
                 asyncEventInProgress(false);
             }
@@ -311,9 +322,8 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
     }
 
     /**
-     * Enable/Show or Disable/Hide the saveChanges button and the progress bar.
-     *
-     * @param inProgress true to disable the button and show the progress bar, false for the opposite.
+     * Si abilita/mostra o disabilita/nascondie il pulsante SaveChanges e la progress bar.
+     * @param inProgress true, se disabilita il button e mostra la progress bar, false altrimenti.
      */
     private void asyncEventInProgress(boolean inProgress){
         if (inProgress) {
@@ -326,9 +336,9 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
     }
 
     /**
-     * Controllo che l'email in input rispetti la forma standard delle email.
+     * Controlla che l'email in input rispetti la forma standard delle email.
      * @param controlloEmail stringa da controllare
-     * @return ritorna true se la stringa è formattata correttamente, altrimenti false
+     * @return ritorna true se la stringa è formattata correttamente, altrimenti false.
      */
     public boolean validazioneEmail(String controlloEmail) {
 
@@ -349,7 +359,7 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
     }
 
     /**
-     * Controllo che la password in input rispetti le seguenti caratteristiche:
+     * Controlla che la password in input rispetti le seguenti caratteristiche:
      * contenta un carattere maiuscolo, contenga un carattere minuscolo e contenga
      * un carattere numerico e essa deve essere di lunghezza compresa tra 8 e 20 caratteri.
      * @param controlloPassword stringa da controllare
@@ -369,24 +379,34 @@ public class ChangeCredentialAccountActivity extends AppCompatActivity implement
     }
 
 
-
-
-
-
-
-    /*
-
-        OVERRIDE OF ALL THE METHOD OF THE TextWatcher INTERFACE TO MANAGE ALL THE TEXT CHANGE EVENT
-        INSIDE ALL THE EDITTEX.
-
+    /**
+     * Metodo che viene chiamato per avvisarti che, all'interno di s, i countcaratteri che iniziano a start stanno per
+     * essere sostituiti da un nuovo testo con lunghezza after.
+     * @param s
+     * @param start
+     * @param count
+     * @param after
      */
-
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+    /**
+     * Metodo che viene chiamato per avvisarti che, all'interno di s, i countcaratteri che iniziano a start hanno appena sostituito
+     * il vecchio testo che aveva lunghezza before. È un errore tentare di apportare modifiche ad s da questo callback.
+     * @param s
+     * @param start
+     * @param before
+     * @param count
+     */
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         checkSaveButtonActivation();
     }
+
+    /**
+     * Metodo che viene chiamato per informarti che, da qualche parte all'interno di s, il testo è stato modificato.
+     * @param s
+     */
     @Override
     public void afterTextChanged(Editable s) { }
 }

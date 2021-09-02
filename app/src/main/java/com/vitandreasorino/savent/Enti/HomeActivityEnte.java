@@ -19,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vitandreasorino.savent.Enti.GenerateCodeTab.GenerateCodeFragment;
 import com.vitandreasorino.savent.LogSingInActivity;
 import com.vitandreasorino.savent.R;
+
 import Helper.AuthHelper;
 
 
@@ -42,45 +43,65 @@ public class HomeActivityEnte extends AppCompatActivity implements BottomNavigat
         viewPager.setAdapter(new HomeFragmentEnteAdapter(this));
         viewPager.setUserInputEnabled(false);
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             String prevClass = savedInstanceState.getString("previousFragmentClass");
-            switch (prevClass){
+            switch (prevClass) {
+                //Nel caso in cui si clicchi sulla home dell'ente
                 case "HomeFragmentEnte":
                     viewPager.setCurrentItem(0);
                     bottomNavigationEnte.setSelectedItemId(R.id.nav_home_ente);
                     break;
+                //Nel caso in cui si clicchi sulla sezione dedicata alla generazione dei codici
                 case "GenerateCodeFragment":
                     viewPager.setCurrentItem(1);
-                    bottomNavigationEnte.setSelectedItemId(R.id.nav_swab_ente);
+                    bottomNavigationEnte.setSelectedItemId(R.id.nav_generate_code_ente);
                     break;
             }
         }
     }
 
+    /**
+     * Metodo che viene chiamato per recuperare lo stato per istanza da un'attività prima di essere uccisa,
+     * in modo che lo stato possa essere ripristinato successivamente.
+     *
+     * @param outState l'ultimo stato dell'attività
+     */
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("previousFragmentClass",previousFragmentClass.getSimpleName());
+        outState.putString("previousFragmentClass", previousFragmentClass.getSimpleName());
     }
 
+    /**
+     * Metodo richiamato quando viene selezionato un elemento nel menu di navigazione.
+     *
+     * @param item : l'elemento selezionato
+     * @return true per visualizzare l'elemento come elemento selezionato, false se non viene selezionato niente.
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
+            //Nel caso in cui si clicca sull'home dell'ente
             case R.id.nav_home_ente:
-                viewPager.setCurrentItem(0,false);
+                viewPager.setCurrentItem(0, false);
                 previousFragmentClass = HomeFragmentEnte.class;
                 return true;
-            case R.id.nav_swab_ente:
-                viewPager.setCurrentItem(1,false);
+            //Nel caso in cui si seleziona sulla parte dedicata alla generazione dei codici
+            case R.id.nav_generate_code_ente:
+                viewPager.setCurrentItem(1, false);
                 previousFragmentClass = GenerateCodeFragment.class;
                 return true;
         }
         return false;
     }
 
+    /**
+     * Metodo che viene richiamato per effettuare il logout dalla home dell'ente
+     * @param view : la nuova vista da visualizzare (ovveroLogSingInActivity)
+     */
     public void onClickLogoutEnte(View view) {
-        //Creo un alertDialog per confermare il logout dall'home ente
+        //Si crea un alertDialog per confermare il logout dall'home ente
         AlertDialog.Builder alertLogout = new AlertDialog.Builder(HomeActivityEnte.this);
         alertLogout.setTitle(R.string.stringConfirmLogout);
         alertLogout.setMessage(R.string.stringDialogLogout);
@@ -89,11 +110,11 @@ public class HomeActivityEnte extends AppCompatActivity implements BottomNavigat
         alertLogout.setPositiveButton(R.string.confirmPositive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //Effettuo il logout richiamando l'apposito metodo
+                //Si effettua il logout richiamando l'apposito metodo
                 AuthHelper.logOutEnte();
                 Toast.makeText(HomeActivityEnte.this, R.string.stringLogoutDone, Toast.LENGTH_SHORT).show();
 
-                //Ritorna alla schermata iniziale
+                //Si ritorna alla schermata iniziale
                 Intent intentLogin = new Intent(HomeActivityEnte.this, LogSingInActivity.class);
                 intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the task all the previous Activity.
                 startActivity(intentLogin);
@@ -102,15 +123,15 @@ public class HomeActivityEnte extends AppCompatActivity implements BottomNavigat
         });
         // Nel caso di risposta negativa nel dialog
         alertLogout.setNegativeButton(R.string.confirmNegative, null);
-        //mostra il dialog
+        //Mostra il dialog
         alertLogout.show();
 
     }
 }
 
-
 /**
- * Adepter specifically created to show the 2 fragment inside the HomeActivityEnte
+ * Si imposta l'adapter per creare in modo specifico e mostrare i due fragment presenti
+ * nell'Home activity ente.
  */
 class HomeFragmentEnteAdapter extends FragmentStateAdapter {
 
@@ -118,11 +139,16 @@ class HomeFragmentEnteAdapter extends FragmentStateAdapter {
         super(fragmentActivity);
     }
 
+    /**
+     * Metodo per la creazione dei fragment relativi all'home ente
+     * @param position : valore intero indicante la posizione in cui dovrà essere creato il fragment
+     * @return un nuovo fragment, o niente (caso di default).
+     */
     @NonNull
     @Override
     public Fragment createFragment(int position) {
 
-        switch (position){
+        switch (position) {
             case 0:
                 return new HomeFragmentEnte();
             case 1:
@@ -132,6 +158,10 @@ class HomeFragmentEnteAdapter extends FragmentStateAdapter {
         }
     }
 
+    /**
+     * Metodo che restituisce il numero degli item, ovvero dei fragment da creare.
+     * @return il numero dei fragment da generare.
+     */
     @Override
     public int getItemCount() {
         return 2;

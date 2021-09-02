@@ -193,6 +193,7 @@ public class NewEvent extends AppCompatActivity {
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
+                // creazione di un DatePickerDialog per l'inserimento della data settandone la data minima
                 DatePickerDialog dialog = new DatePickerDialog(NewEvent.this, dateSetListener, year, month, day);
                 dialog.getDatePicker().setMinDate(cal1.getTime().getTime());
                 dialog.show();
@@ -244,6 +245,9 @@ public class NewEvent extends AppCompatActivity {
 
     }
 
+    /**
+     * metodo setAdapterEdit utilizzato per l'aggiornamento della lista del creatore dell'evento
+     */
     private void setAdapter(){
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.options_item, arrayNome);
         try{
@@ -263,6 +267,12 @@ public class NewEvent extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * onClick per l'apertura di una nuova activity "MapActivity.java" alla quale si passa
+     * latitudine e longitudine mediante l'intent.
+     * @param view
+     */
     public void onMap(View view) {
 
         Intent mapActivity = new Intent(this, MapActivity.class);
@@ -273,14 +283,17 @@ public class NewEvent extends AppCompatActivity {
 
     }
 
-
+    /**
+     * onClick che permette la selezione di una foto mediante un l'intent implicito.
+     * @param view
+     */
     public void onClickPhotoEvent(View view){
         Intent i = new Intent();
         i.setType("image/*");
         i.setAction(Intent.ACTION_GET_CONTENT);
 
-        // pass the constant to compare it
-        // with the returned requestCode
+        // passa la costante per confrontarla
+        // con il requestCode restituito
         startActivityForResult(Intent.createChooser(i, "Select Picture"), 210);
     }
 
@@ -295,13 +308,16 @@ public class NewEvent extends AppCompatActivity {
 
         if(requestCode == 203) {
 
-
             if(resultCode == RESULT_OK) {
                 boolean isNull = data.getBooleanExtra("isNull", true);
 
+                // se isNull è rimasto invariato e quindi true, setta le textView non visibili
                 if(isNull == true) {
                     textViewLatitudine.setVisibility(View.INVISIBLE);
                     textViewLongitudine.setVisibility(View.INVISIBLE);
+
+                // se isNull è diventato false alloraa si settano le textView visibili e si mostrano
+                // i rispettivi valori di latitudine e longitudine
                 }else{
                     valoreLatitudine = data.getDoubleExtra("latitudine",0);
                     valoreLongitudine = data.getDoubleExtra("longitudine",0);
@@ -316,16 +332,16 @@ public class NewEvent extends AppCompatActivity {
 
 
         if (resultCode == RESULT_OK) {
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
 
+            // compara il resulCode con
+            // la costante SELECT_PICTURE
             if (requestCode == 210) {
 
-                // Get the url of the image from data
+                // ottiene l'url dell'immagine dall'intent data
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
-                    // update the preview image in the layout
-                    // Compress it before it is shown into the imageView
+                    // aggiorna la preview dell'immagine nel layout
+                    // Comprimo prima che venga mostrato in imageView
                     imageViewEvent.setImageBitmap(ImageHelper.decodeSampledBitmapFromUri(getContentResolver(),selectedImageUri,imageViewEvent));
                     immagineSelezionata = selectedImageUri;
                 }
@@ -364,6 +380,9 @@ public class NewEvent extends AppCompatActivity {
         selezionaOra = displayTime.getText().toString();
 
 
+        // Nel caso in cui una delle seguenti condizioni non è rispettata l'utente non porcederà con la creazione dell'evento
+        // e verrà mostrato a schermo l'editText o il campo non corretto in rosso e in primo piano comparirà un
+        // Toast che indicherà un messaggio di errore o di mancata creazione dell'evento.
         if(validazioneNomeEvento(nomeEvento) == false || nomeEvento.isEmpty() ||
            validazioneDescrizioneEvento(descrizioneEvento) == false || descrizioneEvento.isEmpty() ||
            numeroPartecipantiEvento.isEmpty() || validazioneNumeroPartecipantiEvento(numeroPartecipantiEvento) == false ||
@@ -400,6 +419,8 @@ public class NewEvent extends AppCompatActivity {
 
             Toast.makeText(this, getString(R.string.campiErratiRegister), Toast.LENGTH_LONG).show();
 
+        // Nel caso in cui l'utente ha compilato correttamente tutti i campi della creazione evento
+        // l'evento sarà caricato sul server "Cloud firestore" e l'evento sarà creato con successo!
         }else{
 
             backgroundTintEditTextCreateEvent();
@@ -431,6 +452,7 @@ public class NewEvent extends AppCompatActivity {
             e.setLatitudine(valoreLatitudine);
             e.setLongitudine(valoreLongitudine);
 
+            // metodo per l'inserimento del nuovo evento sul database
             Eventi.addNewEvent(e, eventId -> {
 
                 if(eventId != null){
@@ -468,6 +490,9 @@ public class NewEvent extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Metodo utilizzato per modificare il colore di tutti i campi nel colore del codice esadecimale "#AAAAAA"
+     */
     private void backgroundTintEditTextCreateEvent() {
         editTextNomeEvento.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextTextMultiLine.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));

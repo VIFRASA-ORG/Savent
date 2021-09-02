@@ -32,7 +32,10 @@ import Model.DAO.Eventi;
 import Model.DAO.Partecipazioni;
 import Model.POJO.Evento;
 
-
+/**
+ * Gestisce la lista degli eventi dove si partecipa.
+ * Permette la visualizzazione e ricerca di tali eventi dove si è deciso di partecipare.
+ */
 public class MyEventPartecipations extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
     List<Evento> listaEventi = new ArrayList<Evento>();
@@ -93,7 +96,11 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
         }
     };
 
-    //funzione che entra in azione durante il caricamento degli elementi della lista
+
+    /**
+     * metodo che entra in azione durante il caricamento degli elementi della lista
+     * @param isDownloading
+     */
     private void toggleDownloadingElements(boolean isDownloading){
         if(isDownloading){
             AnimationHelper.fadeIn(progressBarEvent,0);
@@ -104,8 +111,9 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
         }
     }
 
-
-    //funzione che permette di caricare gli eventi dove siamo partecipanti o in coda
+    /*Metodo che permette di scaricare e visualizzare gli eventi dove si è partecipanti o in coda salvati sul database, con successivo
+     * metodo che che controlla se ad ogni evento sono associate le rispettive immagini del profilo abbinate
+     */
     private void downloadDataList() {
         toggleDownloadingElements(true);
         Log.i("prova", "1");
@@ -147,6 +155,9 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
 
     }
 
+    /**
+     * Forza l'adapter a filtrare l'elemento della ListView in base alla query inserita nella barra di ricerca.
+     */
     SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
@@ -162,7 +173,9 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
     };
 
     /**
-     * Metodo che ti permette di entrare nel dettaglio dell'evento
+     * Metodo che permette di cliccare sul singolo evento dalla lista delle partecipazioni.
+     * Tale metodo ci permetterà di entrare nel dettaglio del singolo evento dove si partecipa,
+     * anche quando è filtrata dalla SearchView.
      * @param parent
      * @param view
      * @param position
@@ -184,7 +197,9 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
         startActivity(i);
     }
 
-
+    /**
+     * pulsante "back" che permette di tornare all'activity precedente.
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -197,7 +212,9 @@ public class MyEventPartecipations extends AppCompatActivity implements AdapterV
 }// fine classe
 
 
-
+/**
+ * EventAdapterPartecipations creato per implementare la lista degli eventi
+ */
 class EventAdapterPartecipations extends BaseAdapter implements Filterable {
 
     private List<Evento> events = null;
@@ -205,7 +222,7 @@ class EventAdapterPartecipations extends BaseAdapter implements Filterable {
     private Context context = null;
     ItemFilter mFilter = new ItemFilter();
 
-    //Costruttori
+    //Costruttore
     public EventAdapterPartecipations(Context context,List<Evento> events) {
         this.events=events;
         this.context=context;
@@ -260,9 +277,9 @@ class EventAdapterPartecipations extends BaseAdapter implements Filterable {
      * Questo metodo viene chiamato automaticamente quando la vista delle voci di elenco è pronta per essere visualizzato o sta per essere visualizzato.
      * In questa funzione impostiamo il layout per gli elementi dell'elenco utilizzando la classe LayoutInflater e quindi aggiungiamo i dati
      * alle viste come ImageView , TextView ecc.
-     * @param //position
-     * @param //v
-     * @param //parent
+     * @param position
+     * @param v
+     * @param parent
      * @return
      */
     @Override
@@ -305,23 +322,18 @@ class EventAdapterPartecipations extends BaseAdapter implements Filterable {
         Partecipazioni.getMyPartecipationAtEvent(evento.getId(), partecipazione -> {
 
             if(partecipazione != null){
-
                 if(partecipazione.getAccettazione()){ //se l'utente ha già aderito all'evento
-
-                    if(partecipazione.getListaAttesa()){ ////e se risulta nella lista di attesa
+                    if(partecipazione.getListaAttesa()){ //e se risulta nella lista di attesa
                         //stampa sei In Coda
                         txtPartecipante.setVisibility(View.INVISIBLE);
                         txtInCoda.setVisibility(View.VISIBLE);
                     }else{
-                        ////stampa sei partecipante
+                        //stampa sei partecipante
                         txtInCoda.setVisibility(View.INVISIBLE);
                         txtPartecipante.setVisibility(View.VISIBLE);
                     }
-
                 }else{
-
-                    //stampa sei In Coda
-                    if(partecipazione.getListaAttesa()){
+                    if(partecipazione.getListaAttesa()){ //se risulta nella lista di attesa
                         //stampa sei In Coda
                         txtPartecipante.setVisibility(View.INVISIBLE);
                         txtInCoda.setVisibility(View.VISIBLE);
@@ -336,13 +348,11 @@ class EventAdapterPartecipations extends BaseAdapter implements Filterable {
         return mFilter;
     }
 
+    /**
+     * Gestisce le operazioni per il filtraggio della SearchView
+     */
     private class ItemFilter extends Filter{
 
-        /**
-         * Metodo utilizzato per eseguire l'operazione di filtraggio.
-         * @param constraint
-         * @return
-         */
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
@@ -354,9 +364,9 @@ class EventAdapterPartecipations extends BaseAdapter implements Filterable {
 
             Evento filterable;
 
+            //permette di leggere dalla lista degli eventi solo i nomi per poter ricercarli attraverso la SearchView
             for (int i = 0; i < count; i++) {
                 filterable = list.get(i);
-                //permette di leggere dalla lista degli eventi solo i nomi per poter ricercarli attraverso la SearchView
                 if (filterable.getNome().toLowerCase().contains(filterString)) {
                     nlist.add(filterable);
                 }
@@ -368,6 +378,11 @@ class EventAdapterPartecipations extends BaseAdapter implements Filterable {
             return results;
         }
 
+        /**
+         * stampa i risultati del filtro
+         * @param constraint
+         * @param results
+         */
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredData = (ArrayList<Evento>) results.values;

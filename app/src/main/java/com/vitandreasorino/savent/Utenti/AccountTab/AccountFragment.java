@@ -115,13 +115,19 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
                 Intent imageProfile = new Intent();
                 imageProfile.setType("image/*");
                 imageProfile.setAction(Intent.ACTION_GET_CONTENT);
-                // pass the constant to compare it
-                // with the returned requestCode
+                //Viene passata la costante per il confronto con il valore di ritorno requestCode
                 startActivityForResult(Intent.createChooser(imageProfile, "Select Picture"), 200);
             }
         });
 
         radioGroupSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            /**
+             * Si verifica se il contatto è stato selezionato. Se è stato selezionato questo viene aggiunto
+             * alla lista dei contatti selezionati, altrimenti viene rimosso da questa lista
+             * @param group :la vista del pulsante che è stato cambiato.
+             * @param checkedId :il nuovo stato selezionato di radioGroup.
+             */
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 onCheckedChangedRadioGroup(group,checkedId);
@@ -160,7 +166,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
 
         disableAllComponent();
 
-        //Download all the user informations
+        //Scarica tutte le informazioni relative agli utenti
         Utenti.getUser(AuthHelper.getUserId(),closureRes -> {
             if(closureRes != null){
                 userModel = closureRes;
@@ -201,6 +207,11 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
 
     }
 
+    /**
+     * Viene richiamato quando lo stato di attivazione di una vista è cambiato.
+     * @param v : la vista il cui stato è cambiato.
+     * @param hasFocus : Il nuovo stato di messa a fuoco del v.
+     */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(hasFocus){
@@ -209,27 +220,54 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     }
 
     /**
-     * Used to check if the user is writing some new information that are different from the one on the server
+     * Si verifica se l'utente sta scrivendo alcune nuove informazioni differenti da quelle presenti sul server
      */
     TextWatcher textWatcher = new TextWatcher() {
+
+        /**
+         * Metodo che viene chiamato per avvisarti che, all'interno di s, i countcaratteri che iniziano a start stanno per
+         * essere sostituiti da un nuovo testo con lunghezza after.
+         * @param s
+         * @param start
+         * @param count
+         * @param after
+         */
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
+        /**
+         * Metodo che viene chiamato per avvisarti che, all'interno di s, i countcaratteri che iniziano a start hanno appena sostituito
+         * il vecchio testo che aveva lunghezza before. È un errore tentare di apportare modifiche ad s da questo callback.
+         * @param s
+         * @param start
+         * @param before
+         * @param count
+         */
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             checkSaveButtonActivation();
         }
 
+        /**
+         * Metodo che viene chiamato per informarti che, da qualche parte all'interno di s, il testo è stato modificato.
+         * @param s
+         */
         @Override
         public void afterTextChanged(Editable s) { }
     };
 
+    /**
+     *Si attiva il cambio dello stato della radiogroup. Se sono state apportate modifiche
+     *si passa poi a rendere attivo il button del Salva Modifiche.
+     *@param group :la vista del pulsante che è stato cambiato.
+     *@param checkedId :il nuovo stato selezionato di radioGroup.
+    **/
     private void onCheckedChangedRadioGroup(RadioGroup group, int checkedId){
         checkSaveButtonActivation();
     }
 
     /**
-     * Enable or disable the button to save the changes only if there are some changes in the account info.
+     * Si abilita/disabilita il button per salvare il cambio solo se sono state apportate modifiche alle info dell'account
      */
     private void checkSaveButtonActivation(){
         if(userModel == null) return;
@@ -246,8 +284,8 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     }
 
     /**
-     * Check all the new information entered in the nome, cognome and phoneNumer fields.
-     * @return true if all the new values are of the correct pattern, false otherwise.
+     * Si verificano tutte le nuove informazioni nei campi del nome, cognome e numero di telefono.
+     * @return true, se tutti i valori sono stati inseriti in forma corretta, false altrimenti.
      */
     private boolean checkAllNewValues(){
         boolean flag = true;
@@ -292,7 +330,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     }
 
     /**
-     * Remove the focus from all the components and reset the background color.
+     * Viene rimosso lo stato attivo da tutti i componenti e a reimpostare il colore di sfondo.
      */
     private void clearAllFocusAndColor(){
         editTextCognome.clearFocus();
@@ -305,20 +343,21 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     }
 
     /**
-     * Event called when is pressed the button to save the information to the server
-     * @param view
+     *
+     * Lo si invoca quando viene premuto il pulsante per salvare le informazioni sul server.
+     * @param view: la nuova vista con i dati aggiornati.
      */
     private void onSaveDataButtonClick(View view){
 
         clearAllFocusAndColor();
 
-        //Disabling all the component and showing the progress bar
+        //Si disabilitano tutti i componenti e si mostrano le progress bar
         disableAllComponent();
         buttonSaveData.setEnabled(false);
 
         if(checkAllNewValues()){
 
-            //Check if the new phone number is a correct phone number only if is different
+            //Si verifica se il nuovo numero di telefono sia stato inserito correttamente
             if(!editTextPhone.getText().toString().equals(userModel.getNumeroDiTelefono())){
                 GenericUser.isPhoneNumberAlreadyTaken(editTextPhone.getText().toString(),closureBool -> {
                     if(!closureBool){
@@ -351,37 +390,37 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     }
 
     /**
-     * Execute the query to update the new information to the server.
+     *Si esegue la query per aggiornare le nuove informazioni sul server.
      */
     private void updateFieldToServer(){
-        //There's for sure something different to upload to the server
+        //C'è sicuramente qualcosa di diverso da caricare sul server
         List<Object> listOfUpdates = new ArrayList<>();
 
-        //nome
+        //Modifica per il nome
         if(!editTextNome.getText().toString().equals(userModel.getNome())){
             listOfUpdates.add(Utenti.NOME_FIELD);
             listOfUpdates.add(editTextNome.getText().toString());
         }
 
-        //cognome
+        //Modifica per il cognome
         if(!editTextCognome.getText().toString().equals(userModel.getCognome())){
             listOfUpdates.add(Utenti.COGNOME_FIELD);
             listOfUpdates.add(editTextCognome.getText().toString());
         }
 
-        //telefono
+        //Modifica per il telefono
         if(!editTextPhone.getText().toString().equals(userModel.getNumeroDiTelefono())){
             listOfUpdates.add(Utenti.NUMERO_TELEFONO_FIELD);
             listOfUpdates.add(editTextPhone.getText().toString());
         }
 
-        //codice fiscale
+        //Modifica per il codice fiscale
         if(!editTextCodiceFiscale.getText().toString().equalsIgnoreCase(userModel.getCodiceFiscale())){
             listOfUpdates.add(Utenti.CODICE_FISCALE_FIELD);
             listOfUpdates.add(editTextCodiceFiscale.getText().toString().toUpperCase());
         }
 
-        //data di nascita
+        //Modifica per la data di nascita
         Calendar storedDate = Calendar.getInstance();
         storedDate.setTime(userModel.getDataNascita());
         if(storedDate.get(Calendar.YEAR) != newSelectedDate.get(Calendar.YEAR) || storedDate.get(Calendar.MONTH) != newSelectedDate.get(Calendar.MONTH) || storedDate.get(Calendar.DAY_OF_MONTH) != newSelectedDate.get(Calendar.DAY_OF_MONTH)){
@@ -389,13 +428,13 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
             listOfUpdates.add(newSelectedDate.getTime());
         }
 
-        //genere
+        //Modifica per il genere
         if(!getSelectedGenere().equals(userModel.getGenere())){
             listOfUpdates.add(Utenti.GENERE_FIELD);
             listOfUpdates.add(getSelectedGenere());
         }
 
-        //This means that no other information is different rather than the image.
+        //Questo significa che nessun'altra informazione è diversa dall'immagine.
         if(listOfUpdates.size() == 0) {
             //Check if we need to upload the image
             if(newSelectedImage != null){
@@ -411,7 +450,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
                     }
                 });
             }else{
-                //This code should never be executed because the button should be disabled in case of no new data.
+                //Questo codice non dovrebbe mai essere eseguito perché il pulsante dovrebbe essere disabilitato in caso di assenza di nuovi dati.
                 enableAllComponent();
                 buttonSaveData.setEnabled(false);
                 Toast.makeText(getContext(),R.string.noUpdates,Toast.LENGTH_SHORT).show();
@@ -419,7 +458,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
             return;
         };
 
-        //put the first two as first parameters
+        //Metti le prime due come primo parametro
         String firstField = (String) listOfUpdates.get(0);;
         Object firstValue = listOfUpdates.get(1);;
         if(listOfUpdates.size() > 2){
@@ -429,7 +468,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
 
         Utenti.updateFields(AuthHelper.getUserId(), closureBool -> {
             if(closureBool){
-                //check if we have to upload also the image
+                //Si ontrolla se si deve caricare anche l'immagine
                 if(newSelectedImage != null){
                     Utenti.uploadUserImage(newSelectedImage,closureBool1 -> {
                         if(closureBool1){
@@ -456,7 +495,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     }
 
     /**
-     * Update the model with the new information after the server update.
+     *Viene aggiornato il modello con le nuove informazioni dopo l'aggiornamento del server.
      */
     private void updateModel(){
         userModel.setNumeroDiTelefono(editTextPhone.getText().toString());
@@ -487,7 +526,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     }
 
     /**
-     * Controllo che il numero di telefono rispetti le seguenti caratteristiche:
+     * Controlla che il numero di telefono rispetti le seguenti caratteristiche:
      * lunghezza compresa tra 9 e 11, consentiti solo caratteri numerici
      * @param controlloTelefono stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
@@ -506,7 +545,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     }
 
     /**
-     * Controllo che il nome in input rispetti le seguenti caratteristiche:
+     * Controlla che il nome in input rispetti le seguenti caratteristiche:
      * stringa non vuota, lunghezza compresa tra 3 e 15 caratteri,
      * solo caratteri letterali, stringa priva di spazi.
      * @param controlloNome stringa da controllare
@@ -527,7 +566,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
 
 
     /**
-     * Controllo che il cognome in input rispetti le seguenti caratteristiche:
+     * Controlla che il cognome in input rispetti le seguenti caratteristiche:
      * stringa non vuota, lunghezza compresa tra 3 e 15 caratteri,
      * solo caratteri letterali, stringa priva di spazi.
      * @param controlloCognome stringa da controllare
@@ -547,8 +586,8 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     }
 
     /**
-     * Return the new genere from the RadioGroup
-     * @return the new genere as a String
+     * Si ottiene il nuovo genere dalla RadioGroup
+     * @return il nuovo genere, sotto forma di stringa
      */
     private String getSelectedGenere(){
         switch (radioGroupSex.getCheckedRadioButtonId()){
@@ -564,7 +603,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
     }
 
     /**
-     * Show and manage the results of the DataPickerDialog.
+     * Vengono mostrati e si gestiscono i risultati del DataPickerDialog.
      */
     private void openDateDialog(){
 
@@ -586,6 +625,9 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         picker.show();
     }
 
+    /**
+     * Vengono disabilitati tutti i componenti del layout
+     */
     private void disableAllComponent(){
         editTextNome.setEnabled(false);
         editTextPhone.setEnabled(false);
@@ -600,6 +642,9 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         AnimationHelper.fadeIn(progressBar,1000);
     }
 
+    /**
+     * Si abilitano tutti i componenti del layout
+     */
     private void enableAllComponent(){
         editTextNome.setEnabled(true);
         editTextPhone.setEnabled(true);
@@ -614,18 +659,25 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         AnimationHelper.fadeOut(progressBar,1000);
     }
 
+    /**
+     * Metodo che serve per la definizione delle attività rispetto alle scelte relative alla modifica dell'immagine profilo.
+     * @param requestCode :codice di richiesta intero originariamente fornito a startActivityForResult(),
+     * che consente di identificare da chi proviene questo risultato
+     * @param resultCode :codice risultato intero restituito dall'attività figlia tramite il suo setResult().
+     * @param data :un intento che può restituire i dati della modifica al chiamante.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == -1) {
 
-            // confronta il resultCode con il SELECT_PICTURE constant
+            // confronta il resultCode con la costante SELECT_PICTURE
             if (requestCode == 200) {
                 // Ottieni l'URL dell'immagine dai dati
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
-                    // aggiorna l'immagine di anteprima nel layout
+                    //Aggiorna l'immagine di anteprima nel layout
                     imageViewProfile.setImageURI(selectedImageUri);
                     newSelectedImage = selectedImageUri;
                     checkSaveButtonActivation();

@@ -17,6 +17,9 @@ import java.util.List;
 
 import Model.POJO.Utente;
 
+/**
+ * ComponentGroupAdapter creato per implementare la lista dei componenti del gruppo
+ */
 public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
 
     private List<Utente> users = null;
@@ -25,7 +28,7 @@ public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
     private String idAdmin;
     ItemFilter mFilter = new ItemFilter();
 
-    //Costruttori
+    //Costruttore
     public ComponentGroupAdapter(Context context, String idAdmin) {
         this.users = new ArrayList<>();
         this.context=context;
@@ -33,7 +36,7 @@ public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
         this.idAdmin = idAdmin;
     }
 
-    //Costruttori
+    //Costruttore
     public ComponentGroupAdapter(Context context) {
         this.users = new ArrayList<>();
         this.context=context;
@@ -44,12 +47,12 @@ public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
         List<Utente> removedOnes = new ArrayList<>(users);
         List<Utente> addedOnes = new ArrayList<>(newList);
 
-        //Calculating the removed ones
+        //Calcolo di quelli rimossi
         removedOnes.removeAll(newList);
         users.removeAll(removedOnes);
         filteredData.removeAll(removedOnes);
 
-        //Calculating the added ones
+        //Calcolo di quelli aggiunti
         addedOnes.removeAll(users);
         users.addAll(addedOnes);
         filteredData.addAll(addedOnes);
@@ -82,21 +85,47 @@ public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
         return new ArrayList<>(users);
     }
 
+    /**
+     * Il metodo getCount() restituisce il numero totale di elementi da visualizzare in un elenco.
+     * Esso conta il valore attraverso il metodo size() dell'elenco di una lista o la lunghezza di un lista.
+     * @return
+     */
     @Override
     public int getCount() {
         return filteredData.size();
     }
 
+    /**
+     * Questo metodo viene utilizzato per ottenere l'elemento di dati associato alla posizione specificata nel set di dati
+     * per ottenere i dati corrispondenti della posizione specifica nella raccolta di elementi di dati.
+     * Restituisce l'elemento della lista nella posizione specificata.
+     * @param position
+     * @return
+     */
     @Override
     public Object getItem(int position) {
         return filteredData.get(position);
     }
 
+    /**
+     * Questo metodo, restituisce il corrispondente all'ID dell'elemento di posizione.
+     * La funzione restituisce un valore lungo della posizione dell'elemento all'adattatore.
+     * @param position
+     * @return
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * impostiamo il layout per gli elementi dell'elenco utilizzando la classe LayoutInflater e quindi aggiungiamo i dati
+     * alle viste come ImageView , TextView ecc.
+     * @param position
+     * @param v
+     * @param vg
+     * @return
+     */
     @Override
     public View getView(int position, View v, ViewGroup vg) {
 
@@ -111,9 +140,11 @@ public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
         TextView txtSurname = v.findViewById(R.id.textViewSurnameComponet);
         TextView textAdmin = v.findViewById(R.id.textAdminGroup);
 
-        //imposta il testo per il nome e la descrizione del gruppo
+        //imposta il testo per il nome e la cognome componente del gruppo
         txtName.setText(utente.getNome());
         txtSurname.setText(utente.getCognome());
+
+        //imposta l'immagine dei componenti dei gruppi
         if(utente.getProfileImageBitmap() != null) img.setImageBitmap(utente.getProfileImageBitmap());
         else if(utente.getProfileImageUri() != null) img.setImageURI(utente.getProfileImageUri());
         else img.setImageResource(R.drawable.profile_icon);
@@ -134,7 +165,9 @@ public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
         return mFilter;
     }
 
-
+    /**
+     * Gestisce le operazioni per il filtraggio della SearchView
+     */
     private class ItemFilter extends Filter{
 
         /**
@@ -167,6 +200,11 @@ public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
             return results;
         }
 
+        /**
+         * stampa i risultati del filtro
+         * @param constraint
+         * @param results
+         */
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredData = (ArrayList<Utente>) results.values;
@@ -177,4 +215,4 @@ public class ComponentGroupAdapter extends BaseAdapter implements Filterable {
 
     }
 
-}//fine classe2
+}

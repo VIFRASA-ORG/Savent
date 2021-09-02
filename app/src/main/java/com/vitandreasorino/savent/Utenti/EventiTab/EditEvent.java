@@ -2,7 +2,6 @@ package com.vitandreasorino.savent.Utenti.EventiTab;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -28,15 +27,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.vitandreasorino.savent.Utenti.EventiTab.CreazioneEvento.MapActivity;
 import com.vitandreasorino.savent.R;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Helper.ImageHelper;
@@ -94,6 +90,10 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
     private Double valoreLongitudineEdit = null;
 
 
+    /**
+     * metodo setAdapterEdit utilizzato per l'aggiornamento della lista del creatore dell'evento
+     * @param position
+     */
     private void setAdapterEdit(int position) {
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.options_item, arrayNomeEdit);
         try {
@@ -142,6 +142,8 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
 
 
         autoCompleteEdit = (AutoCompleteTextView) findViewById(R.id.autoCompleteEditEvent);
+
+        // svuoto le due liste
         arrayNomeEdit.clear();
         arrayIdEdit.clear();
 
@@ -156,6 +158,8 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
             if (closureResult != null) {
                 arrayIdEdit.add(AuthHelper.getUserId());
                 arrayNomeEdit.add("<" + closureResult + "> " + getString(R.string.accountCreatore));
+
+                // controllo che l'id utente creatore coincida con l'id dell'utente loggato
                 if(eventModel.getIdUtenteCreatore().equals(idUtenteLoggato)){
                     idAccountCreatoreEdit = eventModel.getIdUtenteCreatore();
                     setAdapterEdit(0);
@@ -187,7 +191,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
         });
 
 
-        //Deserializing the object from the intent
+        // Deserializzazione dell'oggetto dall'intent
         eventModel = (Evento) getIntent().getSerializableExtra("eventObj");
 
         oldDate = Calendar.getInstance();
@@ -196,7 +200,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
         newDate = Calendar.getInstance();
         newDate.setTime( eventModel.getDataOra());
 
-        //Adding the listener for updates
+        // Aggiunta di un listener per gli aggiornamenti
         Eventi.addDocumentListener(eventModel.getId(),this,closureResult -> {
             if(closureResult != null){
                 eventModel = closureResult;
@@ -259,7 +263,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
         });
 
 
-                /*
+        /*
         Metodo per l'evento del click della textView, aprirà un DatePickerDialog tramite il quale si selezionerà
         la data dell'evento mostrandola e settandola nella textView
         */
@@ -287,6 +291,9 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
         });
 
 
+        /**
+         * Settaggio del DatePickerDialog
+         */
         dateSetListenerEdit = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -340,19 +347,23 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
 
 
     }
-    
 
+
+    /**
+     * Metodo per effettuare il refresh dei dati
+     */
     private void refreshData(){
 
+        // Controlla che sia stata caricata un immagine nel gruppo
         if(eventModel.getIsImageUploaded() == true) {
 
-            //We have to download the image all over again because the intent allow you to pass just file under the size of 1mb
+            // Dobbiamo scaricare di nuovo l'immagine perché l'intent ti consente di passare solo file di dimensioni inferiori a 1 MB
             Eventi.downloadEventImage(eventModel.getId(), (ClosureBitmap) result -> {
                 eventModel.setImageBitmap(result);
                 imageViewEditEvent.setImageBitmap(result);
             });
 
-            //Download the url
+            // Scarico l'url
             Eventi.downloadEventImageUri(eventModel.getId(), new ClosureResult<Uri>() {
                 @Override
                 public void closure(Uri result) {
@@ -363,19 +374,19 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
             });
         }
 
-        //Insert all model information in the view
+        // Inserisco tutte le informazioni sul modello nella vista
         editTextEditNomeEvento.setText(eventModel.getNome());
         editTextEditDescrizione.setText(eventModel.getDescrizione());
 
-        //Computing the available places and the number of participant in the queue
+        // Calcolo dei posti disponibili e del numero dei partecipanti in coda
         editTextEditNuumeroMassimoPartecipanti.setText("" + eventModel.getNumeroMassimoPartecipanti());
 
+        // Inserimento nella progressBar della soglia di accetazione status dell'utente
         seekBarStatusProgressEditEvent.setProgress(eventModel.getSogliaAccettazioneStatus());
         textViewEditContatoreStatus.setText("" + eventModel.getSogliaAccettazioneStatus() + "%");
 
-
+        // Splitto in due parti la data, la prima parte "parts[0]" sarà inerente alla data la seconda "parts[1]" al tempo
         String[] parts = eventModel.getNeutralData().split(" ");
-
        displayDateEdit.setText(parts[0]);
        displayTimeEdit.setText(parts[1]);
 
@@ -420,6 +431,10 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
         public void afterTextChanged(Editable s) { }
     };
 
+    /**
+     * Metodo per il controllo della modifica dei cambi di un evento, in caso positivo viene reso cliccabile il pulsante saveSettings,
+     * in caso negativo rimane disabilitato.
+     */
     private void checkSaveButtonActivation() {
         if(eventModel == null) return;
 
@@ -440,7 +455,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
     }
 
     /**
-     * Remove the focus from all the components and reset the background color.
+     * Rimuove lo stato attivo da tutti i componenti e reimposta il colore di sfondo.
      */
     private void clearAllFocusAndColor(){
         editTextEditNomeEvento.clearFocus();
@@ -455,6 +470,9 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
         textViewEditLongitudine.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
     }
 
+    /**
+     * Disabilita tutti i componenti della schermata
+     */
     private void disableAllComponent(){
         editTextEditNomeEvento.setEnabled(false);
         editTextEditDescrizione.setEnabled(false);
@@ -463,6 +481,9 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
         AnimationHelper.fadeIn(progressBarEvent,1000);
     }
 
+    /**
+     * Abilita tutti i componenti della schermata
+     */
     private void enableAllComponent(){
         editTextEditNomeEvento.setEnabled(true);
         editTextEditDescrizione.setEnabled(true);
@@ -474,17 +495,19 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
 
 
     /**
-     * Event called when is pressed the button to save the information to the server
+     * Evento chiamato quando viene premuto il pulsante per salvare le informazioni sul server
      * @param view
      */
     private void onSaveDataButtonClick(View view){
 
         clearAllFocusAndColor();
 
-        //Disabling all the component and showing the progress bar
+        //Disabilitazione di tutti i componenti e visualizzazione della barra di avanzamento
         disableAllComponent();
         saveSettings.setEnabled(false);
 
+        // Controlla se i dati inseriti dall'utente sono corretti, in caso affermativo
+        // procede e aggiorna i dati nel server
         if(checkAllNewValues()){
 
             updateFieldToServer();
@@ -496,10 +519,10 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
     }
 
     /**
-     * Execute the query to update the new information to the server.
+     * Esegue la query per aggiornare le nuove informazioni sul server.
      */
     private void updateFieldToServer(){
-        //There's for sure something different to upload to the server
+        //C'è sicuramente qualcosa di diverso da caricare sul server
         List<Object> listOfUpdates = new ArrayList<>();
 
 
@@ -515,13 +538,13 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
             listOfUpdates.add(editTextEditDescrizione.getText().toString());
         }
 
-        //descrizione
+        //numeroMassimoPartecipanti
         if(Integer.parseInt(editTextEditNuumeroMassimoPartecipanti.getText().toString()) != eventModel.getNumeroMassimoPartecipanti()){
             listOfUpdates.add(Eventi.MAX_PARTECIPANTI_FIELD);
             listOfUpdates.add(Integer.parseInt(editTextEditNuumeroMassimoPartecipanti.getText().toString()));
         }
 
-        //soglia status
+        //Soglia status
         if(seekBarStatusProgressEditEvent.getProgress() != eventModel.getSogliaAccettazioneStatus()){
             listOfUpdates.add(Eventi.STATUS_SOGLIA_FIELD);
             listOfUpdates.add(seekBarStatusProgressEditEvent.getProgress());
@@ -539,11 +562,13 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
             listOfUpdates.add(Double.parseDouble(textViewEditLongitudine.getText().toString()));
         }
 
+        //data e ora
         if(newDate.compareTo(oldDate) != 0) {
             listOfUpdates.add(Eventi.DATA_ORA_FIELD);
             listOfUpdates.add(newDate.getTime());
         }
 
+        //utente/gruppo creatore
         if(!eventModel.getIdUtenteCreatore().equals(idAccountCreatoreEdit) && !eventModel.getIdGruppoCreatore().equals(idAccountCreatoreEdit)) {
 
             if(idAccountCreatoreEdit.equals(AuthHelper.getUserId())) {
@@ -560,9 +585,9 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
         }
 
 
-        //This means that no other information is different rather than the image.
+        //Ciò significa che nessun'altra informazione è diversa dall'immagine.
         if(listOfUpdates.size() == 0) {
-            //Check if we need to upload the image
+            //Controllo se c'è bisogno di caricare l'immagine
             if(immagineSelezionataEdit != null){
                 Eventi.uploadEventImage(immagineSelezionataEdit,eventModel.getId(), closureBool -> {
                     if(closureBool){
@@ -585,17 +610,19 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
             return;
         };
 
-        //put the first two as first parameters
-        String firstField = (String) listOfUpdates.get(0);;
-        Object firstValue = listOfUpdates.get(1);;
+        //Inserimento dei due paramentri, il primo indicherà il campo, il secondo indicherà il valore
+        String firstField = (String) listOfUpdates.get(0);
+        Object firstValue = listOfUpdates.get(1);
         if(listOfUpdates.size() > 2){
             listOfUpdates.remove(0);
             listOfUpdates.remove(0);
         }
 
+        //Aggiornamento dei campi sul server
         Eventi.updateFields(eventModel.getId(), closureBool -> {
             if(closureBool){
-                //check if we have to upload also the image
+
+                //Controlla se dobbiamo caricare anche l'immagine
                 if(immagineSelezionataEdit != null){
                     Eventi.uploadEventImage(immagineSelezionataEdit,eventModel.getId(),closureBool1 -> {
                         if(closureBool1){
@@ -624,7 +651,7 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
     }
 
     /**
-     * Update the model with the new information after the server update.
+     * Aggiorna il modello con le nuove informazioni dopo l'aggiornamento del server.
      */
     private void updateModel() {
 
@@ -650,17 +677,24 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
     }
 
 
-
+    /**
+     * Metodo per l'inserimento di un'immagine dell'evento.
+     * @param view
+     */
     public void onClickPhotoEditEvent(View view) {
         Intent i = new Intent();
         i.setType("image/*");
         i.setAction(Intent.ACTION_GET_CONTENT);
 
-        // pass the constant to compare it
-        // with the returned requestCode
+        // passa la costante per confrontarla
+        // con il requestCode restituito
         startActivityForResult(Intent.createChooser(i, "Select Picture"), 211);
     }
 
+    /**
+     * Metodo che permette di aprire una nuova activity contenente la mappa aggiornata con il marker.
+     * @param view
+     */
     public void onMap(View view) {
 
         Intent mapActivity = new Intent(this, MapActivity.class);
@@ -700,16 +734,16 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
 
 
         if (resultCode == RESULT_OK) {
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
 
+            // confronta il codice risultato con il
+            // SELECT_PICTURE costante
             if (requestCode == 211) {
 
-                // Get the url of the image from data
+                // Ottieni l'URL dell'immagine dai dati
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
-                    // update the preview image in the layout
-                    // Compress it before it is shown into the imageView
+                    // Aggiorna l'immagine di anteprima nel layout
+                    // Comprimilo prima che venga mostrato in imageView
                     imageViewEditEvent.setImageBitmap(ImageHelper.decodeSampledBitmapFromUri(getContentResolver(), selectedImageUri, imageViewEditEvent));
                     immagineSelezionataEdit = selectedImageUri;
                     checkSaveButtonActivation();
@@ -787,6 +821,9 @@ public class EditEvent extends AppCompatActivity implements View.OnFocusChangeLi
     }
 
 
+    /**
+     * Metodo per  settare il colore "#AAAAAA" a tutte le editText
+     */
     private void backgroundTintEditTextCreateEventEdit() {
         editTextEditNomeEvento.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
         editTextEditDescrizione.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
