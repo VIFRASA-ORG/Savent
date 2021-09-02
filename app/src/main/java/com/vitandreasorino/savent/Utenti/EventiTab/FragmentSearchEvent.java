@@ -35,9 +35,9 @@ import java.util.Map;
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureBitmap;
-import Model.DB.Eventi;
-import Model.DB.Gruppi;
-import Model.Pojo.Evento;
+import Model.DAO.Eventi;
+import Model.DAO.Gruppi;
+import Model.POJO.Evento;
 
 public class FragmentSearchEvent extends Fragment implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
 

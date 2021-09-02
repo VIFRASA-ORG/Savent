@@ -28,9 +28,9 @@ import com.vitandreasorino.savent.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Pojo.ContactModel;
-import Model.DB.Utenti;
-import Model.Pojo.Utente;
+import Model.POJO.Contact;
+import Model.DAO.Utenti;
+import Model.POJO.Utente;
 
 
 public class AddContacts extends AppCompatActivity implements SearchView.OnQueryTextListener {
@@ -41,7 +41,7 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
     RecyclerView recyclerView;
     SearchView searchView;
 
-    ArrayList<ContactModel> arrayList = new ArrayList<ContactModel>();
+    ArrayList<Contact> arrayList = new ArrayList<Contact>();
     ArrayList<Utente> utentiList = new ArrayList<>();
     List<Utente> alreadySelectedUsers;
 
@@ -120,7 +120,7 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
         //Inizializza il cursore
         Cursor cursor = getContentResolver().query(uri, null, null, null, sort);
 
-        ArrayList<ContactModel> tempArrayList = new ArrayList<ContactModel>();
+        ArrayList<Contact> tempArrayList = new ArrayList<Contact>();
 
         //Verifica condizioni
         if (cursor.getCount() > 0) {
@@ -137,7 +137,7 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
                     String number = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     number = PhoneNumberUtils.normalizeNumber(number);
 
-                    ContactModel model = new ContactModel();
+                    Contact model = new Contact();
                     //Si setta la variabile creata con i dati ottenuti in lettura dalla rubrica
                     model.setName(name);
                     model.setNumber(number);
@@ -161,9 +161,10 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
         Utenti.searchContactsInPhoneBooks(tempArrayList, listOfUsers -> {
             for(Utente u : listOfUsers){
                 //Vengono agiunti tutti i contatti con un profilo attivo sul server all'interno dell'adapter della list view.
-                int index = tempArrayList.lastIndexOf(new ContactModel(u.getNumeroDiTelefono()));
+                int index = tempArrayList.lastIndexOf(new Contact(u.getNumeroDiTelefono()));
+              
                 if(index >= 0){
-                    ContactModel c = tempArrayList.get(index);
+                    Contact c = tempArrayList.get(index);
                     c.setDocumentId(u.getId());
                     arrayList.add(c);
                     utentiList.add(u);
@@ -310,10 +311,10 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
      * @return una lista di oggetti di tipo Utente indicante gli oggetti selezionati dall'utente .
      */
     private ArrayList<Utente> getCheckedUsers(){
-        List<ContactModel> checkedContacts = adapter.getCheckedContacts();
+        List<Contact> checkedContacts = adapter.getCheckedContacts();
         ArrayList<Utente> finalList = new ArrayList<>();
 
-        for(ContactModel c : checkedContacts){
+        for(Contact c : checkedContacts){
             int index = utentiList.lastIndexOf(new Utente(c.getDocumentId(),c.getNumber()));
             if(index >= 0){
                 Utente u = utentiList.get(index);

@@ -1,6 +1,5 @@
 package com.vitandreasorino.savent.Utenti.EventiTab;
 
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
@@ -39,11 +38,11 @@ import Helper.AuthHelper;
 import Helper.ImageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureResult;
-import Model.DB.Eventi;
-import Model.DB.Gruppi;
-import Model.DB.Utenti;
-import Model.Pojo.Evento;
-import Model.Pojo.Gruppo;
+import Model.DAO.Eventi;
+import Model.DAO.Gruppi;
+import Model.DAO.Utenti;
+import Model.POJO.Evento;
+import Model.POJO.Gruppo;
 
 public class EditEvent extends AppCompatActivity implements View.OnFocusChangeListener {
 

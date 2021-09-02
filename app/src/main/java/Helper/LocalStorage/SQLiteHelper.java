@@ -1,4 +1,5 @@
 package Helper.LocalStorage;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,17 +13,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import Helper.NotificationHelper;
-import Model.Pojo.Notification;
-import Model.Pojo.TemporaryExposureKey;
-
+import Model.POJO.Notification;
+import Model.POJO.TemporaryExposureKey;
 
 /**
- * Helper class with all the method to create, update and drop all the
- * SQLite tables needed by the application.
- * It contain also all the needed query to manage the data inside the tables.
+ * Classe Helper che estende la classe SQLiteOpenHelper per gestire tutti
+ * i metodi del database SQLite.
+ *
+ * Inoltre sono presenti tutti i metodi per creare, modificare e cancellare
+ * record da tutte le tabelle della base di dati.
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
 
+    /**
+     * CLASSE CONTRACT IN CUI È DEFINITA LA STRUTTURA
+     * DI TUTTE LE TABELLE DELLA BASE DI DATI
+     */
     public final class SaventContract {
 
         private SaventContract() { }
@@ -43,7 +49,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             public static final String COLUMN_NAME_DATA_CONTATTO = "DataContatto";
         }
 
-        /* Inner class che definisce la tabella ContattiAvvenuti */
+        /* Inner class che definisce la tabella Notiiche */
         private class Notifiche implements BaseColumns {
             public static final String TABLE_NAME = "Notifiche";
             public static final String COLUMN_NAME_NOTIFICATION_TYPE = "NotificationType";
@@ -64,16 +70,24 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * COSTANTI
+     */
     public static final int DISTANCE_TIME_CONTACT = 15;
     public static final int DATABASE_VERSION = 4;
 
-    /* Costruttore della classe SQLiteHelper */
+
+    /**
+     * COSTRUTTORE DELLA CLASSE HELPER
+     */
     public SQLiteHelper(Context context) {
         super(context, SaventContract.DATABASE_NAME, null, DATABASE_VERSION);
     }
 
 
-    /* Creazione delle due tabelle MieiCodici, ContattiAvvenuti */
+    /**
+     * OVERRIDE DEI METODI NECESSARI DALLA CLASSE ASTRATTA SQLiteOpenHelper
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + SaventContract.TemporaryExposureKeys.TABLE_NAME + "(" + SaventContract.TemporaryExposureKeys.COLUMN_NAME_CODICI +
@@ -104,8 +118,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
+
     /**
-     * funzione per eseguire il drop delle tabelle
+     * Metodo per eseguire il drop di tutte le tabelle.
+     * Fatto il drop, esse vengono ricreate vuote.
      */
     public void dropDatabase(){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -118,7 +134,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Esegue la query per avere il numero di notifiche non lette
+     * Metodo che ritorna numero di notifiche non lette.
      *
      * @return il numero di notifiche non lette
      */
@@ -132,9 +148,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Imposta il flag della notifica a vero per identificare che la stessa è stata letta dall'utente.
+     * Metodo che modifica il record notifica con id passato come parametro
+     * mpostando il flag COLUMN_NAME_READ a vero per identificare che la stessa è stata letta dall'utente.
      *
-     * @param notificationId l'id della notifica che è stata letta
+     * @param notificationId l'id della notifica che è stata letta.
      */
     public void readANotification(int notificationId){
         SQLiteDatabase databaseSQLite = this.getWritableDatabase();
@@ -145,9 +162,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Permette di salvare sul database SQLite una nuova notifica
+     * Metodo che permette di creare un nuovo record Notifica all'intenro della tabella Notifiche.
      *
-     * @param n l'oggetto della notifica da salvare
+     * @param n l'oggetto della notifica da salvare.
+     * @return id corrispondente all'id assegnato alla nuova notifica sul database SQLite.
      */
     public long insertNewNotification(Notification n){
         SQLiteDatabase databaseSQLite = this.getWritableDatabase();
@@ -169,7 +187,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Permette di cancellare da SQLite una notifica.
+     * Metodo che permette di cancellare un record notifica da dentro la tabella Notifiche.
      *
      * @param notificationId l'id della notifica da cancellare.
      */
@@ -180,10 +198,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Ritorna una lista di tutte le notifiche presenti nel database SQLite.
+     * Metodo che ritorna una lista con tutte le notifiche presenti nel database SQLite.
      *
      * @param context il contesto di utilizzo
-     * @return una List<Notification> contenente tutte le notifiche presenti
+     * @return una List<Notification> contenente tutte le notifiche presenti nella tabella Notifiche.
      */
     public List<Notification> getAllNotificaton(Context context){
         SQLiteDatabase databaseSQLite = this.getReadableDatabase();
@@ -199,7 +217,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             n.setEventId(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_EVENT_ID)));
             n.setGroupName(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_GROUP_NAME)));
             n.setGroupId(cursor.getString(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_GROUP_ID)));
-            n.setRead(cursor.getInt(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_READ)) == 0 ? false : true);
+            n.setRead(cursor.getInt(cursor.getColumnIndexOrThrow(SaventContract.Notifiche.COLUMN_NAME_READ)) != 0);
             n.setId(cursor.getInt(cursor.getColumnIndexOrThrow(SaventContract.Notifiche._ID)));
 
             NotificationHelper.setTitleAndDescription(n,context);
@@ -215,7 +233,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Ritorna l'ultima Temporary Exposure Key memorizzata all'interno della tabella TemporaryExposureKeys
+     * Metodo che ritorna l'ultima Temporary Exposure Key memorizzata all'interno della tabella TemporaryExposureKeys
      *
      * @return l'ultima TEK se esiste, null altrimenti.
      */
@@ -236,9 +254,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Inserimento dei campi nella tabella MieiCodici
-     * @param codice
-     * @param dataCreazione
+     * Metodo che permette di inserire un nuovo record nella tabella TemporaryExposureKeys.
+     *
+     * @param codice nuovo codice TEK assegnato al dispositivo.
+     * @param dataCreazione data di creazione del nuovo TEK.
      */
     public void insertNewTek(String codice, Calendar dataCreazione) {
         SQLiteDatabase databaseSQLite = this.getWritableDatabase();
@@ -250,9 +269,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Inserimento dei campi nella tabella ContattiAvvenuti
-     * @param codice
-     * @param dataAvvenutoContatto
+     * Metodo che permette di inserire un nuovo record nella tabella ContattiAvvenuti.
+     *
+     * @param codice codice TEK del disositivo con cui si è venuti in contatto.
+     * @param dataAvvenutoContatto data del contatto.
      */
     public void insertContattiAvvenuti(String codice, Calendar dataAvvenutoContatto) {
         SQLiteDatabase databaseSQLite = this.getWritableDatabase();
@@ -263,61 +283,37 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         databaseSQLite.close();
     }
 
-
     /**
-     * Cancellazione delle tuple ogni 15 giorni dalla tabella MieiCodici
+     * Metodo che effettua la cancellazione dei campi più vecchi di DISTANCE_TIME_CONTACT dalla tabella TemporaryExposureKeys/
      */
     public void deleteExpiredTek() {
         SQLiteDatabase databaseSQLite = this.getWritableDatabase();
         Calendar currentTime = Calendar.getInstance();
-        // sottrae alla data corrente 15 giorni, in modo tale da usare questo oggetto currentTime all'interno della query
+        // sottrae alla data corrente DISTANCE_TIME_CONTACT giorni, in modo tale da usare questo oggetto currentTime all'interno della query
         currentTime.add(Calendar.DAY_OF_MONTH, -DISTANCE_TIME_CONTACT);
         databaseSQLite.delete(SaventContract.TemporaryExposureKeys.TABLE_NAME, SaventContract.TemporaryExposureKeys.COLUMN_NAME_DATA + " < ?", new String[] {"" + currentTime.getTimeInMillis()});
         databaseSQLite.close();
     }
 
     /**
-     * Cancellazione delle tuple ogni 15 giorni dalla tabella ContattiAvvenuti
+     * Metodo che effettua la cancellazione dei campi più vecchi di DISTANCE_TIME_CONTACT dalla tabella ContattiAvvenuti
      */
     public void deleteExpiredContact() {
         SQLiteDatabase databaseSQLite = this.getWritableDatabase();
         Calendar currentTime = Calendar.getInstance();
-        // sottrae alla data corrente 15 giorni, in modo tale da usare questo oggetto currentTime all'interno della query
+        // sottrae alla data corrente DISTANCE_TIME_CONTACT giorni, in modo tale da usare questo oggetto currentTime all'interno della query
         currentTime.add(Calendar.DAY_OF_MONTH, -DISTANCE_TIME_CONTACT);
         databaseSQLite.delete(SaventContract.ContattiAvvenuti.TABLE_NAME,SaventContract.ContattiAvvenuti.COLUMN_NAME_DATA_CONTATTO + " < ?", new String[] {"" + currentTime.getTimeInMillis()});
         databaseSQLite.close();
     }
 
-
     /**
-     * Permette di controllare la presenza dei codici all'interno della tabella ContattiAvvenuti
-     * @param codici
-     * @return il numero di tuple trovate
+     * Metodo che ritorna tutti i tek presenti nella tabella TemporaryExposureKeys cioè tutti
+     * i tek assegnati all'utente loggato.
+     *
+     * @return lista di tek trovati nella tabella TemporaryExposureKeys.
      */
-    public int controlloContattiAvvenuti(ArrayList<String> codici) {
-
-        SQLiteDatabase databaseSQLite = this.getReadableDatabase();
-        String finalIn = "";
-        for(String codice : codici) {
-            finalIn += "\""+codice + "\",";
-        }
-
-        // la stringa finalIn permette di ricreare la condizione all'interno del WHERE IN
-        finalIn = finalIn.substring(0,  finalIn.length()-1);
-        String queryControlloContatti = "SELECT * FROM " + SaventContract.ContattiAvvenuti.TABLE_NAME +
-                                        " WHERE "+ SaventContract.ContattiAvvenuti.COLUMN_NAME_CODICI + " IN (" + finalIn + ")";
-
-        Cursor cursore = databaseSQLite.rawQuery(queryControlloContatti,null);
-        int count = cursore.getCount();
-        databaseSQLite.close();
-        return count;
-    }
-
-    /**
-     * Lettura dei Miei Codici presenti nel database locale "Savent.db"
-     * @return arrayMieiCodici, contenente tutti i codici presenti nella tabella "MieiCodici"
-     */
-    public ArrayList<TemporaryExposureKey> letturaMieiCodici() {
+    public ArrayList<TemporaryExposureKey> letturaMieiTek() {
         ArrayList<TemporaryExposureKey> arrayMieiCodici = new ArrayList<TemporaryExposureKey>();
         SQLiteDatabase databaseSQLite = this.getReadableDatabase();
         String queryLettura = "SELECT " + SaventContract.TemporaryExposureKeys.COLUMN_NAME_CODICI + " FROM " + SaventContract.TemporaryExposureKeys.TABLE_NAME;
@@ -343,11 +339,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
 
     /**
-     * Cerca dei matching tra i tek passati come paramentro e i tek presenti nella tabella ContattiAvvenuti.
+     * Metodo che cerca dei matching tra i tek passati come paramentro e i tek presenti nella tabella ContattiAvvenuti.
      * Ritorna il numero di occorrenze per ogni diverso contatto passato come paramentro.
      * Se un tek non viene trovato, non viene nemmeno restituito nel valore di ritorno.
      *
-     * @param codici
+     * @param codici codici di cui cercare una corrispondenza nella tabella ContattiAvvenuti.
      * @return HashMap<String,int> contente come chiave il codice della tek, come valore il numero di occorrenze.
      */
     public Map<String,Integer> matchTekContattiConTekPositivi(List<TemporaryExposureKey> codici) {
@@ -379,7 +375,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Inserisce la lista di tek passata come parametro nella tabella di codici tek positivi "TekPositivi".
+     * Metodo che inserisce la lista di tek passata come parametro nella tabella di codici tek positivi "TekPositivi".
      *
      * @param positiveTekList lista di tek da aggiungere nella tabella TekPositivi.
      */
@@ -393,7 +389,4 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
         databaseSQLite.close();
     }
-
-
-
 }

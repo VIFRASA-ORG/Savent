@@ -18,26 +18,35 @@ import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 import java.util.Calendar;
 import java.util.Map;
 import Helper.LocalStorage.SQLiteHelper;
-import Model.Pojo.Notification;
-
+import Model.POJO.Notification;
 
 /**
- * Helper class with some method to manage, create and send notification
- * to the user also when the app is in background.
+ * Classe Helper con tutti i metodi per gestire, creare e inviare le notifiche
+ * all'utente anche quando l'app non è in esecuzione.
  */
 public class NotificationHelper {
 
+    /**
+     * COSTANTI CHE INDICANO I TIPI DI NOTIFICHE CHE È
+     * POSSIBILE RICEVERE DA FIREBASE.
+     *
+     * CORRISPONDONO AL CAMPO TYPE PRESENTE NEL PAYLOAD DELLE
+     * NOTIFICHE RICEVUTE.
+     */
     public static final String QUEUE_CLIMBED_NOTIFICATION = "queueClimbed";
     public static final String NEW_GROUP_NOTIFICATION = "addedToGroup";
     public static final String EVENT_DELETED_NOTIFICATION = "eventDeleted";
     public static final String CONTACT_RISK_NOTIFICATION = "contactRisk";
 
+
     /**
-     * Convert the Map given from the notification, into a Notification object.
+     * Metodo che, dato il payload ricevuto dalla notifica di Firebase (remoteMessage.getData()),
+     * compila un oggetto di POJO di classe Notification gestibile
+     * dall'applicazione.
      *
-     * @param context the context
-     * @param payloadData the data coming from the notification
-     * @return  a Notification object with all the information of the notification.
+     * @param context il contesto dell'applicazione o dell'activity chiamante.
+     * @param payloadData payload riceuto insieme alla notifica (remoteMessage.getData())
+     * @return oggetto di classe Notification con tutte le informazioni ricevute dalla notifica di Firebase.
      */
     public static final Notification getNotificationFromPayload(Context context, Map<String, String> payloadData){
 
@@ -72,10 +81,13 @@ public class NotificationHelper {
     }
 
     /**
-     * Set the notification title and descrption based to the notification type
+     * Metodo che compila i cambi "Title" e "description" dell'oggetto Notification passato come paramentro.
+     * I due campi sono compilati in base al notificationType presente nell'oggetto Notification.
+     * Le stringhe vengono prese dalle risorse in maniera tale da rendere le notifiche multilingua
+     * in base alla lingua del sistema.
      *
-     * @param n the notification object
-     * @param context the context
+     * @param n oggetto Notification in cui compilare i campi "Title" e "Notification".
+     * @param context
      */
     public static final void setTitleAndDescription(Notification n,Context context){
         switch (n.getNotificationType()){
@@ -99,11 +111,15 @@ public class NotificationHelper {
     }
 
     /**
-     * Create and show a simple notification containing the received FCM message.
+     * Metodo che crea e invia una notifica al sistema operativo,
+     * notifica basata sui dati ricevuti da Firebase.
      *
-     * @param n FCM message body received.
+     * @param context contesto dell'applicazione o dell'activity chiamante.
+     * @param n oggetto della notifica da inviare all'utente.
+     * @param icon icona da visualizzare nella notifica.
+     * @param id id della notifica da inviare.
      */
-    public static void sendNotification(Context context, Model.Pojo.Notification n, @Nullable Integer icon, long id) {
+    public static void sendNotification(Context context, Model.POJO.Notification n, @Nullable Integer icon, long id) {
         Intent intent = new Intent(context, NotificationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(NotificationActivity.FROM_NOTIFICATION_INTENT,true);
@@ -123,7 +139,7 @@ public class NotificationHelper {
                 .setSound(defaultSoundUri)
                 .setDefaults(android.app.Notification.BADGE_ICON_LARGE)
                 .setContentIntent(pendingIntent)
-                .setColorized((icon == null) ? false : true)
+                .setColorized((icon != null))
                 .setColor((icon == null ) ? Color.TRANSPARENT : Color.RED);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -140,12 +156,15 @@ public class NotificationHelper {
     }
 
     /**
-     * Method that save the notification to the local storage and end the broadcast
-     * to alert all the receiver that a notification has come.
+     * Metodo che salva la notifica nella tabella Notifiche del database SQLite.
+     * Inoltre invia un messaggio di broadcast locale per notificare tutti gli activity
+     * iteressati dell'arrivo di una notifica.
+     * Questo viene fatto nel caso la notifica arrivi mentre l'app è in esecuzione
+     * per aggiornare il numero di notifiche non lette nella tab bar.
      *
-     * @param context the context.
-     * @param n the notification to save.
-     * @return the notification id into the SQLite database.
+     * @param context contesto dell'activity chiamante.
+     * @param n oggetto notification da inviare.
+     * @return ritorna l'id generato nel database locale SQLite.
      */
     public static long saveAndAlertNotification(Context context, Notification n){
         //Insert the notification into the database

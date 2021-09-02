@@ -33,8 +33,8 @@ import java.util.List;
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureList;
-import Model.DB.Gruppi;
-import Model.Pojo.Gruppo;
+import Model.DAO.Gruppi;
+import Model.POJO.Gruppo;
 
 import static android.app.Activity.RESULT_OK;
 

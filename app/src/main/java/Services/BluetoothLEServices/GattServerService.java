@@ -34,44 +34,53 @@ import Model.LogDebug;
 
 
 /**
- * Service that run a BLE Gatt Server with a single single service with the following UUID: BluetoothLEHelper.UUID_SERVICE
- * This service has two characteristic: BluetoothLEHelper.UUID_SERVICE_SEND and BluetoothLEHelper.UUID_SERVICE_RECEIVE.
+ * Service che lancia un BLE GATT Server con al suo interno un singolo service identificato dell'UUID definito nella classe BluetoothLEHelper.
+ * Il service contiene due caratteristiche identificate rispettivamente da: BluetoothLEHelper.UUID_SERVICE_SEND and BluetoothLEHelper.UUID_SERVICE_RECEIVE.
  *
- * The first characteristic send, as broadcast, the current logged-in TEK.
- * The second characteristic is used to allow the crawler of the other device to send their TEK to this device.
+ * La prima caratteristica, di sola lettura, invia in broadcast il TEK dell'utente loggato.
+ * La seconda caratteristica, di sola scrittura, riceve i TEK dai crawler degli altri dispositivi.
  *
- * In order to work, this service need bluetooth turned on and react to the bluetooth state change event.
+ * Per far funzionare il GATT Server, è necessario avere il bluetooth attivo
+ * e inoltre reagisce anche agli eventi di cambiamento di stato del bluetooth.
  */
 public class GattServerService extends Service {
 
-    public static final String RESTART_GATT_SERVER = "restartGattServer";
-    public static final String STOP_GATT_SERVER = "stopGattServer";
-    public static final String UPDATE_GATT_CHARACTERISTIC = "updateGattCharacteristicValue";
+    /**
+     * Dichiarazione di tutte le costanti per lanciare e ricevere gli intent
+     * con cui interagisce questo service.
+     *
+     * In particolare risponde all'intent per riavviare il GATT Server,
+     * all'intent per stopparlo o per aggiornare il valore inviato dalla caratteristicha di send.
+     */
+    public static final String RESTART_GATT_SERVER_INTENT = "restartGattServer";
+    public static final String STOP_GATT_SERVER_INTENT = "stopGattServer";
+    public static final String UPDATE_GATT_CHARACTERISTIC_INTENT = "updateGattCharacteristicValue";
 
-    public static boolean isRunning = false;
+    //Flag che indica se il SERVICE è attualmente in esecuzione o no.
+    public static boolean isServiceRunning = false;
 
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothManager mBluetoothManager;
     private BluetoothGattServer bluetoothGattServer;
     private BluetoothLeAdvertiser bluetoothLeAdvertiser = null;
 
-    //Creating all the UUID from the UUID string
+    //Creazione degli oggetti UUID partendo dai valori uuid stringa.
     private UUID serviceUUID = UUID.fromString(BluetoothLEHelper.UUID_SERVICE);
     private UUID characteristic_send_UUID = UUID.fromString(BluetoothLEHelper.UUID_CHARACTERISTIC_SEND);
     private UUID characteristic_receive_UUID = UUID.fromString(BluetoothLEHelper.UUID_CHARACTERISTIC_RECEIVE);
 
-    //Defining the settings for Bluetooth LE advertising
+    //Definizione delle settings per il BluetoothLE advertising.
     AdvertiseSettings settings = new AdvertiseSettings.Builder()
             .setConnectable(true)
             .build();
 
-    //Defining the advertisement data to be advertised in advertisement packet
+    //Definizione dei dati advertisement da usare negli advertisement packet.
     AdvertiseData advertiseData = new AdvertiseData.Builder()
             .setIncludeDeviceName(true)
             .setIncludeTxPowerLevel(true)
             .build();
 
-    //Defining the scan response associated with the advertisement data
+    //Definizione della risposta di scansione associata ad i dati di advertisement.
     AdvertiseData scanResponseData = new AdvertiseData.Builder()
             .addServiceData(new ParcelUuid(serviceUUID),"bt".getBytes(StandardCharsets.UTF_8 ))
             .setIncludeTxPowerLevel(true)
@@ -84,34 +93,33 @@ public class GattServerService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        isRunning = true;
+        isServiceRunning = true;
 
-        //Set a filter to only receive bluetooth state changed events.
+        //Regitrazione del receiver per i cambi di stato del bluetooth.
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothStateReceiver, filter);
 
-        //Registering the two broadcast receiver
-        LocalBroadcastManager.getInstance(this).registerReceiver(restartServer, new IntentFilter(RESTART_GATT_SERVER));
-        LocalBroadcastManager.getInstance(this).registerReceiver(stopServer, new IntentFilter(STOP_GATT_SERVER));
-        LocalBroadcastManager.getInstance(this).registerReceiver(updateCharacteristicValue, new IntentFilter(UPDATE_GATT_CHARACTERISTIC));
+        //Registrazione dei broadcast receiver per i 3 intent sopra definiti.
+        LocalBroadcastManager.getInstance(this).registerReceiver(restartServer, new IntentFilter(RESTART_GATT_SERVER_INTENT));
+        LocalBroadcastManager.getInstance(this).registerReceiver(stopServer, new IntentFilter(STOP_GATT_SERVER_INTENT));
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateCharacteristicValue, new IntentFilter(UPDATE_GATT_CHARACTERISTIC_INTENT));
 
-        //Invoking the method to perform all checks before starting the server
+        //Chaimata del metodo che esegue tutti i controlli prima di avviare il GATT Server.
         tryToStartServer();
     }
 
     /**
-     * Method to perform all checks before starting the server.
-     * If the check are all successful, is invoked the method to start the server.
-     * It also register the broadcast receiver to kill the service or to update the TEK broadcasted.
+     * Metodo che esegue tutti i controlli prima di avviare il GATT Server.
+     * Se i controlli vanno a buon fine, avvia effettivamente il server.
      */
     private void tryToStartServer(){
-        //Getting the last TEK
+        //Scaricamento dell'ultimo TEK da comunicare nella caratteristica di send.
         SQLiteHelper db = new SQLiteHelper(this);
         String lastTek = db.getLastTek();
 
         if(lastTek != null){
-            //Checking if the bluetooth is supported and enabled, and check also
-            //if the device supports the multiple advertisement.
+            //Controlla se il bluetooth è supportato e abilitato
+            //Controlla anche se il multiple advertisment è supportato.
             if (checkBluetoothService()){
                 startServer(lastTek);
             }
@@ -119,9 +127,10 @@ public class GattServerService extends Service {
     }
 
     /**
-     * Method that start the Gatt server with the single service and the two characteristics.
+     * Metodo che esegue tutte le operazioni per avviare effettivamente il GATT Server
+     * con il singolo servizio e le due caratteristiche.
      *
-     * @param characteristicValue the TEK to broadcast inside the characteristic BluetoothLEHelper.UUID_SERVICE_SEND.
+     * @param characteristicValue il TEK da inviare in broadcast nella caratteristica di sola lettura BluetoothLEHelper.UUID_SERVICE_SEND.
      */
     private void startServer(String characteristicValue){
 
@@ -129,55 +138,57 @@ public class GattServerService extends Service {
         Log.d(LogDebug.GAT_SERVER_LOG, "CHARAC SEND: " + characteristic_send_UUID.toString());
         Log.d(LogDebug.GAT_SERVER_LOG, "CHARAC RECEIVE: " + characteristic_receive_UUID.toString());
 
+        //Creazione dell'oggetto bluetoothLeAdvertiser se non esiste ancora.
         if(bluetoothLeAdvertiser == null){
             bluetoothLeAdvertiser = mBluetoothAdapter.getBluetoothLeAdvertiser();
             bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, scanResponseData, callback);
         }
 
+        //Apertura del server con assegnazione dei metodi di callback per i cambi di stato del server.
         bluetoothGattServer = mBluetoothManager.openGattServer(this.getApplicationContext(), gattServerCallback);
         BluetoothGattService service = new BluetoothGattService(serviceUUID, BluetoothGattService.SERVICE_TYPE_PRIMARY);
 
-        //add the characteristic to send the TEK
+        //Creazione e aggiunta della caratteristica send del TEK al service.
         BluetoothGattCharacteristic characteristicSend = new BluetoothGattCharacteristic(characteristic_send_UUID, BluetoothGattCharacteristic.PROPERTY_READ ,  BluetoothGattCharacteristic.PERMISSION_READ);
         characteristicSend.setValue(characteristicValue);
         service.addCharacteristic(characteristicSend);
 
-        //Characteristic to receive the TEK from other Gatt Crawler
+        //Creazione e aggiunta della caratteristica receive del TEK di altri dispositivi al service.
         BluetoothGattCharacteristic characteristicReceive = new BluetoothGattCharacteristic(characteristic_receive_UUID,BluetoothGattCharacteristic.PROPERTY_WRITE | BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT, BluetoothGattCharacteristic.PERMISSION_WRITE |  BluetoothGattCharacteristic.PERMISSION_READ);
         service.addCharacteristic(characteristicReceive);
 
-        //Adding the final service to the Gatt Server.
+        //Aggiunta del service finale al GATT Server.
         if(bluetoothGattServer != null) bluetoothGattServer.addService(service);
     }
 
     /**
-     * Method that performs all check for proper Gatt Server startup.
+     * Metodo che esegui i controlli del bluetooth per un corretto avvio del GATT Server.
      *
-     * @return true if all the check are successful, false otherwise.
+     * @return true se tutti i controlli sono corretti, false altrimenti.
      */
     private boolean checkBluetoothService(){
 
-        //Checking if the bluetooth is supported or enabled
+        //Controllo se il bluetooth è supportato e abilitato.
         BluetoothAdapter bluAdap = BluetoothAdapter.getDefaultAdapter();
         if (bluAdap == null) {
-            // Device does not support Bluetooth
+            // Il device non supporta il bluetooth.
             Log.i(LogDebug.GAT_SERVER_LOG, "BLUETOOTH NOT SUPPORTED");
             return false;
         } else if (! bluAdap.isEnabled()) {
-            // Bluetooth is not enabled
+            // Bluetooth spento.
             Log.i(LogDebug.GAT_SERVER_LOG, "BLUETOOTH TURNED OFF");
             return false;
         } else {
-            // Bluetooth is enabled
-            //Checking if the MultipleAdvertisement is supported
+            // Bluetooth acceso.
+            //Controllo se il MultipleAdvertisement è supportato.
             mBluetoothManager  = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             mBluetoothAdapter = mBluetoothManager.getAdapter();
 
             if(mBluetoothAdapter.isMultipleAdvertisementSupported()){
-                Log.i(LogDebug.GAT_SERVER_LOG, "SUPPORTED");
+                Log.i(LogDebug.GAT_SERVER_LOG, "MultipleAdvertisement SUPPORTATO");
                 return true;
             }else {
-                Log.i(LogDebug.GAT_SERVER_LOG, "NOT SUPPORTED");
+                Log.i(LogDebug.GAT_SERVER_LOG, "MultipleAdvertisement NON SUPPORTATO");
                 return false;
             }
         }
@@ -186,7 +197,7 @@ public class GattServerService extends Service {
 
 
     /**
-     * Broadcast receiver to run the server when the bluetooth is enabled during the execution.
+     * Broadcast receiver per i cambi di stato del bluetooth.
      */
     private final BroadcastReceiver bluetoothStateReceiver = new BroadcastReceiver() {
         @Override
@@ -198,7 +209,6 @@ public class GattServerService extends Service {
                         BluetoothAdapter.ERROR);
                 switch (bluetoothState) {
                     case BluetoothAdapter.STATE_ON:
-                        //Bluethooth is on, now you can perform your tasks
                         tryToStartServer();
                         break;
                     case BluetoothAdapter.STATE_OFF:
@@ -209,7 +219,7 @@ public class GattServerService extends Service {
     };
 
     /**
-     * Broadcast receiver to restart the gatt server;
+     * Broadcast receiver per l'intent di riavvio del server.
      */
     private BroadcastReceiver restartServer = new BroadcastReceiver() {
         @Override
@@ -220,7 +230,7 @@ public class GattServerService extends Service {
     };
 
     /**
-     * Broadcast receiver to stop the gatt server.
+     * Broadcast receiver per l'intent di cancellazione del server.
      */
     private BroadcastReceiver stopServer = new BroadcastReceiver() {
         @Override
@@ -234,7 +244,7 @@ public class GattServerService extends Service {
     };
 
     /**
-     * Broadcast receiver to update the characteristic value
+     * Broadcast receiver per aggiornare il valore della caratteristica di send.
      */
     private BroadcastReceiver updateCharacteristicValue = new BroadcastReceiver() {
         @Override
@@ -245,8 +255,7 @@ public class GattServerService extends Service {
     };
 
     /**
-     * Callback method used to deliver advertising operation status.
-     * Such as when there is a change in the Gatt Server Status.
+     * Metodo di callback utilizzato per ricevere i cambi di stato del BLE advertisement.
      */
     AdvertiseCallback callback = new AdvertiseCallback() {
         @Override
@@ -261,8 +270,8 @@ public class GattServerService extends Service {
     };
 
     /**
-     * BluetoothGattServerCallback abstract class implementation to manage all the
-     * callback from the inbound connections to the GATT server from other Crawler.
+     * Implementazione della classe astratta BluetoothGattServerCallbackper gestire tutti i
+     * callback provenienti della connessioni entranti al GATT Server da parte dei Crawler.
      */
     BluetoothGattServerCallback gattServerCallback = new BluetoothGattServerCallback() {
 
@@ -270,16 +279,16 @@ public class GattServerService extends Service {
         public void onCharacteristicWriteRequest(BluetoothDevice device, int requestId, BluetoothGattCharacteristic characteristic, boolean preparedWrite, boolean responseNeeded, int offset, byte[] value) {
             super.onCharacteristicWriteRequest(device, requestId, characteristic, preparedWrite, responseNeeded, offset, value);
 
-            //Converting the received data into a String
+            //Conversione dei dati ricevuti in stringa.
             String TEK = new String(value,StandardCharsets.UTF_8);
             System.out.println("Value wanted to assign: " + TEK);
             Log.i(LogDebug.GAT_SERVER_LOG,"New code: "+TEK);
 
-            //Inserting the received TEK to the local SQLite database
+            //Inserimento del TEK ricevuto nel database SQLlite locale.
             SQLiteHelper db = new SQLiteHelper(getApplicationContext());
             db.insertContattiAvvenuti(TEK, Calendar.getInstance());
 
-            //Sending the response to the crawler otherwise the connection will not be closed.
+            //Invio della risposta al crawler altrimenti la connessione non viene mai chiusa.
             bluetoothGattServer.sendResponse(device,requestId,BluetoothGatt.GATT_SUCCESS,offset,value);
         }
 
@@ -288,7 +297,7 @@ public class GattServerService extends Service {
             super.onCharacteristicReadRequest(device, requestId, offset, characteristic);
             Log.d(LogDebug.GAT_SERVER_LOG, "Sending response to characteristic read.");
 
-            //Sending the current TEK to the crawler requesting it.
+            //Invio del TEK corrent al crawler che lo richiede.
             bluetoothGattServer.sendResponse(device,requestId, BluetoothGatt.GATT_SUCCESS,offset,characteristic.getValue());
         }
     };
@@ -301,6 +310,8 @@ public class GattServerService extends Service {
 
     @Override
     public void onDestroy() {
+
+        //Rimozione dei broadcast receiver.
         try{
             unregisterReceiver(stopServer);
             unregisterReceiver(restartServer);
@@ -311,6 +322,6 @@ public class GattServerService extends Service {
         }
 
         super.onDestroy();
-        isRunning = false;
+        isServiceRunning = false;
     }
 }

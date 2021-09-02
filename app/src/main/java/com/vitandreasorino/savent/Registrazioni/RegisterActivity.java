@@ -12,7 +12,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -35,9 +34,9 @@ import java.util.regex.Pattern;
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Helper.ImageHelper;
-import Model.DB.GenericUser;
-import Model.DB.Utenti;
-import Model.Pojo.Utente;
+import Model.DAO.GenericUser;
+import Model.DAO.Utenti;
+import Model.POJO.Utente;
 
 
 public class RegisterActivity extends AppCompatActivity implements View.OnFocusChangeListener {
@@ -283,7 +282,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
      * @param psw : stringa che indica la password di questo nuovo ente
      */
     private void computeRegistrationToServer(Utente user, String email, String psw){
-        Utenti.createNewUser(user, email, psw, imageSelected, this, closureBool -> {
+        Utenti.createNewUser(user, email, psw, imageSelected, closureBool -> {
             if(closureBool){
                 //Creazione del documento token di notifica firebase associato all'utente connesso
                 //con il token corrente.

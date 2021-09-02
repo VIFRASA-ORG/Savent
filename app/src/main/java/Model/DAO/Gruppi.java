@@ -1,30 +1,40 @@
-package Model.DB;
+package Model.DAO;
 
 import android.net.Uri;
 import android.util.Pair;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import Helper.AuthHelper;
-import Helper.FirebaseStorage.FirestoreHelper;
-import Helper.FirebaseStorage.StorageHelper;
+import Helper.Firebase.FirestoreHelper;
+import Helper.Firebase.StorageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
-import Model.Pojo.Gruppo;
+import Model.POJO.Gruppo;
 
+/**
+ * Classe DAO (Data Access Object) che fornisce tutti i metodi
+ * per ritrovare informazioni o dati riguardanti i Gruppi
+ * memorizzati su firestore.
+ *
+ * Molti valori di ritorno fanno uso appunto della relativa classe POJO Gruppo.
+ *
+ * Implementa la classe astratta ResulConverter per permettere una immediata conversione
+ * dei result provenienti dai task di Firebase in oggetti di classe Gruppo.
+ */
 public class Gruppi extends ResultsConverter{
 
+    /**
+     * NOMI DELLE COLLECTION SU FIREBASE
+     */
     private static final String GRUPPO_COLLECTION = "Gruppi";
 
     /**
-     * Used to update the information of the group into the updateField method.
+     * CONSTANTI CHE INDICANO I NOMI DEI CAMPI SU FIREBASE
      */
     public static final String NOME_FIELD = "nome";
     public static final String DESCRIZIONE_FIELD = "descrizione";
@@ -32,13 +42,14 @@ public class Gruppi extends ResultsConverter{
 
 
 
-    /** Update the information of the GROUP.
+    /**
+     * Metodo che permette di modificare uno o più campi del gruppo con id passato come parametro.
      *
-     * @param groupId the id of the group
-     * @param closureBool get called with true if the task is successful, false otherwise.
-     * @param firstField the name of the first field to update
-     * @param firstValue tha new value of the first field
-     * @param otherFieldAndValues an array of object with other field and values.
+     * @param groupId id del gruppo di cui si vole cambiare i valori.
+     * @param closureBool invocato con true se l'esecuzione va a buon fine, false altrimenti.
+     * @param firstField il nome del primo campo da aggiornare
+     * @param firstValue nuovo valore da inserire nel primo campo sopra citato.
+     * @param otherFieldAndValues array di oggetti con altri campi e valori da sostituire.
      */
     public static final void updateFields(String groupId,ClosureBoolean closureBool, String firstField, Object firstValue, Object... otherFieldAndValues ){
         FirestoreHelper.db.collection(GRUPPO_COLLECTION).document(groupId).update(firstField,firstValue,otherFieldAndValues).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -50,10 +61,10 @@ public class Gruppi extends ResultsConverter{
     }
 
     /**
-     * Return the name of the group given as parameter.
+     * Metodo che restituisce il nome del gruppo il cui id è dato come parametro.
      *
-     * @param groupId id of the group whose name you want to know.
-     * @param closureRes invoked with Pair <String, Boolean> with the group name and a flag indicating is the logged in user is the admin of the group if the task is successful, null otherwise.
+     * @param groupId id del gruppo di cui si vuole sapere il nome.
+     * @param closureRes invocato con un Pair<String, Boolean> contenente il nome del gruppo e una flag indicante se l'utente loggato è admin del gruppo se il task va a buon fine, null altrimenti.
      */
     public static final void getGroupName(String groupId, ClosureResult<Pair<String,Boolean>> closureRes){
         if(AuthHelper.isLoggedIn()){
@@ -73,11 +84,12 @@ public class Gruppi extends ResultsConverter{
         }
     }
 
-    /** Remove a user from a group.
+    /**
+     * Metodo che permette di rimuovere un partecipante dal gruppo.
      *
-     * @param idUser    id of the user to remove from the group.
-     * @param idGroup   group from which the user is to be removed.
-     * @param closureBool   get called with true if the task is successful, false otherwise.
+     * @param idUser id dell'utente da rimuovere.
+     * @param idGroup id del gruppo a cui si vuole rimuovere un partecipante.
+     * @param closureBool invocato con true se il task va a buon fine, false altrimenti.
      */
     public static final void removeUserFromGroup(String idUser, String idGroup, ClosureBoolean closureBool){
         if(AuthHelper.isLoggedIn()){
@@ -87,10 +99,11 @@ public class Gruppi extends ResultsConverter{
         }
     }
 
-    /** Delete group.
+    /**
+     * Metodo che permette la cancellazione di un gruppo il cui id viene dato come parametro.
      *
-     * @param idGroup   id of the group to delete.
-     * @param closureBool   get called with true if the task is successful, false otherwise.
+     * @param idGroup id del gruppo da cancellare.
+     * @param closureBool invocato con true se il task va a buon fine, false altrimenti.
      */
     public static final void deleteGroup(String idGroup, ClosureBoolean closureBool){
         if(AuthHelper.isLoggedIn()){
@@ -100,11 +113,12 @@ public class Gruppi extends ResultsConverter{
         }
     }
 
-    /** Add a new user to a group.
+    /**
+     * Metodo che permette di aggiungere un nuovo utente ad un gruppo.
      *
-     * @param idNewUser id of the new user to insert into the group
-     * @param idGroup   group in which the new user is to be entered
-     * @param closureBool   get called with true if the task is successful, false otherwise.
+     * @param idNewUser id dell'utente da aggiungere.
+     * @param idGroup id del gruppo in cui si vuole aggiungere il nuovo utente.
+     * @param closureBool invocato con true se il task va a buon fine, false altrimenti.
      */
     public static final void addUserToGroup(String idNewUser, String idGroup, ClosureBoolean closureBool){
         if(AuthHelper.isLoggedIn()){
@@ -114,13 +128,13 @@ public class Gruppi extends ResultsConverter{
         }
     }
 
-    /** Return a list of Gruppo of which the user is the admin or a member.
+    /**
+     * Metodo che restituisce una lista di gruppi di cui l'utente è membro.
      *
-     * @param closureList get called with a List of Gruppo if the task is successful, null otherwise.
+     * @param closureList invocato con una lista di gruppi se il task va a buon fine, null altrimenti.
      */
     public static final void getAllMyGroups(ClosureList<Gruppo> closureList){
         if(AuthHelper.isLoggedIn()){
-            //Group of which the user is the administrator
             Task secondTask = FirestoreHelper.db.collection(GRUPPO_COLLECTION).whereArrayContains("idComponenti",AuthHelper.getUserId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -134,9 +148,10 @@ public class Gruppi extends ResultsConverter{
         }
     }
 
-    /** Return the list of Gruppo of which the user is the admin.
+    /**
+     * Metodo che resituisce la lista di gruppi di cui l'utente è amministratore.
      *
-     * @param closureList get called with a List of Gruppo if the task is successful, null otherwise.
+     * @param closureList invocato con una lista di gruppi se il task va a buon fine, null altrimenti.
      */
     public static final void getAdministrationGroups(ClosureList<Gruppo> closureList){
         if(AuthHelper.isLoggedIn()){
@@ -150,10 +165,13 @@ public class Gruppi extends ResultsConverter{
         }
     }
 
-    /** Add a new group to Firestore. The idGroup is randomly picked and the id inside the pojo object is avoided.
+    /**
+     * Metodo usato per creare un nuovo gruppo in Firestore nella tabella Gruppi.
+     * L'id del gruppo viene creato randomicamente da Firebase e quello presente nell'oggetto passato come
+     * parametro viene ignorato.
      *
-     * @param g group to add to Firestore
-     * @param closureRes invoked with the id of the created group if the creation is successful, with null otherwise.
+     * @param g oggetto Gruppo da creare su firebase.
+     * @param closureRes invocato con l'id del gruppo appena creato se la creazione va a buon fine, null altrimenti.
      */
     public static final void addNewGroup(Gruppo g, ClosureResult<String> closureRes){
 
@@ -179,23 +197,11 @@ public class Gruppi extends ResultsConverter{
         });
     }
 
-    /** Return a list of all group on Firestore.
+    /**
+     * Metodo che restituisce il gruppo con lo specifico id passato come parametro.
      *
-     * @param closureList ClosureList of Gruppo type.
-     */
-    public static final void getAllGroups(ClosureList<Gruppo> closureList){
-        FirestoreHelper.db.collection(GRUPPO_COLLECTION).get().addOnCompleteListener(task -> {
-            if(closureList != null){
-                if(task.isSuccessful()){
-                    closureList.closure(convertResults(task,Gruppo.class));
-                }else closureList.closure(null);
-            }
-        });
-    }
-
-    /** Return the group with the specified id
-     *
-     * @param closureRes the closure invoked with the group.
+     * @param idGruppo id del gruppo che si vuole ottenere.
+     * @param closureRes invocato con l'oggetto che si è richiesto se trovato, null altrimenti.
      */
     public static final void getGroup(String idGruppo, ClosureResult<Gruppo> closureRes){
         FirestoreHelper.db.collection(GRUPPO_COLLECTION).document(idGruppo).get().addOnCompleteListener(task -> {
@@ -207,15 +213,16 @@ public class Gruppi extends ResultsConverter{
         });
     }
 
-    /** Upload the group image to the Firestore Storage. It is placed inside a directory named after the group id.
-     * It is replaced if already present.
-     * The image is placed inside the following path: Gruppi/\idGruppo\/immagineProfilo
+    /**
+     * Metodo che permette di caricare l'immagine del gruppo con id passato come parametro su Firestore Storage.
+     * L'immagine viene salvata in una directory chiamata con lo stesso id del gruppo
+     * e viene sostituita se gia esistente.
      *
-     * User must be logged-in.
+     * L'immagine viene messa nella seguente direcotry: Gruppi/\idGruppo\/immagineProfilo
      *
-     * @param file file to upload
-     * @param idGruppo  group whose image you want to change
-     * @param closureBool   get called with true if the task is successful, false otherwise.
+     * @param file uri dell'immagine da caricare.
+     * @param idGruppo id del gruppo a cui associare l'immagine.
+     * @param closureBool invocato con true se l'upload va a buon fine, false altrimenti.
      */
     public static final void uploadGroupImage(Uri file, String idGruppo, ClosureBoolean closureBool){
         if (!AuthHelper.isLoggedIn()){
@@ -241,12 +248,14 @@ public class Gruppi extends ResultsConverter{
         });
     }
 
-    /** Download group image from the Firebase Firestore.
+    /**
+     * Metodo che permette di scaricare l'immagine del gruppo con
+     * l'id passato come parametro da Firebase Storage.
      *
-     *  User must be logged-in.
+     * L'immagine deve esistere altrimenti non è garantito il corretto funzionamento.
      *
-     * @param idGruppo  group whose image you want to download.
-     * @param closureBitmap get called with the Bitmap if the task is successful, null otherwise.
+     * @param idGruppo id del gruppo di cui si vuole scaricare l'immagine.
+     * @param closureBitmap invocato con una bitmap se il download va a buon fine, null altrimenti.
      */
     public static final void downloadGroupImage(String idGruppo, ClosureBitmap closureBitmap){
         if (!AuthHelper.isLoggedIn()){

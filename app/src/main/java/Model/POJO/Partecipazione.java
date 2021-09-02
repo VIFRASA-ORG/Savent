@@ -1,9 +1,17 @@
-package Model.Pojo;
+package Model.POJO;
 
 import com.google.firebase.firestore.DocumentId;
-
 import java.util.Date;
 
+/**
+ * Classe POJO (Plain Old Java Object), classe ordinaria
+ * utilizzata per rappresentare l'astrazione Partecipazione.
+ *
+ * La partecipazione è risultato di una relazione N a N tra gli utenti e gli eventi
+ * in quanto un utente può partecipare ad uno o più eventi e agli eventi possono
+ * partecipare zero o più utenti.
+ *
+ */
 public class Partecipazione {
 
     @DocumentId
@@ -16,7 +24,11 @@ public class Partecipazione {
     private boolean listaAttesa;
 
 
-    // COSTRUTTORE DELLA CLASSE PARTECIPAZIONE
+
+    /**
+     * COSTRUTTORI
+     */
+
     public Partecipazione() { }
 
     public Partecipazione(String idUtente,String idEvento, boolean accettazione, Date dataOra, boolean listaAttesa) {
@@ -27,7 +39,12 @@ public class Partecipazione {
         this.idEvento = idEvento;
     }
 
-    // GETTER E SETTER
+
+
+    /**
+     * GETTER E SETTER
+     */
+
     public String getIdUtente() {
         return idUtente;
     }

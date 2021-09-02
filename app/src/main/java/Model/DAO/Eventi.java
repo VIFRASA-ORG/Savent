@@ -1,10 +1,9 @@
-package Model.DB;
+package Model.DAO;
+
 import android.app.Activity;
 import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -14,29 +13,41 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import Helper.AuthHelper;
-import Helper.FirebaseStorage.FirestoreHelper;
-import Helper.Maps.LocationBoundaries;
-import Helper.Maps.MapsHelper;
-import Helper.FirebaseStorage.StorageHelper;
+import Helper.Firebase.FirestoreHelper;
+import Helper.MapsHelper;
+import Helper.Firebase.StorageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;
-import Model.Pojo.*;
+import Model.POJO.*;
 
-
-
+/**
+ * Classe DAO (Data Access Object) che fornisce tutti i metodi
+ * per ritrovare informazioni o dati riguardanti gli Eventi
+ * memorizzati su firestore.
+ *
+ * Molti valori di ritorno fanno uso appunto della relativa classe POJO Evento.
+ *
+ * Implementa la classe astratta ResulConverter per permettere una immediata conversione
+ * dei result provenienti dai task di Firebase in oggetti di classe Evento.
+ */
 public class Eventi extends ResultsConverter {
 
+    /**
+     * NOMI DELLE COLLECTION SU FIREBASE
+     */
     private static final String EVENTO_COLLECTION = "Eventi";
+
+    /**
+     * CONSTANTI CHE INDICANO I NOMI DEI CAMPI SU FIREBASE
+     */
     public static final String NOME_FIELD = "nome";
     public static final String DESCRIZIONE_FIELD = "descrizione";
     public static final String MAX_PARTECIPANTI_FIELD = "numeroMassimoPartecipanti";
@@ -48,13 +59,14 @@ public class Eventi extends ResultsConverter {
     public static final String GRUPPO_CREATORE_FIELD = "idGruppoCreatore";
 
 
-    /** Update the information of the GROUP.
+    /**
+     * Metodo che permette di modificare uno o più campi dell'evento con id passato come parametro.
      *
-     * @param eventId the id of the event
-     * @param closureBool get called with true if the task is successful, false otherwise.
-     * @param firstField the name of the first field to update
-     * @param firstValue tha new value of the first field
-     * @param otherFieldAndValues an array of object with other field and values.
+     * @param eventId id dell'evento di cui si vole cambiare i valori.
+     * @param closureBool invocato con true se l'esecuzione va a buon fine, false altrimenti.
+     * @param firstField il nome del primo campo da aggiornare
+     * @param firstValue nuovo valore da inserire nel primo campo sopra citato.
+     * @param otherFieldAndValues array di oggetti con altri campi e valori da sostituire.
      */
     public static final void updateFields(String eventId,ClosureBoolean closureBool, String firstField, Object firstValue, Object... otherFieldAndValues ){
         FirestoreHelper.db.collection(EVENTO_COLLECTION).document(eventId).update(firstField,firstValue,otherFieldAndValues).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -65,13 +77,12 @@ public class Eventi extends ResultsConverter {
         });
     }
 
-
     /**
-     * Add a listener to all the updates from the server to the selected event.
+     * Metodo che aggiunge un lister sul documento Evento il cui id viene passato come parametro.
      *
-     * @param eventId id of the event whose changes you want to listen.
-     * @param activity the context of the owner activity
-     * @param closureResult event that will be invoked every time an update is found. it will give the event object if found, null otherwise.
+     * @param eventId id dell'evento di cui ci si vuole mettere in ascolto per i cambiamenti.
+     * @param activity il contesto dell'apllicazione o dell'activity.
+     * @param closureResult invocato con il nuovo oggetto aggiornato tutte le volte che si verifica un aggiornamento, null altrimenti.
      */
     public static final void addDocumentListener(String eventId, Activity activity, ClosureResult<Evento> closureResult){
         FirestoreHelper.db.collection(EVENTO_COLLECTION).document(eventId).addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
@@ -91,26 +102,28 @@ public class Eventi extends ResultsConverter {
     }
 
     /**
-     * Return all the event in the map visible region.
+     *  Metodo che ricerca tutti gli eventi nella regione di mappa visibile.
      *
-     * @param region the map Visible region.
-     * @param closureList closure for the results.
+     * @param region la regione di mappa visibile.
+     * @param closureList invocato con la lista di Eventi se il task va a buon fine , null altrimenti.
      */
     public static final void getEventInRegion(VisibleRegion region, ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
 
-            //Compute all the boundaries.
+            //Calcolo i confini in cui cercare
             double maxLatitude = MapsHelper.maxCoordinate(region.farLeft.latitude,region.farRight.latitude,region.nearRight.latitude,region.nearLeft.latitude);
             double minLatitude = MapsHelper.minCoordinate(region.farLeft.latitude,region.farRight.latitude,region.nearRight.latitude,region.nearLeft.latitude);
 
             double maxLongitude = MapsHelper.maxCoordinate(region.farLeft.longitude,region.farRight.longitude,region.nearRight.longitude,region.nearLeft.longitude);
             double minLongitude = MapsHelper.minCoordinate(region.farLeft.longitude,region.farRight.longitude,region.nearRight.longitude,region.nearLeft.longitude);
 
+            //Cerco tutti gli eventi all'interno della fascia latitudinale
             Task latitudeTask = FirestoreHelper.db.collection(EVENTO_COLLECTION)
                     .whereLessThan("latitudine",maxLatitude)
                     .whereGreaterThan("latitudine",minLatitude)
                     .get();
 
+            //Cerco tutti gli eventi all'interno della fascia longitudinale
             Task longitudeTask = FirestoreHelper.db.collection(EVENTO_COLLECTION)
                     .whereLessThan("longitudine",maxLongitude)
                     .whereGreaterThan("longitudine",minLongitude)
@@ -125,8 +138,8 @@ public class Eventi extends ResultsConverter {
                         listFirstQuery.addAll(convertResults((Task<QuerySnapshot>) task.getResult().get(0),Evento.class));
                         listSecondQuery.addAll(convertResults((Task<QuerySnapshot>) task.getResult().get(1),Evento.class));
 
-                        //If the event is in both list means that is in both the latitude and longitude constraint.
-                        //intersection among the two list || and logic
+                        //Se l'evento è in tutte e due le lista, vuol dire che soddisfa sia i constraint di latitudine che di longitudine
+                        //Effettuo l'intersezione tra le due liste. logica AND.
                         listFirstQuery.retainAll(listSecondQuery);
 
                         closureList.closure(listFirstQuery);
@@ -137,23 +150,25 @@ public class Eventi extends ResultsConverter {
     }
 
     /**
-     * Return all the event in the nearby of a location
+     * Metodo che ricerca tutti gli eventi nelle vicinanze di una determinata posizione data come parametro.
      *
-     * @param refPosition reference location
-     * @param radius tha maximum distance, in all direction, from the reference location.
-     * @param closureList closure for the results.
+     * @param refPosition posizione di riferimento.
+     * @param radius la distanza massima in cui cercare, in tutte le direzioni, dalla posizione di riferimento.
+     * @param closureList invocato con la lista di Eventi se il task va a buon fine , null altrimenti.
      */
     public static final void getNearbyEvent(LatLng refPosition, int radius, ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
 
-            //compute the boundaries for the query
-            LocationBoundaries boundaries = MapsHelper.calcBoundaries(refPosition,radius);
+            //Calcolo i confini in cui cercare
+            MapsHelper.LocationBoundaries boundaries = MapsHelper.calcBoundaries(refPosition,radius);
 
+            //Cerco tutti gli eventi all'interno della fascia latitudinale
             Task latitudeTask = FirestoreHelper.db.collection(EVENTO_COLLECTION)
                     .whereLessThan("latitudine",boundaries.upperLatitude)
                     .whereGreaterThan("latitudine",boundaries.lowerLatitude)
                     .get();
 
+            //Cerco tutti gli eventi all'interno della fascia longitudinale
             Task longitudeTask = FirestoreHelper.db.collection(EVENTO_COLLECTION)
                     .whereLessThan("longitudine",boundaries.rightLongitude)
                     .whereGreaterThan("longitudine",boundaries.leftLongitude)
@@ -168,8 +183,8 @@ public class Eventi extends ResultsConverter {
                         listFirstQuery.addAll(convertResults((Task<QuerySnapshot>) task.getResult().get(0),Evento.class));
                         listSecondQuery.addAll(convertResults((Task<QuerySnapshot>) task.getResult().get(1),Evento.class));
 
-                        //If the event is in both list means that is in both the latitude and longitude constraint.
-                        //intersection among the two list || and logic
+                        //Se l'evento è in tutte e due le lista, vuol dire che soddisfa sia i constraint di latitudine che di longitudine
+                        //Effettuo l'intersezione tra le due liste. logica AND.
                         listFirstQuery.retainAll(listSecondQuery);
 
                         closureList.closure(listFirstQuery);
@@ -179,9 +194,10 @@ public class Eventi extends ResultsConverter {
         }
     }
 
-    /** Return a list of all the event in which the user participate
+    /**
+     * Metodo che cerca tutti gli eventi a cui l'utente loggato partecipa e li restituisce.
      *
-     * @param closureList the parameter list is null in case the task is not successful.
+     * @param closureList invocato con la lista di Eventi se il task va a buon fine , null altrimenti.
      */
     public static final void getMyParticipationEvents(ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
@@ -211,10 +227,11 @@ public class Eventi extends ResultsConverter {
         }
     }
 
-    /** Return a specific event
+    /**
+     * Metodo che ritorna l'oggetto di uno specifico evento identificato dall'id dato come parametro.
      *
-     * @param idEvento
-     * @param closureRes the parameter is null in case the task is not successful.
+     * @param idEvento id dell'evento da cercare.
+     * @param closureRes invocato con l'oggetto Evento se trovato, null altrimenti.
      */
     public static final void getEvent(String idEvento, ClosureResult<Evento> closureRes){
 
@@ -229,24 +246,10 @@ public class Eventi extends ResultsConverter {
 
     }
 
-    /** Return a list of event created by a specific group
+    /**
+     * Metodo che ritorna una lista con tutti gli eventi creati dall'utente loggato.
      *
-     * @param groupId
-     * @param closureList the parameter list is null in case the task is not successful.
-     */
-    public static final void getAllGroupEvents(String groupId, ClosureList<Evento> closureList){
-        FirestoreHelper.db.collection(EVENTO_COLLECTION).whereEqualTo("idGruppoCreatore",groupId).get().addOnCompleteListener(task -> {
-            if (closureList != null){
-                if(task.isSuccessful()){
-                    closureList.closure(convertResults(task,Evento.class));
-                }else closureList.closure(null);
-            }
-        });
-    }
-
-    /** Return a list with all events created by the logged in user
-     *
-     * @param closureList the parameter list is null in case the task is not successful.
+     * @param closureList invocato con la lista se il task va a buon fine, null altrimenti
      */
     public static final void getMyEvent(ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
@@ -255,7 +258,7 @@ public class Eventi extends ResultsConverter {
                     if(task.isSuccessful()){
                         List<Evento> l = convertResults(task,Evento.class);
 
-                        //Sorting by name, impossible to do into the query on different field
+                        //Ordino la lista per nome in quanto non è possibile farlo direttamente nella query
                         Collections.sort(l);
                         closureList.closure(l);
                     }else closureList.closure(null);
@@ -265,10 +268,10 @@ public class Eventi extends ResultsConverter {
     }
 
     /**
-     * Return a list with all the event created by all group given as parameter
+     * Metodo che ritorna una lista di eventi creati dai gruppi i cui id sono dati come parametro.
      *
-     * @param adminGroupIdList the list of all the group id.
-     * @param closureList invoked with the list of the event in case of success, null otherwise.
+     * @param adminGroupIdList lista di id di gruppi di cui si vogliono conoscere gli eventi creati.
+     * @param closureList invocato con la lista se il task va a buon fine, null altrimenti
      */
     private static final void getAllEventCreatedByMyAdminGroup(List<String> adminGroupIdList, ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
@@ -277,11 +280,13 @@ public class Eventi extends ResultsConverter {
                 return;
             }
 
+            //La query IN supporta una lista di massimo 10 elementi
+            //Quindi bisogna dividere la lista di id di gruppi in chuck di lunghezza massima 10
             if(adminGroupIdList.size() > 10){
                 Collection<Task<?>> taskList = new ArrayList<Task<?>>();
                 int numbersOfChucks = adminGroupIdList.size() / 10;
 
-                //Adding the chunked query to the list
+                //Aggiungo la query del singolo chuck alla lista di task
                 for(int i=0; i <= numbersOfChucks; i++){
                     Task t;
                     if(i == numbersOfChucks) t = FirestoreHelper.db.collection(EVENTO_COLLECTION).whereIn("idGruppoCreatore",adminGroupIdList.subList(10*i,adminGroupIdList.size())).get();
@@ -314,34 +319,36 @@ public class Eventi extends ResultsConverter {
     }
 
     /**
-     * Return a list with all the events created by the user and created from all groups in which the user is a member.
+     * Metodo che ritorna tutti gli eventi creati dall'utente o dai gruppi di cui l'utente è membro.
      *
-     * @param closureList the parameter list is null in case the task is not successful.
+     * @param closureList invocato con la lista se il task va a buon fine, null altrimenti
      */
     public static final void getAllMyEvents(ClosureList<Evento> closureList){
         if(AuthHelper.isLoggedIn()){
             List<Evento> listEventi = new ArrayList<>();
 
             //Downloading all the event created by the logged in user
+            //Scarico tutti gli eventi creati dall'utente.
             getMyEvent(list -> {
 
-                //Adding them to the final list
+                //Li aggiungo alla lista finale
                 if(list != null) listEventi.addAll(list);
 
                 //Downloading all the group of which the user is the admin or member.
+                //Scarico tutti i gruppi di cui l'utente è membro.
                 Gruppi.getAllMyGroups(listOfGroup -> {
 
-                    //If the list is null
-                    //return only the one downloaded since now
+                    //Se la lista è vuota, ritorno solo quelli fino ad ora scaricati
                     if(listOfGroup == null){
                         if(closureList != null) closureList.closure(listEventi);
                         return;
                     }
 
-                    //Extrapolating only the id of the group to perform the query with the in operator
+                    //Estraggo solo gli id dei gruppi per eseguire la query con l'operatore IN.
                     List<String> adminGroupIdList = new ArrayList<>();
                     for(Gruppo group : listOfGroup ) adminGroupIdList.add(group.getId());
 
+                    //Richiamo la query per ricevere tutti gli eventi creati dai gruppi dell'utente loggato.
                     getAllEventCreatedByMyAdminGroup(adminGroupIdList, newEvents -> {
                         if(newEvents != null) listEventi.addAll(newEvents);
 
@@ -354,10 +361,12 @@ public class Eventi extends ResultsConverter {
         }
     }
 
-    /** Add a new event to Firestore. The idEvent is randomly picked and the id inside the pojo object is avoided.
+    /**
+     * Metodo che crea un nuovo evento su Firestore.
+     * L'id dell'evento viene generato automaticamente da Firebase e quello presente nell'oggeto viene ignorato.
      *
-     * @param e event to add to Firestore
-     * @param closureResult get called with the event id created if the task is successful, false otherwise
+     * @param e evento da aggiungere su Firebase.
+     * @param closureResult invocato con l'id dell'evento appena creato se il task va a buon fine, null altrimenti.
      */
     public static final void addNewEvent(Evento e, ClosureResult<String> closureResult){
 
@@ -372,21 +381,10 @@ public class Eventi extends ResultsConverter {
         });
     }
 
-    /** Add a new event to Firestore. The idEvent on Firestore is the one inside the pojo object and it is not randomly picked.
+    /**
+     * Metodo che ritorna una lista di tutti gli eventi presneti su Firebase.
      *
-     * @param e event to add to Firestore
-     * @param closureBool get called with true if the task is successful, false otherwise.
-     */
-    public static final void setNewEvent(Evento e, ClosureBoolean closureBool){
-
-        FirestoreHelper.db.collection(EVENTO_COLLECTION).document(e.getId()).set(e).addOnCompleteListener(task -> {
-            if (closureBool != null) closureBool.closure(task.isSuccessful());
-        });
-    }
-
-    /** Return a list of all the event on Firestore.
-     *
-     * @param closureList ClosureList of Event type
+     * @param closureList invocato con la lista se il task va a buon fine, null altrimenti
      */
     public static final void getAllEvent(ClosureList<Evento> closureList){
         FirestoreHelper.db.collection(EVENTO_COLLECTION).orderBy("nome").get().addOnCompleteListener(task -> {
@@ -399,15 +397,16 @@ public class Eventi extends ResultsConverter {
         });
     }
 
-    /** Upload the event image to the Firestore Storage. It is placed inside a directory named after the event id.
-     * It is replaced if already present.
-     * The image is placed inside the following path: Eventi/\idEvento\/locandina
+    /**
+     * Metodo che permette di caricare la locandina dell'evento con id passato come parametro su Firestore Storage.
+     * L'immagine viene salvata in una directory chiamata con lo stesso id dell'evento
+     * e viene sostituita se gia esistente.
      *
-     * The user must be logged in.
+     * L'immagine viene messa nella seguente direcotry: Eventi/\idEvento\/locandina
      *
-     * @param file  file to upload
-     * @param idEvento  event whose image you want to change
-     * @param closureBool   get called with true if the task is successful, false otherwise.
+     * @param file uri dell'immagine da caricare.
+     * @param idEvento id dell'evento a cui associare l'immagine.
+     * @param closureBool invocato con true se l'upload va a buon fine, false altrimenti.
      */
     public static final void uploadEventImage(Uri file, String idEvento, ClosureBoolean closureBool){
         if (!AuthHelper.isLoggedIn()){
@@ -426,12 +425,14 @@ public class Eventi extends ResultsConverter {
         });
     }
 
-    /** Download the event image from the Firestore Storage.
+    /**
+     * Metodo che permette di scaricare la locandina dell'evento con
+     * l'id passato come parametro da Firebase Storage.
      *
-     * User must be logged;
+     * L'immagine deve esistere altrimenti non è garantito il corretto funzionamento.
      *
-     * @param idEvento  event whose image you want to download.
-     * @param closureBitmap get called with the Bitmap if the task is successful, null otherwise.
+     * @param idEvento id dell'evento di cui si vuole scaricare la locandina.
+     * @param closureBitmap invocato con una bitmap e se il download va a buon fine, null altrimenti.
      */
     public static final void downloadEventImage(String idEvento, ClosureBitmap closureBitmap){
         if (!AuthHelper.isLoggedIn()){
@@ -443,11 +444,14 @@ public class Eventi extends ResultsConverter {
         StorageHelper.downloadImage(finalChildName,closureBitmap);
     }
 
-    /** Download the user image from Firebase Storage.
+    /**
+     * Metodo che permette di scaricare la locandina di un evento con
+     * l'id passato come parametro da Firebase Storage.
      *
-     * User must be logged-in.
+     * L'immagine deve esistere altrimenti non è garantito il corretto funzionamento.
      *
-     * @param closureResult get called with the Bitmap if the task is successful, null otherwise.
+     * @param idEvento id dell'evento di cui si vuole scaricare la locandina.
+     * @param closureResult invocato con un temp file nella chache se il download va a buon fine, null altrimenti.
      */
     public static final void downloadEventImage(String idEvento, ClosureResult<File> closureResult){
         if (!AuthHelper.isLoggedIn()){
@@ -459,11 +463,14 @@ public class Eventi extends ResultsConverter {
         StorageHelper.downloadImage(finalChildName,closureResult);
     }
 
-    /** Download the user image from Firebase Storage.
+    /**
+     * Metodo che permette di scaricare la locandina di un vento con
+     * l'id passato come parametro da Firebase Storage.
      *
-     * User must be logged-in.
+     * L'immagine deve esistere altrimenti non è garantito il corretto funzionamento.
      *
-     * @param closureResult get called with the Bitmap if the task is successful, null otherwise.
+     * @param idEvento id dell'evento di cui si vuole scaricare la locandina.
+     * @param closureResult invocato con un URI se il download va a buon fine, null altrimenti.
      */
     public static final void downloadEventImageUri(String idEvento, ClosureResult<Uri> closureResult){
         if (!AuthHelper.isLoggedIn()){
@@ -475,11 +482,11 @@ public class Eventi extends ResultsConverter {
         StorageHelper.downloadImageUri(finalChildName,closureResult);
     }
 
-
-    /** Delete event.
+    /**
+     * Metodo che permette la cancellazione di un evento il cui id viene dato come parametro.
      *
-     * @param idEvento   id of the event to delete.
-     * @param closureBool   get called with true if the task is successful, false otherwise.
+     * @param idEvento id dell'evento da cancellare.
+     * @param closureBool invocato con true se il task va a buon fine, false altrimenti.
      */
     public static final void deleteEvent(String idEvento, ClosureBoolean closureBool){
         if(AuthHelper.isLoggedIn()){
@@ -488,5 +495,4 @@ public class Eventi extends ResultsConverter {
             });
         }
     }
-
 }

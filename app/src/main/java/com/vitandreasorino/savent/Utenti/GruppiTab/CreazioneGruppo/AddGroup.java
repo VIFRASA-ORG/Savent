@@ -30,18 +30,18 @@ import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Helper.ImageHelper;
 import Model.Closures.ClosureResult;
-import Model.Pojo.ContactModel;
-import Model.DB.Gruppi;
-import Model.DB.Utenti;
-import Model.Pojo.Gruppo;
-import Model.Pojo.Utente;
+import Model.POJO.Contact;
+import Model.DAO.Gruppi;
+import Model.DAO.Utenti;
+import Model.POJO.Gruppo;
+import Model.POJO.Utente;
 
 public class AddGroup extends AppCompatActivity {
 
     FloatingActionButton buttonNewContactGroup;
     ImageView imageNewGroup;
     ListView listView;
-    ArrayList<ContactModel> contactsGroupList = new ArrayList<>();
+    ArrayList<Contact> contactsGroupList = new ArrayList<>();
     LinearLayout emptyListLayout;
     ProgressBar progressBar;
     TextView selectPhotoTextView;

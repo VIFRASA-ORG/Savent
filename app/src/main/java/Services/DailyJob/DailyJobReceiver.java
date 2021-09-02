@@ -14,59 +14,64 @@ import Helper.AuthHelper;
 import Helper.LocalStorage.SQLiteHelper;
 import Helper.LocalStorage.SharedPreferencesHelper;
 import Helper.NotificationHelper;
-import Model.DB.TemporaryExposureKeys;
-import Model.DB.Utenti;
+import Model.DAO.TemporaryExposureKeys;
+import Model.DAO.Utenti;
 import Model.LogDebug;
-import Model.Pojo.Notification;
+import Model.POJO.Notification;
 
 
 /**
- * Receiver for the Daily task.
- * The daily task has to download the new TEK, remove all the expired tek,
- * download the new positive, notify the user if someone resulted positive
- * and update the health status of the logged in user.
+ * Classe derivata da BroadcastReceiver per ricevere i broadcast del task giornaliero.
+ * Il task giornaliero deve scaricare un nuovo TEK, cancellare quelli scaduti,
+ * scaricare quelli positivi, notificare l'utente se qualcuno dei suoi contatti è risultato positivo
+ * e aggiornare il suo status sanitario in caso positivo.
  */
 public class DailyJobReceiver extends BroadcastReceiver {
 
+    // Codice da usare per avviare l'intent di relativo a questo receiver.
     private static final int DAILY_JOB_REQUEST_CODE = 123;
 
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(LogDebug.DAILY_JOB, "Daily task running right now");
-
         allWorkToDo(context);
     }
 
     /**
-     * Method with alla the taks operation.
-     * @param context
+     * Metodo che esegue tutte le operazion da fare nel task giornaliero.
+     *
+     * @param context contesto della applicazione o dell'activity chiamante.
      */
     private void allWorkToDo(Context context){
 
-        //Downloading the new TEK
+        //Scaircamento del nuovo TEK
         TemporaryExposureKeys.generateNewTEK(context, null);
 
-        //Deleting tek and contacts older than 15 days
+        //Cancellazione dei tek e dei tek dei contatti scaduti.
         SQLiteHelper db = new SQLiteHelper(context);
         db.deleteExpiredContact();
         db.deleteExpiredTek();
 
-        //Trying the code
+        /**
+         * Ottenimento, dalle shared preference, dell'utima data di scaricamento dei TEK positivi
+         * In maniera tale da scaricare solo quelli sucessivi a quella data soglia.
+         */
         Date latestUpdatePositive = SharedPreferencesHelper.getLastPositiveTekUpdateTime(context);
 
-        //Download the positive tek from the latest update if exists, otherwise all the tek will be downloaded
+        //Scaricamento dei TEK positivi a partire dall'ultima data di scaricamento se esiste, altrimenti scarichera tutti i TEK positivi.
         TemporaryExposureKeys.downloadPositiveTek(latestUpdatePositive, positiveTekList ->{
 
             if(positiveTekList != null){
                 Log.i(LogDebug.DAILY_JOB_POS_TEK_DOWNL, "DOWNLOADED "+ positiveTekList.size());
-                //Save the latest update time
+
+                //Aggiornamento dell'ultima data di scaricamento
                 SharedPreferencesHelper.setLastPositiveTekUpdateTime(context,new Date());
 
-                //Save the new tek to the databse
+                //Salvataggio dei nuovi TEK nel database SQLite
                 db.addPositiveTek(positiveTekList);
 
-                //Check if we have some match and calculate the risk
+                //Controllo se si ha dei match con i positivi e calcolo del rischio.
                 int sumRisk = 0;
                 Map<String, Integer> contacts = db.matchTekContattiConTekPositivi(positiveTekList);
                 for (String key : contacts.keySet()){
@@ -85,22 +90,22 @@ public class DailyJobReceiver extends BroadcastReceiver {
 
                 Log.i(LogDebug.DAILY_JOB_POS_TEK_DOWNL, "TOTAL RISK " + sumRisk);
 
-                //Preparing the notification
+                //Creazione della notifica da inviare.
                 Notification n = new Notification();
                 n.setNotificationType(NotificationHelper.CONTACT_RISK_NOTIFICATION);
                 NotificationHelper.setTitleAndDescription(n,context);
 
                 if(sumRisk == 100) {
-                    //If the risk is 100%, directily update the field.
+                    //Se il rischio è 100%, aggiornamento diretto del campo.
                     Utenti.updateFields(AuthHelper.getUserId(), isSucc -> {
-                        //Send notification
+                        //Invio della notifica.
                         long id = NotificationHelper.saveAndAlertNotification(context,n);
                         NotificationHelper.sendNotification(context,n,R.drawable.red_status_icon,id);
                     },Utenti.STATUS_SANITARIO_FIELD,100);
                 }else if(sumRisk != 0){
-                    //If the risk is below 100%, sum the calculated risk to the one on the database.
+                    //Se il rischio è minore del 100%, sommare il rischio calcolato con quello gia presente nel database.
                     Utenti.sumValueToHealthStatus(sumRisk, isSuccess -> {
-                        //Send notification
+                        //Invio della notifica.
                         long id = NotificationHelper.saveAndAlertNotification(context,n);
                         NotificationHelper.sendNotification(context,n,R.drawable.red_status_icon,id);
                     });
@@ -112,9 +117,10 @@ public class DailyJobReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Static method used to schedule the task
+     * Metodo statico da usare per programmare il task giornaliero.
+     * Eseguito mediante l'uso dell'AlarmManager
      *
-     * @param context the context.
+     * @param context contesto della applicazione.
      */
     public static final void scheduleDailyTask(Context context){
         Intent intent = new Intent(context, DailyJobReceiver.class);
@@ -125,13 +131,19 @@ public class DailyJobReceiver extends BroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
+        /**
+         * Impostazione di un allarme usando setInexactRepeating in quanto non ci interessa
+         * l'esecuzione in un determinato momento della giornata e anche per aumentare la randomess nelle richieste al server
+         * di tutti i task giornalieri di tutti gli utenti.
+         */
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
         Log.i(LogDebug.DAILY_JOB,"Daily task scheduled!");
     }
 
     /**
-     * Static method used to cancel the repeating task.
-     * @param context
+     * Metodo static da usare per cancellare la programmazione del task giornaliero.
+     *
+     * @param context contesto dell'applicazione
      */
     public static final void removeDailyTask(Context context){
         Intent intent = new Intent(context, DailyJobReceiver.class);

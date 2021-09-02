@@ -12,7 +12,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -28,8 +27,8 @@ import com.vitandreasorino.savent.R;
 
 import java.util.List;
 
-import Model.DB.CodiciComunicazioneTampone;
-import Model.Pojo.CodiceComunicazioneTampone;
+import Model.DAO.CodiciComunicazioneTampone;
+import Model.POJO.CodiceComunicazioneTampone;
 
 public class GenerateCodeFragment extends Fragment {
 

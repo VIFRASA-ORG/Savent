@@ -5,17 +5,24 @@ import android.content.SharedPreferences;
 import java.util.Calendar;
 import java.util.Date;
 
-
 /**
- * Helper class with all the method to set, reset and change all
- * the shared preference used by the app.
+ * Classe Helper con tutti i metodi che permettono di impostare, cambiare
+ * e resettare tutti i valori delle shared preference usate dall'applicazione.
  */
 public class SharedPreferencesHelper {
 
+    /**
+     * COSTANTI CHE INDICANO I NOMI DEI FILE DELLE SharedPreference.
+     */
+    private static final String PREFS_NAME = "SaventPref";
+
+    /**
+     * CONSTANTI CHE INDICANO LE CHIAVI CON CUI VENGONO MEMORIZZATI
+     * I VALORI DELLE SCHARED PREFERENCE UTILIZZATE.
+     */
     private static final String BLUETOOTH_PREF = "BluetoothInfo";
     private static final String PROXIMITY_SENSOR_PREF = "SensorInfo";
-
-    private static final String LAST_SERVER_POSITIVE_TEK_UPDATE_TIME = "LAST_SERVER_POSITIVE_TEK_UPDATE_TIME";
+    private static final String LAST_SERVER_POSITIVE_TEK_UPDATE_TIME_PREF = "LAST_SERVER_POSITIVE_TEK_UPDATE_TIME";
 
 
 
@@ -28,8 +35,8 @@ public class SharedPreferencesHelper {
      * @param date la nuova data da salvare.
      */
     public static void setLastPositiveTekUpdateTime(Context context, Date date){
-        SharedPreferences.Editor editor = context.getSharedPreferences(LAST_SERVER_POSITIVE_TEK_UPDATE_TIME, context.MODE_PRIVATE).edit();
-        editor.putLong("value",date.getTime());
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE).edit();
+        editor.putLong(LAST_SERVER_POSITIVE_TEK_UPDATE_TIME_PREF,date.getTime());
         editor.apply();
     }
 
@@ -40,8 +47,8 @@ public class SharedPreferencesHelper {
      * @param context contesto relativo all'activity
      */
     public static void setBluetoothPreference(boolean value, Context context){
-        SharedPreferences.Editor editor = context.getSharedPreferences(BLUETOOTH_PREF, context.MODE_PRIVATE).edit();
-        editor.putBoolean("value", value);
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE).edit();
+        editor.putBoolean(BLUETOOTH_PREF, value);
         editor.apply();
     }
 
@@ -52,8 +59,8 @@ public class SharedPreferencesHelper {
      * @param context contesto relativo all'activity
      */
     public static void setProximitySensorPreference(boolean value, Context context){
-        SharedPreferences.Editor editor = context.getSharedPreferences(PROXIMITY_SENSOR_PREF, context.MODE_PRIVATE).edit();
-        editor.putBoolean("value",value);
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE).edit();
+        editor.putBoolean(PROXIMITY_SENSOR_PREF,value);
         editor.apply();
     }
 
@@ -63,14 +70,8 @@ public class SharedPreferencesHelper {
      * @param context contesto relativo all'activity
      */
     public static void resetSharedPreferences(Context context){
-        SharedPreferences sharedPreferences1 = context.getSharedPreferences(BLUETOOTH_PREF, context.MODE_PRIVATE);
-        sharedPreferences1.edit().clear().apply();
-
-        SharedPreferences sharedPreferences2 = context.getSharedPreferences(PROXIMITY_SENSOR_PREF, context.MODE_PRIVATE);
-        sharedPreferences2.edit().clear().apply();
-
-        SharedPreferences sharedPreferences3 = context.getSharedPreferences(LAST_SERVER_POSITIVE_TEK_UPDATE_TIME, context.MODE_PRIVATE);
-        sharedPreferences3.edit().clear().apply();
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
     }
 
     /**
@@ -81,8 +82,8 @@ public class SharedPreferencesHelper {
      * @return il valore corrente della shared preference se esiste, altrimenti "true"
      */
     public static boolean getBluetoothPreference(Context context){
-        SharedPreferences sharedPreferences1 = context.getSharedPreferences(BLUETOOTH_PREF, context.MODE_PRIVATE);
-        return sharedPreferences1.getBoolean("value", true);
+        SharedPreferences sharedPreferences1 = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
+        return sharedPreferences1.getBoolean(BLUETOOTH_PREF, true);
     }
 
     /**
@@ -93,8 +94,8 @@ public class SharedPreferencesHelper {
      * @return il valore corrente della shared preference se esiste, altrimenti "true"
      */
     public static boolean getProximitySensorPreference(Context context){
-        SharedPreferences sharedPreferences2 = context.getSharedPreferences(PROXIMITY_SENSOR_PREF, context.MODE_PRIVATE);
-        return sharedPreferences2.getBoolean("value", true);
+        SharedPreferences sharedPreferences2 = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
+        return sharedPreferences2.getBoolean(PROXIMITY_SENSOR_PREF, true);
     }
 
     /**
@@ -105,8 +106,8 @@ public class SharedPreferencesHelper {
      * @return la data dell'ultimo aggiornamento.
      */
     public static Date getLastPositiveTekUpdateTime(Context context){
-        SharedPreferences sharedPreferences2 = context.getSharedPreferences(LAST_SERVER_POSITIVE_TEK_UPDATE_TIME, context.MODE_PRIVATE);
-        long l = sharedPreferences2.getLong("value", 0);
+        SharedPreferences sharedPreferences2 = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
+        long l = sharedPreferences2.getLong(LAST_SERVER_POSITIVE_TEK_UPDATE_TIME_PREF, 0);
 
         if(l == 0 ) return null;
         Calendar c = Calendar.getInstance();

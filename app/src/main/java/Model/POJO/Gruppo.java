@@ -1,24 +1,25 @@
-package Model.Pojo;
+package Model.POJO;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
-
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Classe POJO (Plain Old Java Object), classe ordinaria
+ * utilizzata per rappresentare l'entità Gruppo.
+ *
+ * Implementa Serializable per permettere il passaggio di un oggetto tra intent espliciti.
+ * È stato reso "immagineBitmap" transient per evitare di dover utilizzare Parcelable al posto di Serializable.
+ *
+ * In questa maniera l'immagine bitmap non viene serializzata e quindi passata tra gli intent espliciti.
+ */
 public class Gruppo implements Serializable {
 
     @DocumentId
     private String id;
-
-    @Exclude
-    private Uri immagine;
-
-    @Exclude
-    private transient Bitmap immagineBitmap;
 
     private String nome;
     private String descrizione;
@@ -26,8 +27,17 @@ public class Gruppo implements Serializable {
     private boolean isImmagineUploaded;
     private List<String> idComponenti;
 
+    @Exclude
+    private Uri immagine;
 
-    // COSTRUTTORI DELLA CLASSE GRUPPO
+    @Exclude
+    private transient Bitmap immagineBitmap;
+
+
+
+    /**
+     * COSTRUTTORI
+     */
     public Gruppo() { }
 
     public Gruppo(String id, String nome, String descrizione, String idAmministratore, List<String> idComponenti) {
@@ -49,21 +59,18 @@ public class Gruppo implements Serializable {
         this.idComponenti = idComponenti;
     }
 
-    // GETTER E SETTER
+
+
+    /**
+     * GETTER E SETTER
+     */
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    @Exclude public Uri getImmagine() {
-        return immagine;
-    }
-
-    @Exclude public void setImmagine(Uri immagine) {
-        this.immagine = immagine;
     }
 
     public String getNome() {
@@ -106,6 +113,13 @@ public class Gruppo implements Serializable {
         this.isImmagineUploaded = isImmagineUploaded;
     }
 
+
+
+    /**
+     * GETTER E SETTER ESCLUSI SU FIREBASE IN QUANTO
+     * MEMORIZZATI DIVERSAMENTE DI UNA SEMPLICE SCRITTURA.
+     */
+
     @Exclude
     public Bitmap getImmagineBitmap() {
         return immagineBitmap;
@@ -114,5 +128,13 @@ public class Gruppo implements Serializable {
     @Exclude
     public void setImmagineBitmap(Bitmap immagineBitmap) {
         this.immagineBitmap = immagineBitmap;
+    }
+
+    @Exclude public Uri getImmagine() {
+        return immagine;
+    }
+
+    @Exclude public void setImmagine(Uri immagine) {
+        this.immagine = immagine;
     }
 }

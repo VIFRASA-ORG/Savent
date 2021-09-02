@@ -20,7 +20,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +39,7 @@ import com.vitandreasorino.savent.Utenti.Notification.NotificationActivity;
 import Helper.AnimationHelper;
 import Helper.LocalStorage.SQLiteHelper;
 import Helper.LocalStorage.SharedPreferencesHelper;
-import Model.DB.Utenti;
+import Model.DAO.Utenti;
 import Services.BluetoothLEServices.GattServerCrawlerService;
 import Services.BluetoothLEServices.GattServerService;
 
@@ -386,8 +385,8 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
                 //lancio del popUp e invio dei msg di broadcast per killare i processi dei servizi di BLE
                 lanchedPopUp(R.layout.disable_tracking_dialog);
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerService.STOP_GATT_SERVER));
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerCrawlerService.STOP_GATT_CRAWLER));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerService.STOP_GATT_SERVER_INTENT));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerCrawlerService.STOP_GATT_CRAWLER_INTENT));
 
                 //si disattiva la preferenza di BLE una volta killato i suoi processi e flag di disattivazione entrata nel blocco
                 SharedPreferencesHelper.setBluetoothPreference(false,this);
@@ -404,13 +403,13 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
                 if(GattServerService.isRunning){
                     //Si invia il broadcast
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerService.RESTART_GATT_SERVER));
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerService.RESTART_GATT_SERVER_INTENT));
                 }else{
                     startService(new Intent(getBaseContext(), GattServerService.class));
                 }
 
-                if(GattServerCrawlerService.isRunning){
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerCrawlerService.RESTART_GATT_CRAWLER));
+                if(GattServerCrawlerService.isServiceRunning){
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerCrawlerService.RESTART_GATT_CRAWLER_INTENT));
                 }else{
                     startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
                 }

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -69,18 +68,20 @@ public class SettingsActivity extends AppCompatActivity{
         switchBluetooth.setOnClickListener(v -> {
             if (switchBluetooth.isChecked()) {
                 //Viene impostato a true il valore del bluetooth LE
-               SharedPreferencesHelper.setBluetoothPreference(true, getApplicationContext());
+                SharedPreferencesHelper.setBluetoothPreference(true, getApplicationContext());
+              
                 if(GattServerService.isRunning){
                     //Si invia il broadcast
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerService.RESTART_GATT_SERVER));
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerService.RESTART_GATT_SERVER_INTENT));
                 }else{
                     //altrimenti si esegue il Gatt service
                     startService(new Intent(getBaseContext(), GattServerService.class));
                 }
+
                 //se la ricerca di dispositivi compatibili con BLE sta avvenendo
                 if(GattServerCrawlerService.isRunning){
                     //si cerca di effettuare la connessione con tali dispositivi
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerCrawlerService.RESTART_GATT_CRAWLER));
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerCrawlerService.RESTART_GATT_CRAWLER_INTENT));
                 }else{
                     //altrimenti si cerca di rieseguire il Gatt service
                     startService(new Intent(getBaseContext(), GattServerCrawlerService.class));
@@ -90,8 +91,8 @@ public class SettingsActivity extends AppCompatActivity{
             } else {
                 //altrimenti si fa terminare il Gatt server service, se la ricerca non ha dato dispositivi compatibili e il BLE viene disattivato
                 SharedPreferencesHelper.setBluetoothPreference(false, getApplicationContext());
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerService.STOP_GATT_SERVER));
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerCrawlerService.STOP_GATT_CRAWLER));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerService.STOP_GATT_SERVER_INTENT));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(GattServerCrawlerService.STOP_GATT_CRAWLER_INTENT));
                 switchBluetooth.setChecked(false);
             }
         });

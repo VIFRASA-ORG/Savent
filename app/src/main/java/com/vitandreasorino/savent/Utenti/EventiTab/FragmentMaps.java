@@ -37,9 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Helper.AnimationHelper;
-import Model.DB.Eventi;
+import Model.DAO.Eventi;
 import Model.LogDebug;
-import Model.Pojo.Evento;
+import Model.POJO.Evento;
 
 public class FragmentMaps extends Fragment implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnInfoWindowClickListener {
 

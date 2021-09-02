@@ -1,31 +1,35 @@
-package Model.Pojo;
+package Model.POJO;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
+/**
+ * Classe POJO (Plain Old Java Object), classe ordinaria
+ * utilizzata per rappresentare l'entità Utente.
+ *
+ * Implementa Parcelable per permettere il passaggio di un oggetto tra intent espliciti.
+ * Non era possibile usare Serializable a causa del campo "profileImageBitmap".
+ */
 public class Utente implements Parcelable {
 
+    /**
+     * Costanti che indicano il sesso degli utenti.
+     * Non è stata usata una enum in quanto si necessitava del valore String associato ad ogni costante
+     * da memorizzare su Firebase.
+     */
     public static final String MALE = "male";
     public static final String FEMALE = "female";
     public static final String UNDEFINED = "undefined";
 
     @DocumentId
     private String id;
-
-    private boolean isProfileImageUploaded;
-
-    @Exclude
-    private Bitmap profileImageBitmap = null;
-    @Exclude
-    private Uri profileImageUri = null;
 
     private String nome;
     private String cognome;
@@ -35,7 +39,17 @@ public class Utente implements Parcelable {
     private int statusSanitario;
     private String codiceFiscale;
 
-    // COSTRUTTORE DELLA CLASSE UTENTE
+    @Exclude
+    private Bitmap profileImageBitmap = null;
+    @Exclude
+    private Uri profileImageUri = null;
+    private boolean isProfileImageUploaded;
+
+
+
+    /**
+     * COSTRUTTORI
+     */
     public Utente() {
         this.statusSanitario = 0;
         this.isProfileImageUploaded = false;
@@ -62,7 +76,11 @@ public class Utente implements Parcelable {
         this.codiceFiscale = codiceFiscale;
     }
 
-    // GETTER E SETTTER
+
+
+    /**
+     * GETTER E SETTER
+     */
     public String getId() {
         return id;
     }
@@ -127,6 +145,21 @@ public class Utente implements Parcelable {
         this.isProfileImageUploaded = isProfileImageUploaded;
     }
 
+    public String getCodiceFiscale() {
+        return codiceFiscale;
+    }
+
+    public void setCodiceFiscale(String codiceFiscale) {
+        this.codiceFiscale = codiceFiscale;
+    }
+
+
+
+    /**
+     * GETTER E SETTER ESCLUSI SU FIREBASE IN QUANTO
+     * MEMORIZZATI DIVERSAMENTE DI UNA SEMPLICE SCRITTURA.
+     */
+
     @Exclude
     public Bitmap getProfileImageBitmap() {
         return profileImageBitmap;
@@ -135,20 +168,6 @@ public class Utente implements Parcelable {
     @Exclude
     public void setProfileImageBitmap(Bitmap profileImageBitmap) {
         this.profileImageBitmap = profileImageBitmap;
-    }
-  
-    /**
-     * Return the event data and time formatted as following:
-     * dd/MM/yyyy HH:mm
-     *
-     * @return a string with the formatted data
-     */
-    @Exclude
-    public String getNeutralData(){
-        if(dataNascita == null) return null;
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(dataNascita);
     }
 
     @Exclude
@@ -161,14 +180,32 @@ public class Utente implements Parcelable {
         this.profileImageUri = profileImageUri;
     }
 
-    public String getCodiceFiscale() {
-        return codiceFiscale;
+
+
+    /**
+     * METODI DI SUPPORTO
+     */
+
+    /**
+     * Formatta la data di nascita nel tipo "dd/MM/yyyy".
+     *
+     * @return una stringa con la data formattata come sopra definito, null se la data di nascita non esiste.
+     */
+    @Exclude
+    public String getNeutralData(){
+        if(dataNascita == null) return null;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(dataNascita);
     }
 
-    public void setCodiceFiscale(String codiceFiscale) {
-        this.codiceFiscale = codiceFiscale;
-    }
-
+    /**
+     * Implementazione del metodo equals per definire l'ugualianza tra due oggetti di classe Utente.
+     * Due oggetti sono uguali se i loro id sono gli stessi.
+     *
+     * @param o oggetto con cui fare il confronto.
+     * @return true se sono uguali, false altrimenti.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -177,10 +214,22 @@ public class Utente implements Parcelable {
         return Objects.equals(id, utente.id);
     }
 
+    /**
+     * Calcola l'ash dell'oggetto.
+     * L'hash è calcolato solamento sul campo id.
+     *
+     * @return l'hash dell'id dell'oggetto.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
+
+    /**
+     * IMPLEMENTAZIONE DEI METODI DELL'INTERFACCIA Parcelable
+     */
 
     @Override
     public int describeContents() {
@@ -200,6 +249,10 @@ public class Utente implements Parcelable {
         dest.writeInt(statusSanitario);
     }
 
+    /**
+     * Metodo costruttore che deserializza l'oggeto Parcel dentro un oggetto di classe Utente.
+     * @param in parcel da convertire in Utente.
+     */
     protected Utente(Parcel in) {
         id = in.readString();
         isProfileImageUploaded = in.readByte() != 0;

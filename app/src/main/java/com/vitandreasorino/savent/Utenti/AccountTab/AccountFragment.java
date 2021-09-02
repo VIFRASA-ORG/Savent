@@ -38,9 +38,9 @@ import java.util.regex.Pattern;
 import Helper.AnimationHelper;
 import Helper.AuthHelper;
 import Model.Closures.ClosureResult;
-import Model.DB.GenericUser;
-import Model.DB.Utenti;
-import Model.Pojo.Utente;
+import Model.DAO.GenericUser;
+import Model.DAO.Utenti;
+import Model.POJO.Utente;
 
 
 public class AccountFragment extends Fragment implements View.OnFocusChangeListener{
@@ -438,7 +438,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
         if(listOfUpdates.size() == 0) {
             //Check if we need to upload the image
             if(newSelectedImage != null){
-                Utenti.uploadUserImage(newSelectedImage,getContext(),closureBool -> {
+                Utenti.uploadUserImage(newSelectedImage,closureBool -> {
                     if(closureBool){
                         enableAllComponent();
                         buttonSaveData.setEnabled(false);
@@ -470,7 +470,7 @@ public class AccountFragment extends Fragment implements View.OnFocusChangeListe
             if(closureBool){
                 //Si ontrolla se si deve caricare anche l'immagine
                 if(newSelectedImage != null){
-                    Utenti.uploadUserImage(newSelectedImage,getContext(),closureBool1 -> {
+                    Utenti.uploadUserImage(newSelectedImage,closureBool1 -> {
                         if(closureBool1){
                             enableAllComponent();
                             buttonSaveData.setEnabled(false);
