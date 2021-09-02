@@ -86,9 +86,9 @@ public class AddGroup extends AppCompatActivity {
     }
 
     /**
-     * metodo che richiama la successiva classe abbinata allo scopo di aggiungere nuovi contatti al gruppo
+     * Metodo che richiama la successiva classe abbinata allo scopo di aggiungere nuovi contatti al gruppo
      * cliccando il floating button "aggiungi contatto"
-     * @param view
+     * @param view: la nuova vista indicante la lista dei contatti da poter aggiungere
      */
     public void onNewContactClick (View view) {
         Intent addNewContact = new Intent(this, AddContacts.class);
@@ -99,44 +99,52 @@ public class AddGroup extends AppCompatActivity {
     }
 
     /**
-     * metodo che riporta nella schermata precedente
+     * Metodo che riporta nella schermata precedente
      */
     public void onBackButtonPressed(View view){
         super.onBackPressed();
         finish();
     }
 
+    /**
+     * Metodo per la definizione dell'immagine del profilo dell'utente
+     * @param view :la nuova vista indicante il profilo con l'immagine profilo modificata
+     */
     public void onClickPhoto(View view){
         Intent i = new Intent();
         i.setType("image/*");
         i.setAction(Intent.ACTION_GET_CONTENT);
 
-        // pass the constant to compare it
-        // with the returned requestCode
+        //Viene passata la costante per il confronto con il codice requestCode ritornato
         startActivityForResult(Intent.createChooser(i, "Select Picture"), PHOTO_LIBRARY_RESULT);
     }
 
-
+    /**
+     * Metodo che serve per la definizione delle attività rispetto alle scelte relative alla modifica dell'immagine profilo.
+     * @param requestCode :codice di richiesta intero originariamente fornito a startActivityForResult(),
+     * che consente di identificare da chi proviene questo risultato
+     * @param resultCode :codice risultato intero restituito dall'attività figlia tramite il suo setResult().
+     * @param data :un intento che può restituire i dati della modifica al chiamante.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PHOTO_LIBRARY_RESULT) {
 
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
+            // Confronta il resultCode con la costante SELECT_PICTURE
             if (resultCode == RESULT_OK) {
-                // Get the url of the image from data
+                //Si ottiene l'url dell'immagine dal database
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
-                    // update the preview image in the layout
-                    // Compress it before it is shown into the imageView
+                    //Si modifica l'anteprima dell'immagine nel layout
+                    //Si comprime prima che sia mostrata nel componente imageView
                     imageNewGroup.setImageBitmap(ImageHelper.decodeSampledBitmapFromUri(getContentResolver(),selectedImageUri,imageNewGroup));
                     selectedGroupProfileImage = selectedImageUri;
                 }
             }
         }else if (requestCode == ADD_NEW_CONTACT_RESULT){
-            //Return from the addContact intent
+            //Si restituisce il risultato nell'intent dell'aggiunta del contatto
             if(resultCode == RESULT_OK){
                 List<Utente> selectedUsers = data.getParcelableArrayListExtra(AddContacts.EXTRA_ARRAY_CHECKED_CONTACTS);
 
@@ -163,23 +171,44 @@ public class AddGroup extends AppCompatActivity {
     }
 
     /**
-     * Used to check if the user is writing some new information that are different from the one on the server
+     * Si verifica se l'utente sta scrivendo alcune nuove informazioni differenti da quelle presenti sul server
      */
     TextWatcher textWatcher = new TextWatcher() {
+
+        /**
+         * Metodo che viene chiamato per avvisarti che, all'interno di s, i countcaratteri che iniziano a start stanno per
+         * essere sostituiti da un nuovo testo con lunghezza after.
+         * @param s
+         * @param start
+         * @param count
+         * @param after
+         */
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
+        /**
+         * Metodo che viene chiamato per avvisarti che, all'interno di s, i countcaratteri che iniziano a start hanno appena sostituito
+         * il vecchio testo che aveva lunghezza before. È un errore tentare di apportare modifiche ad s da questo callback.
+         * @param s
+         * @param start
+         * @param before
+         * @param count
+         */
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             checkSaveButtonEnable();
         }
 
+        /**
+         * Metodo che viene chiamato per informarti che, da qualche parte all'interno di s, il testo è stato modificato.
+         * @param s
+         */
         @Override
         public void afterTextChanged(Editable s) { }
     };
 
     /**
-     * Enable or disable the save button based on the editText status
+     * Si attiva o disattiva il bottone del Salva Modifiche in base allo stato dell'edit text
      */
     private void checkSaveButtonEnable(){
         if(!editTextDescription.getText().toString().isEmpty() && !editTextGroupName.getText().toString().isEmpty() && adapter.getNoFilteredData().size() != 0){
@@ -188,14 +217,13 @@ public class AddGroup extends AppCompatActivity {
     }
 
     /**
-     * Triggered when the save button is clicked
-     *
-     * @param view
+     * Si attiva il salvataggio quando l'utente clicca sul relativo button
+     * @param view :la nuova vista con i nuovi dati aggiornati.
      */
     public void onSaveButtonClick(View view){
         toggleDownloadMode(true);
 
-        //Save all the information on the server
+        //Si salvano tutte le informazioni presenti sul server
         Gruppo newGroup = new Gruppo();
         newGroup.setNome(editTextGroupName.getText().toString());
         newGroup.setDescrizione(editTextDescription.getText().toString());
@@ -235,6 +263,11 @@ public class AddGroup extends AppCompatActivity {
         });
     }
 
+    /**
+     * Si disabilitano le componenti del layout dell'aggiunta del gruppo mentre vengono apportate le modifiche sulle edit text
+     * o che li abilita dopo che si finisce di modificare le edit text del layout
+     * @param isEnabled : valore booleano equivalente a true che indica le componenti abilitate
+     */
     private void toggleDownloadMode(boolean isEnabled){
         if(isEnabled){
             buttonSaveDataGroup.setEnabled(false);

@@ -35,12 +35,20 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-
+    /**
+     * Metodo che controlla quanti elementi ci sono nel set di dati rappresentato da questo Adapter.
+     * @return :il numero del contatore della pagina
+     */
     @Override
     public int getCount() {
         return contatorePagina;
     }
 
+    /**
+     * Metodo che serve per ottenere il titolo della pagina
+     * @param position : un valore intero che serve a definire la posizione della pagina
+     * @return : il titolo del tipo di pagina da restituire (freelance o company)
+     */
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {

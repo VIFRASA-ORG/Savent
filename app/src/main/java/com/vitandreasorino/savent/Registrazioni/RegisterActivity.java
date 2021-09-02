@@ -97,8 +97,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
     }
 
     /**
-     * Add to all the component in the view the focus change listener
-     * to reset the background when an error occur
+     * Si aggiunge a tutti i componenti nella vista il listener di cambio focus
+     * per ripristinare lo sfondo quando si verifica un errore
      */
     private void setAllFocusChanged(){
         editTextCognome.setOnFocusChangeListener(this);
@@ -110,6 +110,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         editTextCodiceFiscale.setOnFocusChangeListener(this);
     }
 
+    /**
+     * Si ripuliscono i focus da tutti i componenti
+     */
     private void clearAllFocus(){
         editTextCognome.clearFocus();
         editTextConfermaPassword.clearFocus();
@@ -120,6 +123,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         editTextCodiceFiscale.clearFocus();
     }
 
+    /**
+     * Metodo chiamato quando lo stato di attivazione di una vista è cambiato.
+     * @param v : la vista il cui stato è cambiato.
+     * @param hasFocus : Il nuovo stato di messa a fuoco del v.
+     */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(hasFocus){
@@ -127,12 +135,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         }
     }
 
+    /**
+     * Viene richiamto il controllo dell'input per la registrazione
+     * @param view
+     */
     public void onRegistrationClick(View view) {
         controlloInputUtenteRegistrazione();
     }
 
-
-
+    /**
+     * Si controllano i dati inseriti in input per la registrazione di un utente
+     */
     private void controlloInputUtenteRegistrazione() {
 
         String nome, cognome, dataNascita, genere, telefono, email, password, confermaPassword, codiceFiscale;
@@ -145,55 +158,72 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         confermaPassword = editTextConfermaPassword.getText().toString();
         codiceFiscale = editTextCodiceFiscale.getText().toString();
 
-
+        //Se i valori inseriti per la registrazione dell'utente non sono corretti e/o contengono spazi
         if( validazioneNome(nome) == false || validazioneCognome(cognome) == false || validazioneCodiceFiscale(codiceFiscale) == false ||
             validazioneTelefono(telefono) == false || selectedBirthDate == null
             || validazioneEmail(email) == false || validazionePassword(password) == false || !password.equals(confermaPassword)
              || password.contains(" ")) {
 
             if(validazioneNome(nome) == false) {
+                //Se il nome inserito è errato, il color state list cambia colore e diventa rosso
                 editTextNome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se il nome inserito è corretto, il color state list rimane grigio
                 editTextNome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneCognome(cognome) == false) {
+                //Se il cognome inserito è errato, il color state list cambia colore e diventa rosso
                 editTextCognome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se il cognome inserito è corretto, il color state list rimane grigio
                 editTextCognome.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneCodiceFiscale(codiceFiscale) == false) {
+                //Se il cf inserito è errato, il color state list cambia colore e diventa rosso
                 editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se il cf inserito è corretto, il color state list rimane grigio
                 editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(selectedBirthDate == null){
+                //Se la data non è stata inserita, comunica all'utente che la data non è stata inserita
                 Toast.makeText(this, "Data di nascita non selezionata!", Toast.LENGTH_LONG).show();
             }
 
             if(validazioneTelefono(telefono) == false) {
+                //Se il numero di telefono inserito è errato, il color state list cambia colore e diventa rosso
                 editTextTelefono.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else{
+                //Se il numero di telefono inserito è corretto, il color state list rimane grigio
                 editTextTelefono.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneEmail(email) == false) {
+                //Se il'email inserita è errata, il color state list cambia colore e diventa rosso
                 editTextEmail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else{
+                //Se l'email inserita è corretta, il color state list rimane grigio
                 editTextEmail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
+            //Dopo si controlla la password inserita se è corretta e se non contiene spazi
             if(validazionePassword(password) == false || password.contains(" ")) {
+                //Se la password inserita è errata segna il color state list cambia colore e diventa rosso
                 editTextPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 editTextConfermaPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                //Comunica i caratteri da inserire per una password corretta
                 Toast.makeText(this, getString(R.string.passwordErrataRegister), Toast.LENGTH_LONG).show();
             }else if(!password.equals(confermaPassword)){
+                //Si segna il color state list di rosso se si sbaglia a reinserire la conferma della password
                 editTextPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 editTextConfermaPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                //Comunica all'utente che le due password non corrispondono
                 Toast.makeText(this, getString(R.string.passwordsNotMatching), Toast.LENGTH_LONG).show();
             } else {
+                //altrimenti si segna il color state list di grigio se la password e la riconferma della sua password sono corrette
                 editTextPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
                 editTextConfermaPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
@@ -216,24 +246,27 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
             disableAllComponents();
 
-            //Check that the phone number is not already taken
+            //Verifica se il numero di telefono inserito è già presente nel database
             GenericUser.isPhoneNumberAlreadyTaken(telefono, closureBool -> {
                 if(!closureBool){
                     u.setNumeroDiTelefono(telefono);
 
-                    //Check the fiscal code
+                    //Verifica se codice fiscale inserito dall'utente sia stato già immesso nel database
                     Utenti.isFiscalCodeAlreadyUsed(codiceFiscale, isUsed -> {
                         if(isUsed){
                             editTextCodiceFiscale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                            //Comunica all'utente che il cf è già stato utilizzato
                             Toast.makeText(this,R.string.fiscalCodeAlreadyTaken,Toast.LENGTH_LONG).show();
                             enableAllComponents();
                             return;
                         }else{
+                            //altrimenti si accetta il cf inserito se non è presente nel db
                             u.setCodiceFiscale(codiceFiscale.toUpperCase());
                             computeRegistrationToServer(u,email,password);
                         }
                     });
                 }else{
+                    //altrimenti si comunics all'utente che il numero di telefono è già stato utilizzato
                     editTextTelefono.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                     Toast.makeText(this,R.string.phoneNumberAlreadyTaken,Toast.LENGTH_LONG).show();
                     enableAllComponents();
@@ -243,11 +276,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         }
     }
 
+    /**
+     * Si passano e si caricano i dati inseriti sul server
+     * @param user : si riferisce all'utente in questione
+     * @param email : stringa che indica l'email di questo nuovo ente
+     * @param psw : stringa che indica la password di questo nuovo ente
+     */
     private void computeRegistrationToServer(Utente user, String email, String psw){
         Utenti.createNewUser(user, email, psw, imageSelected, this, closureBool -> {
             if(closureBool){
-                //Creating the firebase notification token document associated to the logged in user
-                //with the current token.
+                //Creazione del documento token di notifica firebase associato all'utente connesso
+                //con il token corrente.
                 Utenti.createMessagingTokenDocument(null);
 
                 Toast.makeText(this, getString(R.string.registrazioneEffettuataRegister), Toast.LENGTH_LONG).show();
@@ -264,7 +303,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
     }
 
     /**
-     * Show and manage the results of the DataPickerDialog.
+     * Vengono mostrati e gestiti i risultati del DataPickerDialog
      */
     public void onClickCalendarImageView(View view){
 
@@ -288,7 +327,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
     }
 
     /**
-     * Re-enable the interaction with all the components and hide the progress bar
+     * Si riattiva l'interazione con tutti i componenti e nasconde la progress bar
      */
     private void enableAllComponents(){
         editTextTelefono.setEnabled(true);
@@ -306,12 +345,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         textViewRegistrazioneEnte.setEnabled(true);
         editTextCodiceFiscale.setEnabled(true);
 
-        //Hide the progress bar
+        //Nasconde la progress bar
         AnimationHelper.fadeOut(progressBar,1000);
     }
 
     /**
-     * Disable the interaction with all the components and shows the progress bar
+     * Si disabilita l'interazione con tutti i componenti e mostra la progress bar
      */
     private void disableAllComponents(){
         editTextTelefono.setEnabled(false);
@@ -329,7 +368,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         textViewRegistrazioneEnte.setEnabled(false);
         editTextCodiceFiscale.setEnabled(false);
 
-        //Show the progress bar
+        //Mostra la progress bar
         AnimationHelper.fadeIn(progressBar,1000);
     }
 
@@ -347,7 +386,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
 
     /**
-     * Controllo che il nome in input rispetti le seguenti caratteristiche:
+     * Controlla che il nome in input rispetti le seguenti caratteristiche:
      * stringa non vuota, lunghezza compresa tra 3 e 15 caratteri,
      * solo caratteri letterali, stringa priva di spazi.
      * @param controlloNome stringa da controllare
@@ -368,7 +407,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
 
     /**
-     * Controllo che il cognome in input rispetti le seguenti caratteristiche:
+     * Controlla che il cognome in input rispetti le seguenti caratteristiche:
      * stringa non vuota, lunghezza compresa tra 3 e 15 caratteri,
      * solo caratteri letterali, stringa priva di spazi.
      * @param controlloCognome stringa da controllare
@@ -388,7 +427,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
     }
 
     /**
-     * Controllo che il numero di telefono rispetti le seguenti caratteristiche:
+     * Controlla che il numero di telefono rispetti le seguenti caratteristiche:
      * lunghezza compresa tra 9 e 11, consentiti solo caratteri numerici
      * @param controlloTelefono stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
@@ -408,7 +447,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
 
     /**
-     * Controllo che l'email in input rispetti la forma standard delle email.
+     * Controlla che l'email in input rispetti la forma standard delle email.
      * @param controlloEmail stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
      */
@@ -432,7 +471,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
 
     /**
-     * Controllo che la password in input rispetti le seguenti caratteristiche:
+     * Controlla che la password in input rispetti le seguenti caratteristiche:
      * contenta un carattere maiuscolo, contenga un carattere minuscolo e contenga
      * un carattere numerico e essa deve essere di lunghezza compresa tra 8 e 20 caratteri.
      * @param controlloPassword stringa da controllare
@@ -470,39 +509,49 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         return matchTrovato;
     }
 
+    /**
+     * Metodo che serve per definire l'intent che serve per richiamare la parte dedicata alla registrazione degli enti
+     * @param view : la nuova vista da vedere
+     */
     public void onClickRegisterEnte(View view) {
 
         Intent schermataRegistrazioneEnte = new Intent(this, RegisterEnteActivity.class);
         startActivity(schermataRegistrazioneEnte);
     }
 
-
-
+    /**
+     * Metodo che serve per impostare l'immagine del profilo dell'utente
+     * @param view : la nuova vista con l'immagine del profilo aggiornata
+     */
     public void onClickPhoto(View view){
         Intent i = new Intent();
         i.setType("image/*");
         i.setAction(Intent.ACTION_GET_CONTENT);
 
-        // pass the constant to compare it
-        // with the returned requestCode
+        //Si passa la costante per il confronto con il requestCode ritornato come valore
         startActivityForResult(Intent.createChooser(i, "Select Picture"), 200);
     }
 
-
+    /**
+     * Metodo che serve per la definizione delle attività rispetto alle scelte relative alla modifica dell'immagine profilo dell'utente.
+     * @param requestCode :codice di richiesta intero originariamente fornito a startActivityForResult(),
+     * che consente di identificare da chi proviene questo risultato
+     * @param resultCode :codice risultato intero restituito dall'attività figlia tramite il suo setResult().
+     * @param data :un intento che può restituire i dati della modifica al chiamante.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
 
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
+            //Si confronta i resultCode con la costante SELECT_PICTURE
             if (requestCode == 200) {
-                // Get the url of the image from data
+                //Si ottiene l'url dell'immagine dai dati
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
-                    // update the preview image in the layout
-                    // Compress it before it is shown into the imageView
+                    //Si modifica l'anteprima dell'immagine nel layout
+                    //Si comprime tutto prima che sia mostrata questa immagine nel componente imageView
                     imageView.setImageBitmap(ImageHelper.decodeSampledBitmapFromUri(getContentResolver(),selectedImageUri,imageView));
                     imageSelected = selectedImageUri;
                 }

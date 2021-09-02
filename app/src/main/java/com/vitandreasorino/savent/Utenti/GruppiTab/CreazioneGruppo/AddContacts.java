@@ -49,7 +49,7 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
     LinearLayout emptyListLayout;
     LinearLayout recycleListLayout;
 
-    //Empty layout textView inside
+    //Dichiarazione di text view per la definizione delle due tipologie di layout da vedere
     TextView emptyLayoutNoContacts;
     TextView emptyListNoPermissionGranted;
     ProgressBar progressBar;
@@ -77,7 +77,7 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
 
         setEmptyLayoutType(EmptyLayoutType.NORMAL);
 
-        //Setting the adapter
+        //Impostazione dell'adapter
         alreadySelectedUsers = getIntent().getParcelableArrayListExtra(EXTRA_ARRAY_CHECKED_CONTACTS);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -90,6 +90,10 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
 
     }
 
+    /**
+     * Si richiede il permesso di accedere ai contatti presenti nella rubrica quando non è stato richiesto.
+     * Se si ottiene il permesso dall'utente si richiama il metodo per accedere ai dati in rubrica, altrimenti non si accede senza permesso.
+     */
     private void checkPermission() {
         //Verifica le condizioni
         if (ContextCompat.checkSelfPermission(AddContacts.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -103,7 +107,7 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
     }
 
     /**
-     * metodo che, dopo aver ottenuto il permesso dall'utente accede ai dati della rubrica e, mediante cursore, legge e setta i valori
+     * Dopo aver ottenuto il permesso dall'utente si accede ai dati della rubrica e, mediante cursore, legge e setta i valori
      * da utilizzare (nome contatto e numero di telefono) all'interno di un arraylist
      */
     private void getContactList() {
@@ -120,9 +124,9 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
 
         //Verifica condizioni
         if (cursor.getCount() > 0) {
-            //quando il conteggio è maggiore di 0 usa il while loop
+
             while (cursor.moveToNext()) {
-                //Il cursore si muove verso il successivo, e ottiene l'id del contatto e il nome
+                //Il cursore si muove verso il successivo, e ottiene l'id del contatto, il nome e il numero di telefono
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 Uri uriPhone = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
@@ -134,29 +138,29 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
                     number = PhoneNumberUtils.normalizeNumber(number);
 
                     ContactModel model = new ContactModel();
+                    //Si setta la variabile creata con i dati ottenuti in lettura dalla rubrica
                     model.setName(name);
                     model.setNumber(number);
                     model.setId(id);
-                    //Add model in array list
+                    //Si aggiunge la variabile model che contiene il nuovo contatto creato nell'arraylist
                     tempArrayList.add(model);
-                    //Close phone cursor
+                    //Viene chiuso il cursone per la lettura dei numeri
                     phoneCursor.close();
                 }
             }
-            //Chiudi il cursore
+            //Si chiude il cursore per la lettura dell'id del contatto e del nome
             cursor.close();
         }
 
-        //Checking if the contact list is empty
+        //Si verifica se la lista dei contatti è vuota. In questo caso si setta il layout della lista vuota
         if(tempArrayList.size() == 0){
             setEmptyLayoutType(EmptyLayoutType.NORMAL);
             return;
         }
-
-        //Download all the users from firebase with those phone numbers
+        //Scarica tutti gli utenti presenti nel database di firestore con i relativi numeri di telefono
         Utenti.searchContactsInPhoneBooks(tempArrayList, listOfUsers -> {
             for(Utente u : listOfUsers){
-                //Adding all contact with an active account on the servers to the listView adapter.
+                //Vengono agiunti tutti i contatti con un profilo attivo sul server all'interno dell'adapter della list view.
                 int index = tempArrayList.lastIndexOf(new ContactModel(u.getNumeroDiTelefono()));
                 if(index >= 0){
                     ContactModel c = tempArrayList.get(index);
@@ -176,8 +180,8 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
     }
 
     /**
-     * Method used to check the checkbox of the user already checked before.
-     */
+     * Si verificano le checkbox dell'utente già settate in precedenza, in modo tale da salvarne le modifiche
+     **/
     private void checkAlreadySelected(){
         if(alreadySelectedUsers == null) return;
         if(alreadySelectedUsers.size() == 0) return;
@@ -191,14 +195,13 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
     }
 
     /**
-     * Showing the list view or the emptyView based the number of result from the cantact list and from the server.
-     *
-     * @param newType
+     * Viene mostrata la list view con contatti o la list view vuota in base al numero di risultati pervenuti dall'elenco e dal server.
+     * @param newType : il tipo del nuovo layout
      */
     private void setEmptyLayoutType(EmptyLayoutType newType){
         switch (newType){
             case NORMAL:
-                //This is tha case in which show only the message of empty list
+                //caso in cui si mostra solo il messaggio della lista vuota
                 recycleListLayout.setVisibility(View.GONE);
                 emptyListLayout.setVisibility(View.VISIBLE);
                 emptyLayoutNoContacts.setVisibility(View.VISIBLE);
@@ -206,6 +209,7 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
                 progressBar.setVisibility(View.GONE);
                 break;
             case DOWNLOADING:
+                //caso in cui si stanno per scaricare i dati presenti nella rubrica
                 recycleListLayout.setVisibility(View.GONE);
                 emptyListLayout.setVisibility(View.VISIBLE);
                 emptyLayoutNoContacts.setVisibility(View.GONE);
@@ -213,6 +217,7 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
                 progressBar.setVisibility(View.VISIBLE);
                 break;
             case CONTACT_ACCESS_NOT_GRANTED:
+                //caso in cui l'utente nega il permesso all'accesso dei dati in rubrica
                 recycleListLayout.setVisibility(View.GONE);
                 emptyListLayout.setVisibility(View.VISIBLE);
                 emptyLayoutNoContacts.setVisibility(View.GONE);
@@ -220,6 +225,7 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
                 progressBar.setVisibility(View.GONE);
                 break;
             case INVISIBLE:
+                //caso in cui si abilita la visione del layout con la lista dei contatti
                 emptyListLayout.setVisibility(View.GONE);
                 recycleListLayout.setVisibility(View.VISIBLE);
                 break;
@@ -227,12 +233,11 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
     }
 
     /**
-     * metodo che serve per richiamare il metodo getContactList() che serve per ottenere il permesso di accesso ai dati all'utente.
-     * Se l'utente rifiuta di dare il permesso, dovrà essere richiamato nuovamente il metodo per richiederlo
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
+     * Metodo che serve per richiamare il metodo getContactList() che serve per ottenere il permesso di accesso ai dati all'utente.
+     * Se l'utente rifiuta di dare il permesso, dovrà essere richiamato nuovamente il metodo per richiederlo.
+     * @param requestCode :codice di richiesta passato ActivityCompat.requestPermissions(android.app.Activity, String[], int)
+     * @param permissions :le autorizzazioni richieste di tipo String.
+     * @param grantResults :i risultati della concessione per le autorizzazioni corrispondenti.
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -252,6 +257,11 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
 
     }
 
+    /**
+     *Metodo che viene chiamato quando l'utente invia la query.
+     * @param query :il testo della query da inviare
+     * @return true se la query è stata gestita dal listener, false per consentire alla SearchView di eseguire l'azione predefinita.
+     */
     @Override
     public boolean onQueryTextSubmit(String query) {
         adapter.getFilter().filter(query);
@@ -261,6 +271,11 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
         return false;
     }
 
+    /**
+     *Metodo che viene chiamato quando il testo della query viene modificato dall'utente.
+     * @param newText : stringa contenente il nuovo testo
+     * @return false se la ricerca esegue l'azione predefinita, altrimenti true se l'azione è stata gestita dal listener.
+     */
     @Override
     public boolean onQueryTextChange(String newText) {
         adapter.getFilter().filter(newText);
@@ -271,13 +286,19 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
         return false;
     }
 
+    /**
+     * Metodo che riporta nella schermata precedente
+     */
     public void onBackButtonPressed(View view) {
         super.onBackPressed();
         finish();
     }
 
+    /**
+     * Metodo che serve per aggiungere i contatti all'interno del gruppo che si vuole creare
+     * @param view: la nuova vista contenente il gruppo da creare con la lista dei contatti selezionati
+     */
     public void onClickAddContacts(View view){
-        //adapter.
         Intent i = new Intent();
         i.putParcelableArrayListExtra(EXTRA_ARRAY_CHECKED_CONTACTS,getCheckedUsers());
         setResult(RESULT_OK,i);
@@ -285,9 +306,8 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
     }
 
     /**
-     * Find all the users selected.
-     *
-     * @return a list of Utente object indicating the selected objects.
+     *Metodo che serve per trovare tutti gli utenti selezionati nella rubrica
+     * @return una lista di oggetti di tipo Utente indicante gli oggetti selezionati dall'utente .
      */
     private ArrayList<Utente> getCheckedUsers(){
         List<ContactModel> checkedContacts = adapter.getCheckedContacts();
@@ -304,9 +324,9 @@ public class AddContacts extends AppCompatActivity implements SearchView.OnQuery
         return finalList;
     }
 
-
     /**
-     * Various state of the user interface for this Activity
+     * Si definisce una nuova costante di tipo enum per la definizione dei vari stati che possono verificarsi
+     * all'interno dell'interfaccia utente di questa activity
      */
     private enum EmptyLayoutType{
         NORMAL,
