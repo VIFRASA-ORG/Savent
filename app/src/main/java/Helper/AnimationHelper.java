@@ -17,27 +17,29 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 /**
- * Class used to perform some basic animation to Views.
+ * Classe Helper che fornisce dei metodi semplici per eseguire
+ * delle animazioni su componenti View.
  */
 public class AnimationHelper {
 
     /**
-     * Perform the conversion from a value in dp to a value in Px
-     * @param dp value to convert
-     * @param context context in which the value is to be converted
-     * @return the value in Px
+     * Metodo che converte una dimensione in dp a un valore in px.
+     *
+     * @param dp valore da convertire.
+     * @param context contesto dell'activity chiamante.
+     * @return il valore in px corrispondete al valore passato come paramentro.
      */
     public static final int dpToPx(float dp, Context context) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
-
+    
     /**
-     * Perform a slide animation of the view given as parameter
+     * Metodo che esegue uno spostamento lineare animato della vista passata come parametro.
      *
-     * @param view the view to be slided
-     * @param currentHeight the starting height of the view
-     * @param newHeight the final height of the view
-     * @param duration the duration of the animation
+     * @param view la vista da spostare in maniera animata.
+     * @param currentHeight l'altezza iniziale della vista.
+     * @param newHeight l'altezza finale della vista.
+     * @param duration la durata dell'animazione.
      */
     public static final void slideView(View view, int currentHeight, int newHeight, int duration) {
 
@@ -61,10 +63,10 @@ public class AnimationHelper {
     }
 
     /**
-     * Perform a fadeOut animation of the view given as parameter
+     * Metodo che esegue un animazione fade out della view passata come parametro.
      *
-     * @param view the view to be animated
-     * @param duration the duration of the animation
+     * @param view la vista da animare.
+     * @param duration la durata dell'animazione.
      */
     public static final void fadeOut(View view, int duration){
         view.setAlpha(1f);
@@ -82,11 +84,11 @@ public class AnimationHelper {
     }
 
     /**
-     * Perform a fadeOut animation of the view given as parameter
-     * The final visibility status of the given view is View.GONE
+     * Metodo che esegue un animazione fade out della view data come parametro.
+     * Lo stato finale di visibility della vista sarà View.GONE.
      *
-     * @param view the view to be animated
-     * @param duration the duration of the animation
+     * @param view la vista da animare.
+     * @param duration la durata dell'animazione.
      */
     public static final void fadeOutWithGone(View view, int duration){
         view.setAlpha(1f);
@@ -104,10 +106,10 @@ public class AnimationHelper {
     }
 
     /**
-     * Perform a fadeIn animation to the view given as parameter.
+     * Metodo che esegue un animazione fade in della view passata come parametro.
      *
-     * @param view the view to ba animated
-     * @param duration the duration of the animation
+     * @param view la vista da animare.
+     * @param duration la durata dell'animazione.
      */
     public static final void fadeIn(View view, int duration){
         view.setAlpha(0f);
@@ -119,11 +121,11 @@ public class AnimationHelper {
     }
 
     /**
-     * Switch between the selected image into the imageView and the given image.
-     * The switch takes place with a fade out/in animation.
+     * Metodo che esegue un cambio animato dell'immagine all'interno dell'ImageView passata come parametro.
+     * Lo switch avviene mediante una animazione fade in/out.
      *
-     * @param imageView the source imageView
-     * @param resId the resource id of the new image.
+     * @param imageView l'imageView di cui cambiare l'immagine
+     * @param resId l'id della risorsa della nuova immagine da impostare nell'imageView passata come parametro.
      */
     public static final void switchImageWithFadeAnimations(ImageView imageView, @DrawableRes int resId){
         imageView.animate()
@@ -145,13 +147,14 @@ public class AnimationHelper {
     }
 
     /**
-     * Switch between the actual text into the textView and the given new text.
-     * The switch takes places with a fade out/in animation.
-     * If color is set, the animation include also a text color change.
+     * Metodo che esegue un cambio animato di testo all'interno di una textView.
+     * Lo switch avviene mediante una animazione fade in/out.
+     * Se viene passato come paramentro anche un colore, anche il colore subisce la stessa
+     * animazione del testo.
      *
-     * @param textView the source textView
-     * @param resId the resource id of the new string.
-     * @param color the resources of the new color.
+     * @param textView la textView in cui cambiare il testo.
+     * @param resId la risorsa id della stringa da mettere nella text view.
+     * @param color la risorsa del nuovo colore di stile del testo da impostare nella textView.
      */
     public static final void switchTextWithFadeAnimation(TextView textView, @StringRes int resId, @ColorRes @Nullable Integer color){
         textView.animate()

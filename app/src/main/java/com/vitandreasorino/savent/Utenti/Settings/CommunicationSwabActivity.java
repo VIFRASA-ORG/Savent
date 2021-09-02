@@ -219,7 +219,7 @@ public class CommunicationSwabActivity extends AppCompatActivity {
 
                         // Assegnazione di tutti i codici presenti sul database locale (SQLite) dell'utente loggato
                         // inseriti in un arrayList di tipo TemporaryExposureKey.
-                        ArrayList<TemporaryExposureKey> listaCodici = helper.letturaMieiCodici();
+                        ArrayList<TemporaryExposureKey> listaCodici = helper.letturaMieiTek();
 
                         // si disabilitano tutti i pulsanti e l'editText con relativa progressBar
                         changeComponentStatus(false);

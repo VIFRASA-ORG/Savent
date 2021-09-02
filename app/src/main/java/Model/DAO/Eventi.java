@@ -19,10 +19,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import Helper.AuthHelper;
-import Helper.FirebaseStorage.FirestoreHelper;
-import Helper.Maps.LocationBoundaries;
-import Helper.Maps.MapsHelper;
-import Helper.FirebaseStorage.StorageHelper;
+import Helper.Firebase.FirestoreHelper;
+import Helper.MapsHelper;
+import Helper.Firebase.StorageHelper;
 import Model.Closures.ClosureBitmap;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
@@ -161,7 +160,7 @@ public class Eventi extends ResultsConverter {
         if(AuthHelper.isLoggedIn()){
 
             //Calcolo i confini in cui cercare
-            LocationBoundaries boundaries = MapsHelper.calcBoundaries(refPosition,radius);
+            MapsHelper.LocationBoundaries boundaries = MapsHelper.calcBoundaries(refPosition,radius);
 
             //Cerco tutti gli eventi all'interno della fascia latitudinale
             Task latitudeTask = FirestoreHelper.db.collection(EVENTO_COLLECTION)

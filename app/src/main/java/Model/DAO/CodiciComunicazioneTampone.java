@@ -6,7 +6,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.Collections;
 import java.util.List;
 import Helper.AuthHelper;
-import Helper.FirebaseStorage.FirestoreHelper;
+import Helper.Firebase.FirestoreHelper;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;
 import Model.Closures.ClosureResult;

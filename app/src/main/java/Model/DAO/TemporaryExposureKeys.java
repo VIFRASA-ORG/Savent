@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import Helper.AuthHelper;
-import Helper.FirebaseStorage.FirestoreHelper;
+import Helper.Firebase.FirestoreHelper;
 import Helper.LocalStorage.SQLiteHelper;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureList;

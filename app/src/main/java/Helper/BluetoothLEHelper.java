@@ -21,7 +21,7 @@ import androidx.core.app.ActivityCompat;
 public class BluetoothLEHelper {
 
     /**
-     * Definizione di tutti gli UUID
+     * COSTANTI CHE DEFINISCONO TUTTI GLI UUID
      * Identificatori per il service e le characteristic del BluetoothLE GATT Server.
      */
     public static final String UUID_SERVICE = "33ae23df-9282-4b3c-8f32-c137be4c4979";

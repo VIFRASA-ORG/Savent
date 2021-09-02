@@ -3,8 +3,8 @@ package Model.DAO;
 import android.net.Uri;
 
 import Helper.AuthHelper;
-import Helper.FirebaseStorage.FirestoreHelper;
-import Helper.FirebaseStorage.StorageHelper;
+import Helper.Firebase.FirestoreHelper;
+import Helper.Firebase.StorageHelper;
 import Model.Closures.ClosureBoolean;
 import Model.Closures.ClosureResult;
 import Model.POJO.Ente;

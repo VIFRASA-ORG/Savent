@@ -27,8 +27,8 @@ public class AuthHelper {
     private static final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     /**
-     * Enum che definisce tutti i tipi di utenti che potrebbero
-     * fare il login all'interno dell'applicazione.
+     * ENUM CHE DEFINISCE TUTTI I TIPI DI UTENTI CHE POTREBBERO
+     * FARE IL LOGIN ALL'INTERNO DELL'APPLICAZIONE
      */
     public enum UserType{
         Utente,

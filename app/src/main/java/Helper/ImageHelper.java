@@ -7,19 +7,24 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.widget.ImageView;
-
-import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * Classe Helper con alcuni metodi per ridimensioneare le immagini scaricate da Firebase
+ * in maniera tale da rientrare nelle dimensioni massime definite nella ImageView.
+ *
+ * Se non utilizzati, le immagini più grandi del consentito caricate nelle ImageView
+ * non veranno visualizzate.
+ */
 public class ImageHelper {
 
     /**
-     * Return the inSampleSize of the bitmap, that is the scale ration for that image
+     * Calcola il valore inSampleSize, valore per scalare l'immagine bitmap passata come parametro.
      *
-     * @param options BitmapFactory options
-     * @param reqWidth width of the imageView where you want to display the image
-     * @param reqHeight height of the imageView where you want to display the image
-     * @return the inSampleSize value
+     * @param options opzioni BitmapFactory.
+     * @param reqWidth larghezza dell'imageView dove si vuole visualizzare l'immagine.
+     * @param reqHeight altezza dell'imageView dove si vuole visualizzare l'immagine.
+     * @return valore di inSampleSize per scalare l'immagine.
      */
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
@@ -44,38 +49,13 @@ public class ImageHelper {
     }
 
     /**
-     * Compress the image given to fit into the imageView.
+     * Metodo che comprime l'immagine passata come parametro in maniera tale
+     * da risparmiare memoria e farla entrare nell'ImageView.
      *
-     * @param res manager of the application resources
-     * @param resId the image resource id
-     * @param destination destination imageView where you want to display the image
-     * @return the compressed bitmap
-     */
-    public static final Bitmap decodeSampledBitmapFromResource(Resources res, int resId, ImageView destination) {
-        int reqWidth, reqHeight;
-        reqHeight = destination.getHeight();
-        reqWidth = destination.getWidth();
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(res, resId, options);
-    }
-
-    /**
-     * Compress the image given to fit into the imageView.
-     *
-     * @param cR the content model
-     * @param image the image to compress
-     * @param destination imageView where you want to display the image
-     * @return the compressed bitmap
+     * @param cR content resolver.
+     * @param image immagine che si vuole comprimere nell'imageView.
+     * @param destination imageView di destinazione dell'immagine.
+     * @return
      */
     public static final Bitmap decodeSampledBitmapFromUri(ContentResolver cR, Uri image, ImageView destination ) {
 
@@ -83,7 +63,6 @@ public class ImageHelper {
         reqHeight = destination.getHeight();
         reqWidth = destination.getWidth();
 
-        // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         Rect c = new Rect();
@@ -95,10 +74,10 @@ public class ImageHelper {
             return null;
         }
 
-        // Calculate inSampleSize
+        // Calcolo l'inSampleSize
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
-        // Decode bitmap with inSampleSize set
+        // Decodifico la bitma con il nuovo inSampleSize.
         options.inJustDecodeBounds = false;
         try {
             return BitmapFactory.decodeStream(cR.openInputStream(image),c,options);
