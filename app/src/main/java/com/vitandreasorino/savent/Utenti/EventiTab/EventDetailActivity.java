@@ -35,9 +35,12 @@ import Model.DB.Utenti;
 import Model.Pojo.Evento;
 import Model.Pojo.Utente;
 
+/**
+ * Activity inerente alla gestione del dettaglio del singolo evento.
+ */
 public class EventDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    //Model that contains all the information shown in the interface
+    //Model che contiene tutte le informazioni mostrate nell'interfaccia
     Evento eventModel;
     Utente userModel;
 
@@ -66,26 +69,27 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
 
-        //Inflate all the component
+        //riferimenti a tutti i componenti dell'interfaccia
         inflateAll();
 
-        //Setting-up the mapView
+        //Impostazione di mapView
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
         fromCreation = getIntent().getBooleanExtra("Creation",false);
 
-        //Checking if we are arriving here from the notification
+        //Controllo se stiamo arrivando qui dalla notifica (notification)
         boolean fromNotification = getIntent().getBooleanExtra(NotificationActivity.FROM_NOTIFICATION_INTENT,false);
         if(fromNotification){
             String eventId = getIntent().getStringExtra("eventId");
 
+            //lettura dell'evento
             Eventi.getEvent(eventId, evento -> {
                 eventModel = evento;
                 setAllEventData();
             });
         }else{
-            //Deserializing the object from the intent
+            //Deserializzazione dell'oggetto per l'intent
             eventModel = (Evento) getIntent().getSerializableExtra("eventObj");
             setAllEventData();
         }
@@ -93,10 +97,10 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Set the listener for the event and download the logged in user info
+     * Imposta il listener per l'evento e scarica le informazioni dell'utente connesso
      */
     private void setAllEventData(){
-        //Adding the listener for updates
+        //Aggiungo il listener per gli aggiornamenti su firestore
         Eventi.addDocumentListener(eventModel.getId(),this,closureResult -> {
             if(closureResult != null){
                 eventModel = closureResult;
@@ -104,7 +108,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
             }
         });
 
-        //Downloading the user info
+        //Scaricare le informazioni dell'utente
         Utenti.getUser(AuthHelper.getUserId(),utente -> {
             userModel = utente;
         });
@@ -113,12 +117,12 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void refreshData(){
-        //Insert all model information in the view
+        //Inserire tutte le informazioni sul model nella vista
         titleTextView.setText(eventModel.getNome());
         descriptionTextView.setText(eventModel.getDescrizione());
         dateTime.setText(eventModel.getNeutralData());
 
-        //Computing the available places and the number of participant in the queue
+        //Calcolo dei posti disponibili e del numero dei partecipanti in coda
         int maxPartecipation = eventModel.getNumeroMassimoPartecipanti();
         int actualPartecipation = eventModel.getNumeroPartecipanti();
 
@@ -126,14 +130,15 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         availablePlacesTextView.setText(getResources().getQuantityString(R.plurals.availablePlaces,quant,quant));
         queueTextView.setText(getResources().getQuantityString(R.plurals.queuePlaces,eventModel.getNumeroPartecipantiInCoda(),eventModel.getNumeroPartecipantiInCoda()));
 
+        //controllo dell'image del evento
         if(eventModel.getIsImageUploaded()){
-            //We have to download the image all over again because the intent allow you to pass just file under the size of 1mb
+            //Dobbiamo scaricare di nuovo l'immagine perché l'intent ti consente di passare solo file di dimensioni inferiori a 1mb
             Eventi.downloadEventImage(eventModel.getId(), (ClosureBitmap) result -> {
                 eventModel.setImageBitmap(result);
                 eventLocandinaImageView.setImageBitmap(result);
             });
 
-            //Download the url
+            //Scarica l'URL
             Eventi.downloadEventImageUri(eventModel.getId(), new ClosureResult<Uri>() {
                 @Override
                 public void closure(Uri result) {
@@ -144,7 +149,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
             });
         }
 
-        //Download the user name of the creator or of the group
+        //Scarica il nome utente del creatore o del gruppo
         if(!eventModel.getIdUtenteCreatore().isEmpty()){
             Utenti.getNameSurnameOfUser(eventModel.getIdUtenteCreatore(), closureResult -> {
                 if(closureResult != null) creatorTextView.setText(closureResult);
@@ -155,61 +160,61 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
             });
         }
 
-        //Locate the map to the correct position
+        //Trova la mappa nella posizione corretta
         addMarkerToPosition(new LatLng(eventModel.getLatitudine(),eventModel.getLongitudine()));
 
-        //Enable or disable the correct button inside the view
+        //Abilita o disabilita il pulsante corretto all'interno della vista
         participationManager();
     }
 
     /**
-     * Method that perform all the controls and enable or disable the correct component
-     * based on the user and the participation to the event.
+     * Metodo che esegue tutti i controlli e attiva o disattiva il componente corretto
+     * in base all'utente e alla partecipazione all'evento.
      */
     private void participationManager(){
 
-        //trying to download the partecipation instance to this event
+        //prova a scaricare l'istanza di partecipazione a questo evento
         Partecipazioni.getMyPartecipationAtEvent(eventModel.getId(), partecipazione -> {
             if(partecipazione != null){
-                //User has already joined the event
+                //L'utente ha già aderito all'evento
 
                 if(partecipazione.getAccettazione()){
                     if(partecipazione.getListaAttesa()){
-                        //Accepted and in the queue
+                        //Accettato e in coda
                         setPageMode(PageMode.LEAVE_EVENT_FROM_QUEUE);
                     }else{
-                        //Accepted but not in queue
+                        //Accettato ma non in coda
                         setPageMode(PageMode.LEAVE_EVENT_FROM_PARTICIPATION);
                     }
                 }else{
                     if(partecipazione.getListaAttesa()){
-                        //Not accepted but in queue
+                        //Non accettato ma in coda
                         setPageMode(PageMode.LEAVE_EVENT_FROM_QUEUE_DUE_STATUS);
                     }
                 }
             }else{
-                //User is not joining the event yet
+                //L'utente non si è ancora unito all'evento
                 setPageMode(PageMode.JOIN_EVENT);
             }
         });
     }
 
     /**
-     * Enable the correct component based to the mode given.
+     * Abilita i componenti corretti in base alla modalità data.
      *
-     * @param newPageMode the new mode.
+     * @param newPageMode la nuova modalità.
      */
     private void setPageMode(PageMode newPageMode){
         switch (newPageMode){
             case JOIN_EVENT:
-                //Not joined the event yet
+                //Non ho ancora partecipato all'evento
                 buttonLeave.setVisibility(View.GONE);
                 buttonPartecipate.setVisibility(View.VISIBLE);
                 buttonPartecipate.setEnabled(true);
                 messageBox.setVisibility(View.GONE);
                 break;
             case LEAVE_EVENT_FROM_QUEUE:
-                //Joined but in queue
+                //Iscritto ma in coda
                 buttonLeave.setVisibility(View.VISIBLE);
                 buttonPartecipate.setVisibility(View.GONE);
                 buttonLeave.setEnabled(true);
@@ -218,7 +223,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                 messageBox.setText(R.string.queueMessage);
                 break;
             case LEAVE_EVENT_FROM_PARTICIPATION:
-                //Joined and not in queue
+                //Iscritto e non in coda
                 buttonLeave.setVisibility(View.VISIBLE);
                 buttonPartecipate.setVisibility(View.GONE);
                 buttonLeave.setEnabled(true);
@@ -228,7 +233,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                 break;
 
             case LEAVE_EVENT_FROM_QUEUE_DUE_STATUS:
-                //Joined but in queue due to health minimun requirement not meet.
+                //Iscritto ma in coda a causa del requisito minimo di salute non soddisfatto.
                 buttonLeave.setVisibility(View.VISIBLE);
                 buttonPartecipate.setVisibility(View.GONE);
                 buttonLeave.setEnabled(true);
@@ -240,7 +245,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Method used to gett all the interface reference from the xml file
+     * Metodo utilizzato per ottenere tutti i riferimenti dell'interfaccia dal file xml
      */
     private void inflateAll(){
         titleTextView = findViewById(R.id.titleTextView);
@@ -257,8 +262,10 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         messageBox = findViewById(R.id.messageBox);
     }
 
+
     /**
-     * On click event of the back button
+     * pulsante "back" che permette di tornare all'activity precedente.
+     * Tale pulsante manda anche messaggi in broadcast locale per aggiornare gli eventi
      * @param view
      */
     public void onBackButtonPressed(View view){
@@ -274,8 +281,8 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * On click method for the join event button.
-     *
+     * Metodo per il click al pulsante di partecipazione all'evento.
+     * Controlla se ci sono posti disponibili e se viene soddisfatto lo stato di salute.
      * @param view
      */
     public void onParticipateButtonPressed(View view) {
@@ -287,19 +294,19 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
 
         if(userModel == null || eventModel == null) return;
 
-        //Determine the message to insert into the dialog
+        // Determina il messaggio da inserire nella finestra di dialog
         if(userModel.getStatusSanitario() <= eventModel.getSogliaAccettazioneStatus()){
-            //The health status is OK
+            //Lo stato di salute è OK
             if(eventModel.getNumeroPartecipanti() < eventModel.getNumeroMassimoPartecipanti()){
-                // Health OK, available Places OK
+                // Lo stato di salute è OK, e ci sono Posti disponibili
                 builder.setMessage(R.string.popUpJoinHealthOkPlacesOk);
             }else{
-                // Health OK, available places NOT OK
+                // Lo stato di salute è OK, ma non ci sono Posti disponibili
                 builder.setMessage(R.string.popUpJoinHealthOkPlacesNO);
             }
         }else{
-            //The health status is NOT OK
-            //The message is the same for both the cases
+            //Lo stato di salute NON è OK
+            //Il messaggio è lo stesso per entrambi i casi
             builder.setMessage(R.string.popUpJoinHealthNO);
         }
 
@@ -307,8 +314,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * On click event for the leave button.
-     *
+     * Pulsante abbandona evento
      * @param view
      */
     public void onLeaveButtonPressed(View view) {
@@ -337,29 +343,30 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                 getString(R.string.dataEventPartecipation) + ": " + eventModel.getDataOra() + "\n");
 
         sendIntent.setType("text/plain");
+
         Intent shareIntent = Intent.createChooser(sendIntent, "Share to");
         startActivity(shareIntent);
     }
 
-    /*
-
-        DialogInterface.OnClickListener
-        IT IS USED TO MANAGE THE OncClick ON THE TWO BUTTON IN THE DIALOG
-        TO JOIN AND LEAVE AN EVENT.
-
+    /**
+     * DialogInterface.OnClickListener
+     * SI USA PER GESTIRE L'OnClick SUI DUE PULSANTI NELLA DIALOG PER PARTECIPARE E LASCIARE UN EVENTO.
      */
     DialogInterface.OnClickListener leaveEventListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
+                    //Abbandona evento da un evento specifico.
                     Partecipazioni.removeMyPartecipationTransaction(eventModel.getId(), closureBool -> {
                         if(closureBool){
                             Toast.makeText(getApplicationContext(),R.string.eventAbandonedCorrectly, Toast.LENGTH_SHORT).show();
+                            //messaggio in broadcast per l'aggiornamento della lista delle partecipazioni
                             Intent i = new Intent("UpdateListPartecipations");
                             i.putExtra("UpdatedListPartecipations", true);
                             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
                         }
+                        //abbandono non riuscito
                         else Toast.makeText(getApplicationContext(),R.string.errorAbandoningEvent, Toast.LENGTH_SHORT).show();
 
                     });
@@ -376,7 +383,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
-                    //Yes button clicked
+                    //Partecipazione all'evento specifico.
                     Partecipazioni.addMyPartecipationTransaction(eventModel.getId(), part ->{
                         if(part != null) Toast.makeText(getApplicationContext(),R.string.participationCorrectlySent, Toast.LENGTH_SHORT).show();
                         else Toast.makeText(getApplicationContext(),R.string.errorJoiningEvent, Toast.LENGTH_SHORT).show();
@@ -388,12 +395,10 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         }
     };
 
-    /*
-
-        OVERRIDE OF SOME METHOD IN THE OnMapReadyCallback INTERFACE
-
+    /**
+     * OVERRIDE DI ALCUNI METODI NELL'INTERFACCIA OnMapReadyCallback
+     * @param googleMap
      */
-
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
@@ -405,6 +410,10 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
+    /**
+     * aggiunta del marker nella posizione indicata dalla latitudine e longitudine indicata con rispettivo nome e icona dell'evento
+     * @param latLng
+     */
     private void addMarkerToPosition(LatLng latLng){
         if (map == null) return;
         map.clear();
@@ -417,14 +426,15 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Move the map camera to the location given
-     * @param location  location to which tha camera is to be moved
+     * Sposta la camera della mappa nella posizione indicata
+     * @param location posizione in cui deve essere spostata la camera
      */
+
     private void moveToLocation(LatLng location) {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(location,12));
-        // Zoom in, animating the camera.
+        // Ingrandisci (Zoom in), animando la camera.
         map.animateCamera(CameraUpdateFactory.zoomIn());
-        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        // Rimpicciolisci (Zoom out) per ingrandire il livello 10, animando con una durata di 2 secondi.
         map.animateCamera(CameraUpdateFactory.zoomTo(12), 2000, null);
     }
 
@@ -452,12 +462,10 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         mapView.onLowMemory();
     }
 
-    /*
 
-        ENUM USED TO DEFINE THE STATUS OF THE PAGE
-
+    /**
+     * ENUM UTILIZZATO PER DEFINIRE LO STATO DELLA PAGINA
      */
-
     private enum PageMode{
         JOIN_EVENT,
         LEAVE_EVENT_FROM_QUEUE,
