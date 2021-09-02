@@ -70,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity{
                 //Viene impostato a true il valore del bluetooth LE
                 SharedPreferencesHelper.setBluetoothPreference(true, getApplicationContext());
               
-                if(GattServerService.isRunning){
+                if(GattServerService.isServiceRunning){
                     //Si invia il broadcast
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerService.RESTART_GATT_SERVER_INTENT));
                 }else{
@@ -79,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity{
                 }
 
                 //se la ricerca di dispositivi compatibili con BLE sta avvenendo
-                if(GattServerCrawlerService.isRunning){
+                if(GattServerCrawlerService.isServiceRunning){
                     //si cerca di effettuare la connessione con tali dispositivi
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerCrawlerService.RESTART_GATT_CRAWLER_INTENT));
                 }else{

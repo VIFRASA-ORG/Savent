@@ -401,7 +401,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
             //si attiva nel caso l'utente ha passato la mano sul sensore
             if(event.values[0] == 0.0 && flag == true) {
 
-                if(GattServerService.isRunning){
+                if(GattServerService.isServiceRunning){
                     //Si invia il broadcast
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GattServerService.RESTART_GATT_SERVER_INTENT));
                 }else{
