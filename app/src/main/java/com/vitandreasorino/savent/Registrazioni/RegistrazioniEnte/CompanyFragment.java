@@ -49,7 +49,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //Definizione e inizializzazione del fragment
         View view = inflater.inflate(R.layout.fragment_company, container, false);
 
         buttonCertificatoPartitaIvaDitta = (Button) view.findViewById(R.id.buttonCertificatoPartitaIvaDitta);
@@ -78,8 +78,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
                 imagePartitaIvaDitta.setType("image/*");
                 imagePartitaIvaDitta.setAction(Intent.ACTION_GET_CONTENT);
 
-                // pass the constant to compare it
-                // with the returned requestCode
+                //Si passa la costante per il confronto con il requestCode ritornato
                 startActivityForResult(Intent.createChooser(imagePartitaIvaDitta, "Select Picture"), 201);
             }
         });
@@ -91,8 +90,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
                 imageVisuraCameraleDitta.setType("image/*");
                 imageVisuraCameraleDitta.setAction(Intent.ACTION_GET_CONTENT);
 
-                // pass the constant to compare it
-                // with the returned requestCode
+                //Si passa la costante per il confronto con il requestCode ritornato
                 startActivityForResult(Intent.createChooser(imageVisuraCameraleDitta, "Select Picture"), 202);
             }
         });
@@ -115,6 +113,10 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
         setAllFocusChanged();
     }
 
+    /**
+     * Si aggiunge a tutti i componenti nella vista il listener di cambio focus
+     * per ripristinare lo sfondo quando si verifica un errore
+     */
     private void setAllFocusChanged(){
         editTextPartitaIvaDitta.setOnFocusChangeListener(this);
         editTextNomeDitta.setOnFocusChangeListener(this);
@@ -126,6 +128,9 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
         editTextConfermaPasswordDitta.setOnFocusChangeListener(this);
     }
 
+    /**
+     * Si rimuovono i focus da tutti i componenti
+     */
     private void removeAllFocus(){
         editTextPartitaIvaDitta.clearFocus();
         editTextNomeDitta.clearFocus();
@@ -137,7 +142,11 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
         editTextConfermaPasswordDitta.clearFocus();
     }
 
-
+    /**
+     * Metodo chiamato quando lo stato di attivazione di una vista è cambiato.
+     * @param v : la vista il cui stato è cambiato.
+     * @param hasFocus : Il nuovo stato di messa a fuoco del v.
+     */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(hasFocus){
@@ -145,7 +154,9 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
         }
     }
 
-
+    /**
+     * Si controllano i dati inseriti in input per la registrazione della ditta
+     */
     private void controlloInputUtenteRegistrazioneDitta() {
 
         String numeroPartitaIvaDitta, nomeDitta,domicilioFiscaleDitta, sedeDitta, numeroTelefonoDitta,
@@ -168,55 +179,73 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
            pathCertificatoPartitaIvaDitta == null || pathVisuraCameraleDitta == null){
 
             if(validazionePartitaIvaDitta(numeroPartitaIvaDitta) == false) {
+                //Se la partita iva inserita è errata, il color state list cambia colore e diventa rosso
                 editTextPartitaIvaDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se la partita iva inserita è corretta, il color state list rimane grigio
                 editTextPartitaIvaDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneNomeDitta(nomeDitta) == false) {
+                //Se il nome della ditta inserito è errato, il color state list cambia colore e diventa rosso
                 editTextNomeDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se il nome della ditta inserito è corretto, il color state list rimane grigio
                 editTextNomeDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneDomicilioFiscale(domicilioFiscaleDitta) == false) {
+                //Se il domicilio inserito è errato, il color state list cambia colore e diventa rosso
                 editTextDomicilioFiscaleDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se  il domicilio inserito è corretto, il color state list rimane grigio
                 editTextDomicilioFiscaleDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneSedeDitta(sedeDitta) == false) {
+                //Se la sede inserita è errata, il color state list cambia colore e diventa rosso
                 editTextSedeDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se la sede inserita è corretta, il color state list rimane grigio
                 editTextSedeDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneTelefonoDitta(numeroTelefonoDitta) == false) {
+                //Se il numero di telefono inserito è errato, il color state list cambia colore e diventa rosso
                 editTextTelefonoDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se  il numero della ditta inserito è corretto, il color state list rimane grigio
                 editTextTelefonoDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
             if(validazioneEmailDitta(emailDitta) == false) {
+                //Se l'email inserita è errata, il color state list cambia colore e diventa rosso
                 editTextEmailDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             }else {
+                //Se  l'email inserita è corretta, il color state list rimane grigio
                 editTextEmailDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
-
+            //Dopo si controlla la password inserita se è corretta e se non contiene spazi
             if(validazionePasswordDitta(passwordDitta) == false || passwordDitta.contains(" ") ) {
+                //Se la password inserita è errata segna il color state list cambia colore e diventa rosso
                 editTextPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 editTextConfermaPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                //Comunica i caratteri da inserire per una password corretta
                 Toast.makeText(getActivity(), getString(R.string.passwordErrataRegister), Toast.LENGTH_LONG).show();
             }else if(!passwordDitta.equals(confermaPasswordDitta)){
+                //Si segna il color state list di rosso se si sbaglia a reinserire la conferma della password
                 editTextPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
                 editTextConfermaPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+                //Comunica all'utente che le due password non corrispondono
                 Toast.makeText(getActivity(), getString(R.string.passwordsNotMatching), Toast.LENGTH_LONG).show();
                 return;
             }else{
+                //altrimenti si segna il color state list di grigio se la password e la riconferma della sua password sono corrette
                 editTextPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
                 editTextConfermaPasswordDitta.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#AAAAAA")));
             }
 
+            //Se il certificato per la partita iva non è stato selezionato comunica all'utente che deve inserirlo
             if(pathCertificatoPartitaIvaDitta == null){
                 textViewLabelCaricamentoCertificatoDitta.setVisibility(View.INVISIBLE);
                 Toast.makeText(getActivity(),R.string.errorPIVA,Toast.LENGTH_LONG).show();
@@ -225,6 +254,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
                 textViewLabelCaricamentoCertificatoDitta.setVisibility(View.VISIBLE);
             }
 
+            //Se la camera di commercio non è stato selezionata comunica all'utente che deve inserirla
             if(pathVisuraCameraleDitta == null ){
                 textViewLabelCaricamentoVisuraDitta.setVisibility(View.INVISIBLE);
                 Toast.makeText(getActivity(),R.string.errorVCamerale,Toast.LENGTH_LONG).show();
@@ -245,7 +275,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
             e.setCertificatoPIVA(pathCertificatoPartitaIvaDitta);
             e.setSedeDitta(sedeDitta);
 
-            //Check if the phone number is already taken
+            //Verifica se il numero di telefono è stato gia utilizzato da altri utenti presenti nel database
             GenericUser.isPhoneNumberAlreadyTaken(numeroTelefonoDitta, closureBool -> {
                 if(!closureBool){
                     e.setNumeroTelefono(numeroTelefonoDitta);
@@ -260,23 +290,30 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
         }
     }
 
+    /**
+     * Si passano e si caricano i dati inseriti sul server
+     * @param e : si riferisce all'ente in questione
+     * @param email : stringa che indica l'email di questo nuovo ente
+     * @param password : stringa che indica la password di questo nuovo ente
+     */
     private void computeRegistrationToServer(Ente e, String email, String password){
         Enti.createNewEnteDitta(e,email,password,closureBool -> {
             if(closureBool){
-                /*  If the Ente creation is successful, execute the logout from the account because
-                 *   it has to be enabled from the service provider after having verified all the information.
-                 * */
+                //Se la creazione dell'ente va a buon fine, esegui il logout dall'account perché
+                //deve essere abilitato dal fornitore del servizio dopo aver verificato tutte le informazioni
 
-                //LogOut
                 AuthHelper.logOut(getContext());
+                //Viene comunicato all'utente che la creazione dell'ente è andata a buon fine
                 Toast.makeText(getActivity(),R.string.enteCreated,Toast.LENGTH_LONG).show();
 
-                //Go back to the first page
+                //Si ritorna alla prima pagina del login e della registrazione
                 Intent firstPage = new Intent(getActivity(), LogSingInActivity.class);
-                firstPage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);    //Removing from the stack all the previous Activity.
+                //Si rimuovono dallo stack tutte le precedenti attività
+                firstPage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(firstPage);
                 getActivity().finish();
             }else{
+                //altrimenti si comunica che la registrazione dell'ente è fallita
                 Toast.makeText(getActivity(), getString(R.string.registrazioneErrore), Toast.LENGTH_LONG).show();
                 AuthHelper.logOut(getContext());
                 enableAllComponents();
@@ -284,6 +321,9 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
         });
     }
 
+    /**
+     * Si disabilitano tutte le componenti presenti nel layout
+     */
     private void disableAllComponents(){
 
         editTextPartitaIvaDitta.setEnabled(false);
@@ -302,6 +342,9 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
         AnimationHelper.fadeIn(progressBar,1000);
     }
 
+    /**
+     * Si abilitano tutte le componenti presenti nel layout
+     */
     private void enableAllComponents(){
 
         editTextPartitaIvaDitta.setEnabled(true);
@@ -345,7 +388,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
 
 
     /**
-     * Controllo che il numero di partita Iva rispetti le seguenti caratteristiche:
+     * Controlla che il numero di partita Iva rispetti le seguenti caratteristiche:
      * lunghezza di 11, consentiti solo caratteri numerici.
      * @param numeroPartitaIva stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, alt
@@ -364,9 +407,8 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
         return matchTrovato ;
     }
 
-
     /**
-     * Controllo che il nome in input rispetti le seguenti caratteristiche:
+     * Controlla che il nome in input rispetti le seguenti caratteristiche:
      * stringa non vuota, lunghezza compresa tra 3 e 15 caratteri,
      * solo caratteri letterali, stringa priva di spazi.
      * @param controlloNomeDitta stringa da controllare
@@ -387,7 +429,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
 
 
     /**
-     * Controllo che il domiclio fiscale dell'azienda sia formattato correttamente
+     * Controlla che il domiclio fiscale dell'azienda sia formattato correttamente
      * Va inserito prima il numero civico e poi successivamente la via 
      * @param controlloDomiclioFiscale stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
@@ -408,7 +450,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
 
 
     /**
-     * Controllo che la sede dell'azienda sia formattata correttamente
+     * Controlla che la sede dell'azienda sia formattata correttamente
      * Va inserito prima il numero civico e poi successivamente la via
      * @param controlloSedeDitta stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
@@ -428,7 +470,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
 
 
     /**
-     * Controllo che il numero di telefono rispetti le seguenti caratteristiche:
+     * Controlla che il numero di telefono rispetti le seguenti caratteristiche:
      * lunghezza compresa tra 9 e 11, consentiti solo caratteri numerici
      * @param controlloTelefonoDitta stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
@@ -448,7 +490,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
 
 
     /**
-     * Controllo che l'email in input rispetti la forma standard delle email.
+     * Controlla che l'email in input rispetti la forma standard delle email.
      * @param controlloEmailDitta stringa da controllare
      * @return ritorna true se la stringa è formattata correttamente, altrimenti false
      */
@@ -472,7 +514,7 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
 
 
     /**
-     * Controllo che la password in input rispetti le seguenti caratteristiche:
+     * Controlla che la password in input rispetti le seguenti caratteristiche:
      * contenta un carattere maiuscolo, contenga un carattere minuscolo e contenga
      * un carattere numerico e essa deve essere di lunghezza compresa tra 8 e 20 caratteri.
      * @param controlloPasswordDitta stringa da controllare
@@ -491,20 +533,25 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
         return matchTrovato;
     }
 
-
+    /**
+     * Metodo che serve per la definizione delle attività rispetto alle scelte relative alla modifica dell'immagine profilo dell'ente.
+     * @param requestCode :codice di richiesta intero originariamente fornito a startActivityForResult(),
+     * che consente di identificare da chi proviene questo risultato
+     * @param resultCode :codice risultato intero restituito dall'attività figlia tramite il suo setResult().
+     * @param data :un intento che può restituire i dati della modifica al chiamante.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
 
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
+            //Si confronta il resultCode con la costante SELECT_PICTURE
             if (requestCode == 201) {
-                // Get the url of the image from data
+                //Si ottiene l'url dell'immagine del profilo dell'ente dai dati
                 Uri selectedImageCertificatoUri = data.getData();
                 if (null != selectedImageCertificatoUri) {
-                    // update the preview image in the layout
+                    //Si modifica l'anteprima dell'immagine nel layout
                     pathCertificatoPartitaIvaDitta = selectedImageCertificatoUri;
                     textViewLabelCaricamentoCertificatoDitta.setVisibility(View.VISIBLE);
                 }else{
@@ -513,10 +560,10 @@ public class CompanyFragment extends Fragment implements View.OnFocusChangeListe
             }
 
             if (requestCode == 202) {
-                // Get the url of the image from data
+                //Si ottiene l'url dell'immagine del profilo dell'ente dai dati
                 Uri selectedImageVisuraUri = data.getData();
                 if (null != selectedImageVisuraUri) {
-                    // update the preview image in the layout
+                    //Si modifica l'anteprima dell'immagine nel layout
                     pathVisuraCameraleDitta = selectedImageVisuraUri;
                     textViewLabelCaricamentoVisuraDitta.setVisibility(View.VISIBLE);
                 }else{

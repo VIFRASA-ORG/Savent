@@ -14,12 +14,15 @@ public class RegisterEnteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Definizione e inizializzazione dell'activity
         setContentView(R.layout.activity_register_ente);
 
         ViewPager vp = findViewById(R.id.viewPager);
+        //Dichiarazione dell'adapter e settaggio di quest'ultimo
         PagerAdapter page = new PagerAdapter(getSupportFragmentManager());
         vp.setAdapter(page);
 
+        //Dichiarazione del tab layout per la registrazione
         TabLayout tabLayoutRegistrazione = findViewById(R.id.tabLayoutRegistrazione);
         tabLayoutRegistrazione.setupWithViewPager(vp);
 

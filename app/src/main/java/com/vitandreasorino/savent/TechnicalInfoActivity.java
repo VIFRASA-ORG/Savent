@@ -14,6 +14,10 @@ public class TechnicalInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_technical_info);
     }
 
+    /**
+     * Metodo che serve per tornare alla schermata precedente
+     * @param view : la vista della pagina precedente
+     */
     public void onBackButtonPressed(View view) {
         super.onBackPressed();
         finish();
