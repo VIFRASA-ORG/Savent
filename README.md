@@ -16,26 +16,26 @@ The complete documentation with all the installation instructions are located in
 
 
 #### User manual
-![Alt text](readmeFiles/ManualeUtente-01 "First page")
+![Alt text](readmeFiles/ManualeUtente-01.png "Page 1")
 
-![Alt text](readmeFiles/ManualeUtente-02 "First page")
+![Alt text](readmeFiles/ManualeUtente-02.png "Page 2")
 
-![Alt text](readmeFiles/ManualeUtente-03 "First page")
+![Alt text](readmeFiles/ManualeUtente-03.png "Page 3")
 
-![Alt text](readmeFiles/ManualeUtente-04 "First page")
+![Alt text](readmeFiles/ManualeUtente-04.png "Page 4")
 
-![Alt text](readmeFiles/ManualeUtente-05 "First page")
+![Alt text](readmeFiles/ManualeUtente-05.png "Page 5")
 
-![Alt text](readmeFiles/ManualeUtente-06 "First page")
+![Alt text](readmeFiles/ManualeUtente-06.png "Page 6")
 
-![Alt text](readmeFiles/ManualeUtente-07 "First page")
+![Alt text](readmeFiles/ManualeUtente-07.png "Page 7")
 
-![Alt text](readmeFiles/ManualeUtente-08 "First page")
+![Alt text](readmeFiles/ManualeUtente-08.png "Page 8")
 
-![Alt text](readmeFiles/ManualeUtente-09 "First page")
+![Alt text](readmeFiles/ManualeUtente-09.png "Page 9")
 
-![Alt text](readmeFiles/ManualeUtente-10 "First page")
+![Alt text](readmeFiles/ManualeUtente-10.png "Page 10")
 
-![Alt text](readmeFiles/ManualeUtente-11 "First page")
+![Alt text](readmeFiles/ManualeUtente-11.png "Page 11")
 
-![Alt text](readmeFiles/ManualeUtente-12 "First page")
+![Alt text](readmeFiles/ManualeUtente-12.png "Page 12")
