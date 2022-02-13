@@ -37,5 +37,3 @@ The complete documentation with all the installation instructions are located in
 ![Alt text](readmeFiles/ManualeUtente-10.png "Page 10")
 
 ![Alt text](readmeFiles/ManualeUtente-11.png "Page 11")
-
-![Alt text](readmeFiles/ManualeUtente-12.png "Page 12")
